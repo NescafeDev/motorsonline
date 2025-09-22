@@ -52,7 +52,7 @@ export const BlogSection = (): JSX.Element => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[16px]">
-          {blogPosts.map((post, index) => (
+          {(blogPosts || []).map((post, index) => (
             <Card
               key={index}
               className="bg-[#f6f7f9] rounded-[10px] overflow-hidden border-none"

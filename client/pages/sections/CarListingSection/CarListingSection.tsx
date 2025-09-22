@@ -101,9 +101,10 @@ export const CarListingSection = ({
     const fetchDriveTypes = async () => {
       try {
         const response = await apiClient.get('/api/drive-types');
-        setDriveTypes(response.data);
+        setDriveTypes(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error('Error fetching drive types:', error);
+        setDriveTypes([]);
       }
     };
     fetchDriveTypes();
@@ -115,7 +116,7 @@ export const CarListingSection = ({
       try {
         setBrandsLoading(true);
         const response = await apiClient.get('/api/brands');
-        setBrands(response.data);
+        setBrands(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error('Error fetching brands:', error);
         setBrands([]);
@@ -132,7 +133,7 @@ export const CarListingSection = ({
       try {
         setModelsLoading(true);
         const response = await apiClient.get('/api/models?brand_id=all');
-        setModels(response.data);
+        setModels(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error('Error fetching models:', error);
         setModels([]);
@@ -145,7 +146,7 @@ export const CarListingSection = ({
 
   // Filter models based on selected brand
   useEffect(() => {
-    if (filters.brand_id) {
+    if (filters.brand_id && Array.isArray(models)) {
       const filtered = models.filter(model => model.brand_id === filters.brand_id);
       setFilteredModels(filtered);
     } else {
@@ -320,7 +321,7 @@ export const CarListingSection = ({
             ) : (
               <Combobox
                 className="font-normal"
-                options={brands.map(brand => ({ value: brand.id.toString(), label: brand.name }))}
+                options={(brands || []).map(brand => ({ value: brand.id.toString(), label: brand.name }))}
                 value={filters.brand_id?.toString() || ""}
                 onValueChange={handleBrandChange}
                 placeholder="Mark"
@@ -336,7 +337,7 @@ export const CarListingSection = ({
             ) : (
               <Combobox
                 className="font-normal"
-                options={filteredModels.map(model => ({ value: model.id.toString(), label: model.name }))}
+                options={(filteredModels || []).map(model => ({ value: model.id.toString(), label: model.name }))}
                 value={filters.model_id?.toString() || ""}
                 onValueChange={(value) => {
                   if (value === "") {
@@ -377,7 +378,7 @@ export const CarListingSection = ({
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-2">
-                  {driveTypes.map((type) => (
+                  {(driveTypes || []).map((type) => (
                     <div key={type.id} className="flex items-center space-x-2">
                       <Checkbox
                         id={type.id.toString()}
@@ -426,7 +427,7 @@ export const CarListingSection = ({
           </Select>
 
           {/* Range Input Groups */}
-          {rangeInputGroups.slice(0, 3).map((group) => (
+          {(rangeInputGroups || []).slice(0, 3).map((group) => (
             <div key={group.id} className="space-y-2">
               <label className="block font-['Poppins',Helvetica] font-normal text-[#747474] text-base">
                 {group.label}
@@ -533,7 +534,7 @@ export const CarListingSection = ({
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-2">
-                  {fuelTypes.map((type) => (
+                  {(fuelTypes || []).map((type) => (
                     <div key={type.id} className="flex items-center space-x-2">
                       <Checkbox
                         id={type.id}
@@ -557,7 +558,7 @@ export const CarListingSection = ({
           <Separator className="my-2" />
 
           {/* Technical Specifications */}
-          {rangeInputGroups.slice(3, 5).map((group) => (
+          {(rangeInputGroups || []).slice(3, 5).map((group) => (
             <div key={group.id} className="space-y-2">
               <label className="block font-['Poppins',Helvetica] font-normal text-[#747474] text-base">
                 {group.label}
@@ -602,7 +603,7 @@ export const CarListingSection = ({
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-2">
-                  {transmissionTypes.map((type) => (
+                  {(transmissionTypes || []).map((type) => (
                     <div key={type.id} className="flex items-center space-x-2">
                       <Checkbox
                         id={type.id}
@@ -633,7 +634,7 @@ export const CarListingSection = ({
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-4">
-                  {rangeInputGroups.slice(5).map((group) => (
+                  {(rangeInputGroups || []).slice(5).map((group) => (
                     <div key={group.id} className="space-y-2">
                       <label className="block font-['Poppins',Helvetica] font-normal text-[#747474] text-base">
                         {group.label}
@@ -682,12 +683,12 @@ export const CarListingSection = ({
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-4">
-                  {colorRows.map((row, rowIndex) => (
+                  {(colorRows || []).map((row, rowIndex) => (
                     <div
                       key={`color-row-${rowIndex}`}
                       className="flex justify-between row"
                     >
-                      {row.map((color) => (
+                      {(row || []).map((color) => (
                         <label
                           key={color.id}
                           className={`flex items-center space-x-2 col-6 w-full cursor-pointer ${selectedColor === color.id ? 'bg-[#f0fdfa]' : ''}`}
@@ -785,7 +786,7 @@ export const CarListingSection = ({
                   </Select>
 
                   <div className="space-y-2 pt-2">
-                    {additionalInfo.map((info) => (
+                    {(additionalInfo || []).map((info) => (
                       <div
                         key={info.id}
                         className="flex items-center space-x-2"
@@ -820,7 +821,7 @@ export const CarListingSection = ({
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-2">
-                  {equipment.map((item) => (
+                  {(equipment || []).map((item) => (
                     <div key={item.id} className="flex items-center space-x-2">
                       <Checkbox
                         id={item.id}
