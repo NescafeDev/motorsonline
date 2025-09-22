@@ -37,6 +37,10 @@ export function createServer() {
     res.json({ message: "Hello from Express server v2!" });
   });
 
+  // Serve React app for all non-API routes (SPA routing)
+  app.get("*", (_req, res) => {
+    res.sendFile(path.join(__dirname, '../dist/spa/index.html'));
+  });
 
   // Error handling middleware
   app.use((err: any, _req: express.Request, res: express.Response, next: express.NextFunction) => {
