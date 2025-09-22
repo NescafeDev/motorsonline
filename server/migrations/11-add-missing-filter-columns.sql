@@ -1,0 +1,17 @@
+ALTER TABLE cars
+  ADD COLUMN brand_id INT,
+  ADD COLUMN model_id INT,
+  ADD COLUMN year_id INT,
+  ADD COLUMN seats INT,
+  ADD COLUMN doors INT,
+  ADD COLUMN color VARCHAR(50),
+  ADD COLUMN registeredCountry VARCHAR(50),
+  ADD COLUMN importedFrom VARCHAR(50),
+  ADD COLUMN serviceBook VARCHAR(10) DEFAULT 'false',
+  ADD COLUMN inspection VARCHAR(10) DEFAULT 'false',
+  ADD COLUMN metallicPaint VARCHAR(10) DEFAULT 'false',
+  ADD COLUMN exchangePossible VARCHAR(10) DEFAULT 'false',
+  ADD COLUMN fuelCityConsumption DECIMAL(5,2),
+  ADD COLUMN fuelHighwayConsumption DECIMAL(5,2),
+  ADD COLUMN fuelAverageConsumption DECIMAL(5,2),
+  ADD COLUMN co2Emission DECIMAL(5,2); 

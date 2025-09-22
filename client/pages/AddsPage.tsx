@@ -1,0 +1,1099 @@
+import React, { useState, useEffect } from "react";
+import PageContainer from "@/components/PageContainer";
+import PhotoUpload from "@/components/PhotoUpload";
+import FormSection, {
+  FormField,
+  TextAreaField,
+  CheckboxField,
+} from "@/components/FormSection";
+import ReactFlagsSelect from "react-flags-select";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+const ChevronDownIcon = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 17 17"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M8.5002 11.6997C8.03353 11.6997 7.56686 11.5197 7.21353 11.1664L2.86686 6.81968C2.67353 6.62635 2.67353 6.30635 2.86686 6.11302C3.0602 5.91968 3.3802 5.91968 3.57353 6.11302L7.9202 10.4597C8.2402 10.7797 8.7602 10.7797 9.0802 10.4597L13.4269 6.11302C13.6202 5.91968 13.9402 5.91968 14.1335 6.11302C14.3269 6.30635 14.3269 6.62635 14.1335 6.81968L9.78686 11.1664C9.43353 11.5197 8.96686 11.6997 8.5002 11.6997Z"
+      fill="#06D6A0"
+      stroke="#06D6A0"
+      strokeWidth="0.5"
+    />
+  </svg>
+);
+
+const techCheckOptions = [
+  { key: 'technicalInspection', label: 'Teostatud tehniline kontroll' },
+  { key: 'technicalMaintenance', label: 'Teostatud tehniline hooldus' },
+  { key: 'serviceBook', label: 'Hooldusraamat' },
+  { key: 'hideVin', label: 'Peida VIN-kood' },
+];
+const accessoriesOptions = [
+  { key: 'abs', label: 'ABS' },
+  { key: 'adaptiveHeadlights', label: 'Adaptiivne kurvituli' },
+  { key: 'alarmSystem', label: 'Häiresüsteem' },
+  { key: 'ambientLighting', label: 'Ambiente valgustus' },
+  { key: 'appleCarplay', label: 'Apple Carplay' },
+  { key: 'armrest', label: 'Käetugi' },
+  { key: 'hillStartAssist', label: 'Käivitusabi mäkketõusul' },
+  { key: 'automaticHighBeams', label: 'Pimestamisvaba kaugtuli' },
+  { key: 'bluetooth', label: 'Bluetooth' },
+  { key: 'boardComputer', label: 'Bordcomputer (pardaarvuti)' },
+  { key: 'cdPlayer', label: 'CD-mängija' },
+  { key: 'electricWindows', label: 'Elektrilised aknatõstukid' },
+];
+
+export default function AddsPage() {
+  const [formData, setFormData] = useState({
+    brand_id: "",
+    model_id: "",
+    year_id: "",
+    drive_type_id: "",
+    category: "",
+    transmission: "",
+    fuelType: "",
+    plateNumber: "",
+    month: "",
+    mileage: "",
+    power: "",
+    displacement: "",
+    technicalData: "",
+    ownerCount: "",
+    modelDetail: "",
+    price: "",
+    discountPrice: "",
+    warranty: "",
+    vatRefundable: "",
+    vatRate: "24",
+    accident: "",
+    vinCode: "",
+    description: "",
+    equipment: "",
+    additionalInfo: "",
+    country: "EE",
+    phone: "",
+    businessType: "",
+    socialNetwork: "",
+    email: "",
+  });
+
+  const [checktechboxes, setCheckTechboxes] = useState({
+    technicalInspection: false,
+    technicalMaintenance: false,
+    serviceBook: false,
+    hideVin: false,
+  });
+
+  const [checkboxes, setCheckboxes] = useState({
+    abs: false,
+    adaptiveHeadlights: false,
+    alarmSystem: false,
+    ambientLighting: false,
+    appleCarplay: false,
+    armrest: false,
+    hillStartAssist: false,
+    automaticHighBeams: false,
+    bluetooth: false,
+    boardComputer: false,
+    cdPlayer: false,
+    electricWindows: false,
+  });
+
+  const [showMoreEquipment, setShowMoreEquipment] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [cars, setCars] = useState<any[]>([]);
+  const [editingCar, setEditingCar] = useState<any | null>(null);
+  const [carImages, setCarImages] = useState<(File | null)[]>(
+    Array(8).fill(null),
+  );
+  const [brands, setBrands] = useState<{ id: number; name: string }[]>([]);
+  const [models, setModels] = useState<{ id: number; name: string }[]>([]);
+  const [years, setYears] = useState<{ id: number; value: string }[]>([]);
+  const [driveTypes, setDriveTypes] = useState<{ id: number; name: string; ee_name: string }[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+  const { id: carId } = useParams<{ id: string }>();
+
+  useEffect(() => {
+    const initializeData = async () => {
+      await Promise.all([
+        fetchCars(),
+        fetchBrands(),
+        fetchYears(),
+        fetchDriveTypes()
+      ]);
+      
+      // If we have a carId in the URL, fetch that car for editing
+      if (carId) {
+        const car = await fetchCarById(carId);
+        if (car) {
+          // Set the car data after all other data is loaded
+          setEditingCar(car);
+          
+          // Convert car data to proper format for form fields
+          let priceToShow = car.price?.toString() || "";
+          
+          // If car has VAT applied, calculate the base price for editing
+          if (car.vatRefundable === 'yes' && car.price && car.vatRate) {
+            const totalPrice = parseFloat(car.price.toString());
+            // const vatRate = parseFloat(car.vatRate.toString());
+            const vatRate = 24;
+            if (!isNaN(totalPrice) && !isNaN(vatRate)) {
+              const basePrice = calculateBasePriceFromTotal(totalPrice, vatRate);
+              priceToShow = basePrice.toString();
+            }
+          }
+          
+          const formattedCarData = {
+            ...car,
+            brand_id: car.brand_id?.toString() || "",
+            model_id: car.model_id?.toString() || "",
+            year_id: car.year_id?.toString() || "",
+            drive_type_id: car.drive_type_id?.toString() || "",
+            price: priceToShow,
+            discountPrice: car.discountPrice?.toString() || "",
+            mileage: car.mileage?.toString() || "",
+            power: car.power?.toString() || "",
+            displacement: car.displacement?.toString() || "",
+            ownerCount: car.ownerCount?.toString() || "",
+            vatRate: car.vatRate?.toString() || "",
+            month: car.month?.toString() || "",
+          };
+          
+          setFormData((prev) => ({
+            ...prev,
+            ...formattedCarData,
+          }));
+          
+          // Fetch models for the selected brand when editing
+          if (car.brand_id) {
+            await fetchModels(car.brand_id.toString());
+          }
+          
+          // Set checkboxes
+          if (car.tech_check) {
+            const arr = Array.isArray(car.tech_check) ? car.tech_check : car.tech_check.split(',');
+            setCheckTechboxes((prev) => {
+              const obj: any = {};
+              techCheckOptions.forEach(opt => {
+                obj[opt.key] = arr.includes(opt.key);
+              });
+              return obj;
+            });
+          }
+          if (car.accessories) {
+            const arr = Array.isArray(car.accessories) ? car.accessories : car.accessories.split(',');
+            setCheckboxes((prev) => {
+              const obj: any = {};
+              accessoriesOptions.forEach(opt => {
+                obj[opt.key] = arr.includes(opt.key);
+              });
+              return obj;
+            });
+          }
+        } else {
+          // If car not found, redirect to user page
+          navigate('/user');
+        }
+      } else {
+        // Check for editing car data in localStorage (fallback for old approach)
+        const editingCarData = localStorage.getItem('editingCar');
+        if (editingCarData) {
+          try {
+            const car = JSON.parse(editingCarData);
+            handleEditCar(car);
+            // Clear the localStorage after loading the data
+            localStorage.removeItem('editingCar');
+          } catch (error) {
+            console.error('Error parsing editing car data:', error);
+            localStorage.removeItem('editingCar');
+          }
+        }
+      }
+    };
+    
+    initializeData().finally(() => {
+      setIsLoading(false);
+    });
+  }, [carId]);
+
+  // Auto-select first option for selects on add (not edit)
+  useEffect(() => {
+    if (!editingCar) {
+      // Set brand_id
+      if (brands.length > 0 && !formData.brand_id) {
+        setFormData((prev) => ({ ...prev, brand_id: brands[0].id.toString() }));
+      }
+      // Set model_id
+      if (models.length > 0 && !formData.model_id) {
+        setFormData((prev) => ({ ...prev, model_id: models[0].id.toString() }));
+      }
+      // Set year_id
+      if (years.length > 0 && !formData.year_id) {
+        setFormData((prev) => ({ ...prev, year_id: years[0].id.toString() }));
+      }
+      // Set month
+      if (!formData.month) {
+        setFormData((prev) => ({ ...prev, month: "1" }));
+      }
+      // Set vatRefundable
+      if (!formData.vatRefundable) {
+        setFormData((prev) => ({ ...prev, vatRefundable: "yes" }));
+      }
+      // Set vatRate
+      if (!formData.vatRate) {
+        setFormData((prev) => ({ ...prev, vatRate: "24" }));
+      }
+      // Set ownerCount
+      if (!formData.ownerCount) {
+        setFormData((prev) => ({ ...prev, ownerCount: "1" }));
+      }
+      // Set drive_type_id
+      if (driveTypes.length > 0 && !formData.drive_type_id) {
+        setFormData((prev) => ({ ...prev, drive_type_id: driveTypes[0].id.toString() }));
+      }
+      // Set transmission
+      if (!formData.transmission) {
+        setFormData((prev) => ({ ...prev, transmission: "helical" }));
+      }
+      // Set fuelType
+      if (!formData.fuelType) {
+        setFormData((prev) => ({ ...prev, fuelType: "petrol" }));
+      }
+      // Set category
+      if (!formData.category) {
+        setFormData((prev) => ({ ...prev, category: "hatchback" }));
+      }
+    }
+  }, [brands, models, years, driveTypes, editingCar]);
+
+  useEffect(() => {
+    if (formData.brand_id) {
+      fetchModels(formData.brand_id);
+    } else {
+      setModels([]);
+      setFormData((prev) => ({ ...prev, model_id: "" }));
+    }
+  }, [formData.brand_id]);
+
+  const fetchModels = async (brand_id: string) => {
+    const token = localStorage.getItem("token");
+    const res = await axios.get(`/api/models?brand_id=${brand_id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setModels(res.data);
+  };
+
+  const fetchCars = async () => {
+    const token = localStorage.getItem("token");
+    const res = await axios.get("/api/cars", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setCars(res.data);
+  };
+
+  const fetchCarById = async (id: string) => {
+    const token = localStorage.getItem("token");
+    try {
+      const res = await axios.get(`/api/cars/edit/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return res.data;
+    } catch (error) {
+      console.error('Error fetching car:', error);
+      return null;
+    }
+  };
+
+  const fetchBrands = async () => {
+    const token = localStorage.getItem("token");
+    const res = await axios.get("/api/brands", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setBrands(res.data);
+  };
+
+  const fetchYears = async () => {
+    const token = localStorage.getItem("token");
+    const res = await axios.get("/api/years", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setYears(res.data);
+  };
+
+  const fetchDriveTypes = async () => {
+    const token = localStorage.getItem("token");
+    const res = await axios.get("/api/drive-types", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setDriveTypes(res.data);
+  };
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleCheckboxChange = (field: string, checked: boolean) => {
+    setCheckboxes((prev) => ({ ...prev, [field]: checked }));
+  };
+
+  const handleCheckTechboxChange = (field: string, checked: boolean) => {
+    setCheckTechboxes((prev) => ({ ...prev, [field]: checked }));
+  };
+
+  const handleCarImageChange = (index: number, file: File | null) => {
+    setCarImages((prev) => {
+      const updated = [...prev];
+      updated[index] = file;
+      return updated;
+    });
+  };
+
+  const handleCarSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const form = { ...formData };
+    // Map checkboxes to form fields if needed
+    const formDataObj = new FormData();
+    Object.entries(form).forEach(([key, value]) => {
+      formDataObj.append(key, value as string);
+    });
+    carImages.forEach((file, idx) => {
+      if (file) formDataObj.append(`image_${idx + 1}`, file);
+    });
+    
+    const techCheckSelected = Object.entries(checktechboxes)
+      .filter(([k, v]) => v)
+      .map(([k]) => k);
+    const accessoriesSelected = Object.entries(checkboxes)
+      .filter(([k, v]) => v)
+      .map(([k]) => k);
+    formDataObj.append('tech_check', techCheckSelected.join(','));
+    formDataObj.append('accessories', accessoriesSelected.join(','));
+    const token = localStorage.getItem("token");
+    if (editingCar) {
+      await axios.put(`/api/cars/${editingCar.id}`, formDataObj, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } else {
+      await axios.post("/api/cars", formDataObj, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    }
+    setEditingCar(null);
+    setCarImages(Array(8).fill(null));
+    fetchCars();
+    // Navigate to user's listings after successful add or edit
+    navigate("/user");
+  };
+
+  const handleEditCar = (car: any) => {
+    setEditingCar(car);
+    
+    // Calculate base price if VAT is applied
+    let priceToShow = car.price?.toString() || "";
+    if (car.vatRefundable === 'yes' && car.price && car.vatRate) {
+      const totalPrice = parseFloat(car.price.toString());
+      // const vatRate = parseFloat(car.vatRate.toString());
+      const vatRate = 24;
+
+      if (!isNaN(totalPrice) && !isNaN(vatRate)) {
+        const basePrice = calculateBasePriceFromTotal(totalPrice, vatRate);
+        priceToShow = basePrice.toString();
+      }
+    }
+    
+    setFormData((prev) => ({
+      ...prev,
+      ...car,
+      price: priceToShow,
+    }));
+    setCarImages(Array(8).fill(null));
+    
+    // Fetch models for the selected brand when editing
+    if (car.brand_id) {
+      fetchModels(car.brand_id.toString());
+    }
+    
+    if (car.tech_check) {
+      const arr = Array.isArray(car.tech_check) ? car.tech_check : car.tech_check.split(',');
+      setCheckTechboxes((prev) => {
+        const obj: any = {};
+        techCheckOptions.forEach(opt => {
+          obj[opt.key] = arr.includes(opt.key);
+        });
+        return obj;
+      });
+    }
+    if (car.accessories) {
+      const arr = Array.isArray(car.accessories) ? car.accessories : car.accessories.split(',');
+      setCheckboxes((prev) => {
+        const obj: any = {};
+        accessoriesOptions.forEach(opt => {
+          obj[opt.key] = arr.includes(opt.key);
+        });
+        return obj;
+      });
+    }
+  };
+
+  const handleDeleteCar = async (id: number) => {
+    const token = localStorage.getItem("token");
+    await axios.delete(`/api/cars/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    fetchCars();
+  };
+
+  // Calculate VAT price for display
+  const calculateVatPrice = () => {
+    if (formData.vatRefundable === 'yes' && formData.price && formData.vatRate) {
+      const basePrice = parseFloat(formData.price);
+      // const vatRate = parseFloat(formData.vatRate);
+      const vatRate = 24;
+      
+      if (!isNaN(basePrice) && !isNaN(vatRate)) {
+        const vatAmount = basePrice * (vatRate / 100);
+        const totalPrice = basePrice + vatAmount;
+        return {
+          basePrice,
+          vatAmount,
+          totalPrice
+        };
+      }
+    }
+    return null;
+  };
+
+  // Calculate base price from total price (for editing cars with VAT)
+  const calculateBasePriceFromTotal = (totalPrice: number, vatRate: number) => {
+    if (vatRate > 0) {
+      return (totalPrice / (1 + vatRate / 100)).toFixed(1);
+    }
+    return totalPrice;
+  };
+
+  if (isLoading) {
+    return (
+      <PageContainer>
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-[100px] py-16">
+          <div className="text-center">
+            <h1 className="text-motorsoline-text text-3xl font-semibold mb-8">
+              Laetakse...
+            </h1>
+          </div>
+        </div>
+      </PageContainer>
+    );
+  }
+
+  return (
+    <PageContainer>
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-[100px] py-16">
+        <h1 className="text-motorsoline-text text-3xl font-semibold mb-8">
+          {editingCar ? 'Redigeeri kuulutus' : 'Loo kuulutus'}
+        </h1>
+
+        <div className="space-y-6">
+          {/* Photo Upload Section */}
+          <FormSection title="">
+            <PhotoUpload
+              images={carImages}
+              onImageChange={handleCarImageChange}
+              previews={
+                editingCar
+                  ? [1, 2, 3, 4, 5, 6, 7, 8].map(
+                      (i) => editingCar[`image_${i}`],
+                    )
+                  : []
+              }
+            />
+          </FormSection>
+
+          {/* Vehicle Details */}
+          <FormSection title="Mudelidetailid">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <FormField
+                label="Vali bränd"
+                placeholder="Vali Bränd"
+                isSelect
+                value={formData.brand_id || ""}
+                onChange={(value) => handleInputChange("brand_id", value)}
+                options={brands.map((b) => ({ value: b.id, label: b.name }))}
+              />
+              <FormField
+                label="Mudel"
+                placeholder="Vali mudel"
+                isSelect
+                value={formData.model_id || ""}
+                onChange={(value) => handleInputChange("model_id", value)}
+                options={models.map((m) => ({ value: m.id, label: m.name }))}
+                className={formData.brand_id ? "" : "hidden"}
+              />
+              <FormField
+                label="Esmane registreerimine"
+                placeholder="Aasta"
+                isSelect
+                value={formData.year_id || ""}
+                onChange={(value) => handleInputChange("year_id", value)}
+                options={years.map((y) => ({ value: y.id, label: y.value }))}
+              />
+              <div className="space-y-3">
+                <label className="block text-motorsoline-text text-lg font-medium">
+                  &nbsp;
+                </label>
+                <select
+                  value={formData.month}
+                  onChange={(e) => handleInputChange("month", e.target.value)}
+                  className="w-full h-14 px-5 rounded-lg border border-motorsoline-form-border bg-white text-lg text-motorsoline-placeholder appearance-none focus:outline-none focus:ring-2 focus:ring-motorsoline-primary focus:border-transparent"
+                >
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                  <option value="11">11</option>
+                  <option value="12">12</option>
+                </select>
+              </div>
+              <FormField
+                label="Läbisõit"
+                placeholder="Läbisõit"
+                suffix="km"
+                value={formData.mileage}
+                onChange={(value) => handleInputChange("mileage", value)}
+              />
+              <FormField
+                label="Võimsus"
+                placeholder="0"
+                suffix="kw"
+                value={formData.power}
+                onChange={(value) => handleInputChange("power", value)}
+              />
+              <FormField
+                label="Muu mudel või täpsustus"
+                placeholder="Vali mudel"
+                value={formData.modelDetail}
+                onChange={(value) => handleInputChange("modelDetail", value)}
+              />
+              <div className="space-y-2">
+                <FormField
+                  label="Hind"
+                  placeholder="€"
+                  value={formData.price}
+                  onChange={(value) => handleInputChange("price", value)}
+                />
+                {(() => {
+                  const vatCalculation = calculateVatPrice();
+                  if (vatCalculation) {
+                    return (
+                      <p className="text-sm text-gray-600">
+                        {editingCar ? (
+                          <>
+                            Baashind: €{vatCalculation.basePrice.toLocaleString()} + 
+                            KM (24%): €{vatCalculation.vatAmount.toLocaleString()} = 
+                            <span className="font-semibold text-motorsoline-primary"> €{vatCalculation.totalPrice.toLocaleString()}</span>
+                            <br />
+                            <span className="text-xs text-blue-600">(Salvestatud hind: €{editingCar.price?.toLocaleString()})</span>
+                          </>
+                        ) : (
+                          <>
+                            Baashind: €{vatCalculation.basePrice.toLocaleString()} + 
+                            KM (24%): €{vatCalculation.vatAmount.toLocaleString()} = 
+                            <span className="font-semibold text-motorsoline-primary"> €{vatCalculation.totalPrice.toLocaleString()}</span>
+                          </>
+                        )}
+                      </p>
+                    );
+                  }
+                  return null;
+                })()}
+              </div>
+              <FormField
+                label="Soodushind"
+                placeholder="€"
+                value={formData.discountPrice}
+                onChange={(value) => handleInputChange("discountPrice", value)}
+              />
+              <FormField
+                label="Garantii"
+                placeholder="Kehtib kuni"
+                value={formData.warranty}
+                onChange={(value) => handleInputChange("warranty", value)}
+              />
+              <FormField
+                label="Käibemaksu tagastatavus"
+                placeholder="Jah"
+                isSelect
+                value={formData.vatRefundable}
+                onChange={(value) => handleInputChange("vatRefundable", value)}
+                options={[
+                  {
+                    value: "yes",
+                    label: "Jah",
+                  },
+                  {
+                    value: "no",
+                    label: "Ei",
+                  },
+                ]}
+              />
+              <FormField
+                label="Käibemaksumäär"
+                placeholder="Palun vali"
+                isSelect
+                value={formData.vatRate}
+                onChange={(value) => handleInputChange("vatRate", value)}
+                options={[
+                  {
+                    value: "24",
+                    label: "24",
+                  },
+                ]}
+              />
+            </div>
+
+            {/* Checkboxes */}
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <FormField
+                  label="Avariiline"
+                  placeholder="näide: osad kaasa"
+                  value={formData.accident}
+                  onChange={(value) => handleInputChange("accident", value)}
+                />
+                <FormField
+                  label="VIN-kood"
+                  placeholder="WDC000000000000"
+                  value={formData.vinCode}
+                  onChange={(value) => handleInputChange("vinCode", value)}
+                />
+              </div>
+              <div className="my-auto">
+                <CheckboxField
+                  label="Teostatud tehniline kontroll"
+                  checked={checktechboxes.technicalInspection}
+                  onChange={(checked) =>
+                    handleCheckTechboxChange("technicalInspection", checked)
+                  }
+                />
+                <CheckboxField
+                  label="Teostatud tehniline hooldus"
+                  checked={checktechboxes.technicalMaintenance}
+                  onChange={(checked) =>
+                    handleCheckTechboxChange("technicalMaintenance", checked)
+                  }
+                />
+                <CheckboxField
+                  label="Houldusraamat"
+                  checked={checktechboxes.serviceBook}
+                  onChange={(checked) =>
+                    handleCheckTechboxChange("serviceBook", checked)
+                  }
+                />
+                <CheckboxField
+                  label="Peida VIN kood"
+                  checked={checktechboxes.hideVin}
+                  onChange={(checked) =>
+                    handleCheckTechboxChange("hideVin", checked)
+                  }
+                />
+              </div>
+            </div>
+          </FormSection>
+
+          {/* Technical Details */}
+          <FormSection title="Mudelidetailid">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <FormField
+                label="Kütuse tüüp"
+                placeholder="Vali Kütuse tüüp"
+                isSelect
+                value={formData.fuelType}
+                onChange={(value) => handleInputChange("fuelType", value)}
+                options={[
+                  {
+                    value: "petrol",
+                    label: "Bensiin",
+                  },
+                  {
+                    value: "diesel",
+                    label: "Diisel",
+                  },
+                  {
+                    value: "hybrids",
+                    label: "Hübriid",
+                  },
+                  {
+                    value: "electric",
+                    label: "Elektriline",
+                  },
+                ]}
+              />
+              <FormField
+                label="Sõiduki number:"
+                placeholder="AA00000"
+                value={formData.plateNumber}
+                onChange={(value) => handleInputChange("plateNumber", value)}
+              />
+              <FormField
+                label="Kategooria"
+                placeholder="Vali kategooria"
+                isSelect
+                value={formData.category}
+                onChange={(value) => handleInputChange("category", value)}
+                options={[
+                  {
+                    value: "hatchback",
+                    label: "Hatchback",
+                  },
+                  {
+                    value: "sedan",
+                    label: "Sedan",
+                  },
+                  {
+                    value: "suv",
+                    label: "SUV",
+                  },
+                  {
+                    value: "muv",
+                    label: "MUV",
+                  },
+                  {
+                    value: "coupe",
+                    label: "Coupe",
+                  },
+                  {
+                    value: "convertible",
+                    label: "Convertible",
+                  },
+                  {
+                    value: "pickup_truck",
+                    label: "Pickup Truck",
+                  },
+                ]}
+              />
+              <FormField
+                label="Käigukasti tüüp"
+                placeholder="Automaat"
+                isSelect
+                value={formData.transmission}
+                onChange={(value) => handleInputChange("transmission", value)}
+                options={[
+                  {
+                    value: "helical",
+                    label: "Helical",
+                  },
+                  {
+                    value: "bevel",
+                    label: "Bevel",
+                  },
+                  {
+                    value: "worm",
+                    label: "Worm",
+                  },
+                  {
+                    value: "planetary",
+                    label: "Planetary",
+                  },
+                ]}
+              />
+              <FormField
+                label="Tehnilised andmed"
+                placeholder="Kasutatud, avariivaba ..."
+                value={formData.technicalData}
+                onChange={(value) => handleInputChange("technicalData", value)}
+              />
+              <FormField
+                label="Omanike arv"
+                placeholder="1"
+                isSelect
+                value={formData.ownerCount}
+                onChange={(value) => handleInputChange("ownerCount", value)}
+                options={[
+                  {
+                    value: "1",
+                    label: "1",
+                  },
+                  {
+                    value: "2",
+                    label: "2",
+                  },
+                  {
+                    value: "3",
+                    label: "3",
+                  },
+                  {
+                    value: "4+",
+                    label: "4+",
+                  },
+                ]}
+              />
+              <FormField
+                label="Veoskeem:"
+                placeholder="Vali veoskeem"
+                isSelect
+                value={formData.drive_type_id}
+                onChange={(value) => handleInputChange("drive_type_id", value)}
+                options={driveTypes.map(driveType => ({
+                  value: driveType.id.toString(),
+                  label: driveType.ee_name,
+                }))}
+              />
+              <FormField
+                label="Töömaht"
+                placeholder="0"
+                suffix="cm³"
+                value={formData.displacement}
+                onChange={(value) => handleInputChange("displacement", value)}
+              />
+            </div>
+          </FormSection>
+
+          {/* Equipment Section */}
+          <FormSection title="Kõrgema väärtusega lisavarustus">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <CheckboxField
+                label="ABS"
+                checked={checkboxes.abs}
+                onChange={(checked) => handleCheckboxChange("abs", checked)}
+              />
+              <CheckboxField
+                label="Käivitusabi mäkketõusul"
+                checked={checkboxes.hillStartAssist}
+                onChange={(checked) =>
+                  handleCheckboxChange("hillStartAssist", checked)
+                }
+              />
+              <CheckboxField
+                label="Adaptiivne kurvituli"
+                checked={checkboxes.adaptiveHeadlights}
+                onChange={(checked) =>
+                  handleCheckboxChange("adaptiveHeadlights", checked)
+                }
+              />
+              <CheckboxField
+                label="Pimestamisvaba kaugtuli"
+                checked={checkboxes.automaticHighBeams}
+                onChange={(checked) =>
+                  handleCheckboxChange("automaticHighBeams", checked)
+                }
+              />
+              <CheckboxField
+                label="Häiresüsteem"
+                checked={checkboxes.alarmSystem}
+                onChange={(checked) =>
+                  handleCheckboxChange("alarmSystem", checked)
+                }
+              />
+              <CheckboxField
+                label="Bluetooth"
+                checked={checkboxes.bluetooth}
+                onChange={(checked) =>
+                  handleCheckboxChange("bluetooth", checked)
+                }
+              />
+              <CheckboxField
+                label="Ambiente valgustus"
+                checked={checkboxes.ambientLighting}
+                onChange={(checked) =>
+                  handleCheckboxChange("ambientLighting", checked)
+                }
+              />
+              <CheckboxField
+                label="Bordcomputer (pardaarvuti)"
+                checked={checkboxes.boardComputer}
+                onChange={(checked) =>
+                  handleCheckboxChange("boardComputer", checked)
+                }
+              />
+              <CheckboxField
+                label="Apple CarPlay"
+                checked={checkboxes.appleCarplay}
+                onChange={(checked) =>
+                  handleCheckboxChange("appleCarplay", checked)
+                }
+              />
+              <CheckboxField
+                label="CD-mängija"
+                checked={checkboxes.cdPlayer}
+                onChange={(checked) =>
+                  handleCheckboxChange("cdPlayer", checked)
+                }
+              />
+              <CheckboxField
+                label="Käetugi"
+                checked={checkboxes.armrest}
+                onChange={(checked) => handleCheckboxChange("armrest", checked)}
+              />
+              <CheckboxField
+                label="Elektrilised aknatõstukid"
+                checked={checkboxes.electricWindows}
+                onChange={(checked) =>
+                  handleCheckboxChange("electricWindows", checked)
+                }
+              />
+            </div>
+
+            <div className="flex justify-center mt-8">
+              <button
+                onClick={() => setShowMoreEquipment(!showMoreEquipment)}
+                className="flex items-center gap-2 px-5 py-3 border border-[#06d6a0] text-[#06d6a0] rounded-lg text-motorsoline-primary hover:bg-motorsoline-primary hover:text-white transition-colors"
+              >
+                <span>Näita rohkem</span>
+                <ChevronDownIcon />
+              </button>
+            </div>
+          </FormSection>
+
+          {/* Description Section */}
+          <FormSection title="">
+            <TextAreaField
+              label="Sõiduki kirjeldus müüja poolt"
+              placeholder="Lisage kirjeldus"
+              value={formData.description}
+              onChange={(value) => handleInputChange("description", value)}
+            />
+          </FormSection>
+
+          {/* Equipment Section */}
+          <FormSection title="">
+            <TextAreaField
+              label="Varustus:"
+              placeholder="Lisage varustus:"
+              value={formData.equipment}
+              onChange={(value) => handleInputChange("equipment", value)}
+            />
+          </FormSection>
+
+          {/* Contact Section */}
+          <FormSection title="Kontaktid">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="flex gap-4">
+                <div className="w-full">
+                  <label className="block text-motorsoline-text text-lg font-medium mb-3">
+                    Vali riik
+                  </label>
+                  <ReactFlagsSelect
+                    className="w-full rounded-lg bg-white text-lg"
+                    selected={formData.country}
+                    onSelect={(value) => handleInputChange("country", value)}
+                    placeholder="Select a Country"
+                    searchable={true}
+                  />
+                </div>
+              </div>
+              <FormField
+                label="Telefoninumber"
+                placeholder="+49 000 0000000"
+                value={formData.phone}
+                onChange={(value) => handleInputChange("phone", value)}
+              />
+              <FormField
+                label="Sotsiaalvõrgustik"
+                placeholder="www.youtube.com/Näide"
+                value={formData.socialNetwork}
+                onChange={(value) => handleInputChange("socialNetwork", value)}
+              />
+              <FormField
+                label="Ettevõte/eraisik"
+                placeholder="Sisesta ettevõte"
+                value={formData.businessType}
+                onChange={(value) => handleInputChange("businessType", value)}
+              />
+              <FormField
+                label="E-post"
+                placeholder="Näide@elke.ee"
+                type="email"
+                value={formData.email}
+                onChange={(value) => handleInputChange("email", value)}
+              />
+            </div>
+
+            <div className="mt-6">
+              <button className="flex items-center px-8 py-4 border border-brand-primary rounded-lg text-brand-primary hover:bg-motorsoline-primary hover:text-white transition-colors">
+                + Lisa sotsiaalvõrgustik
+              </button>
+            </div>
+          </FormSection>
+
+          {/* Additional Info Section */}
+          <FormSection title="">
+            <TextAreaField
+              label="Lisainfo"
+              placeholder="Lisage lisainfo"
+              value={formData.additionalInfo}
+              onChange={(value) => handleInputChange("additionalInfo", value)}
+            />
+          </FormSection>
+
+          <FormSection title="">
+          <form onSubmit={handleCarSubmit} className="space-y-4">
+            <button
+              type="submit"
+              className="bg-brand-primary text-white px-4 py-2 rounded font-semibold"
+            >
+              {editingCar ? "Salvesta muudatused" : "Lisa kuulutus"}
+            </button>
+            {editingCar && (
+              <button
+                type="button"
+                className="bg-gray-300 px-4 py-2 rounded ml-2"
+                onClick={() => {
+                  setEditingCar(null);
+                  setFormData({
+                    brand_id: "",
+                    model_id: "",
+                    year_id: "",
+                    drive_type_id: "",
+                    category: "",
+                    transmission: "",
+                    fuelType: "",
+                    plateNumber: "",
+                    month: "",
+                    mileage: "",
+                    power: "",
+                    displacement: "",
+                    technicalData: "",
+                    ownerCount: "",
+                    modelDetail: "",
+                    price: "",
+                    discountPrice: "",
+                    warranty: "",
+                    vatRefundable: "",
+                    vatRate: "24",
+                    accident: "",
+                    vinCode: "",
+                    description: "",
+                    equipment: "",
+                    additionalInfo: "",
+                    country: "EE",
+                    phone: "",
+                    businessType: "",
+                    socialNetwork: "",
+                    email: "",
+                  });
+                  setCarImages(Array(8).fill(null));
+                  navigate("/user");
+                }}
+              >
+                Tühista
+              </button>
+            )}
+          </form>
+        </FormSection>
+        </div>
+
+
+      </div>
+    </PageContainer>
+  );
+}

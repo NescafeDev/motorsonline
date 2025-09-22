@@ -1,0 +1,2 @@
+ALTER TABLE cars
+  ADD COLUMN views INT DEFAULT 0; 
