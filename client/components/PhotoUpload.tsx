@@ -7,6 +7,10 @@ interface PhotoUploadProps {
   previews?: (string | undefined)[];
   maxFileSize?: number; // in MB
   acceptedTypes?: string[];
+  maxPhotos?: number;
+  initialVisibleCount?: number;
+  showMore?: boolean;
+  onToggleShowMore?: () => void;
 }
 
 export default function PhotoUpload({ 
@@ -14,7 +18,11 @@ export default function PhotoUpload({
   onImageChange, 
   previews = [],
   maxFileSize = 5, // 5MB default
-  acceptedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+  acceptedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
+  maxPhotos = 38,
+  initialVisibleCount = 8,
+  showMore = false,
+  onToggleShowMore
 }: PhotoUploadProps) {
   const [dragOver, setDragOver] = useState<number | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
@@ -91,7 +99,7 @@ export default function PhotoUpload({
       )}
       
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
-        {[...Array(8)].map((_, idx) => {
+        {[...Array(showMore ? maxPhotos : initialVisibleCount)].map((_, idx) => {
           const preview = getImagePreview(idx);
           const isDragOver = dragOver === idx;
           
@@ -169,6 +177,34 @@ export default function PhotoUpload({
           );
         })}
       </div>
+      
+      {/* Show more/less button */}
+      {maxPhotos > initialVisibleCount && onToggleShowMore && (
+        <div className="flex justify-center mt-6">
+          <button
+            type="button"
+            onClick={onToggleShowMore}
+            className="flex items-center gap-2 px-6 py-3 border border-motorsoline-primary text-motorsoline-primary rounded-lg hover:bg-motorsoline-primary hover:text-white transition-colors"
+          >
+            <span>{showMore ? 'Näita vähem' : `Näita rohkem (${maxPhotos - initialVisibleCount} veel)`}</span>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 17 17"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className={`transition-transform ${showMore ? 'rotate-180' : ''}`}
+            >
+              <path
+                d="M8.5002 11.6997C8.03353 11.6997 7.56686 11.5197 7.21353 11.1664L2.86686 6.81968C2.67353 6.62635 2.67353 6.30635 2.86686 6.11302C3.0602 5.91968 3.3802 5.91968 3.57353 6.11302L7.9202 10.4597C8.2402 10.7797 8.7602 10.7797 9.0802 10.4597L13.4269 6.11302C13.6202 5.91968 13.9402 5.91968 14.1335 6.11302C14.3269 6.30635 14.3269 6.62635 14.1335 6.81968L9.78686 11.1664C9.43353 11.5197 8.96686 11.6997 8.5002 11.6997Z"
+                fill="currentColor"
+                stroke="currentColor"
+                strokeWidth="0.5"
+              />
+            </svg>
+          </button>
+        </div>
+      )}
     </div>
   );
 }

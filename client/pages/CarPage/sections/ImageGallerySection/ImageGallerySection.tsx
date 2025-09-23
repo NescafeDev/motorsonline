@@ -79,6 +79,28 @@ export const ImageGallerySection = (): JSX.Element => {
     <section className="w-full max-w-[1240px] mx-auto my-8">
       <Card className="bg-[#f6f7f9] rounded-[10px] p-5">
         <CardContent className="p-0 space-y-8">
+          {/* Equipment */}
+          <div className="space-y-4">
+            <h2 className="font-['Poppins',Helvetica] font-semibold text-secondary-500 text-xl tracking-[-0.60px] leading-[30px]">
+              Varustus:
+            </h2>
+            <ul className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px] list-disc pl-6 space-y-2">
+              {vehicleDescription.equipment.map((item, index) => (
+                <li key={`equipment-${index}`} className="pl-2">{item}</li>
+              ))}
+            </ul>
+          </div>
+          {/* Car model and basic info */}
+          <div className="space-y-4">
+            <h2 className="font-['Poppins',Helvetica] font-semibold text-secondary-500 text-xl tracking-[-0.60px] leading-[30px]">
+              Aston Martin DBS Superleggera Q
+            </h2>
+            <ul className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px] list-disc pl-6 space-y-2">
+              {vehicleDescription.basicInfo.map((info, index) => (
+                <li key={`basic-info-${index}`} className="pl-2">{info}</li>
+              ))}
+            </ul>
+          </div>
           {/* Vehicle description */}
           <div className="space-y-4">
             <h2 className="font-['Poppins',Helvetica] font-semibold text-secondary-500 text-xl tracking-[-0.60px] leading-[30px]">
@@ -88,28 +110,6 @@ export const ImageGallerySection = (): JSX.Element => {
               {vehicleDescription.title}
             </p>
           </div>
-          {/* Car model and basic info */}
-          <div className="space-y-4">
-            <h2 className="font-['Poppins',Helvetica] font-semibold text-secondary-500 text-xl tracking-[-0.60px] leading-[30px]">
-              Aston Martin DBS Superleggera Q
-            </h2>
-            <div className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]">
-              {vehicleDescription.basicInfo.map((info, index) => (
-                <li key={`basic-info-${index}`}>{info}</li>
-              ))}
-            </div>
-          </div>
-          {/* Equipment */}
-          <div className="space-y-4">
-            <h2 className="font-['Poppins',Helvetica] font-semibold text-secondary-500 text-xl tracking-[-0.60px] leading-[30px]">
-              Varustus:
-            </h2>
-            <div className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]">
-              {vehicleDescription.equipment.map((item, index) => (
-                <li key={`equipment-${index}`}>{item}</li>
-              ))}
-            </div>
-          </div>
           {/* Contact information */}
           <div className="space-y-4">
             <h2 className="font-['Poppins',Helvetica] font-semibold text-secondary-500 text-xl tracking-[-0.60px] leading-[30px]">
@@ -117,11 +117,11 @@ export const ImageGallerySection = (): JSX.Element => {
               kohta, ärge kõhelge meiega ühendust võtmast. Meie meeskond on teie
               jaoks olemas.
             </h2>
-            <div className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]">
+            <ul className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px] list-disc pl-6 space-y-2">
               {vehicleDescription.contactInfo.map((contact, index) => (
-                <li key={`contact-${index}`}>{contact}</li>
+                <li key={`contact-${index}`} className="pl-2">{contact}</li>
               ))}
-            </div>
+            </ul>
           </div>
           {/* Social media */}
           <div className="space-y-4">
@@ -129,11 +129,11 @@ export const ImageGallerySection = (): JSX.Element => {
               Avastage meie eksklusiivsete luksusautode maailm ja olge kursis
               pakkumiste ja uudistega. Jälgige meid:
             </h2>
-            <div className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]">
+            <ul className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px] list-disc pl-6 space-y-2">
               {vehicleDescription.socialMedia.map((social, index) => (
-                <li key={`social-${index}`}>{social}</li>
+                <li key={`social-${index}`} className="pl-2">{social}</li>
               ))}
-            </div>
+            </ul>
           </div>
           {/* Financing */}
           <div className="space-y-4">

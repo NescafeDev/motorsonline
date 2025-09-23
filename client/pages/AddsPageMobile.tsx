@@ -446,7 +446,7 @@ export default function AddsPageMobile() {
                 }
               />
               <CheckboxField
-                label="Houldusraamat"
+                label="Hooldusraamat"
                 checked={checkboxes.serviceBook}
                 onChange={(checked) =>
                   handleCheckboxChange("serviceBook", checked)

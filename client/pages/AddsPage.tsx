@@ -57,6 +57,8 @@ export default function AddsPage() {
     transmission: "",
     fuelType: "",
     plateNumber: "",
+    vehicleType: "",
+    bodyType: "",
     month: "",
     mileage: "",
     power: "",
@@ -108,8 +110,9 @@ export default function AddsPage() {
   const [cars, setCars] = useState<any[]>([]);
   const [editingCar, setEditingCar] = useState<any | null>(null);
   const [carImages, setCarImages] = useState<(File | null)[]>(
-    Array(8).fill(null),
+    Array(38).fill(null),
   );
+  const [showMorePhotos, setShowMorePhotos] = useState(false);
   const [brands, setBrands] = useState<{ id: number; name: string }[]>([]);
   const [models, setModels] = useState<{ id: number; name: string }[]>([]);
   const [years, setYears] = useState<{ id: number; value: string }[]>([]);
@@ -236,10 +239,10 @@ export default function AddsPage() {
       if (years.length > 0 && !formData.year_id) {
         setFormData((prev) => ({ ...prev, year_id: years[0].id.toString() }));
       }
-      // Set month
-      if (!formData.month) {
-        setFormData((prev) => ({ ...prev, month: "1" }));
-      }
+      // Set month - don't auto-select, let placeholder show
+      // if (!formData.month) {
+      //   setFormData((prev) => ({ ...prev, month: "1" }));
+      // }
       // Set vatRefundable
       if (!formData.vatRefundable) {
         setFormData((prev) => ({ ...prev, vatRefundable: "yes" }));
@@ -264,9 +267,13 @@ export default function AddsPage() {
       if (!formData.fuelType) {
         setFormData((prev) => ({ ...prev, fuelType: "petrol" }));
       }
+      // Set vehicleType
+      if (!formData.vehicleType) {
+          setFormData((prev) => ({ ...prev, vehicleType: "sõiduauto" }));
+        }
       // Set category
       if (!formData.category) {
-        setFormData((prev) => ({ ...prev, category: "hatchback" }));
+        setFormData((prev) => ({ ...prev, category: "sedaan" }));
       }
     }
   }, [brands, models, years, driveTypes, editingCar]);
@@ -322,7 +329,12 @@ export default function AddsPage() {
     const res = await axios.get("/api/years", {
       headers: { Authorization: `Bearer ${token}` },
     });
-    setYears(res.data);
+    setYears([
+      {
+        id: 0,
+        value: "Aasta",
+      }, ...res.data
+    ]);
   };
 
   const fetchDriveTypes = async () => {
@@ -384,7 +396,8 @@ export default function AddsPage() {
       });
     }
     setEditingCar(null);
-    setCarImages(Array(8).fill(null));
+    setCarImages(Array(38).fill(null));
+    setShowMorePhotos(false);
     fetchCars();
     // Navigate to user's listings after successful add or edit
     navigate("/user");
@@ -411,7 +424,8 @@ export default function AddsPage() {
       ...car,
       price: priceToShow,
     }));
-    setCarImages(Array(8).fill(null));
+    setCarImages(Array(38).fill(null));
+    setShowMorePhotos(false);
     
     // Fetch models for the selected brand when editing
     if (car.brand_id) {
@@ -505,20 +519,136 @@ export default function AddsPage() {
               onImageChange={handleCarImageChange}
               previews={
                 editingCar
-                  ? [1, 2, 3, 4, 5, 6, 7, 8].map(
-                      (i) => editingCar[`image_${i}`],
-                    )
+                  ? Array.from({ length: 38 }, (_, i) => editingCar[`image_${i + 1}`])
                   : []
               }
+              maxPhotos={38}
+              initialVisibleCount={8}
+              showMore={showMorePhotos}
+              onToggleShowMore={() => setShowMorePhotos(!showMorePhotos)}
             />
           </FormSection>
 
           {/* Vehicle Details */}
           <FormSection title="Mudelidetailid">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <FormField
+                label="Valige sõiduki liik"
+                placeholder="Vali sõiduki liik"
+                isSelect
+                value={formData.vehicleType}
+                onChange={(value) => handleInputChange("vehicleType", value)}
+                options={[
+                  {
+                    value: "sõiduauto",
+                    label: "Sõiduauto",
+                  },
+                  {
+                    value: "maastur",
+                    label: "Maastur",
+                  },
+                  {
+                    value: "kaubik",
+                    label: "Kaubik",
+                  },
+                  {
+                    value: "buss",
+                    label: "Buss",
+                  },
+                  {
+                    value: "veoauto",
+                    label: "Veoauto",
+                  },
+                  {
+                    value: "haagis",
+                    label: "Haagis",
+                  },
+                  {
+                    value: "mototehnika",
+                    label: "Mototehnika",
+                  },
+                  {
+                    value: "haagissuvila",
+                    label: "Haagissuvila",
+                  },
+                  {
+                    value: "autoelamu",
+                    label: "Autoelamu",
+                  },
+                  {
+                    value: "veesõiduk",
+                    label: "Veesõiduk",
+                  },
+                  {
+                    value: "ehitustehnika",
+                    label: "Ehitustehnika",
+                  },
+                  {
+                    value: "põllumajandustehnika",
+                    label: "Põllumajandustehnika",
+                  },
+                  {
+                    value: "metsatehnika",
+                    label: "Metsatehnika",
+                  },
+                  {
+                    value: "kommunaaltehnika",
+                    label: "Kommunaaltehnika",
+                  },
+                  {
+                    value: "võistlussõiduk",
+                    label: "Võistlussõiduk",
+                  },
+                  {
+                    value: "muu",
+                    label: "Muu",
+                  },
+                ]}
+              />
               <FormField
-                label="Vali bränd"
-                placeholder="Vali Bränd"
+                label="Keretüüp"
+                placeholder="Keretüüp"
+                isSelect
+                value={formData.bodyType}
+                onChange={(value) => handleInputChange("bodyType", value)}
+                options={[
+                  {
+                    value: "sedaan",
+                    label: "sedaan",
+                  },
+                  {
+                    value: "luukpara",
+                    label: "luukpara",
+                  },
+                  {
+                    value: "universaal",
+                    label: "universaal",
+                  },
+                  {
+                    value: "mahtuniversaal",
+                    label: "mahtuniversaal",
+                  },
+                  {
+                    value: "kupee",
+                    label: "kupee",
+                  },
+                  {
+                    value: "kabriolett",
+                    label: "kabriolett",
+                  },
+                  {
+                    value: "pikap",
+                    label: "pikap",
+                  },
+                  {
+                    value: "limusiin",
+                    label: "limusiin",
+                  },
+                ]}
+              />
+              <FormField
+                label="Vali mark"
+                placeholder="Vali mark"
                 isSelect
                 value={formData.brand_id || ""}
                 onChange={(value) => handleInputChange("brand_id", value)}
@@ -550,6 +680,7 @@ export default function AddsPage() {
                   onChange={(e) => handleInputChange("month", e.target.value)}
                   className="w-full h-14 px-5 rounded-lg border border-motorsoline-form-border bg-white text-lg text-motorsoline-placeholder appearance-none focus:outline-none focus:ring-2 focus:ring-motorsoline-primary focus:border-transparent"
                 >
+                  <option value="">Kuu</option>
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
@@ -580,7 +711,7 @@ export default function AddsPage() {
               />
               <FormField
                 label="Muu mudel või täpsustus"
-                placeholder="Vali mudel"
+                placeholder="näide: Long 4Matic"
                 value={formData.modelDetail}
                 onChange={(value) => handleInputChange("modelDetail", value)}
               />
@@ -631,18 +762,18 @@ export default function AddsPage() {
               />
               <FormField
                 label="Käibemaksu tagastatavus"
-                placeholder="Jah"
+                placeholder="Yes"
                 isSelect
                 value={formData.vatRefundable}
                 onChange={(value) => handleInputChange("vatRefundable", value)}
                 options={[
                   {
                     value: "yes",
-                    label: "Jah",
+                    label: "Yes",
                   },
                   {
                     value: "no",
-                    label: "Ei",
+                    label: "No",
                   },
                 ]}
               />
@@ -655,7 +786,7 @@ export default function AddsPage() {
                 options={[
                   {
                     value: "24",
-                    label: "24",
+                    label: "24%",
                   },
                 ]}
               />
@@ -693,7 +824,7 @@ export default function AddsPage() {
                   }
                 />
                 <CheckboxField
-                  label="Houldusraamat"
+                  label="Hooldusraamat"
                   checked={checktechboxes.serviceBook}
                   onChange={(checked) =>
                     handleCheckTechboxChange("serviceBook", checked)
@@ -954,16 +1085,6 @@ export default function AddsPage() {
             </div>
           </FormSection>
 
-          {/* Description Section */}
-          <FormSection title="">
-            <TextAreaField
-              label="Sõiduki kirjeldus müüja poolt"
-              placeholder="Lisage kirjeldus"
-              value={formData.description}
-              onChange={(value) => handleInputChange("description", value)}
-            />
-          </FormSection>
-
           {/* Equipment Section */}
           <FormSection title="">
             <TextAreaField
@@ -971,6 +1092,16 @@ export default function AddsPage() {
               placeholder="Lisage varustus:"
               value={formData.equipment}
               onChange={(value) => handleInputChange("equipment", value)}
+            />
+          </FormSection>
+
+          {/* Description Section */}
+          <FormSection title="">
+            <TextAreaField
+              label="Sõiduki kirjeldus müüja poolt"
+              placeholder="Lisage kirjeldus"
+              value={formData.description}
+              onChange={(value) => handleInputChange("description", value)}
             />
           </FormSection>
 
@@ -1058,6 +1189,8 @@ export default function AddsPage() {
                     transmission: "",
                     fuelType: "",
                     plateNumber: "",
+                    vehicleType: "",
+                    bodyType: "",
                     month: "",
                     mileage: "",
                     power: "",
@@ -1081,7 +1214,8 @@ export default function AddsPage() {
                     socialNetwork: "",
                     email: "",
                   });
-                  setCarImages(Array(8).fill(null));
+                  setCarImages(Array(38).fill(null));
+                  setShowMorePhotos(false);
                   navigate("/user");
                 }}
               >
