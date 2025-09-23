@@ -75,7 +75,7 @@ export default function LoginForm() {
         <input
           type="email"
           placeholder="Sisesta e-post"
-          className="w-full h-[57px] px-5 rounded-[10px] border border-brand-gray-border bg-white text-brand-gray font-poppins text-base placeholder:text-brand-gray focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
+          className="w-full h-[57px] px-5 rounded-[10px] border border-brand-gray-border bg-white font-poppins text-base placeholder:text-brand-gray focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
           value={email}
           onChange={e => setEmail(e.target.value)}
           autoComplete="email"
@@ -90,7 +90,7 @@ export default function LoginForm() {
         <input
           type="password"
           placeholder="Sisesta parool"
-          className="w-full h-[57px] px-5 rounded-[10px] border border-brand-gray-border bg-white text-brand-gray font-poppins text-base placeholder:text-brand-gray focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
+          className="w-full h-[57px] px-5 rounded-[10px] border border-brand-gray-border bg-white font-poppins text-base placeholder:text-brand-gray focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
           value={password}
           onChange={e => setPassword(e.target.value)}
           autoComplete="current-password"

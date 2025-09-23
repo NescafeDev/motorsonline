@@ -136,7 +136,7 @@ export const CarCard: React.FC<CarCardProps> = ({
   onEdit,
 }) => {
   return (
-    <div className={`w-[1240px] h-[307px] relative ${className}`}>
+    <div className={`w-100 h-[307px] relative ${className}`}>
       {/* Main Card Background */}
       <div className="w-full h-full bg-[#F6F7F9] rounded-[10px] absolute left-0 top-0"></div>
 
