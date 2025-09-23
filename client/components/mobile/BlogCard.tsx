@@ -35,7 +35,7 @@ export function BlogCard({
         <p className="text-black text-base leading-normal mb-6">
           {description}
         </p>
-        <div className="flex items-center gap-2" onClick={() => navigate('/blog/1')}>
+        <div className="flex items-center gap-2" onClick={() => navigate('/blog')}>
           <span className="text-motors-green font-medium text-base text-[#06d6a0]" >
             {readMoreText}
           </span>

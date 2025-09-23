@@ -59,7 +59,7 @@ export const BlogSection = (): JSX.Element => {
             >
               <div className="relative h-[189px]">
                 <img
-                  onClick={() => navigate('/blog/1')}
+                  onClick={() => navigate('/blog')}
                   className="w-full h-full object-cover cursor-pointer"
                   alt="Blog post thumbnail"
                   src={post.image}
@@ -76,7 +76,7 @@ export const BlogSection = (): JSX.Element => {
                   <p className="font-['Poppins',Helvetica] font-normal text-black text-sm leading-normal">
                     {post.description}
                   </p>
-                  <div className="pt-6 flex items-center cursor-pointer" onClick={() => navigate('/blog/1')}>
+                  <div className="pt-6 flex items-center cursor-pointer" onClick={() => navigate('/blog')}>
                     <span className="font-['Poppins',Helvetica] font-medium text-[#06d6a0] text-sm leading-[21px]">
                       Loe postitust
                     </span>

@@ -84,7 +84,7 @@ export default function BlogPage() {
                     Suspendisse varius enim in eros.
                   </p>
                 </div>
-                <div className="flex items-center gap-3 text-[#06d6a0]" onClick={() => navigate('/blog/1')}>
+                <div className="flex items-center gap-3 text-[#06d6a0]" onClick={() => navigate('/blog')}>
                   <span className="text-base font-medium">Loe postitust</span>
                   <ArrowRight className="w-6 h-6" />
                 </div>
@@ -130,7 +130,7 @@ export default function BlogPage() {
                         Suspendisse varius enim in eros.
                       </p>
                     </div>
-                    <div className="flex items-center gap-3 text-motor-green" onClick={() => navigate('/blog/1')}>
+                    <div className="flex items-center gap-3 text-motor-green" onClick={() => navigate('/blog')}>
                       <span className="text-base font-medium text-[#06d6a0]">
                         Loe postitust
                       </span>
@@ -225,7 +225,7 @@ export default function BlogPage() {
                       Lorem varius enim in eros.
                     </p>
                   </div>
-                  <div className="flex items-center gap-3 text-motor-green" onClick={() => navigate('/blog/1')}>
+                  <div className="flex items-center gap-3 text-motor-green" onClick={() => navigate('/blog')}>
                     <span className="text-sm font-medium text-[#06d6a0]">Loe postitust</span>
                     <ArrowRight className="w-6 h-6 text-[#06d6a0]" />
                   </div>
