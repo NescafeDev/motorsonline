@@ -20,7 +20,7 @@ export function CategoryTabs({
   };
 
   return (
-    <div className="flex overflow-x-auto gap-2 p-1 bg-motors-gray-50 rounded-xl">
+    <div className="flex overflow-x-auto gap-2 p-1 bg-gray-100 rounded-xl">
       {categories.map((category) => (
         <button
           key={category}

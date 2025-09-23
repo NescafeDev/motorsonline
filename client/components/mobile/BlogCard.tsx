@@ -17,7 +17,7 @@ export function BlogCard({
 }: BlogCardProps) {
   const navigate = useNavigate();
   return (
-    <div className="bg-motors-gray-50 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200">
+    <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200">
       <div className="aspect-[390/247] w-full overflow-hidden">
         <img
           src={image}

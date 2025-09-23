@@ -4,7 +4,7 @@ export default function Footer() {
   const navigate = useNavigate();
   return (
     <footer className="bg-[#1D1D1D] text-white px-5 py-16 mt-[10%]">
-      <div className="space-y-12 max-w-7xl mx-auto">
+      <div className="space-y-12 max-w-7xl mx-auto px-3">
         <div>
           <svg
             className="h-4 w-auto"

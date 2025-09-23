@@ -6,12 +6,207 @@ import Footer from "@/components/mobile/Footer";
 import { useNavigate } from "react-router-dom";
 import { Drawer, DrawerTrigger, DrawerContent } from "@/components/mobile/ui/drawer";
 import { CarListingSection } from "./sections/CarListingSection/CarListingSection";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import axios from "axios";
+import { useFavorites } from "../hooks/useFavorites";
+import { useAuth } from "../contexts/AuthContext";
+
+// Car-related types
+export interface Car {
+  id: number;
+  brand_id: number;
+  model_id: number;
+  year_id: number;
+  drive_type_id: number;
+  approved: boolean;
+  category: string;
+  transmission: string;
+  fuelType: string;
+  plateNumber: string;
+  month: string;
+  mileage: number;
+  power: string;
+  displacement: string;
+  technicalData: string;
+  ownerCount: string;
+  modelDetail: string;
+  price: number;
+  discountPrice: number;
+  warranty: string;
+  vatRefundable: string;
+  vatRate: string;
+  accident: string;
+  vinCode: string;
+  description: string;
+  equipment: string;
+  additionalInfo: string;
+  country: string;
+  phone: string;
+  businessType: string;
+  socialNetwork: string;
+  email: string;
+  image_1?: string;
+  image_2?: string;
+  image_3?: string;
+  image_4?: string;
+  image_5?: string;
+  image_6?: string;
+  image_7?: string;
+  image_8?: string;
+  tech_check?: string;
+  accessories?: string;
+  seats?: number;
+  doors?: number;
+  color?: string;
+  registeredCountry?: string;
+  importedFrom?: string;
+  serviceBook?: string;
+  inspection?: string;
+  metallicPaint?: string;
+  exchangePossible?: string;
+  fuelCityConsumption?: number;
+  fuelHighwayConsumption?: number;
+  fuelAverageConsumption?: number;
+  co2Emission?: number;
+  created_at?: string;
+  updated_at?: string;
+  brand_name?: string;
+  model_name?: string;
+  year_value?: number;
+  drive_type_name?: string;
+  drive_type_ee_name?: string;
+}
+
+export interface CarFilters {
+  brand_id?: number;
+  model_id?: number;
+  model_name?: string;
+  trim_level?: string;
+  drive_type_id?: number[];
+  seats?: number;
+  doors?: number;
+  price_min?: number;
+  price_max?: number;
+  year_min?: number;
+  year_max?: number;
+  mileage_min?: number;
+  mileage_max?: number;
+  power_min?: number;
+  power_max?: number;
+  engine_min?: number;
+  engine_max?: number;
+  fuel_city_min?: number;
+  fuel_city_max?: number;
+  fuel_highway_min?: number;
+  fuel_highway_max?: number;
+  fuel_average_min?: number;
+  fuel_average_max?: number;
+  co2_min?: number;
+  co2_max?: number;
+  fuel_type?: string[];
+  transmission?: string[];
+  color?: string;
+  country?: string;
+  registered_country?: string;
+  imported_from?: string;
+  seller_type?: string;
+  with_vat?: boolean;
+  service_book?: boolean;
+  inspection?: boolean;
+  accident_free?: boolean;
+  metallic_paint?: boolean;
+  exchange_possible?: boolean;
+  with_warranty?: boolean;
+  equipment?: string[];
+}
+
+// API functions
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
+const apiClient = axios.create({
+  baseURL: "",
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+async function fetchFilteredCars(filters: CarFilters): Promise<Car[]> {
+  try {
+    const params = new URLSearchParams();
+
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== '') {
+        if (Array.isArray(value)) {
+          value.forEach(v => params.append(key, v));
+        } else {
+          params.append(key, String(value));
+        }
+      }
+    });
+
+    const response = await apiClient.get(`/api/cars/public/filtered?${params}`);
+    return Array.isArray(response.data) ? response.data : [];
+  } catch (error) {
+    console.error('Error fetching filtered cars:', error);
+    return [];
+  }
+}
+
+async function fetchAllApprovedCars(): Promise<Car[]> {
+  try {
+    const response = await apiClient.get('/api/cars/public/approved');
+    return Array.isArray(response.data) ? response.data : [];
+  } catch (error) {
+    console.error('Error fetching all cars:', error);
+    return [];
+  }
+}
 
 export default function HomePageMobile() {
   const navigate = useNavigate();
+  const { isAuthenticated, user } = useAuth();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const [filterOpen, setFilterOpen] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
+  const [cars, setCars] = useState<Car[]>([]);
+  const [filteredCars, setFilteredCars] = useState<Car[]>([]);
+  const [filters, setFilters] = useState<CarFilters>({});
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filtersApplied, setFiltersApplied] = useState(false);
+
+  // Load initial cars
+  useEffect(() => {
+    console.log('Initial load cars effect triggered');
+    loadCars();
+  }, []);
+
+  // Reload cars when authentication state changes (login/logout)
+  useEffect(() => {
+    console.log('Auth state changed, isAuthenticated:', isAuthenticated, 'user:', user);
+    loadCars();
+  }, [isAuthenticated, user]);
+
+  // Update filtered cars when cars change or search term changes
+  useEffect(() => {
+    if (filtersApplied) {
+      // If filters are applied, use the filtered results
+      return;
+    }
+
+    // Otherwise, show all cars or search results
+    if (searchTerm.trim() === "") {
+      setFilteredCars(cars);
+    } else {
+      const filtered = cars.filter(car =>
+        car.brand_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        car.model_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        car.modelDetail?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredCars(filtered);
+    }
+  }, [cars, searchTerm, filtersApplied]);
 
   // Close filter when clicking outside
   useEffect(() => {
@@ -25,80 +220,68 @@ export default function HomePageMobile() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, [filterOpen]);
 
-  const cars = [
-    {
-      id: 1,
-      title: "Volkswagen Touareg",
-      year: 2016,
-      mileage: "303 000 km",
-      price: "€ 15 900",
-      fuel: "Diisel",
-      transmission: "Automaat",
-      image:
-        "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=390&h=247&fit=crop&crop=center",
-      isFavorite: true,
-    },
-    {
-      id: 2,
-      title: "Volkswagen Touareg",
-      year: 2016,
-      mileage: "303 000 km",
-      price: "€ 15 900",
-      fuel: "Diisel",
-      transmission: "Automaat",
-      image:
-        "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=390&h=247&fit=crop&crop=center",
-      isFavorite: false,
-    },
-    {
-      id: 3,
-      title: "Volkswagen Touareg",
-      year: 2016,
-      mileage: "303 000 km",
-      price: "€ 15 900",
-      fuel: "Diisel",
-      transmission: "Automaat",
-      image:
-        "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=390&h=247&fit=crop&crop=center",
-      isFavorite: true,
-    },
-    {
-      id: 4,
-      title: "Volkswagen Touareg",
-      year: 2016,
-      mileage: "303 000 km",
-      price: "€ 15 900",
-      fuel: "Diisel",
-      transmission: "Automaat",
-      image:
-        "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=390&h=247&fit=crop&crop=center",
-      isFavorite: false,
-    },
-    {
-      id: 5,
-      title: "Volkswagen Touareg",
-      year: 2016,
-      mileage: "303 000 km",
-      price: "€ 15 900",
-      fuel: "Diisel",
-      transmission: "Automaat",
-      image:
-        "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=390&h=247&fit=crop&crop=center",
-      isFavorite: true,
-    },
-    {
-      id: 6,
-      title: "Volkswagen Touareg",
-      year: 2016,
-      mileage: "303 000 km",
-      price: "€ 15 900",
-      fuel: "Diisel",
-      transmission: "Automaat",
-      image:
-        "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=390&h=247&fit=crop&crop=center",
-      isFavorite: false,
-    },
-  ];
+  const loadCars = useCallback(async () => {
+    console.log('Loading cars');
+    try {
+      setLoading(true);
+      const allCars = await fetchAllApprovedCars();
+
+      setCars(allCars);
+      setFilteredCars(allCars);
+      setFiltersApplied(false);
+    } catch (error) {
+      console.error('Failed to load cars:', error);
+      // Set empty arrays to prevent undefined errors
+      setCars([]);
+      setFilteredCars([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const loadFilteredCarsWithFilters = async (filterParams: CarFilters) => {
+    try {
+      setLoading(true);
+      const filtered = await fetchFilteredCars(filterParams);
+      setFilteredCars(filtered);
+      setFiltersApplied(true);
+    } catch (error) {
+      console.error('Failed to load filtered cars:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFiltersChange = (newFilters: CarFilters) => {
+    setFilters(newFilters);
+    // If filters are cleared, reset the applied state
+    if (Object.keys(newFilters).length === 0) {
+      setFiltersApplied(false);
+      setFilteredCars(cars);
+    } else {
+      // Automatically apply filters when they change
+      loadFilteredCarsWithFilters(newFilters);
+    }
+  };
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    setFiltersApplied(false); // Reset filter state when searching
+  };
+
+  // Format car data for display
+  const formatCarForDisplay = (car: Car) => ({
+    id: car.id,
+    title: `${car.brand_name || 'Unknown'} ${car.model_name || ''}`,
+    year: car.year_value || 0,
+    mileage: `${car.mileage?.toLocaleString() || 'N/A'} km`,
+    price: `€ ${car.price?.toLocaleString() || 'N/A'}`,
+    fuel: car.fuelType || 'N/A',
+    transmission: car.transmission || 'N/A',
+    image: car.image_1 || "img/Rectangle 34624924.png",
+    isFavorite: isFavorite(car.id),
+  });
+
 
   const blogPosts = [
     {
@@ -197,6 +380,8 @@ export default function HomePageMobile() {
                 <input
                   type="text"
                   placeholder="Otsing"
+                  value={searchTerm}
+                  onChange={(e) => handleSearch(e.target.value)}
                   className="flex-1 text-motors-gray placeholder:text-motors-gray pl-1 outline-none"
                 />
               </div>
@@ -207,28 +392,66 @@ export default function HomePageMobile() {
               ref={filterRef}
               className="absolute left-0 mt-2 w-3/4 bg-white rounded-[10px] shadow-lg z-30"
             >
-              <CarListingSection />
+              <CarListingSection
+                filters={filters}
+                onFiltersChange={handleFiltersChange}
+                onApplyFilters={() => {}}
+              />
             </div>
           )}
         </section>
 
         {/* Car Listings */}
         <section className="px-6 py-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-            {cars.map((car, index) => (
-              <div className={filterOpen ? "blur-sm transition-all duration-300" : "transition-all duration-300"} key={car.id}>
-                <CarCard
-                  {...car}
-                />
-              </div>
-            ))}
-          </div>
+          {/* Loading State */}
+          {loading && (
+            <div className="flex justify-center items-center h-64">
+              <div className="text-lg text-gray-500">Laetakse...</div>
+            </div>
+          )}
 
-          <div className="pt-6 max-w-md mx-auto">
-            <button className="w-full border border-motors-green text-motors-green py-4 px-6 rounded-[10px] font-normal text-base leading-[150%] tracking-[-0.32px]">
-              Näita rohkem autosid
-            </button>
-          </div>
+          {/* Car Grid */}
+          {!loading && (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+                {filteredCars.map((car) => {
+                  const displayCar = formatCarForDisplay(car);
+                  return (
+                    <div className={filterOpen ? "blur-sm transition-all duration-300" : "transition-all duration-300"} key={car.id}>
+                      <CarCard
+                        {...displayCar}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* No Results */}
+              {filteredCars.length === 0 && (
+                <div className="flex justify-center items-center h-64">
+                  <div className="text-center">
+                    <div className="text-lg text-gray-500 mb-2">
+                      {cars.length === 0
+                        ? "Andmebaasis pole autosid"
+                        : "Autosid ei leitud valitud filtritega"
+                      }
+                    </div>
+                    {cars.length === 0 && (
+                      <div className="text-sm text-gray-400">
+                        Kontrollige, kas andmebaas on seadistatud ja migratsioon on käivitatud
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <div className="pt-6 max-w-md mx-auto">
+                <button className="w-full border border-motors-green text-motors-green py-4 px-6 rounded-[10px] font-normal text-base leading-[150%] tracking-[-0.32px]">
+                  Näita rohkem autosid
+                </button>
+              </div>
+            </>
+          )}
         </section>
 
         {/* Blog Section */}

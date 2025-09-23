@@ -130,7 +130,7 @@ export default function BlogPageMobile() {
       {/* Main Content */}
       <main className="px-5 py-12 max-w-md mx-auto lg:max-w-4xl">
         {/* Categories Section */}
-        <section className="mb-12">
+        <section className="mb-12 px-3">
           <h2 className="text-black font-normal text-lg leading-7 mb-6">
             Blogi kategooriad
           </h2>
@@ -138,7 +138,7 @@ export default function BlogPageMobile() {
         </section>
 
         {/* Blog Posts Grid */}
-        <section className="mb-20">
+        <section className="mb-20 px-3">
           <div className="grid gap-8 lg:grid-cols-2 xl:grid-cols-3">
             {blogPosts.map((post, index) => (
               <BlogCard key={index} {...post} />
@@ -152,10 +152,10 @@ export default function BlogPageMobile() {
 
       {/* Latest Posts Section */}
       <section className="px-5 py-12 max-w-md mx-auto lg:max-w-4xl">
-        <h2 className="text-black font-semibold text-2xl leading-normal mb-8">
+        <h2 className="text-black font-semibold text-2xl leading-normal mb-8 px-3">
           Viimased postitused
         </h2>
-        <div className="grid gap-8 lg:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-8 lg:grid-cols-2 xl:grid-cols-3 px-3">
           {latestPosts.map((post, index) => (
             <BlogCard key={index} {...post} />
           ))}
