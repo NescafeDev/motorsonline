@@ -9,6 +9,7 @@ import FormSection, {
 import ReactFlagsSelect from "react-flags-select";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 const ChevronDownIcon = () => (
   <svg
     width="16"
@@ -47,7 +48,40 @@ const accessoriesOptions = [
   { key: 'electricWindows', label: 'Elektrilised aknatõstukid' },
 ];
 
+const carColorOptions = [
+  { value: "valge", label: "Valge" },
+  { value: "must", label: "Must" },
+  { value: "hall", label: "Hall" },
+  { value: "punane", label: "Punane" },
+  { value: "sinine", label: "Sinine" },
+  { value: "roheline", label: "Roheline" },
+  { value: "kollane", label: "Kollane" },
+  { value: "oranž", label: "Oranž" },
+  { value: "lilla", label: "Lilla" },
+  { value: "pruun", label: "Pruun" },
+  { value: "beež", label: "Beež" },
+  { value: "hõbedane", label: "Hõbedane" },
+  { value: "kuldne", label: "Kuldne" },
+  { value: "muu", label: "Muu" },
+];
+
+const salonColorOptions = [
+  { value: "must", label: "Must" },
+  { value: "hall", label: "Hall" },
+  { value: "beež", label: "Beež" },
+  { value: "pruun", label: "Pruun" },
+  { value: "punane", label: "Punane" },
+  { value: "sinine", label: "Sinine" },
+  { value: "roheline", label: "Roheline" },
+  { value: "kollane", label: "Kollane" },
+  { value: "lilla", label: "Lilla" },
+  { value: "oranž", label: "Oranž" },
+  { value: "valge", label: "Valge" },
+  { value: "muu", label: "Muu" },
+];
+
 export default function AddsPage() {
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     brand_id: "",
     model_id: "",
@@ -73,6 +107,9 @@ export default function AddsPage() {
     vatRate: "24",
     accident: "",
     vinCode: "",
+    carColor: "",
+    carColorType: "",
+    salonColor: "",
     description: "",
     equipment: "",
     additionalInfo: "",
@@ -725,6 +762,33 @@ export default function AddsPage() {
                 value={formData.modelDetail}
                 onChange={(value) => handleInputChange("modelDetail", value)}
               />
+              <FormField
+                label="Sõiduki värv"
+                placeholder="Vali sõiduki värv"
+                isSelect
+                value={formData.carColor}
+                onChange={(value) => handleInputChange("carColor", value)}
+                options={carColorOptions}
+              />
+              <FormField
+                label="Värvi tüüp"
+                placeholder="Vali värvi tüüp"
+                isSelect
+                value={formData.carColorType}
+                onChange={(value) => handleInputChange("carColorType", value)}
+                options={[
+                  { value: "tavaline", label: "Tavaline" },
+                  { value: "metallik", label: "Metallik" },
+                ]}
+              />
+              <FormField
+                label="Salongi värv"
+                placeholder="Vali salongi värv"
+                isSelect
+                value={formData.salonColor}
+                onChange={(value) => handleInputChange("salonColor", value)}
+                options={salonColorOptions}
+              />
               <div className="space-y-2">
                 <FormField
                   label="Hind"
@@ -1164,7 +1228,7 @@ export default function AddsPage() {
               </div>
               <FormField
                 label="Telefoninumber"
-                placeholder="+49 000 0000000"
+                placeholder="+372 1234 567"
                 value={formData.phone}
                 onChange={(value) => handleInputChange("phone", value)}
               />
@@ -1175,8 +1239,8 @@ export default function AddsPage() {
                 onChange={(value) => handleInputChange("socialNetwork", value)}
               />
               <FormField
-                label="Ettevõte/eraisik"
-                placeholder="Sisesta ettevõte"
+                label={user?.userType === "company" ? "Ettevõte" : "Eraisik"}
+                placeholder={user?.userType === "company" ? "Sisesta ettevõte" : "Sisesta eraisik"}
                 value={formData.businessType}
                 onChange={(value) => handleInputChange("businessType", value)}
               />
@@ -1245,6 +1309,9 @@ export default function AddsPage() {
                     vatRate: "24",
                     accident: "",
                     vinCode: "",
+                    carColor: "",
+                    carColorType: "",
+                    salonColor: "",
                     description: "",
                     equipment: "",
                     additionalInfo: "",

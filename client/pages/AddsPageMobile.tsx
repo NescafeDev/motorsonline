@@ -10,6 +10,7 @@ import FormSection, {
   CheckboxField,
 } from "@/components/FormSection";
 import ReactFlagsSelect from "react-flags-select";
+import { useAuth } from "@/contexts/AuthContext";
 const ChevronDownIcon = () => (
   <svg
     width="16"
@@ -49,7 +50,40 @@ const accessoriesOptions = [
   { key: 'electricWindows', label: 'Elektrilised aknatõstukid' },
 ];
 
+const carColorOptions = [
+  { value: "valge", label: "Valge" },
+  { value: "must", label: "Must" },
+  { value: "hall", label: "Hall" },
+  { value: "punane", label: "Punane" },
+  { value: "sinine", label: "Sinine" },
+  { value: "roheline", label: "Roheline" },
+  { value: "kollane", label: "Kollane" },
+  { value: "oranž", label: "Oranž" },
+  { value: "lilla", label: "Lilla" },
+  { value: "pruun", label: "Pruun" },
+  { value: "beež", label: "Beež" },
+  { value: "hõbedane", label: "Hõbedane" },
+  { value: "kuldne", label: "Kuldne" },
+  { value: "muu", label: "Muu" },
+];
+
+const salonColorOptions = [
+  { value: "must", label: "Must" },
+  { value: "hall", label: "Hall" },
+  { value: "beež", label: "Beež" },
+  { value: "pruun", label: "Pruun" },
+  { value: "punane", label: "Punane" },
+  { value: "sinine", label: "Sinine" },
+  { value: "roheline", label: "Roheline" },
+  { value: "kollane", label: "Kollane" },
+  { value: "lilla", label: "Lilla" },
+  { value: "oranž", label: "Oranž" },
+  { value: "valge", label: "Valge" },
+  { value: "muu", label: "Muu" },
+];
+
 export default function AddsPageMobile() {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const { id: carId } = useParams<{ id: string }>();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -82,6 +116,9 @@ export default function AddsPageMobile() {
     vatRate: "24",
     accident: "",
     vinCode: "",
+    carColor: "",
+    carColorType: "",
+    salonColor: "",
     description: "",
     equipment: "",
     additionalInfo: "",
@@ -538,6 +575,9 @@ export default function AddsPageMobile() {
         vatRate: "24",
         accident: "",
         vinCode: "",
+        carColor: "",
+        carColorType: "",
+        salonColor: "",
         description: "",
         equipment: "",
         additionalInfo: "",
@@ -817,6 +857,33 @@ export default function AddsPageMobile() {
                 value={formData.modelDetail}
                 onChange={(value) => handleInputChange("modelDetail", value)}
               />
+              <FormField
+                  label="Sõiduki värv"
+                  placeholder="Vali sõiduki värv"
+                  isSelect
+                  value={formData.carColor}
+                  onChange={(value) => handleInputChange("carColor", value)}
+                  options={carColorOptions}
+                />
+                <FormField
+                  label="Värvi tüüp"
+                  placeholder="Vali värvi tüüp"
+                  isSelect
+                  value={formData.carColorType}
+                  onChange={(value) => handleInputChange("carColorType", value)}
+                  options={[
+                    { value: "tavaline", label: "Tavaline" },
+                    { value: "metallik", label: "Metallik" },
+                  ]}
+                />
+                <FormField
+                  label="Salongi värv"
+                  placeholder="Vali salongi värv"
+                  isSelect
+                  value={formData.salonColor}
+                  onChange={(value) => handleInputChange("salonColor", value)}
+                  options={salonColorOptions}
+                />
               <div className="space-y-2">
                 <FormField
                   label="Hind"
@@ -922,6 +989,7 @@ export default function AddsPageMobile() {
                   value={formData.vinCode}
                   onChange={(value) => handleInputChange("vinCode", value)}
                 />
+                
               </div>
               <div className="my-auto space-y-3">
                 <CheckboxField
@@ -1256,7 +1324,7 @@ export default function AddsPageMobile() {
               </div>
               <FormField
                 label="Telefoninumber"
-                placeholder="+49 000 0000000"
+                placeholder="+372 1234 567"
                 value={formData.phone}
                 onChange={(value) => handleInputChange("phone", value)}
               />
@@ -1267,8 +1335,8 @@ export default function AddsPageMobile() {
                 onChange={(value) => handleInputChange("socialNetwork", value)}
               />
               <FormField
-                label="Ettevõte/eraisik"
-                placeholder="Sisesta ettevõte"
+                label={user?.userType === "company" ? "Ettevõte" : "Eraisik"}
+                placeholder={user?.userType === "company" ? "Sisesta ettevõte" : "Sisesta Eraisik"}
                 value={formData.businessType}
                 onChange={(value) => handleInputChange("businessType", value)}
               />
@@ -1337,6 +1405,9 @@ export default function AddsPageMobile() {
                     vatRate: "24",
                     accident: "",
                     vinCode: "",
+                    carColor: "",
+                    carColorType: "",
+                    salonColor: "",
                     description: "",
                     equipment: "",
                     additionalInfo: "",

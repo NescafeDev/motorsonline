@@ -12,7 +12,7 @@ const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 // Signup
 router.post('/signup', async (req, res) => {
-  const { name, email, password, admin } = req.body;
+  const { name, email, password, admin , userType} = req.body;
   if (!name || !email || !password) {
     return res.status(400).json({ message: 'All fields are required.' });
   }
@@ -20,8 +20,8 @@ router.post('/signup', async (req, res) => {
   if (existing) {
     return res.status(409).json({ message: 'Email already in use.' });
   }
-  const user = await createUser(name, email, password, admin);
-  res.status(201).json({ id: user.id, name: user.name, email: user.email, admin: user.admin });
+  const user = await createUser(name, email, password, admin, userType);
+  res.status(201).json({ id: user.id, name: user.name, email: user.email, admin: user.admin, userType: user.userType });
 });
 
 // Login
@@ -38,8 +38,8 @@ router.post('/login', async (req, res) => {
   if (!valid) {
     return res.status(401).json({ message: 'Invalid credentials.' });
   }
-  const token = jwt.sign({ id: user.id, email: user.email, admin: user.admin }, JWT_SECRET, { expiresIn: '7d' });
-  res.json({ token, user: { id: user.id, name: user.name, email: user.email, admin: user.admin } });
+  const token = jwt.sign({ id: user.id, email: user.email, admin: user.admin, userType: user.userType }, JWT_SECRET, { expiresIn: '7d' });
+  res.json({ token, user: { id: user.id, name: user.name, email: user.email, admin: user.admin, userType: user.userType } });
 });
 
 // Google
@@ -52,11 +52,11 @@ router.post('/google', async (req, res) => {
     // Check if user exists
     let user = await findUserByEmail(email);
     if (!user) {
-      user = await createUser(name, email, '', false);
+      user = await createUser(name, email, '', false, 'user');
     }
 
-    const token = jwt.sign({ id: user.id, email: user.email, admin: user.admin }, JWT_SECRET, { expiresIn: '7d' });
-    res.json({ token, user: { id: user.id, name: user.name, email: user.email, admin: user.admin } });
+    const token = jwt.sign({ id: user.id, email: user.email, admin: user.admin, userType: user.userType }, JWT_SECRET, { expiresIn: '7d' });
+    res.json({ token, user: { id: user.id, name: user.name, email: user.email, admin: user.admin, userType: user.userType } });
   } catch (err) {
     console.error(err);
   }

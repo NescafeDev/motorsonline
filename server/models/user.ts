@@ -8,9 +8,10 @@ export interface User {
   password: string;
   created_at: Date;
   admin: boolean;
+  userType: string;
 }
 
-export async function createUser(name: string, email: string, password: string, admin: boolean = false): Promise<User> {
+export async function createUser(name: string, email: string, password: string, admin: boolean = false, userType: string = 'user'): Promise<User> {
   // Check if user already exists
   const existing = await findUserByEmail(email);
   if (existing) {
@@ -18,8 +19,8 @@ export async function createUser(name: string, email: string, password: string, 
   }
   const hashedPassword = await bcrypt.hash(password, 10);
   const [result]: any = await pool.query(
-    'INSERT INTO users (name, email, password, admin) VALUES (?, ?, ?, ?)',
-    [name, email, hashedPassword, admin]
+    'INSERT INTO users (name, email, password, admin, userType) VALUES (?, ?, ?, ?, ?)',
+    [name, email, hashedPassword, admin, userType]
   );
   return {
     id: result.insertId,
@@ -28,6 +29,7 @@ export async function createUser(name: string, email: string, password: string, 
     password: hashedPassword,
     created_at: new Date(),
     admin,
+    userType,
   };
 }
 

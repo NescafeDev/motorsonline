@@ -14,6 +14,7 @@ export const RegistrationFormSection = (): JSX.Element => {
     email: "",
     password: "",
     confirmPassword: "",
+    userType: "private", // Default to private
     terms: false,
   });
   const [loading, setLoading] = useState(false);
@@ -24,6 +25,13 @@ export const RegistrationFormSection = (): JSX.Element => {
     setForm((prev) => ({
       ...prev,
       [id]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleRadioChange = (value: string) => {
+    setForm((prev) => ({
+      ...prev,
+      userType: value,
     }));
   };
 
@@ -84,6 +92,7 @@ export const RegistrationFormSection = (): JSX.Element => {
           name: form.fullname,
           email: form.email,
           password: form.password,
+          userType: form.userType,
         }),
       });
       if (!res.ok) {
@@ -152,6 +161,49 @@ export const RegistrationFormSection = (): JSX.Element => {
                 />
               </div>
             ))}
+          </div>
+
+          {/* User Type Radio Buttons */}
+          <div className="space-y-4">
+            <label className="block font-medium text-lg text-black [font-family:'Poppins',Helvetica]">
+              Kasutaja tüüp
+            </label>
+            <div className="flex space-x-6">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  id="private"
+                  name="userType"
+                  value="private"
+                  checked={form.userType === "private"}
+                  onChange={(e) => handleRadioChange(e.target.value)}
+                  className="w-5 h-5 text-[#06d6a0] focus:ring-[#06d6a0]"
+                />
+                <label
+                  htmlFor="private"
+                  className="text-lg [font-family:'Poppins',Helvetica] cursor-pointer"
+                >
+                  Eraisik
+                </label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  id="company"
+                  name="userType"
+                  value="company"
+                  checked={form.userType === "company"}
+                  onChange={(e) => handleRadioChange(e.target.value)}
+                  className="w-5 h-5 text-[#06d6a0] focus:ring-[#06d6a0]"
+                />
+                <label
+                  htmlFor="company"
+                  className="text-lg [font-family:'Poppins',Helvetica] cursor-pointer"
+                >
+                  Ettevõte
+                </label>
+              </div>
+            </div>
           </div>
 
           <div className="flex items-start space-x-4 pt-4 mb-5">
