@@ -110,7 +110,7 @@ export default function AddsPage() {
   const [cars, setCars] = useState<any[]>([]);
   const [editingCar, setEditingCar] = useState<any | null>(null);
   const [carImages, setCarImages] = useState<(File | null)[]>(
-    Array(38).fill(null),
+    Array(40).fill(null),
   );
   const [showMorePhotos, setShowMorePhotos] = useState(false);
   const [brands, setBrands] = useState<{ id: number; name: string }[]>([]);
@@ -235,9 +235,15 @@ export default function AddsPage() {
       if (models.length > 0 && !formData.model_id) {
         setFormData((prev) => ({ ...prev, model_id: models[0].id.toString() }));
       }
-      // Set year_id
+      // Set year_id to 2025 by default
       if (years.length > 0 && !formData.year_id) {
-        setFormData((prev) => ({ ...prev, year_id: years[0].id.toString() }));
+        const year2025 = years.find(y => y.value === "2025");
+        if (year2025) {
+          setFormData((prev) => ({ ...prev, year_id: year2025.id.toString() }));
+        } else {
+          // Fallback to first year if 2025 not found
+          setFormData((prev) => ({ ...prev, year_id: years[0].id.toString() }));
+        }
       }
       // Set month - don't auto-select, let placeholder show
       // if (!formData.month) {
@@ -329,12 +335,7 @@ export default function AddsPage() {
     const res = await axios.get("/api/years", {
       headers: { Authorization: `Bearer ${token}` },
     });
-    setYears([
-      {
-        id: 0,
-        value: "Aasta",
-      }, ...res.data
-    ]);
+    setYears(res.data);
   };
 
   const fetchDriveTypes = async () => {
@@ -361,6 +362,15 @@ export default function AddsPage() {
     setCarImages((prev) => {
       const updated = [...prev];
       updated[index] = file;
+      return updated;
+    });
+  };
+
+  const handleImageReorder = (sourceIndex: number, destinationIndex: number) => {
+    setCarImages((prev) => {
+      const updated = [...prev];
+      const [movedItem] = updated.splice(sourceIndex, 1);
+      updated.splice(destinationIndex, 0, movedItem);
       return updated;
     });
   };
@@ -396,7 +406,7 @@ export default function AddsPage() {
       });
     }
     setEditingCar(null);
-    setCarImages(Array(38).fill(null));
+    setCarImages(Array(40).fill(null));
     setShowMorePhotos(false);
     fetchCars();
     // Navigate to user's listings after successful add or edit
@@ -424,7 +434,7 @@ export default function AddsPage() {
       ...car,
       price: priceToShow,
     }));
-    setCarImages(Array(38).fill(null));
+    setCarImages(Array(40).fill(null));
     setShowMorePhotos(false);
     
     // Fetch models for the selected brand when editing
@@ -517,12 +527,13 @@ export default function AddsPage() {
             <PhotoUpload
               images={carImages}
               onImageChange={handleCarImageChange}
+              onReorder={handleImageReorder}
               previews={
                 editingCar
-                  ? Array.from({ length: 38 }, (_, i) => editingCar[`image_${i + 1}`])
+                  ? Array.from({ length: 40 }, (_, i) => editingCar[`image_${i + 1}`])
                   : []
               }
-              maxPhotos={38}
+              maxPhotos={40}
               initialVisibleCount={8}
               showMore={showMorePhotos}
               onToggleShowMore={() => setShowMorePhotos(!showMorePhotos)}
@@ -534,7 +545,7 @@ export default function AddsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <FormField
                 label="Valige sõiduki liik"
-                placeholder="Vali sõiduki liik"
+                placeholder="Valik sõiduki liik"
                 isSelect
                 value={formData.vehicleType}
                 onChange={(value) => handleInputChange("vehicleType", value)}
@@ -647,8 +658,8 @@ export default function AddsPage() {
                 ]}
               />
               <FormField
-                label="Vali mark"
-                placeholder="Vali mark"
+                label="Valik mark"
+                placeholder="Valik mark"
                 isSelect
                 value={formData.brand_id || ""}
                 onChange={(value) => handleInputChange("brand_id", value)}
@@ -656,7 +667,7 @@ export default function AddsPage() {
               />
               <FormField
                 label="Mudel"
-                placeholder="Vali mudel"
+                placeholder="Valik mudel"
                 isSelect
                 value={formData.model_id || ""}
                 onChange={(value) => handleInputChange("model_id", value)}
@@ -665,7 +676,7 @@ export default function AddsPage() {
               />
               <FormField
                 label="Esmane registreerimine"
-                placeholder="Aasta"
+                placeholder="2025"
                 isSelect
                 value={formData.year_id || ""}
                 onChange={(value) => handleInputChange("year_id", value)}
@@ -680,7 +691,6 @@ export default function AddsPage() {
                   onChange={(e) => handleInputChange("month", e.target.value)}
                   className="w-full h-14 px-5 rounded-lg border border-motorsoline-form-border bg-white text-lg text-motorsoline-placeholder appearance-none focus:outline-none focus:ring-2 focus:ring-motorsoline-primary focus:border-transparent"
                 >
-                  <option value="">Kuu</option>
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
@@ -768,27 +778,25 @@ export default function AddsPage() {
                 onChange={(value) => handleInputChange("vatRefundable", value)}
                 options={[
                   {
-                    value: "yes",
-                    label: "Yes",
+                    value: "jah",
+                    label: "JAH",
                   },
                   {
-                    value: "no",
-                    label: "No",
+                    value: "ei",
+                    label: "EI",
                   },
                 ]}
               />
               <FormField
                 label="Käibemaksumäär"
-                placeholder="Palun vali"
-                isSelect
+                placeholder="Sisesta protsent 0-30"
+                type="number"
                 value={formData.vatRate}
                 onChange={(value) => handleInputChange("vatRate", value)}
-                options={[
-                  {
-                    value: "24",
-                    label: "24%",
-                  },
-                ]}
+                min={1}
+                max={30}
+                step={1}
+                suffix="%"
               />
             </div>
 
@@ -796,10 +804,25 @@ export default function AddsPage() {
             <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <FormField
-                  label="Avariiline"
-                  placeholder="näide: osad kaasa"
+                  label="Sõiduki seisukord"
+                  placeholder="näide: uus"
                   value={formData.accident}
                   onChange={(value) => handleInputChange("accident", value)}
+                  isSelect
+                  options={[
+                    {
+                      value: "uus",
+                      label: "Uus",
+                    },
+                    {
+                      value: "kasutatud",
+                      label: "Kasutatud",
+                    },
+                    {
+                      value: "avariiline",
+                      label: "Avariiline",
+                    },
+                  ]}
                 />
                 <FormField
                   label="VIN-kood"
@@ -808,7 +831,7 @@ export default function AddsPage() {
                   onChange={(value) => handleInputChange("vinCode", value)}
                 />
               </div>
-              <div className="my-auto">
+              <div className="ml-2 space-y-1 pt-11">
                 <CheckboxField
                   label="Teostatud tehniline kontroll"
                   checked={checktechboxes.technicalInspection}
@@ -842,11 +865,11 @@ export default function AddsPage() {
           </FormSection>
 
           {/* Technical Details */}
-          <FormSection title="Mudelidetailid">
+          <FormSection title="Tehnilised detailandmed">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <FormField
                 label="Kütuse tüüp"
-                placeholder="Vali Kütuse tüüp"
+                placeholder="Valik Kütuse tüüp"
                 isSelect
                 value={formData.fuelType}
                 onChange={(value) => handleInputChange("fuelType", value)}
@@ -877,7 +900,7 @@ export default function AddsPage() {
               />
               <FormField
                 label="Kategooria"
-                placeholder="Vali kategooria"
+                placeholder="Valik kategooria"
                 isSelect
                 value={formData.category}
                 onChange={(value) => handleInputChange("category", value)}
@@ -920,20 +943,16 @@ export default function AddsPage() {
                 onChange={(value) => handleInputChange("transmission", value)}
                 options={[
                   {
-                    value: "helical",
-                    label: "Helical",
+                    value: "maunaal",
+                    label: "Maunaal",
                   },
                   {
-                    value: "bevel",
-                    label: "Bevel",
+                    value: "automaat",
+                    label: "Automaat",
                   },
                   {
-                    value: "worm",
-                    label: "Worm",
-                  },
-                  {
-                    value: "planetary",
-                    label: "Planetary",
+                    value: "poolautomaat",
+                    label: "Poolautomaat",
                   },
                 ]}
               />
@@ -941,7 +960,18 @@ export default function AddsPage() {
                 label="Tehnilised andmed"
                 placeholder="Kasutatud, avariivaba ..."
                 value={formData.technicalData}
+                isSelect
                 onChange={(value) => handleInputChange("technicalData", value)}
+                options={[
+                  {
+                    value: "kasutatud",
+                    label: "Kasutatud",
+                  },
+                  {
+                    value: "avariivaba",
+                    label: "Avariivaba",
+                  },
+                ]}
               />
               <FormField
                 label="Omanike arv"
@@ -970,14 +1000,24 @@ export default function AddsPage() {
               />
               <FormField
                 label="Veoskeem:"
-                placeholder="Vali veoskeem"
+                placeholder="Valik veoskeem"
                 isSelect
                 value={formData.drive_type_id}
                 onChange={(value) => handleInputChange("drive_type_id", value)}
-                options={driveTypes.map(driveType => ({
-                  value: driveType.id.toString(),
-                  label: driveType.ee_name,
-                }))}
+                options={[
+                  {
+                    value: "esivedu",
+                    label: "Esivedu",
+                  },
+                  {
+                    value: "tausted",
+                    label: "Tausted",
+                  },
+                  {
+                    value: "nelikvedu",
+                    label: "Nelikvedu",
+                  },
+                ]}
               />
               <FormField
                 label="Töömaht"
@@ -1111,7 +1151,7 @@ export default function AddsPage() {
               <div className="flex gap-4">
                 <div className="w-full">
                   <label className="block text-motorsoline-text text-lg font-medium mb-3">
-                    Vali riik
+                    Valik riik
                   </label>
                   <ReactFlagsSelect
                     className="w-full rounded-lg bg-white text-lg"
@@ -1214,7 +1254,7 @@ export default function AddsPage() {
                     socialNetwork: "",
                     email: "",
                   });
-                  setCarImages(Array(38).fill(null));
+                  setCarImages(Array(40).fill(null));
                   setShowMorePhotos(false);
                   navigate("/user");
                 }}

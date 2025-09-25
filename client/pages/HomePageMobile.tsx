@@ -1,5 +1,5 @@
 import { Search } from "lucide-react";
-import  Header  from "@/components/mobile/Header";
+import Header from "@/components/mobile/Header";
 import { CarCard } from "@/components/mobile/CarCard";
 import { BlogCard } from "@/components/mobile/BlogCard";
 import Footer from "@/components/mobile/Footer";
@@ -356,8 +356,8 @@ export default function HomePageMobile() {
         </section>
 
         {/* Call to Action Section */}
-        <section className="bg-white px-5 py-8">
-          <div className="bg-white p-4 rounded-lg mb-6 max-w-md mx-auto">
+        <section className="bg-[#F6F7F9] py-5 px-5">
+          <div className="bg-white px-3 py-6 rounded-lg max-w-md">
             <p className="text-motors-dark leading-[150%] tracking-[-0.48px] mb-6">
               Kuulutuste avaldamine on tasuta. Kasutage võimalust, et leida oma
               sõidukile uus omanik!
@@ -369,12 +369,12 @@ export default function HomePageMobile() {
         </section>
 
         {/* Search Section */}
-        <section className="px-5 py-6 max-w-7xl mx-auto relative">
+        {/* <section className="max-w-7xl mx-auto">
           <div className="flex items-center">
-            <div className="bg-white p-3 rounded-md shadow-sm cursor-pointer relative z-20" onClick={() => setFilterOpen((v) => !v)}>
+            <div className="bg-white p-3 rounded-md shadow-sm cursor-pointer z-20" onClick={() => setFilterOpen((v) => !v)}>
               <span className="text-black font-medium">Filtrid</span>
             </div>
-            <div className="flex-1 relative w-full pl-[10px]">
+            <div className="flex-1 w-full pl-[10px]">
               <div className="bg-white border rounded-md px-3 py-3 flex items-center shadow-sm w-full">
                 <Search className="w-4 h-4 text-black" />
                 <input
@@ -385,6 +385,36 @@ export default function HomePageMobile() {
                   className="flex-1 text-motors-gray placeholder:text-motors-gray pl-1 outline-none"
                 />
               </div>
+            </div>
+          </div>
+          {filterOpen && (
+            <div
+              ref={filterRef}
+              className="absolute left-0 mt-2 w-3/4 bg-white rounded-[10px] shadow-lg z-30"
+            >
+              <CarListingSection
+                filters={filters}
+                onFiltersChange={handleFiltersChange}
+                onApplyFilters={() => {}}
+              />
+            </div>
+          )}
+        </section> */}
+
+        <section className="px-5">
+          <div className="flex items-center gap-2">
+            <div className="bg-white p-3 rounded-md shadow-sm cursor-pointer z-20" onClick={() => setFilterOpen((v) => !v)}>
+              <span className="text-black font-medium">Filtrid</span>
+            </div>
+            <div className="flex-1 items-center py-3 w-full pl-[10px] bg-white border rounded-md ">
+              {/* <Search className="w-4 h-4 text-black" /> */}
+              <input
+                type="text"
+                placeholder="Otsing"
+                value={searchTerm}
+                onChange={(e) => handleSearch(e.target.value)}
+                className="text-motors-gray placeholder:text-motors-gray pl-1 outline-none"
+              />
             </div>
           </div>
           {filterOpen && (
@@ -446,7 +476,7 @@ export default function HomePageMobile() {
               )}
 
               <div className="pt-6 max-w-md mx-auto">
-                <button className="w-full border border-motors-green text-motors-green py-4 px-6 rounded-[10px] font-normal text-base leading-[150%] tracking-[-0.32px]">
+                <button className="w-full border text-motors-green py-4 px-6 rounded-[10px] font-normal text-base leading-[150%] border-[#06d6a0] text-[#06d6a0]">
                   Näita rohkem autosid
                 </button>
               </div>
@@ -456,7 +486,7 @@ export default function HomePageMobile() {
 
         {/* Blog Section */}
         <section className="px-5 py-12">
-          <div className="mb-12 max-w-7xl mx-auto">
+          <div className="mb-12 px-6 max-w-7xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold text-black mb-6">
               Blog
             </h2>

@@ -34,6 +34,9 @@ interface FormFieldProps {
   className?: string;
   options?: { value: string | number; label: string }[];
   disabled?: boolean;
+  min?: number;
+  max?: number;
+  step?: number;
 }
 
 export function FormField({
@@ -47,6 +50,9 @@ export function FormField({
   className = "",
   options = [],
   disabled = false,
+  min,
+  max,
+  step,
 }: FormFieldProps) {
   const ChevronDownIcon = () => (
     <svg
@@ -97,12 +103,15 @@ export function FormField({
               onChange={(e) => onChange?.(e.target.value)}
               placeholder={placeholder}
               disabled={disabled}
+              min={min}
+              max={max}
+              step={step}
               className={`w-full h-14 px-5 rounded-lg border border-motorsoline-form-border bg-white text-lg text-black placeholder:text-motorsoline-placeholder focus:outline-none focus:ring-2 focus:ring-motorsoline-primary focus:border-transparent ${disabled ? 'opacity-50 cursor-not-allowed bg-gray-100' : ''}`}
             />
-            {suffix && (
-              <span className="absolute right-5 top-1/2 transform -translate-y-1/2 text-lg text-motorsoline-placeholder">
-                {suffix}
-              </span>
+            {value && suffix && (
+              <div className="absolute left-5 top-1/2 transform -translate-y-1/2 text-lg text-motorsoline-text font-normal pointer-events-none">
+                {value}{suffix}
+              </div>
             )}
           </div>
         )}

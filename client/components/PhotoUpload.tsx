@@ -1,9 +1,10 @@
 import React, { useState, useCallback } from "react";
-import { X, Upload, Camera } from "lucide-react";
+import { X, Upload, Camera, GripVertical } from "lucide-react";
 
 interface PhotoUploadProps {
   images: (File | null)[];
   onImageChange: (index: number, file: File | null) => void;
+  onReorder?: (sourceIndex: number, destinationIndex: number) => void;
   previews?: (string | undefined)[];
   maxFileSize?: number; // in MB
   acceptedTypes?: string[];
@@ -16,6 +17,7 @@ interface PhotoUploadProps {
 export default function PhotoUpload({ 
   images, 
   onImageChange, 
+  onReorder,
   previews = [],
   maxFileSize = 5, // 5MB default
   acceptedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
@@ -26,6 +28,7 @@ export default function PhotoUpload({
 }: PhotoUploadProps) {
   const [dragOver, setDragOver] = useState<number | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
   const validateFile = useCallback((file: File): string | null => {
     if (!acceptedTypes.includes(file.type)) {
@@ -53,17 +56,17 @@ export default function PhotoUpload({
     setErrors([]);
   }, [onImageChange, validateFile]);
 
-  const handleDragOver = useCallback((e: React.DragEvent, index: number) => {
+  const handleFileDragOver = useCallback((e: React.DragEvent, index: number) => {
     e.preventDefault();
     setDragOver(index);
   }, []);
 
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
+  const handleFileDragLeave = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     setDragOver(null);
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent, index: number) => {
+  const handleFileDrop = useCallback((e: React.DragEvent, index: number) => {
     e.preventDefault();
     setDragOver(null);
     
@@ -76,6 +79,41 @@ export default function PhotoUpload({
   const removeImage = useCallback((index: number) => {
     onImageChange(index, null);
   }, [onImageChange]);
+
+  const handleDragStart = useCallback((e: React.DragEvent, index: number) => {
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', index.toString());
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOver(index);
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(null);
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    setDragOver(null);
+    
+    const sourceIndex = parseInt(e.dataTransfer.getData('text/html'));
+    
+    if (sourceIndex !== index && onReorder) {
+      onReorder(sourceIndex, index);
+    }
+    
+    setDraggedIndex(null);
+  }, [onReorder]);
+
+  const handleDragEnd = useCallback(() => {
+    setDraggedIndex(null);
+    setDragOver(null);
+  }, []);
 
   const getImagePreview = (index: number) => {
     if (images[index]) {
@@ -102,6 +140,7 @@ export default function PhotoUpload({
         {[...Array(showMore ? maxPhotos : initialVisibleCount)].map((_, idx) => {
           const preview = getImagePreview(idx);
           const isDragOver = dragOver === idx;
+          const isDragging = draggedIndex === idx;
           
           return (
             <div key={idx} className="flex flex-col items-center">
@@ -112,7 +151,7 @@ export default function PhotoUpload({
               <div 
                 className={`relative w-full transition-all duration-200 ${
                   isDragOver ? 'scale-105 ring-2 ring-blue-400' : ''
-                }`}
+                } ${isDragging ? 'rotate-2 scale-105 opacity-50' : ''}`}
                 onDragOver={(e) => handleDragOver(e, idx)}
                 onDragLeave={handleDragLeave}
                 onDrop={(e) => handleDrop(e, idx)}
@@ -132,7 +171,12 @@ export default function PhotoUpload({
                   }`}
                 >
                   {preview ? (
-                    <div className="relative group">
+                    <div 
+                      className="relative group"
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, idx)}
+                      onDragEnd={handleDragEnd}
+                    >
                       <img
                         src={preview}
                         alt={`Pilt ${idx + 1}`}
@@ -151,13 +195,22 @@ export default function PhotoUpload({
                           <X size={16} />
                         </button>
                       </div>
+                      {/* Drag handle for uploaded images */}
+                      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 bg-white bg-opacity-80 rounded-full p-1 cursor-grab active:cursor-grabbing transition-all duration-200">
+                        <GripVertical size={16} className="text-gray-600" />
+                      </div>
                     </div>
                   ) : (
-                    <div className={`
-                      flex flex-col items-center justify-center h-32 w-full border-2 border-dashed border-gray-300 rounded-lg 
-                      ${isDragOver ? 'border-blue-400 bg-blue-50' : 'bg-gray-50 hover:bg-gray-100'} 
-                      transition-all duration-200
-                    `}>
+                    <div 
+                      className={`
+                        flex flex-col items-center justify-center h-32 w-full border-2 border-dashed border-gray-300 rounded-lg 
+                        ${isDragOver ? 'border-blue-400 bg-blue-50' : 'bg-gray-50 hover:bg-gray-100'} 
+                        transition-all duration-200
+                      `}
+                      onDragOver={(e) => handleFileDragOver(e, idx)}
+                      onDragLeave={handleFileDragLeave}
+                      onDrop={(e) => handleFileDrop(e, idx)}
+                    >
                       {isDragOver ? (
                         <Upload size={24} className="text-blue-500 mb-2" />
                       ) : (

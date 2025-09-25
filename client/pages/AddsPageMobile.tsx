@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Header from "@/components/mobile/Header";
 import Footer from "@/components/mobile/Footer";
@@ -27,26 +27,53 @@ const ChevronDownIcon = () => (
   </svg>
 );
 
+const techCheckOptions = [
+  { key: 'technicalInspection', label: 'Teostatud tehniline kontroll' },
+  { key: 'technicalMaintenance', label: 'Teostatud tehniline hooldus' },
+  { key: 'serviceBook', label: 'Hooldusraamat' },
+  { key: 'hideVin', label: 'Peida VIN-kood' },
+];
+
+const accessoriesOptions = [
+  { key: 'abs', label: 'ABS' },
+  { key: 'adaptiveHeadlights', label: 'Adaptiivne kurvituli' },
+  { key: 'alarmSystem', label: 'Häiresüsteem' },
+  { key: 'ambientLighting', label: 'Ambiente valgustus' },
+  { key: 'appleCarplay', label: 'Apple Carplay' },
+  { key: 'armrest', label: 'Käetugi' },
+  { key: 'hillStartAssist', label: 'Käivitusabi mäkketõusul' },
+  { key: 'automaticHighBeams', label: 'Pimestamisvaba kaugtuli' },
+  { key: 'bluetooth', label: 'Bluetooth' },
+  { key: 'boardComputer', label: 'Bordcomputer (pardaarvuti)' },
+  { key: 'cdPlayer', label: 'CD-mängija' },
+  { key: 'electricWindows', label: 'Elektrilised aknatõstukid' },
+];
+
 export default function AddsPageMobile() {
   const navigate = useNavigate();
+  const { id: carId } = useParams<{ id: string }>();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [editingCar, setEditingCar] = useState<any | null>(null);
   
   const [formData, setFormData] = useState({
     brand_id: "",
     model_id: "",
+    year_id: "",
+    drive_type_id: "",
     category: "",
     transmission: "",
     fuelType: "",
     plateNumber: "",
-    year_id: "",
+    vehicleType: "",
+    bodyType: "",
     month: "",
     mileage: "",
     power: "",
     displacement: "",
     technicalData: "",
     ownerCount: "",
-    drive_type_id: "",
     modelDetail: "",
     price: "",
     discountPrice: "",
@@ -65,12 +92,14 @@ export default function AddsPageMobile() {
     email: "",
   });
 
-  const [checkboxes, setCheckboxes] = useState({
+  const [checktechboxes, setCheckTechboxes] = useState({
     technicalInspection: false,
     technicalMaintenance: false,
     serviceBook: false,
     hideVin: false,
-    // Equipment checkboxes
+  });
+
+  const [checkboxes, setCheckboxes] = useState({
     abs: false,
     adaptiveHeadlights: false,
     alarmSystem: false,
@@ -86,8 +115,9 @@ export default function AddsPageMobile() {
   });
 
   const [showMoreEquipment, setShowMoreEquipment] = useState(false);
+  const [showMorePhotos, setShowMorePhotos] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState("");
-  const [carImages, setCarImages] = useState<(File | null)[]>(Array(8).fill(null));
+  const [carImages, setCarImages] = useState<(File | null)[]>(Array(40).fill(null));
   
   // Data for dropdowns
   const [brands, setBrands] = useState<{ id: number; name: string }[]>([]);
@@ -95,44 +125,216 @@ export default function AddsPageMobile() {
   const [years, setYears] = useState<{ id: number; value: string }[]>([]);
   const [driveTypes, setDriveTypes] = useState<{ id: number; name: string; ee_name: string }[]>([]);
 
-  // Fetch dropdown data on component mount
   useEffect(() => {
-    const fetchDropdownData = async () => {
-      try {
-        const [brandsRes, yearsRes, driveTypesRes] = await Promise.all([
-          axios.get('/api/brands'),
-          axios.get('/api/years'),
-          axios.get('/api/drive-types')
-        ]);
-        
-        setBrands(brandsRes.data);
-        setYears(yearsRes.data);
-        setDriveTypes(driveTypesRes.data);
-      } catch (error) {
-        console.error('Error fetching dropdown data:', error);
-      }
-    };
-
-    fetchDropdownData();
-  }, []);
-
-  // Fetch models when brand changes
-  useEffect(() => {
-    const fetchModels = async () => {
-      if (formData.brand_id) {
-        try {
-          const response = await axios.get(`/api/models?brand_id=${formData.brand_id}`);
-          setModels(response.data);
-        } catch (error) {
-          console.error('Error fetching models:', error);
+    const initializeData = async () => {
+      await Promise.all([
+        fetchBrands(),
+        fetchYears(),
+        fetchDriveTypes()
+      ]);
+      
+      // If we have a carId in the URL, fetch that car for editing
+      if (carId) {
+        const car = await fetchCarById(carId);
+        if (car) {
+          // Set the car data after all other data is loaded
+          setEditingCar(car);
+          
+          // Convert car data to proper format for form fields
+          let priceToShow = car.price?.toString() || "";
+          
+          // If car has VAT applied, calculate the base price for editing
+          if (car.vatRefundable === 'yes' && car.price && car.vatRate) {
+            const totalPrice = parseFloat(car.price.toString());
+            const vatRate = 24;
+            if (!isNaN(totalPrice) && !isNaN(vatRate)) {
+              const basePrice = calculateBasePriceFromTotal(totalPrice, vatRate);
+              priceToShow = basePrice.toString();
+            }
+          }
+          
+          const formattedCarData = {
+            ...car,
+            brand_id: car.brand_id?.toString() || "",
+            model_id: car.model_id?.toString() || "",
+            year_id: car.year_id?.toString() || "",
+            drive_type_id: car.drive_type_id?.toString() || "",
+            price: priceToShow,
+            discountPrice: car.discountPrice?.toString() || "",
+            mileage: car.mileage?.toString() || "",
+            power: car.power?.toString() || "",
+            displacement: car.displacement?.toString() || "",
+            ownerCount: car.ownerCount?.toString() || "",
+            vatRate: car.vatRate?.toString() || "",
+            month: car.month?.toString() || "",
+          };
+          
+          setFormData((prev) => ({
+            ...prev,
+            ...formattedCarData,
+          }));
+          
+          // Fetch models for the selected brand when editing
+          if (car.brand_id) {
+            await fetchModels(car.brand_id.toString());
+          }
+          
+          // Set checkboxes
+          if (car.tech_check) {
+            const arr = Array.isArray(car.tech_check) ? car.tech_check : car.tech_check.split(',');
+            setCheckTechboxes((prev) => {
+              const obj: any = {};
+              techCheckOptions.forEach(opt => {
+                obj[opt.key] = arr.includes(opt.key);
+              });
+              return obj;
+            });
+          }
+          if (car.accessories) {
+            const arr = Array.isArray(car.accessories) ? car.accessories : car.accessories.split(',');
+            setCheckboxes((prev) => {
+              const obj: any = {};
+              accessoriesOptions.forEach(opt => {
+                obj[opt.key] = arr.includes(opt.key);
+              });
+              return obj;
+            });
+          }
+        } else {
+          // If car not found, redirect to user page
+          navigate('/user');
         }
       } else {
-        setModels([]);
+        // Check for editing car data in localStorage (fallback for old approach)
+        const editingCarData = localStorage.getItem('editingCar');
+        if (editingCarData) {
+          try {
+            const car = JSON.parse(editingCarData);
+            handleEditCar(car);
+            // Clear the localStorage after loading the data
+            localStorage.removeItem('editingCar');
+          } catch (error) {
+            console.error('Error parsing editing car data:', error);
+            localStorage.removeItem('editingCar');
+          }
+        }
       }
     };
+    
+    initializeData().finally(() => {
+      setIsLoading(false);
+    });
+  }, [carId]);
 
-    fetchModels();
+  // Auto-select first option for selects on add (not edit)
+  useEffect(() => {
+    if (!editingCar) {
+      // Set brand_id
+      if (brands.length > 0 && !formData.brand_id) {
+        setFormData((prev) => ({ ...prev, brand_id: brands[0].id.toString() }));
+      }
+      // Set model_id
+      if (models.length > 0 && !formData.model_id) {
+        setFormData((prev) => ({ ...prev, model_id: models[0].id.toString() }));
+      }
+      // Set year_id to 2025 by default
+      if (years.length > 0 && !formData.year_id) {
+        const year2025 = years.find(y => y.value === "2025");
+        if (year2025) {
+          setFormData((prev) => ({ ...prev, year_id: year2025.id.toString() }));
+        } else {
+          // Fallback to first year if 2025 not found
+          setFormData((prev) => ({ ...prev, year_id: years[0].id.toString() }));
+        }
+      }
+      // Set vatRefundable
+      if (!formData.vatRefundable) {
+        setFormData((prev) => ({ ...prev, vatRefundable: "yes" }));
+      }
+      // Set vatRate
+      if (!formData.vatRate) {
+        setFormData((prev) => ({ ...prev, vatRate: "24" }));
+      }
+      // Set ownerCount
+      if (!formData.ownerCount) {
+        setFormData((prev) => ({ ...prev, ownerCount: "1" }));
+      }
+      // Set drive_type_id
+      if (driveTypes.length > 0 && !formData.drive_type_id) {
+        setFormData((prev) => ({ ...prev, drive_type_id: driveTypes[0].id.toString() }));
+      }
+      // Set transmission
+      if (!formData.transmission) {
+        setFormData((prev) => ({ ...prev, transmission: "helical" }));
+      }
+      // Set fuelType
+      if (!formData.fuelType) {
+        setFormData((prev) => ({ ...prev, fuelType: "petrol" }));
+      }
+      // Set vehicleType
+      if (!formData.vehicleType) {
+          setFormData((prev) => ({ ...prev, vehicleType: "sõiduauto" }));
+        }
+      // Set category
+      if (!formData.category) {
+        setFormData((prev) => ({ ...prev, category: "sedaan" }));
+      }
+    }
+  }, [brands, models, years, driveTypes, editingCar]);
+
+  useEffect(() => {
+    if (formData.brand_id) {
+      fetchModels(formData.brand_id);
+    } else {
+      setModels([]);
+      setFormData((prev) => ({ ...prev, model_id: "" }));
+    }
   }, [formData.brand_id]);
+
+  const fetchModels = async (brand_id: string) => {
+    const token = localStorage.getItem("token");
+    const res = await axios.get(`/api/models?brand_id=${brand_id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setModels(res.data);
+  };
+
+  const fetchCarById = async (id: string) => {
+    const token = localStorage.getItem("token");
+    try {
+      const res = await axios.get(`/api/cars/edit/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return res.data;
+    } catch (error) {
+      console.error('Error fetching car:', error);
+      return null;
+    }
+  };
+
+  const fetchBrands = async () => {
+    const token = localStorage.getItem("token");
+    const res = await axios.get("/api/brands", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setBrands(res.data);
+  };
+
+  const fetchYears = async () => {
+    const token = localStorage.getItem("token");
+    const res = await axios.get("/api/years", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setYears(res.data);
+  };
+
+  const fetchDriveTypes = async () => {
+    const token = localStorage.getItem("token");
+    const res = await axios.get("/api/drive-types", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setDriveTypes(res.data);
+  };
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -140,6 +342,10 @@ export default function AddsPageMobile() {
 
   const handleCheckboxChange = (field: string, checked: boolean) => {
     setCheckboxes((prev) => ({ ...prev, [field]: checked }));
+  };
+
+  const handleCheckTechboxChange = (field: string, checked: boolean) => {
+    setCheckTechboxes((prev) => ({ ...prev, [field]: checked }));
   };
 
   const handleCarImageChange = (index: number, file: File | null) => {
@@ -150,7 +356,94 @@ export default function AddsPageMobile() {
     });
   };
 
-  const handleSubmit = async () => {
+  const handleImageReorder = (sourceIndex: number, destinationIndex: number) => {
+    setCarImages((prev) => {
+      const updated = [...prev];
+      const [movedItem] = updated.splice(sourceIndex, 1);
+      updated.splice(destinationIndex, 0, movedItem);
+      return updated;
+    });
+  };
+
+  // Calculate VAT price for display
+  const calculateVatPrice = () => {
+    if (formData.vatRefundable === 'yes' && formData.price && formData.vatRate) {
+      const basePrice = parseFloat(formData.price);
+      const vatRate = 24;
+      
+      if (!isNaN(basePrice) && !isNaN(vatRate)) {
+        const vatAmount = basePrice * (vatRate / 100);
+        const totalPrice = basePrice + vatAmount;
+        return {
+          basePrice,
+          vatAmount,
+          totalPrice
+        };
+      }
+    }
+    return null;
+  };
+
+  // Calculate base price from total price (for editing cars with VAT)
+  const calculateBasePriceFromTotal = (totalPrice: number, vatRate: number) => {
+    if (vatRate > 0) {
+      return (totalPrice / (1 + vatRate / 100)).toFixed(1);
+    }
+    return totalPrice;
+  };
+
+  const handleEditCar = (car: any) => {
+    setEditingCar(car);
+    
+    // Calculate base price if VAT is applied
+    let priceToShow = car.price?.toString() || "";
+    if (car.vatRefundable === 'yes' && car.price && car.vatRate) {
+      const totalPrice = parseFloat(car.price.toString());
+      const vatRate = 24;
+
+      if (!isNaN(totalPrice) && !isNaN(vatRate)) {
+        const basePrice = calculateBasePriceFromTotal(totalPrice, vatRate);
+        priceToShow = basePrice.toString();
+      }
+    }
+    
+    setFormData((prev) => ({
+      ...prev,
+      ...car,
+      price: priceToShow,
+    }));
+    setCarImages(Array(40).fill(null));
+    setShowMorePhotos(false);
+    
+    // Fetch models for the selected brand when editing
+    if (car.brand_id) {
+      fetchModels(car.brand_id.toString());
+    }
+    
+    if (car.tech_check) {
+      const arr = Array.isArray(car.tech_check) ? car.tech_check : car.tech_check.split(',');
+      setCheckTechboxes((prev) => {
+        const obj: any = {};
+        techCheckOptions.forEach(opt => {
+          obj[opt.key] = arr.includes(opt.key);
+        });
+        return obj;
+      });
+    }
+    if (car.accessories) {
+      const arr = Array.isArray(car.accessories) ? car.accessories : car.accessories.split(',');
+      setCheckboxes((prev) => {
+        const obj: any = {};
+        accessoriesOptions.forEach(opt => {
+          obj[opt.key] = arr.includes(opt.key);
+        });
+        return obj;
+      });
+    }
+  };
+
+  const handleCarSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     setIsSubmitting(true);
     setSubmitError(null);
 
@@ -163,8 +456,8 @@ export default function AddsPageMobile() {
         throw new Error(`Please fill in all required fields: ${missingFields.join(', ')}`);
       }
 
-      // Check if at least one image is uploaded
-      if (!carImages.some(img => img !== null)) {
+      // Check if at least one image is uploaded (only for new cars)
+      if (!editingCar && !carImages.some(img => img !== null)) {
         throw new Error('Please upload at least one image');
       }
 
@@ -178,18 +471,16 @@ export default function AddsPageMobile() {
 
       // Add images
       carImages.forEach((file, idx) => {
-        if (file) {
-          formDataObj.append(`image_${idx + 1}`, file);
-        }
+        if (file) formDataObj.append(`image_${idx + 1}`, file);
       });
 
       // Add checkboxes
-      const techCheckSelected = Object.entries(checkboxes)
-        .filter(([k, v]) => v && ['technicalInspection', 'technicalMaintenance', 'serviceBook', 'hideVin'].includes(k))
+      const techCheckSelected = Object.entries(checktechboxes)
+        .filter(([k, v]) => v)
         .map(([k]) => k);
       
       const accessoriesSelected = Object.entries(checkboxes)
-        .filter(([k, v]) => v && !['technicalInspection', 'technicalMaintenance', 'serviceBook', 'hideVin'].includes(k))
+        .filter(([k, v]) => v)
         .map(([k]) => k);
 
       formDataObj.append('tech_check', techCheckSelected.join(','));
@@ -202,31 +493,43 @@ export default function AddsPageMobile() {
       }
 
       // Submit to server
-      const response = await axios.post("/api/cars", formDataObj, {
-        headers: { 
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
-        },
-      });
+      if (editingCar) {
+        await axios.put(`/api/cars/${editingCar.id}`, formDataObj, {
+          headers: { 
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
+          },
+        });
+      } else {
+        await axios.post("/api/cars", formDataObj, {
+          headers: { 
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
+          },
+        });
+      }
 
-      console.log('Car created successfully:', response.data);
+      console.log('Car saved successfully');
       
       // Reset form and redirect
+      setEditingCar(null);
       setFormData({
         brand_id: "",
         model_id: "",
+        year_id: "",
+        drive_type_id: "",
         category: "",
         transmission: "",
         fuelType: "",
         plateNumber: "",
-        year_id: "",
+        vehicleType: "",
+        bodyType: "",
         month: "",
         mileage: "",
         power: "",
         displacement: "",
         technicalData: "",
         ownerCount: "",
-        drive_type_id: "",
         modelDetail: "",
         price: "",
         discountPrice: "",
@@ -244,11 +547,13 @@ export default function AddsPageMobile() {
         socialNetwork: "",
         email: "",
       });
-      setCheckboxes({
+      setCheckTechboxes({
         technicalInspection: false,
         technicalMaintenance: false,
         serviceBook: false,
         hideVin: false,
+      });
+      setCheckboxes({
         abs: false,
         adaptiveHeadlights: false,
         alarmSystem: false,
@@ -262,18 +567,35 @@ export default function AddsPageMobile() {
         cdPlayer: false,
         electricWindows: false,
       });
-      setCarImages(Array(8).fill(null));
+      setCarImages(Array(40).fill(null));
+      setShowMorePhotos(false);
       
       // Navigate to user's listings
       navigate("/user");
       
     } catch (error: any) {
-      console.error('Error creating car:', error);
-      setSubmitError(error.response?.data?.message || error.message || 'An error occurred while creating the car listing');
+      console.error('Error saving car:', error);
+      setSubmitError(error.response?.data?.message || error.message || 'An error occurred while saving the car listing');
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Header />
+        <main className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center">
+            <h1 className="text-motorsoline-text text-3xl font-semibold mb-8">
+              Laetakse...
+            </h1>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -281,7 +603,7 @@ export default function AddsPageMobile() {
 
       <main className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <h1 className="text-motorsoline-text text-3xl font-semibold mb-8">
-          Loo kuulutus
+          {editingCar ? 'Redigeeri kuulutus' : 'Loo kuulutus'}
         </h1>
 
         {/* Error message */}
@@ -293,43 +615,166 @@ export default function AddsPageMobile() {
 
         <div className="space-y-6">
           {/* Photo Upload Section */}
-          <FormSection title="Fotod">
-            <PhotoUpload 
+          <FormSection title="">
+            <PhotoUpload
               images={carImages}
               onImageChange={handleCarImageChange}
-              maxFileSize={5}
+              onReorder={handleImageReorder}
+              previews={
+                editingCar
+                  ? Array.from({ length: 40 }, (_, i) => editingCar[`image_${i + 1}`])
+                  : []
+              }
+              maxPhotos={40}
+              initialVisibleCount={8}
+              showMore={showMorePhotos}
+              onToggleShowMore={() => setShowMorePhotos(!showMorePhotos)}
             />
           </FormSection>
 
           {/* Vehicle Details */}
           <FormSection title="Mudelidetailid">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <FormField
-                label="Vali bränd"
-                placeholder="Vali Bränd"
+            <FormField
+                label="Valige sõiduki liik"
+                placeholder="Valik sõiduki liik"
                 isSelect
-                value={formData.brand_id}
+                value={formData.vehicleType}
+                onChange={(value) => handleInputChange("vehicleType", value)}
+                options={[
+                  {
+                    value: "sõiduauto",
+                    label: "Sõiduauto",
+                  },
+                  {
+                    value: "maastur",
+                    label: "Maastur",
+                  },
+                  {
+                    value: "kaubik",
+                    label: "Kaubik",
+                  },
+                  {
+                    value: "buss",
+                    label: "Buss",
+                  },
+                  {
+                    value: "veoauto",
+                    label: "Veoauto",
+                  },
+                  {
+                    value: "haagis",
+                    label: "Haagis",
+                  },
+                  {
+                    value: "mototehnika",
+                    label: "Mototehnika",
+                  },
+                  {
+                    value: "haagissuvila",
+                    label: "Haagissuvila",
+                  },
+                  {
+                    value: "autoelamu",
+                    label: "Autoelamu",
+                  },
+                  {
+                    value: "veesõiduk",
+                    label: "Veesõiduk",
+                  },
+                  {
+                    value: "ehitustehnika",
+                    label: "Ehitustehnika",
+                  },
+                  {
+                    value: "põllumajandustehnika",
+                    label: "Põllumajandustehnika",
+                  },
+                  {
+                    value: "metsatehnika",
+                    label: "Metsatehnika",
+                  },
+                  {
+                    value: "kommunaaltehnika",
+                    label: "Kommunaaltehnika",
+                  },
+                  {
+                    value: "võistlussõiduk",
+                    label: "Võistlussõiduk",
+                  },
+                  {
+                    value: "muu",
+                    label: "Muu",
+                  },
+                ]}
+              />
+              <FormField
+                label="Keretüüp"
+                placeholder="Keretüüp"
+                isSelect
+                value={formData.bodyType}
+                onChange={(value) => handleInputChange("bodyType", value)}
+                options={[
+                  {
+                    value: "sedaan",
+                    label: "sedaan",
+                  },
+                  {
+                    value: "luukpara",
+                    label: "luukpara",
+                  },
+                  {
+                    value: "universaal",
+                    label: "universaal",
+                  },
+                  {
+                    value: "mahtuniversaal",
+                    label: "mahtuniversaal",
+                  },
+                  {
+                    value: "kupee",
+                    label: "kupee",
+                  },
+                  {
+                    value: "kabriolett",
+                    label: "kabriolett",
+                  },
+                  {
+                    value: "pikap",
+                    label: "pikap",
+                  },
+                  {
+                    value: "limusiin",
+                    label: "limusiin",
+                  },
+                ]}
+              />
+              <FormField
+                label="Valik mark"
+                placeholder="Valik mark"
+                isSelect
+                value={formData.brand_id || ""}
                 onChange={(value) => handleInputChange("brand_id", value)}
-                options={brands.map(brand => ({ value: brand.id.toString(), label: brand.name }))}
+                options={brands.map((b) => ({ value: b.id, label: b.name }))}
               />
               <FormField
                 label="Mudel"
-                placeholder="Vali mudel"
+                placeholder="Valik mudel"
                 isSelect
-                value={formData.model_id}
+                value={formData.model_id || ""}
                 onChange={(value) => handleInputChange("model_id", value)}
-                options={models.map(model => ({ value: model.id.toString(), label: model.name }))}
-                disabled={!formData.brand_id}
+                options={models.map((m) => ({ value: m.id, label: m.name }))}
+                className={formData.brand_id ? "" : "hidden"}
               />
               <FormField
                 label="Esmane registreerimine"
-                placeholder="Aasta"
+                placeholder="2025"
                 isSelect
-                value={formData.year_id}
+                value={formData.year_id || ""}
                 onChange={(value) => handleInputChange("year_id", value)}
-                options={years.map(year => ({ value: year.id.toString(), label: year.value }))}
+                options={years.map((y) => ({ value: y.id, label: y.value }))}
               />
-              <div className="space-y-3">
+              <div className="space-y-1">
                 <label className="block text-motorsoline-text text-lg font-medium">
                   &nbsp;
                 </label>
@@ -338,19 +783,18 @@ export default function AddsPageMobile() {
                   onChange={(e) => handleInputChange("month", e.target.value)}
                   className="w-full h-14 px-5 rounded-lg border border-motorsoline-form-border bg-white text-lg text-motorsoline-placeholder appearance-none focus:outline-none focus:ring-2 focus:ring-motorsoline-primary focus:border-transparent"
                 >
-                  <option value="">Kuu</option>
-                  <option value="01">Jaanuar</option>
-                  <option value="02">Veebruar</option>
-                  <option value="03">Märts</option>
-                  <option value="04">Aprill</option>
-                  <option value="05">Mai</option>
-                  <option value="06">Juuni</option>
-                  <option value="07">Juuli</option>
-                  <option value="08">August</option>
-                  <option value="09">September</option>
-                  <option value="10">Oktoober</option>
-                  <option value="11">November</option>
-                  <option value="12">Detsember</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                  <option value="11">11</option>
+                  <option value="12">12</option>
                 </select>
               </div>
               <FormField
@@ -369,16 +813,43 @@ export default function AddsPageMobile() {
               />
               <FormField
                 label="Muu mudel või täpsustus"
-                placeholder="Vali mudel"
+                placeholder="näide: Long 4Matic"
                 value={formData.modelDetail}
                 onChange={(value) => handleInputChange("modelDetail", value)}
               />
-              <FormField
-                label="Hind"
-                placeholder="€"
-                value={formData.price}
-                onChange={(value) => handleInputChange("price", value)}
-              />
+              <div className="space-y-2">
+                <FormField
+                  label="Hind"
+                  placeholder="€"
+                  value={formData.price}
+                  onChange={(value) => handleInputChange("price", value)}
+                />
+                {(() => {
+                  const vatCalculation = calculateVatPrice();
+                  if (vatCalculation) {
+                    return (
+                      <p className="text-sm text-gray-600">
+                        {editingCar ? (
+                          <>
+                            Baashind: €{vatCalculation.basePrice.toLocaleString()} + 
+                            KM (24%): €{vatCalculation.vatAmount.toLocaleString()} = 
+                            <span className="font-semibold text-motorsoline-primary"> €{vatCalculation.totalPrice.toLocaleString()}</span>
+                            <br />
+                            <span className="text-xs text-blue-600">(Salvestatud hind: €{editingCar.price?.toLocaleString()})</span>
+                          </>
+                        ) : (
+                          <>
+                            Baashind: €{vatCalculation.basePrice.toLocaleString()} + 
+                            KM (24%): €{vatCalculation.vatAmount.toLocaleString()} = 
+                            <span className="font-semibold text-motorsoline-primary"> €{vatCalculation.totalPrice.toLocaleString()}</span>
+                          </>
+                        )}
+                      </p>
+                    );
+                  }
+                  return null;
+                })()}
+              </div>
               <FormField
                 label="Soodushind"
                 placeholder="€"
@@ -393,101 +864,124 @@ export default function AddsPageMobile() {
               />
               <FormField
                 label="Käibemaksu tagastatavus"
-                placeholder="Jah"
+                placeholder="Yes"
                 isSelect
                 value={formData.vatRefundable}
                 onChange={(value) => handleInputChange("vatRefundable", value)}
                 options={[
-                  { value: "yes", label: "Jah" },
-                  { value: "no", label: "Ei" }
+                  {
+                    value: "jah",
+                    label: "JAH",
+                  },
+                  {
+                    value: "ei",
+                    label: "EI",
+                  },
                 ]}
               />
               <FormField
                 label="Käibemaksumäär"
-                placeholder="Palun vali"
-                isSelect
+                placeholder="Sisesta protsent 0-30"
+                type="number"
                 value={formData.vatRate}
                 onChange={(value) => handleInputChange("vatRate", value)}
-                options={[
-                  { value: "0", label: "0%" },
-                  { value: "9", label: "9%" },
-                  { value: "20", label: "20%" },
-                  { value: "24", label: "24%" }
-                ]}
-              />
-              <FormField
-                label="Avariiline"
-                placeholder="näide: osad kaasa"
-                value={formData.accident}
-                onChange={(value) => handleInputChange("accident", value)}
-              />
-              <FormField
-                label="VIN-kood"
-                placeholder="WDC000000000000"
-                value={formData.vinCode}
-                onChange={(value) => handleInputChange("vinCode", value)}
+                min={1}
+                max={30}
+                step={1}
+                suffix="%"
               />
             </div>
 
             {/* Checkboxes */}
             <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <CheckboxField
-                label="Teostatud tehniline kontroll"
-                checked={checkboxes.technicalInspection}
-                onChange={(checked) =>
-                  handleCheckboxChange("technicalInspection", checked)
-                }
-              />
-              <CheckboxField
-                label="Teostatud tehniline hooldus"
-                checked={checkboxes.technicalMaintenance}
-                onChange={(checked) =>
-                  handleCheckboxChange("technicalMaintenance", checked)
-                }
-              />
-              <CheckboxField
-                label="Hooldusraamat"
-                checked={checkboxes.serviceBook}
-                onChange={(checked) =>
-                  handleCheckboxChange("serviceBook", checked)
-                }
-              />
-              <CheckboxField
-                label="Peida VIN-kod"
-                checked={checkboxes.hideVin}
-                onChange={(checked) => handleCheckboxChange("hideVin", checked)}
-              />
+              <div>
+                <FormField
+                  label="Sõiduki seisukord"
+                  placeholder="näide: uus"
+                  value={formData.accident}
+                  onChange={(value) => handleInputChange("accident", value)}
+                  isSelect
+                  options={[
+                    {
+                      value: "uus",
+                      label: "Uus",
+                    },
+                    {
+                      value: "kasutatud",
+                      label: "Kasutatud",
+                    },
+                    {
+                      value: "avariiline",
+                      label: "Avariiline",
+                    },
+                  ]}
+                />
+                <FormField
+                  label="VIN-kood"
+                  placeholder="WDC000000000000"
+                  value={formData.vinCode}
+                  onChange={(value) => handleInputChange("vinCode", value)}
+                />
+              </div>
+              <div className="my-auto space-y-3">
+                <CheckboxField
+                  label="Teostatud tehniline kontroll"
+                  checked={checktechboxes.technicalInspection}
+                  onChange={(checked) =>
+                    handleCheckTechboxChange("technicalInspection", checked)
+                  }
+                />
+                <CheckboxField
+                  label="Teostatud tehniline hooldus"
+                  checked={checktechboxes.technicalMaintenance}
+                  onChange={(checked) =>
+                    handleCheckTechboxChange("technicalMaintenance", checked)
+                  }
+                />
+                <CheckboxField
+                  label="Hooldusraamat"
+                  checked={checktechboxes.serviceBook}
+                  onChange={(checked) =>
+                    handleCheckTechboxChange("serviceBook", checked)
+                  }
+                />
+                <CheckboxField
+                  label="Peida VIN kood"
+                  checked={checktechboxes.hideVin}
+                  onChange={(checked) =>
+                    handleCheckTechboxChange("hideVin", checked)
+                  }
+                />
+              </div>
             </div>
           </FormSection>
 
           {/* Technical Details */}
-          <FormSection title="Tehnilised andmed">
+          <FormSection title="Tehnilised detailandmed">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <FormField
-                label="Kategooria"
-                placeholder="Vali kategooria"
-                isSelect
-                value={formData.category}
-                onChange={(value) => handleInputChange("category", value)}
-                options={[
-                  { value: "car", label: "Auto" },
-                  { value: "suv", label: "SUV" },
-                  { value: "van", label: "Väikebuss" },
-                  { value: "truck", label: "Veoauto" }
-                ]}
-              />
-              <FormField
                 label="Kütuse tüüp"
-                placeholder="Vali Kütuse tüüp"
+                placeholder="Valik Kütuse tüüp"
                 isSelect
                 value={formData.fuelType}
                 onChange={(value) => handleInputChange("fuelType", value)}
                 options={[
-                  { value: "petrol", label: "Bensiin" },
-                  { value: "diesel", label: "Diisel" },
-                  { value: "hybrid", label: "Hübriid" },
-                  { value: "electric", label: "Elektri" },
-                  { value: "lpg", label: "Gaas" }
+                  {
+                    value: "petrol",
+                    label: "Bensiin",
+                  },
+                  {
+                    value: "diesel",
+                    label: "Diisel",
+                  },
+                  {
+                    value: "hybrids",
+                    label: "Hübriid",
+                  },
+                  {
+                    value: "electric",
+                    label: "Elektriline",
+                  },
                 ]}
               />
               <FormField
@@ -497,22 +991,79 @@ export default function AddsPageMobile() {
                 onChange={(value) => handleInputChange("plateNumber", value)}
               />
               <FormField
+                label="Kategooria"
+                placeholder="Valik kategooria"
+                isSelect
+                value={formData.category}
+                onChange={(value) => handleInputChange("category", value)}
+                options={[
+                  {
+                    value: "hatchback",
+                    label: "Hatchback",
+                  },
+                  {
+                    value: "sedan",
+                    label: "Sedan",
+                  },
+                  {
+                    value: "suv",
+                    label: "SUV",
+                  },
+                  {
+                    value: "muv",
+                    label: "MUV",
+                  },
+                  {
+                    value: "coupe",
+                    label: "Coupe",
+                  },
+                  {
+                    value: "convertible",
+                    label: "Convertible",
+                  },
+                  {
+                    value: "pickup_truck",
+                    label: "Pickup Truck",
+                  },
+                ]}
+              />
+              <FormField
                 label="Käigukasti tüüp"
                 placeholder="Automaat"
                 isSelect
                 value={formData.transmission}
                 onChange={(value) => handleInputChange("transmission", value)}
                 options={[
-                  { value: "manual", label: "Käsikäik" },
-                  { value: "automatic", label: "Automaat" },
-                  { value: "semi_auto", label: "Poolautomaat" }
+                  {
+                    value: "maunaal",
+                    label: "Maunaal",
+                  },
+                  {
+                    value: "automaat",
+                    label: "Automaat",
+                  },
+                  {
+                    value: "poolautomaat",
+                    label: "Poolautomaat",
+                  },
                 ]}
               />
               <FormField
                 label="Tehnilised andmed"
                 placeholder="Kasutatud, avariivaba ..."
                 value={formData.technicalData}
+                isSelect
                 onChange={(value) => handleInputChange("technicalData", value)}
+                options={[
+                  {
+                    value: "kasutatud",
+                    label: "Kasutatud",
+                  },
+                  {
+                    value: "avariivaba",
+                    label: "Avariivaba",
+                  },
+                ]}
               />
               <FormField
                 label="Omanike arv"
@@ -521,19 +1072,44 @@ export default function AddsPageMobile() {
                 value={formData.ownerCount}
                 onChange={(value) => handleInputChange("ownerCount", value)}
                 options={[
-                  { value: "1", label: "1 omanik" },
-                  { value: "2", label: "2 omanikku" },
-                  { value: "3", label: "3 omanikku" },
-                  { value: "4+", label: "4+ omanikku" }
+                  {
+                    value: "1",
+                    label: "1",
+                  },
+                  {
+                    value: "2",
+                    label: "2",
+                  },
+                  {
+                    value: "3",
+                    label: "3",
+                  },
+                  {
+                    value: "4+",
+                    label: "4+",
+                  },
                 ]}
               />
               <FormField
                 label="Veoskeem:"
-                placeholder="Vali veoskeem"
+                placeholder="Valik veoskeem"
                 isSelect
                 value={formData.drive_type_id}
                 onChange={(value) => handleInputChange("drive_type_id", value)}
-                options={driveTypes.map(dt => ({ value: dt.id.toString(), label: dt.ee_name }))}
+                options={[
+                  {
+                    value: "esivedu",
+                    label: "Esivedu",
+                  },
+                  {
+                    value: "tausted",
+                    label: "Tausted",
+                  },
+                  {
+                    value: "nelikvedu",
+                    label: "Nelikvedu",
+                  },
+                ]}
               />
               <FormField
                 label="Töömaht"
@@ -667,16 +1243,16 @@ export default function AddsPageMobile() {
               <div className="flex gap-4">
                 <div className="w-full">
                   <label className="block text-motorsoline-text text-lg font-medium mb-3">
-                    Vali riik
+                    Valik riik
                   </label>
-                <ReactFlagsSelect
-                className="w-full rounded-lg bg-white text-lg"
-                  selected={formData.country}
-                  onSelect={(value) => handleInputChange("country", value)}
-                  placeholder="Select a Country"
-                  searchable={true}
-                />
-              </div>
+                  <ReactFlagsSelect
+                    className="w-full rounded-lg bg-white text-lg"
+                    selected={formData.country}
+                    onSelect={(value) => handleInputChange("country", value)}
+                    placeholder="Select a Country"
+                    searchable={true}
+                  />
+                </div>
               </div>
               <FormField
                 label="Telefoninumber"
@@ -692,8 +1268,7 @@ export default function AddsPageMobile() {
               />
               <FormField
                 label="Ettevõte/eraisik"
-                placeholder="Vali ettevõte"
-                isSelect
+                placeholder="Sisesta ettevõte"
                 value={formData.businessType}
                 onChange={(value) => handleInputChange("businessType", value)}
               />
@@ -707,7 +1282,7 @@ export default function AddsPageMobile() {
             </div>
 
             <div className="mt-6">
-              <button className="flex items-center px-8 py-4 border border-motorsoline-primary rounded-lg text-motorsoline-primary hover:bg-motorsoline-primary hover:text-white transition-colors">
+              <button className="flex items-center px-8 py-4 border border-brand-primary rounded-lg text-brand-primary hover:bg-motorsoline-primary hover:text-white transition-colors">
                 + Lisa sotsiaalvõrgustik
               </button>
             </div>
@@ -723,15 +1298,64 @@ export default function AddsPageMobile() {
             />
           </FormSection>
 
-          {/* Submit Button */}
-          <div className="flex justify-start">
+          <FormSection title="">
+          <form onSubmit={handleCarSubmit} className="space-y-4">
             <button
-              onClick={handleSubmit}
-              className="flex items-center px-8 py-4 bg-motorsoline-primary rounded-lg text-white hover:bg-motorsoline-secondary transition-colors font-medium"
+              type="submit"
+              className="bg-brand-primary text-white px-4 py-2 rounded font-semibold"
             >
-              Lisa kuulutus
+              {editingCar ? "Salvesta muudatused" : "Lisa kuulutus"}
             </button>
-          </div>
+            {editingCar && (
+              <button
+                type="button"
+                className="bg-gray-300 px-4 py-2 rounded ml-2"
+                onClick={() => {
+                  setEditingCar(null);
+                  setFormData({
+                    brand_id: "",
+                    model_id: "",
+                    year_id: "",
+                    drive_type_id: "",
+                    category: "",
+                    transmission: "",
+                    fuelType: "",
+                    plateNumber: "",
+                    vehicleType: "",
+                    bodyType: "",
+                    month: "",
+                    mileage: "",
+                    power: "",
+                    displacement: "",
+                    technicalData: "",
+                    ownerCount: "",
+                    modelDetail: "",
+                    price: "",
+                    discountPrice: "",
+                    warranty: "",
+                    vatRefundable: "",
+                    vatRate: "24",
+                    accident: "",
+                    vinCode: "",
+                    description: "",
+                    equipment: "",
+                    additionalInfo: "",
+                    country: "EE",
+                    phone: "",
+                    businessType: "",
+                    socialNetwork: "",
+                    email: "",
+                  });
+                  setCarImages(Array(40).fill(null));
+                  setShowMorePhotos(false);
+                  navigate("/user");
+                }}
+              >
+                Tühista
+              </button>
+            )}
+          </form>
+        </FormSection>
         </div>
       </main>
 

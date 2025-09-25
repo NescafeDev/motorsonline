@@ -1,9 +1,11 @@
 import { Menu, X } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
-function DesktopNav({ onNavigate }: { onNavigate?: () => void }) {
+function DesktopNav({ onNavigate, user, logout }: { onNavigate?: () => void; user: { name: string } | null; logout: () => void }) {
   const navigate = useNavigate();
+  
   return (
     <>
       <nav className="flex items-center gap-8">
@@ -25,15 +27,17 @@ function DesktopNav({ onNavigate }: { onNavigate?: () => void }) {
         >
           Lorem ipsum
         </a>
-        <a
-          onClick={() => {
-            navigate("/adds");
-            onNavigate && onNavigate();
-          }}
-          className="text-black font-poppins text-lg font-normal leading-[140%] hover:text-motors-green transition-colors cursor-pointer"
-        >
-          Lorem ipsum
-        </a>
+        {user && (
+          <a
+            onClick={() => {
+              navigate("/adds");
+              onNavigate && onNavigate();
+            }}
+            className="text-black font-poppins text-lg font-normal leading-[140%] hover:text-motors-green transition-colors cursor-pointer"
+          >
+            Lorem ipsum
+          </a>
+        )}
       </nav>
       {/* Language Switch */}
       <div className="flex items-center gap-4">
@@ -48,24 +52,38 @@ function DesktopNav({ onNavigate }: { onNavigate?: () => void }) {
       </div>
       {/* Auth Buttons */}
       <div className="flex items-center gap-2">
-        <button
-          onClick={() => {
-            navigate("/login");
-            onNavigate && onNavigate();
-          }}
-          className="h-10 px-5 flex items-center rounded-lg border border-motors-green text-motors-green hover:bg-motors-green hover:text-white transition-colors"
-        >
-          Logi sisse
-        </button>
-        <button
-          onClick={() => {
-            navigate("/register");
-            onNavigate && onNavigate();
-          }}
-          className="h-10 px-5 flex items-center rounded-lg bg-motors-green text-white hover:bg-opacity-90 transition-all"
-        >
-          Registreeru
-        </button>
+        {user ? (
+          <button
+            onClick={() => {
+              logout();
+              onNavigate && onNavigate();
+            }}
+            className="h-10 px-5 flex items-center rounded-lg border border-red-500 text-red-500 hover:bg-red-50 transition-colors"
+          >
+            Logi välja
+          </button>
+        ) : (
+          <>
+            <button
+              onClick={() => {
+                navigate("/login");
+                onNavigate && onNavigate();
+              }}
+              className="h-10 px-5 flex items-center rounded-lg border border-motors-green text-motors-green hover:bg-motors-green hover:text-white transition-colors"
+            >
+              Logi sisse
+            </button>
+            <button
+              onClick={() => {
+                navigate("/register");
+                onNavigate && onNavigate();
+              }}
+              className="h-10 px-5 flex items-center rounded-lg bg-motors-green text-white hover:bg-opacity-90 transition-all"
+            >
+              Registreeru
+            </button>
+          </>
+        )}
       </div>
     </>
   );
@@ -76,10 +94,27 @@ export default function Header() {
   const navigate = useNavigate();
   const menuBtnRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [user, setUser] = useState<{ name: string } | null>(null);
+  const { logout } = useAuth();
+  
+  // Check user state on component mount and when localStorage changes
+  useEffect(() => {
+    const stored = localStorage.getItem("user");
+    if (stored) {
+      try {
+        setUser(JSON.parse(stored));
+      } catch {
+        setUser(null);
+      }
+    } else {
+      setUser(null);
+    }
+  }, []);
 
   // Close dropdown on outside click
   useEffect(() => {
     if (!menuOpen) return;
+
     function handleClick(e: MouseEvent) {
       if (
         dropdownRef.current &&
@@ -106,7 +141,7 @@ export default function Header() {
       </div>
       {/* Desktop Nav */}
       <div className="hidden xl:flex items-center gap-8">
-        <DesktopNav />
+        <DesktopNav user={user} logout={logout} />
       </div>
       {/* Hamburger for mobile */}
       <button
@@ -140,7 +175,7 @@ export default function Header() {
                     }}
                     className="text-lg font-normal cursor-pointer whitespace-nowrap truncate text-left"
                   >
-                    Lorem ipsum
+                    Blogi
                   </span>
                   <span
                     onClick={() => {
@@ -149,17 +184,16 @@ export default function Header() {
                     }}
                     className="text-lg font-normal cursor-pointer whitespace-nowrap truncate text-left"
                   >
-                    Lorem ipsum
+                    Minu kuulutused
                   </span>
-                  <span
-                    onClick={() => {
-                      navigate("/adds");
-                      setMenuOpen(false);
-                    }}
-                    className="text-lg font-normal cursor-pointer whitespace-nowrap truncate text-left"
-                  >
-                    Lorem ipsum
-                  </span>
+                  {user && (
+                    <a
+                      onClick={() => navigate("/adds")}
+                      className="text-lg font-normal cursor-pointer whitespace-nowrap truncate text-left"
+                    >
+                      Lisa uus kuulutus
+                    </a>
+                  )}
                   {/* Language Switch */}
                 </nav>
               </div>
@@ -177,24 +211,42 @@ export default function Header() {
             <div className="flex-1" />
             {/* Auth Buttons */}
             <div className="flex flex-col gap-4 w-full">
-              <button
-                onClick={() => {
-                  navigate("/login");
-                  setMenuOpen(false);
-                }}
-                className="w-full border border-brand-primary text-brand-primary rounded-lg py-3 font-medium bg-white whitespace-nowrap truncate"
-              >
-                Logi sisse
-              </button>
-              <button
-                onClick={() => {
-                  navigate("/register");
-                  setMenuOpen(false);
-                }}
-                className="w-full bg-brand-primary text-white rounded-lg py-3 font-medium whitespace-nowrap truncate"
-              >
-                Registreeru
-              </button>
+              {user ? (
+                // Show logout button when user is logged in
+                <button
+                  onClick={() => {
+                    logout();
+                    setUser(null);
+                    setMenuOpen(false);
+                    navigate("/");
+                  }}
+                  className="w-full border border-brand-primary text-brand-primary rounded-lg py-3 font-medium bg-white whitespace-nowrap truncate"
+                >
+                  Logi välja
+                </button>
+              ) : (
+                // Show login/register buttons when user is not logged in
+                <>
+                  <button
+                    onClick={() => {
+                      navigate("/login");
+                      setMenuOpen(false);
+                    }}
+                    className="w-full border border-brand-primary text-brand-primary rounded-lg py-3 font-medium bg-white whitespace-nowrap truncate"
+                  >
+                    Logi sisse
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigate("/register");
+                      setMenuOpen(false);
+                    }}
+                    className="w-full bg-brand-primary text-white rounded-lg py-3 font-medium whitespace-nowrap truncate"
+                  >
+                    Registreeru
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </>
