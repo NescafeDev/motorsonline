@@ -96,7 +96,7 @@ export function FormField({
             </div>
           </div>
         ) : (
-          <div className="relative">
+          <div className="relative w-full">
             <input
               type={type}
               value={value}
@@ -108,9 +108,9 @@ export function FormField({
               step={step}
               className={`w-full h-14 px-5 rounded-lg border border-motorsoline-form-border bg-white text-lg text-black placeholder:text-motorsoline-placeholder focus:outline-none focus:ring-2 focus:ring-motorsoline-primary focus:border-transparent ${disabled ? 'opacity-50 cursor-not-allowed bg-gray-100' : ''}`}
             />
-            {value && suffix && (
-              <div className="absolute left-5 top-1/2 transform -translate-y-1/2 text-lg text-motorsoline-text font-normal pointer-events-none">
-                {value}{suffix}
+            {suffix && (
+              <div className="absolute left-11 top-1/2 transform -translate-y-1/2 pointer-events-none text-lg text-gray-600 font-medium font-['Poppins',Helvetica]">
+                {suffix}
               </div>
             )}
           </div>

@@ -176,6 +176,40 @@ router.post('/', authenticateToken, upload.fields([
         data[`image_${i}`] = `/img/cars/${reqWithFiles.files[`image_${i}`][0].filename}`;
       }
     }
+    
+    // Validate required fields
+    if (!data.brand_id || data.brand_id === '') {
+      return res.status(400).json({ message: 'Brand is required.' });
+    }
+    if (!data.model_id || data.model_id === '') {
+      return res.status(400).json({ message: 'Model is required.' });
+    }
+    if (!data.year_id || data.year_id === '') {
+      return res.status(400).json({ message: 'Year is required.' });
+    }
+    if (!data.drive_type_id || data.drive_type_id === '') {
+      return res.status(400).json({ message: 'Drive type is required.' });
+    }
+    
+    // Convert string IDs to numbers
+    data.brand_id = parseInt(data.brand_id);
+    data.model_id = parseInt(data.model_id);
+    data.year_id = parseInt(data.year_id);
+    data.drive_type_id = parseInt(data.drive_type_id);
+    
+    // Convert numeric fields
+    data.mileage = data.mileage ? parseInt(data.mileage) || 0 : 0;
+    data.price = data.price ? parseFloat(data.price) || 0 : 0;
+    data.discountPrice = data.discountPrice ? parseFloat(data.discountPrice) || 0 : 0;
+    
+    // Convert empty strings to null for optional fields
+    const optionalFields = ['plateNumber', 'month', 'power', 'displacement', 'technicalData', 'ownerCount', 'modelDetail', 'warranty', 'vatRefundable', 'vatRate', 'accident', 'vinCode', 'description', 'equipment', 'additionalInfo', 'phone', 'businessType', 'socialNetwork', 'email'];
+    optionalFields.forEach(field => {
+      if (data[field] === '') {
+        data[field] = null;
+      }
+    });
+    
     // Set cars to be approved by default (no admin approval needed)
     data.approved = true;
     // Set the user_id from the authenticated user
@@ -193,9 +227,11 @@ router.post('/', authenticateToken, upload.fields([
     // Join tech_check and accessories arrays to comma-separated strings if present
     if (Array.isArray(data.tech_check)) data.tech_check = data.tech_check.join(',');
     if (Array.isArray(data.accessories)) data.accessories = data.accessories.join(',');
+    
     const car = await createCar(data);
     res.status(201).json(car);
   } catch (err: any) {
+    console.error('Car creation error:', err);
     res.status(400).json({ message: 'Car creation failed.', error: err.message });
   }
 });
@@ -687,6 +723,39 @@ router.put('/:id', authenticateToken, upload.fields([
         data[`image_${i}`] = `/img/cars/${reqWithFiles.files[`image_${i}`][0].filename}`;
       }
     }
+    
+    // Validate required fields
+    if (!data.brand_id || data.brand_id === '') {
+      return res.status(400).json({ message: 'Brand is required.' });
+    }
+    if (!data.model_id || data.model_id === '') {
+      return res.status(400).json({ message: 'Model is required.' });
+    }
+    if (!data.year_id || data.year_id === '') {
+      return res.status(400).json({ message: 'Year is required.' });
+    }
+    if (!data.drive_type_id || data.drive_type_id === '') {
+      return res.status(400).json({ message: 'Drive type is required.' });
+    }
+    
+    // Convert string IDs to numbers
+    data.brand_id = parseInt(data.brand_id);
+    data.model_id = parseInt(data.model_id);
+    data.year_id = parseInt(data.year_id);
+    data.drive_type_id = parseInt(data.drive_type_id);
+    
+    // Convert numeric fields
+    data.mileage = data.mileage ? parseInt(data.mileage) || 0 : 0;
+    data.price = data.price ? parseFloat(data.price) || 0 : 0;
+    data.discountPrice = data.discountPrice ? parseFloat(data.discountPrice) || 0 : 0;
+    
+    // Convert empty strings to null for optional fields
+    const optionalFields = ['plateNumber', 'month', 'power', 'displacement', 'technicalData', 'ownerCount', 'modelDetail', 'warranty', 'vatRefundable', 'vatRate', 'accident', 'vinCode', 'description', 'equipment', 'additionalInfo', 'phone', 'businessType', 'socialNetwork', 'email'];
+    optionalFields.forEach(field => {
+      if (data[field] === '') {
+        data[field] = null;
+      }
+    });
     
     // Calculate VAT if applicable
     if (data.vatRefundable === 'yes' && data.price && data.vatRate) {

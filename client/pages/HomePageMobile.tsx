@@ -213,7 +213,17 @@ export default function HomePageMobile() {
     if (!filterOpen) return;
     function handleClick(e: MouseEvent) {
       if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
-        setFilterOpen(false);
+        // Check if the click is on a select dropdown or combobox
+        const target = e.target as Element;
+        const isSelectContent = target.closest('[data-radix-select-content]') || 
+                               target.closest('[data-radix-combobox-content]') ||
+                               target.closest('[data-radix-accordion-content]') ||
+                               target.closest('[role="combobox"]') ||
+                               target.closest('[role="listbox"]');
+        
+        if (!isSelectContent) {
+          setFilterOpen(false);
+        }
       }
     }
     document.addEventListener("mousedown", handleClick);
@@ -261,6 +271,15 @@ export default function HomePageMobile() {
     } else {
       // Automatically apply filters when they change
       loadFilteredCarsWithFilters(newFilters);
+    }
+  };
+  const handleApplyFilters = () => {
+    if (Object.keys(filters).length > 0) {
+      loadFilteredCarsWithFilters(filters);
+    } else {
+      // If no filters, show all cars
+      setFilteredCars(cars);
+      setFiltersApplied(false);
     }
   };
 
@@ -425,7 +444,7 @@ export default function HomePageMobile() {
               <CarListingSection
                 filters={filters}
                 onFiltersChange={handleFiltersChange}
-                onApplyFilters={() => {}}
+                onApplyFilters={handleApplyFilters}
               />
             </div>
           )}

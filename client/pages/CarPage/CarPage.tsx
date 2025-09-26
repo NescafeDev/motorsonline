@@ -24,6 +24,8 @@ interface CarData {
   power: string;
   transmission: string;
   fuelType: string;
+  drive_type_id: string;
+  drive_type_ee_name: string;
   ownerCount: string;
   displacement: string;
   technicalData: string;
@@ -44,6 +46,11 @@ interface CarData {
   equipment?: string;
   description?: string;
   created_at?: string;
+  // Seller information
+  businessType?: string;
+  country?: string;
+  phone?: string;
+  email?: string;
 }
 
 export default function CarPage() {
@@ -255,7 +262,7 @@ export default function CarPage() {
     { label: "Kategooria:", value: car.category },
     { label: "Võimsus:", value: car.power },
     { label: "Sõiduki number:", value: car.plateNumber },
-    { label: "Veoskeem:", value: "Sisepõlemismootor" },
+    { label: "Veoskeem:", value: car.drive_type_ee_name },
     { label: "Läbisõit:", value: `${car.mileage.toLocaleString()} km` },
     { label: "Kütuse tüüp:", value: car.fuelType },
   ];
@@ -366,7 +373,7 @@ export default function CarPage() {
                 )}
 
                 {/* Import all required sections */}
-                <ImageGallerySection />
+                <ImageGallerySection car={car} />
               </div>
               {/* Right: 1/3 width on md+ screens, floating */}
               <div className="md:col-span-1">
@@ -487,8 +494,17 @@ export default function CarPage() {
             </div>
           </div>
           {/* Now, OUTSIDE the grid, render the next sections */}
-          <SpecificationsSection />
-          <VehicleDetailsSection />
+          <SpecificationsSection 
+            sellerData={{
+              title: "Müüja andmed",
+              company: car.businessType || "ELKE Mustamäe",
+              address: car.country || "Tallinn, Mustamäe tee 22",
+              contactPerson: "Kontaktisik",
+              phone: car.phone || "+372 8888 8888",
+              email: car.email || "Näide@elke.ee"
+            }}
+          />
+          <VehicleDetailsSection excludeCarId={car.id} />
         </main>
       </div>
     </PageContainer>

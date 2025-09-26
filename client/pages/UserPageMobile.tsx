@@ -1,66 +1,156 @@
 import { Heart, Eye, Menu } from "lucide-react";
 import Header from "@/components/mobile/Header";
 import Footer from "@/components/mobile/Footer";
+import { useNavigate } from 'react-router-dom';
+import { UserCarCard } from '../components/mobile/UserCarCard';
+import { useState, useEffect } from "react";
+import axios from 'axios';
+
+
+interface Car {
+  id: number;
+  brand_name?: string;
+  model_name?: string;
+  year_value?: number;
+  price?: number;
+  discountPrice?: number;
+  description?: string;
+  image_1?: string;
+  vatRefundable?: string;
+  vatRate?: string;
+  favoriteCount?: number;
+  views?: number;
+}
 
 export default function UserPageMobile() {
-  const carListings = [
-    {
-      id: 1,
-      title: "Toyota RAV4",
-      category: "Kasutatud autod » Toyota RAV4 » 2023-2025",
-      description:
-        "Lorem ipsum dolor sit amet consectetur. Felis fringilla pharetra sit orci sem eu suspendisse elit nibh. A morbi purus sollicitudin in nunc eget senectus. In sit gravida pellentesque ut in enim odio.",
-      price: 45890,
-      originalPrice: 46500,
-      discount: -15,
-      expiryDate: "Kuni 25. juunini 2025",
-      views: 126,
-      likes: 4,
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/f79839f8acc0eefdf36397b6acdaeb58ee304aaa?width=782",
-    },
-    {
-      id: 2,
-      title: "Volkswagen Touareg",
-      category: "Kasutatud autod » Volkswagen Touareg » 2023-2025",
-      description:
-        "Lorem ipsum dolor sit amet consectetur. Felis fringilla pharetra sit orci sem eu suspendisse elit nibh. A morbi purus sollicitudin in nunc eget senectus. In sit gravida pellentesque ut in enim odio.",
-      price: 15900,
-      expiryDate: "Kuni 23. juunini 2025",
-      views: 72,
-      likes: 8,
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/7a57091642f455cc0640aa2ca748eb54e5a2ebda?width=780",
-    },
-    {
-      id: 3,
-      title: "Toyota RAV4",
-      category: "Kasutatud autod » Toyota RAV4 » 2023-2025",
-      description:
-        "Lorem ipsum dolor sit amet consectetur. Felis fringilla pharetra sit orci sem eu suspendisse elit nibh. A morbi purus sollicitudin in nunc eget senectus. In sit gravida pellentesque ut in enim odio.",
-      price: 45890,
-      originalPrice: 46500,
-      discount: -15,
-      expiryDate: "Kuni 25. juunini 2025",
-      views: 126,
-      likes: 4,
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/f79839f8acc0eefdf36397b6acdaeb58ee304aaa?width=782",
-    },
-    {
-      id: 4,
-      title: "Volkswagen Touareg",
-      category: "Kasutatud autod » Volkswagen Touareg » 2023-2025",
-      description:
-        "Lorem ipsum dolor sit amet consectetur. Felis fringilla pharetra sit orci sem eu suspendisse elit nibh. A morbi purus sollicitudin in nunc eget senectus. In sit gravida pellentesque ut in enim odio.",
-      price: 15900,
-      expiryDate: "Kuni 23. juunini 2025",
-      views: 72,
-      likes: 8,
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/7a57091642f455cc0640aa2ca748eb54e5a2ebda?width=780",
-    },
-  ];
+  const navigate = useNavigate();
+  const [userCars, setUserCars] = useState<Car[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Function to get VAT display text
+  const getVatDisplayText = (car: Car) => {
+    if (!car) return '';
+    console.log('Vat Refundable:', car.vatRefundable);
+    
+    // If there's no VAT rate or it's empty/null, show "Hind ei sisalda käibemaksu"
+    if (car.vatRefundable == "no") {
+      return 'Hind ei sisalda käibemaksu';
+    }
+    
+    // If VAT rate is 24, show "Hind sisaldab käibemaksu 24%"
+    // if (car.vatRate === '24') {
+      return 'Hind sisaldab käibemaksu 24%';
+    // }
+    
+    // For any other VAT rate, show the specific rate
+    // return `Hind sisaldab käibemaksu ${car.vatRate}%`;
+  };
+
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const cars = await fetchCarsByUserID();
+        setUserCars(cars);
+      } catch (error) {
+        console.error('Error fetching cars:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCars();
+  }, []);
+
+  async function fetchCarsByUserID() {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = localStorage.getItem("token");
+
+    if (user && token) {
+      try {
+        const response = await axios.get(`/api/cars/user/${user.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        // Fetch favorite counts and view counts for each car
+        const carsWithCounts = await Promise.all(
+          response.data.map(async (car: Car) => {
+            try {
+              const [favoriteResponse, viewResponse] = await Promise.all([
+                fetch(`/api/favorites/count/${car.id}`),
+                fetch(`/api/views/count/${car.id}`)
+              ]);
+              
+              let favoriteCount = 0;
+              let viewCount = car.views || 0;
+              
+              if (favoriteResponse.ok) {
+                const favoriteData = await favoriteResponse.json();
+                favoriteCount = favoriteData.favoriteCount;
+              }
+              
+              if (viewResponse.ok) {
+                const viewData = await viewResponse.json();
+                viewCount = viewData.viewCount;
+              }
+              
+              return { ...car, favoriteCount, views: viewCount };
+            } catch (error) {
+              console.error(`Error fetching counts for car ${car.id}:`, error);
+              return { ...car, favoriteCount: 0, views: car.views || 0 };
+            }
+          })
+        );
+
+        return carsWithCounts;
+      } catch (error) {
+        console.error('Error fetching user cars:', error);
+        return [];
+      }
+    } else {
+      navigate('/login')
+    }
+  }
+
+  async function deleteCar(carId: number) {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = localStorage.getItem("token");
+
+    if (!user || !token) {
+      navigate('/login');
+      return;
+    }
+
+    // Show confirmation dialog
+    const isConfirmed = window.confirm('Kas oled kindel, et soovid selle kuulutuse kustutada?');
+    if (!isConfirmed) {
+      return;
+    }
+
+    try {
+      await axios.delete(`/api/cars/${carId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      console.log('Car deleted successfully:', carId);
+
+      // Refresh the cars list
+      const updatedCars = await fetchCarsByUserID();
+      setUserCars(updatedCars);
+
+    } catch (err) {
+      console.error('Error deleting car:', err);
+      alert('Viga kuulutuse kustutamisel. Palun proovi uuesti.');
+    }
+  }
+
+  const handleDeleteCar = (carId: number) => {
+    deleteCar(carId);
+  };
+
+  const handleEditCar = (carId: number) => {
+    // Navigate to update page with car ID for editing
+    navigate(`/update/${carId}`);
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -75,108 +165,60 @@ export default function UserPageMobile() {
         </h1>
 
         {/* Add Listing Button */}
-        <button className="w-full mb-10 bg-motorsonline-primary text-white font-normal text-base leading-[150%] py-[18px] rounded-[10px] hover:bg-opacity-90 transition-colors">
-          + Lisa kuulutus
+        <button
+          onClick={() => navigate('/adds')}
+          className="flex px-[30px] py-[15px] justify-center items-center gap-[10px] rounded-[10px] bg-[#06D6A0] mb-5"
+        >
+          <span className="text-white font-['Poppins'] text-[16px] font-normal leading-[150%]">
+            + Lisa kuulutus
+          </span>
         </button>
 
         {/* Car Listings */}
-        <div className="space-y-10">
-          {carListings.map((car) => (
-            <div
-              key={car.id}
-              className="bg-motorsonline-card rounded-[10px] overflow-hidden"
-            >
-              {/* Car Image */}
-              <div className="relative">
-                <img
-                  src={car.image}
-                  alt={car.title}
-                  className="w-full h-[287px] object-cover"
-                />
-              </div>
-
-              {/* Car Details */}
-              <div className="p-5">
-                {/* Title */}
-                <h2 className="text-[26px] font-semibold leading-[150%] tracking-[-0.78px] text-motorsonline-dark mb-3">
-                  {car.title}
-                </h2>
-
-                {/* Category */}
-                <p className="text-sm font-medium text-motorsonline-gray mb-6">
-                  {car.category}
-                </p>
-
-                {/* Description */}
-                <p className="text-base leading-[150%] tracking-[-0.48px] text-motorsonline-dark mb-6">
-                  {car.description}
-                </p>
-
-                {/* Price Section */}
-                <div className="mb-6">
-                  {car.originalPrice && (
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-base text-motorsonline-gray line-through">
-                        € {car.originalPrice.toLocaleString()}
-                      </span>
-                      {car.discount && (
-                        <span className="px-2 py-1 bg-red-50 border border-red-500 rounded-full text-sm text-red-500">
-                          {car.discount}%
-                        </span>
-                      )}
-                    </div>
-                  )}
-                  <div className="text-[26px] font-semibold text-motorsonline-dark">
-                    € {car.price.toLocaleString()}
-                  </div>
-                  <p className="text-xs leading-[150%] tracking-[-0.36px] text-motorsonline-gray mt-1">
-                    Hind sisaldab käibemaksu 22%
-                  </p>
-                </div>
-
-                {/* Stats and Expiry */}
-                <div className="flex items-center justify-between mb-6">
-                  <span className="text-sm leading-[150%] tracking-[-0.42px] text-motorsonline-dark">
-                    {car.expiryDate}
-                  </span>
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2">
-                      <Eye className="h-6 w-6 text-motorsonline-dark" />
-                      <span className="text-sm leading-[150%] tracking-[-0.42px] text-motorsonline-dark">
-                        {car.views}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Heart className="h-6 w-6 text-motorsonline-dark" />
-                      <span className="text-sm leading-[150%] tracking-[-0.42px] text-motorsonline-dark">
-                        {car.likes}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="space-y-3">
-                  <button className="w-full py-3 px-5 border border-motorsonline-primary text-motorsonline-primary text-base leading-[150%] rounded-[10px] hover:bg-motorsonline-primary hover:text-white transition-colors">
-                    Redigeeri
-                  </button>
-                  <button className="w-full py-3 px-5 border border-motorsonline-primary text-motorsonline-primary text-base leading-[150%] rounded-[10px] hover:bg-motorsonline-primary hover:text-white transition-colors">
-                    Kustuta
-                  </button>
-                </div>
-              </div>
+        <div className="space-y-6">
+          {loading ? (
+            <div className="text-center py-8">
+              <span className="text-[#747474] font-['Poppins'] text-[18px]">
+                Laetakse...
+              </span>
             </div>
-          ))}
+          ) : userCars.length > 0 ? (
+            userCars.map((car, index) => (
+              <UserCarCard
+                key={car.id || index}
+                id={car.id}
+                title={`${car.brand_name || 'Unknown'} ${car.model_name || ''}`}
+                breadcrumb={`Kasutatud autod  »  ${car.brand_name || 'Unknown'} ${car.model_name || ''}  »  ${car.year_value || ''}`}
+                image={car.image_1 || "https://cdn.builder.io/api/v1/image/assets/TEMP/cc7bda4b04e2c28565ece34ac8989e7268a2a60f?width=620"}
+                description={car.description || "No description available"}
+                price={`€ ${car.price?.toLocaleString() || '0'}`}
+                originalPrice={car.discountPrice ? `€ ${car.discountPrice.toLocaleString()}` : undefined}
+                discount={car.discountPrice ? `${Math.round(((car.price - car.discountPrice) / car.price) * 100)}%` : undefined}
+                dateEnd="Kuni 25. juunini 2025"
+                views={car.views || 0}
+                likes={car.favoriteCount || 0}
+                vatNote={getVatDisplayText(car)}
+                onDelete={() => handleDeleteCar(car.id)}
+                onEdit={() => handleEditCar(car.id)}
+              />
+            ))
+          ) : (
+            <div className="text-center py-8">
+              <span className="text-[#747474] font-['Poppins'] text-[18px]">
+                Sul pole veel ühtegi kuulutust
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Results Counter */}
         <p className="text-base leading-[150%] tracking-[-0.48px] text-motorsonline-gray mt-10">
-          Kuvatakse 4 teavitust 4-st
+          {loading ? 'Laetakse...' : `Kuvatakse ${userCars.length} teavitust ${userCars.length}-st`}
         </p>
       </main>
 
       {/* Footer */}
-      <Footer/>
+      <Footer />
     </div>
   );
 }

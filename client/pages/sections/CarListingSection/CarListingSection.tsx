@@ -167,21 +167,19 @@ export const CarListingSection = ({
   const fuelTypes = [
     { id: "bensiin", label: "Bensiin" },
     { id: "diisel", label: "Diisel" },
-    { id: "elektriline", label: "Elektriline" },
-    { id: "hubriid-ben-el", label: "Hübriid (ben./el.)" },
-    { id: "hubriid-dii-el", label: "Hübriid (dii./el.)" },
-    { id: "pistikhuubriid-ben-el", label: "Pistikhübriid (ben./el.)" },
-    { id: "pistikhuubriid-dii-el", label: "Pistikhübriid (dii./el.)" },
-    { id: "bensiin-lpg", label: "Bensiin + LPG" },
-    { id: "bensiin-cng", label: "Bensiin + CNG" },
-    { id: "bensiin-lng", label: "Bensiin + LNG" },
-    { id: "diisel-cng", label: "Diisel + CNG" },
-    { id: "diisel-lng", label: "Diisel + LNG" },
-    { id: "lpg", label: "LPG (vedelgaas)" },
-    { id: "cng", label: "CNG (surugaas)" },
-    { id: "lng", label: "LNG (veeldatud maagaas)" },
+    { id: "elekter", label: "Elekter" },
+    { id: "hubriid-ben-el", label: "Hübriid (bensiin/elekter)" },
+    { id: "hubriid-dii-el", label: "Hübriid (diisel/elekter)" },
+    { id: "pistikhuubriid-ben-el", label: "Pistikhübriid (bensiin/elekter)" },
+    { id: "pistikhuubriid-dii-el", label: "Pistikhübriid (diisel/elekter)" },
+    { id: "bensiin-lpg", label: "Bensiin + Gaas (LPG/vedelgaas)" },
+    { id: "bensiin-cng", label: "Bensiin + Gaas (CNG/surugaas)" },
+    { id: "bensiin-lng", label: "Bensiin + Gaas (LNG/veeldatud maagaas)" },
+    { id: "diisel-cng", label: "Diisel + Gaas (LNG/veeldatud maagaas)" },
+    { id: "lpg", label: "Gaas (LPG/vedelgaas)" },
+    { id: "cng", label: "Gaas (CNG/surugaas)" },
+    { id: "lng", label: "Gaas (LNG/veeldatud maagaas)" },
     { id: "vesinik", label: "Vesinik" },
-    { id: "etanool", label: "Etanool" },
   ];
 
   // Data for transmission types
@@ -191,21 +189,54 @@ export const CarListingSection = ({
     { id: "poolautomaat", label: "Poolautomaat" },
   ];
 
-  // Data for colors
-  const colorRows = [
-    [
-      { id: "valge", label: "Valge", color: "bg-white" },
-      { id: "must", label: "Must", color: "bg-[#000000]" },
-    ],
-    [
-      { id: "sinine", label: "Sinine", color: "bg-[#0065ff]" },
-      { id: "roosa", label: "Roosa", color: "bg-[#fe5bee]" },
-    ],
-    [
-      { id: "punane", label: "Punane", color: "bg-[#ff0000]" },
-      { id: "pruun", label: "Pruun", color: "bg-[#946454]" },
-    ],
+  // Data for colors - expanded array with 48 colors
+  const allColors = [
+    { id: "beež", label: "Beež", color: "bg-yellow-100" },
+    { id: "hall", label: "Hall", color: "bg-gray-500" },
+    { id: "helebeež", label: "Hele beež", color: "bg-yellow-50" },
+    { id: "helehall", label: "Hele hall", color: "bg-gray-300" },
+    { id: "hellkollane", label: "Hele kollane", color: "bg-yellow-200" },
+    { id: "helelilla", label: "Hele Lilla", color: "bg-purple-200" },
+    { id: "heleanž", label: "Heleanž", color: "bg-orange-200" },
+    { id: "helepruun", label: "Hele Pruun", color: "bg-amber-200" },
+    { id: "helepunane", label: "Hele Punane", color: "bg-red-200" },
+    { id: "heleroheline", label: "Hele Roheline", color: "bg-green-200" },
+    { id: "helesinine", label: "Hele Sinine", color: "bg-blue-200" },
+    { id: "hõbedane", label: "Hõbedane", color: "bg-gray-200" },
+    { id: "kollane", label: "Kollane", color: "bg-yellow-400" },
+    { id: "kuldne", label: "Kuldne", color: "bg-yellow-500" },
+    { id: "lilla", label: "Lilla", color: "bg-purple-500" },
+    { id: "heleoranž", label: "Hele Oranž", color: "bg-orange-200" },
+    { id: "must", label: "Must", color: "bg-black" },
+    { id: "oranž", label: "Oranž", color: "bg-orange-500" },
+    { id: "pruun", label: "Pruun", color: "bg-amber-700" },
+    { id: "punane", label: "Punane", color: "bg-red-500" },
+    { id: "roheline", label: "Roheline", color: "bg-green-500" },
+    { id: "roosa", label: "Roosa", color: "bg-pink-400" },
+    { id: "sinine", label: "Sinine", color: "bg-blue-500" },
+    { id: "tumebeež", label: "Tume Beež", color: "bg-yellow-600", },
+    { id: "tumehall", label: "Tume Hall", color: "bg-gray-700" },
+    { id: "tumekollane", label: "Tume Kollane", color: "bg-yellow-600" },
+    { id: "tumelilla", label: "Tume Lilla", color: "bg-purple-700" },
+    { id: "tumeoranž", label: "Tume Oranž", color: "bg-orange-600" },
+    { id: "tumerpruun", label: "Tume Pruun", color: "bg-amber-800" },
+    { id: "tumerpunane", label: "Tume Punane", color: "bg-red-700" },
+    { id: "tumeroheline", label: "Tume Oheline", color: "bg-green-700" },
+    { id: "tumesinine", label: "Tume Sinine", color: "bg-blue-700" },
+    { id: "valge", label: "Valge", color: "bg-white", },
   ];
+
+  // State to control showing all colors or just initial 6
+  const [showAllColors, setShowAllColors] = useState(false);
+  
+  // Get colors to display based on state
+  const colorsToShow = showAllColors ? allColors : allColors.slice(0, 6);
+  
+  // Convert colors to rows for display (2 colors per row)
+  const colorRows = [];
+  for (let i = 0; i < colorsToShow.length; i += 2) {
+    colorRows.push(colorsToShow.slice(i, i + 2));
+  }
 
   // Data for additional info
   const additionalInfo = [
@@ -304,7 +335,7 @@ export const CarListingSection = ({
   };
 
   return (
-    <div className="w-full max-w-[292px]">
+    <div className="w-full max-w-[292px]" onClick={(e) => e.stopPropagation()}>
       <Card className="rounded-[10px]">
         <CardContent className="p-5 space-y-4">
           <h2 className="font-medium text-xl font-['Poppins',Helvetica]">
@@ -378,7 +409,7 @@ export const CarListingSection = ({
               <AccordionContent>
                 <div className="space-y-2">
                   {driveTypes.map((type) => (
-                    <div key={type.id} className="flex items-center space-x-2">
+                    <div key={type.id} className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
                       <Checkbox
                         id={type.id.toString()}
                         className="w-6 h-6 rounded border-[#ababab]"
@@ -462,7 +493,7 @@ export const CarListingSection = ({
           ))}
 
           <div className="space-y-2">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
               <Checkbox
                 id="kaibemaksuga"
                 className="w-6 h-6 rounded border-[#ababab]"
@@ -479,7 +510,7 @@ export const CarListingSection = ({
           </div>
 
           <div className="space-y-2">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
               <Checkbox
                 id="hooldusraamat"
                 className="w-6 h-6 rounded border-[#ababab]"
@@ -493,7 +524,7 @@ export const CarListingSection = ({
                 Hooldusraamat
               </label>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
               <Checkbox
                 id="ulevaatus"
                 className="w-6 h-6 rounded border-[#ababab]"
@@ -507,7 +538,7 @@ export const CarListingSection = ({
                 Ülevaatus
               </label>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
               <Checkbox
                 id="avariiline"
                 className="w-6 h-6 rounded border-[#ababab]"
@@ -529,7 +560,7 @@ export const CarListingSection = ({
           <Accordion type="single" collapsible defaultValue="fuel-type">
             <AccordionItem value="fuel-type" className="border-none">
               <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica]">
-                Kütus
+                Kütuse tüüp
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-2">
@@ -685,12 +716,12 @@ export const CarListingSection = ({
                   {colorRows.map((row, rowIndex) => (
                     <div
                       key={`color-row-${rowIndex}`}
-                      className="flex justify-between row"
+                      className="grid grid-cols-2 gap-1"
                     >
                       {row.map((color) => (
                         <label
                           key={color.id}
-                          className={`flex items-center space-x-2 col-6 w-full cursor-pointer ${selectedColor === color.id ? 'bg-[#f0fdfa]' : ''}`}
+                          className={`flex items-center space-x-1 cursor-pointer p-1 rounded ${selectedColor === color.id ? 'bg-[#f0fdfa]' : ''}`}
                         >
                           <input
                             type="radio"
@@ -704,13 +735,13 @@ export const CarListingSection = ({
                             className="sr-only"
                           />
                           <div
-                            className={`w-6 h-6 rounded-full ${color.color} flex items-center justify-center ${selectedColor === color.id ? '' : ''}`}
+                            className={`w-6 h-6 rounded-full ${color.color} ${color.border || ''} flex items-center justify-center flex-shrink-0 ${selectedColor === color.id ? 'ring-2 ring-blue-500' : ''}`}
                           >
                             {selectedColor === color.id && (
                               <span className="block w-3 h-3 rounded-full bg-white" />
                             )}
                           </div>
-                          <span className="font-['Poppins',Helvetica] font-normal text-base">
+                          <span className="font-['Poppins',Helvetica] font-normal text-base leading-tight">
                             {color.label}
                           </span>
                         </label>
@@ -719,9 +750,10 @@ export const CarListingSection = ({
                   ))}
                   <Button
                     variant="outline"
+                    onClick={() => setShowAllColors(!showAllColors)}
                     className="w-full h-[42px] rounded-[10px] border-[#06d6a0] text-[#06d6a0] font-['Poppins',Helvetica] font-medium"
                   >
-                    + Vaata rohkem
+                    {showAllColors ? '- Näita vähem' : '+ Vaata rohkem'}
                   </Button>
                 </div>
               </AccordionContent>

@@ -20,6 +20,45 @@ import { useFavorites } from "../../hooks/useFavorites";
 import { useAuth } from "../../contexts/AuthContext";
 import { useViews } from "../../hooks/useViews";
 import { useState, useEffect } from "react";
+import { VehicleDetailsSection } from "./sections/VehicleDetailsSection/VehicleDetailsSection";
+
+interface CarData {
+  id: number;
+  brand_name?: string;
+  model_name?: string;
+  year_value?: number;
+  mileage: number;
+  power: string;
+  transmission: string;
+  fuelType: string;
+  drive_type_id: string;
+  drive_type_ee_name: string;
+  ownerCount: string;
+  displacement: string;
+  technicalData: string;
+  category: string;
+  plateNumber: string;
+  price: number;
+  discountPrice?: number;
+  vatRate?: string;
+  vatRefundable?: string;
+  image_1?: string;
+  image_2?: string;
+  image_3?: string;
+  image_4?: string;
+  image_5?: string;
+  image_6?: string;
+  image_7?: string;
+  image_8?: string;
+  equipment?: string;
+  description?: string;
+  created_at?: string;
+  // Seller information
+  businessType?: string;
+  country?: string;
+  phone?: string;
+  email?: string;
+}
 
 export default function CarPageMobile() {
   const { id } = useParams();
@@ -148,52 +187,79 @@ export default function CarPageMobile() {
     car.image_8,
   ].filter(Boolean) as string[];
 
-  const relatedCars = [
+  const vehicleDetails = [
     {
-      id: 1,
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/1990e9147faccc75e4f4487358e1c8f3e0fd318f?width=780",
-      title: "Volkswagen Touareg",
-      year: 2016,
-      mileage: "303 000 km",
-      fuel: "Diisel",
-      transmission: "Automaat",
-      price: "€ 15 900",
+      icon: "/img/car/Car.png",
+      label: "Läbisõit:",
+      value: `${car.mileage.toLocaleString()} km`,
     },
     {
-      id: 2,
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/1990e9147faccc75e4f4487358e1c8f3e0fd318f?width=780",
-      title: "Volkswagen Touareg",
-      year: 2016,
-      mileage: "303 000 km",
-      fuel: "Diisel",
-      transmission: "Automaat",
-      price: "€ 15 900",
+      icon: "/img/car/Speedometer.png",
+      label: "Võimsus:",
+      value: car.power,
     },
     {
-      id: 3,
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/1990e9147faccc75e4f4487358e1c8f3e0fd318f?width=780",
-      title: "Volkswagen Touareg",
-      year: 2016,
-      mileage: "303 000 km",
-      fuel: "Diisel",
-      transmission: "Automaat",
-      price: "€ 15 900",
+      icon: "/img/car/gear-box-switch.png",
+      label: "Käigukast:",
+      value: car.transmission,
     },
     {
-      id: 4,
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/1990e9147faccc75e4f4487358e1c8f3e0fd318f?width=780",
-      title: "Volkswagen Touareg",
-      year: 2016,
-      mileage: "303 000 km",
-      fuel: "Diisel",
-      transmission: "Automaat",
-      price: "€ 15 900",
+      icon: "/img/car/calendar.png",
+      label: "Esmaregistreerimine:",
+      value: car.year_value?.toString() || "N/A",
+    },
+    {
+      icon: "/img/car/gas_station.png",
+      label: "Kütus",
+      value: car.fuelType,
+    },
+    {
+      icon: "/img/car/user_profile.png",
+      label: "Omanike arv:",
+      value: car.ownerCount,
     },
   ];
+
+  const technicalSpecs = [
+    { label: "Tehnilised andmed", value: car.technicalData },
+    { label: "Töömaht:", value: car.displacement },
+    { label: "Kategooria:", value: car.category },
+    { label: "Võimsus:", value: car.power },
+    { label: "Sõiduki number:", value: car.plateNumber },
+    { label: "Veoskeem:", value: car.drive_type_ee_name },
+    { label: "Läbisõit:", value: `${car.mileage.toLocaleString()} km` },
+    { label: "Kütuse tüüp:", value: car.fuelType },
+  ];
+
+  const equipmentFeatures = car.equipment
+    ? car.equipment.split(',').map(item => ({
+      label: item.trim(),
+      icon: "/img/car/check.svg"
+    }))
+    : [];
+
+  // Map equipment features to display names
+  const equipmentDisplayMap: { [key: string]: string } = {
+    'abs': 'ABS',
+    'adaptiveHeadlights': 'Adaptiivne kurvituli',
+    'alarmSystem': 'Häiresüsteem',
+    'ambientLighting': 'Ambiente valgustus',
+    'appleCarplay': 'Apple CarPlay',
+    'armrest': 'Käetugi',
+    'hillStartAssist': 'Käivitusabi mäkketõusul',
+    'automaticHighBeams': 'Pimestamisvaba kaugtuli',
+    'bluetooth': 'Bluetooth',
+    'boardComputer': 'Bordcomputer (pardaarvuti)',
+    'cdPlayer': 'CD-mängija',
+    'electricWindows': 'Elektrilised aknatõstukid'
+  };
+
+
+    const discountPercentage = car.discountPrice && car.price
+    ? Math.round(((car.price - car.discountPrice) / car.price) * 100)
+    : 0;
+
+
 
   return (
     <div className="min-h-screen bg-white font-['Poppins']">
@@ -204,7 +270,7 @@ export default function CarPageMobile() {
         <CarGallery
           mainImage={carImages[0]}
           thumbnails={carImages.slice(1)}
-          totalImages={15}
+          totalImages={carImages.length}
         />
         {/* Car title and breadcrumb */}
         <div className="px-5 mb-4">
@@ -235,25 +301,25 @@ export default function CarPageMobile() {
               <SpecCard
                 icon={<CarIcon />}
                 label="Läbisõit:"
-                value="20 350 km"
+                value={`${car.mileage.toLocaleString()} km`}
               />
               <SpecCard
                 icon={<SpeedometerIcon />}
                 label="Võimsus:"
-                value="533 kW (725 hj)"
+                value={car.power}
               />
               <SpecCard
                 icon={<GearboxIcon />}
                 label="Käigukast:"
-                value="Automaat"
+                value={car.transmission}
               />
               <SpecCard
                 icon={<CalendarIcon />}
                 label="Esmaregistreerimine:"
-                value="07/2019"
+                  value={car.year_value?.toString() || "N/A"}
               />
-              <SpecCard icon={<FuelIcon />} label="Kütus:" value="Bensiin" />
-              <SpecCard icon={<UserIcon />} label="Omanike arv:" value="1" />
+              <SpecCard icon={<FuelIcon />} label="Kütus:" value={car.fuelType} />
+              <SpecCard icon={<UserIcon />} label="Omanike arv:" value={car.ownerCount} />
             </div>
           </div>
         </div>
@@ -274,10 +340,10 @@ export default function CarPageMobile() {
             <div className="space-y-3">
               <div className="bg-white rounded-[10px] p-3 flex justify-between">
                 <span className="text-[#1A202C] text-sm font-medium">
-                  Seisukord:
+                  Tehnilised andmed
                 </span>
                 <span className="text-[#1A202C] text-sm font-normal">
-                  Kasutatud, avariivaba
+                   {car.accident}
                 </span>
               </div>
               <div className="bg-white rounded-[10px] p-3 flex justify-between">
@@ -285,7 +351,7 @@ export default function CarPageMobile() {
                   Kategooria:
                 </span>
                 <span className="text-[#1A202C] text-sm font-normal">
-                  Sportauto / Kupee
+                    {car.category}
                 </span>
               </div>
               <div className="bg-white rounded-[10px] p-3 flex justify-between">
@@ -293,7 +359,7 @@ export default function CarPageMobile() {
                   Sõiduki number:
                 </span>
                 <span className="text-[#1A202C] text-sm font-normal">
-                  GR01195
+                  {car.plateNumber}
                 </span>
               </div>
               <div className="bg-white rounded-[10px] p-3 flex justify-between">
@@ -301,7 +367,7 @@ export default function CarPageMobile() {
                   Läbisõit:
                 </span>
                 <span className="text-[#1A202C] text-sm font-normal">
-                  20 350 km
+                  {car.mileage.toLocaleString()} km
                 </span>
               </div>
               <div className="bg-white rounded-[10px] p-3 flex justify-between">
@@ -309,7 +375,7 @@ export default function CarPageMobile() {
                   Töömaht:
                 </span>
                 <span className="text-[#1A202C] text-sm font-normal">
-                  5 204 cm³
+                  {car.displacement} cm³
                 </span>
               </div>
               <div className="bg-white rounded-[10px] p-3 flex justify-between">
@@ -317,7 +383,7 @@ export default function CarPageMobile() {
                   Võimsus:
                 </span>
                 <span className="text-[#1A202C] text-sm font-normal">
-                  533 kW (725 hj)
+                  {car.power}
                 </span>
               </div>
               <div className="bg-white rounded-[10px] p-3 flex justify-between">
@@ -325,7 +391,7 @@ export default function CarPageMobile() {
                   Veoskeem:
                 </span>
                 <span className="text-[#1A202C] text-sm font-normal">
-                  Sisepõlemismootor
+                  {car.drive_type_ee_name}
                 </span>
               </div>
               <div className="bg-white rounded-[10px] p-3 flex justify-between">
@@ -333,7 +399,7 @@ export default function CarPageMobile() {
                   Kütuse tüüp:
                 </span>
                 <span className="text-[#1A202C] text-sm font-normal">
-                  Bensiin, sobib E10-le
+                  {car.fuelType}
                 </span>
               </div>
             </div>
@@ -344,44 +410,26 @@ export default function CarPageMobile() {
         <div className="px-5 mb-6">
           <ExpandableSection title="Kõrgema väärtusega lisvarustus">
             <div className="space-y-3">
-              <div className="bg-white rounded-[10px] p-3 flex justify-between items-center">
-                <span className="text-[#1A202C] text-sm font-medium">ABS</span>
-                <Check className="w-5 h-5 text-black" />
-              </div>
-              <div className="bg-white rounded-[10px] p-3 flex justify-between items-center">
-                <span className="text-[#1A202C] text-sm font-medium">
-                  Adaptiivne kurvituli
-                </span>
-                <Check className="w-5 h-5 text-black" />
-              </div>
-              <div className="bg-white rounded-[10px] p-3 flex justify-between items-center">
-                <span className="text-[#1A202C] text-sm font-medium">
-                  Häiresüsteem
-                </span>
-                <Check className="w-5 h-5 text-black" />
-              </div>
-              <div className="bg-white rounded-[10px] p-3 flex justify-between items-center">
-                <span className="text-[#1A202C] text-sm font-medium">
-                  Ambiente valgustus
-                </span>
-                <Check className="w-5 h-5 text-black" />
-              </div>
-              <div className="bg-white rounded-[10px] p-3 flex justify-between items-center">
-                <span className="text-[#1A202C] text-sm font-medium">
-                  Apple CarPlay
-                </span>
-                <Check className="w-5 h-5 text-black" />
-              </div>
-              <div className="bg-white rounded-[10px] p-3 flex justify-between items-center">
-                <span className="text-[#1A202C] text-sm font-medium">
-                  Käetugi
-                </span>
-                <Check className="w-5 h-5 text-black" />
-              </div>
+              {equipmentFeatures.length > 0 ? (
+                equipmentFeatures.map((feature, index) => (
+                  <div key={index} className="bg-white rounded-[10px] p-3 flex justify-between items-center">
+                    <span className="text-[#1A202C] text-sm font-medium">
+                      {equipmentDisplayMap[feature.label] || feature.label}
+                    </span>
+                    <Check className="w-5 h-5 text-black" />
+                  </div>
+                ))
+              ) : (
+                <div className="bg-white rounded-[10px] p-3 text-center">
+                  <span className="text-[#1A202C] text-sm font-medium text-gray-500">
+                    Lisavarustus puudub
+                  </span>
+                </div>
+              )}
             </div>
           </ExpandableSection>
         </div>
-        <ImageGallerySection />
+        <ImageGallerySection car={car} />
 
         {/* Seller information section */}
         <div className="px-5 mb-6">
@@ -391,25 +439,21 @@ export default function CarPageMobile() {
             </h2>
 
             <div className="flex items-start gap-4">
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/6046d70a5fee3409e99c3999eb42f7000a654341?width=160"
-                alt="Seller"
-                className="w-20 h-20 rounded-[10px] object-cover"
-              />
+              <div className="w-20 h-20 rounded-[10px] bg-gray-200 flex items-center justify-center">
+                <UserIcon />
+              </div>
               <div className="flex-1">
                 <h3 className="text-[#1A202C] text-base font-medium leading-[150%] tracking-[-0.48px] mb-1">
-                  Lorem Ipsum
+                  {car.businessType || "Müüja"}
                 </h3>
                 <p className="text-[#1A202C] text-base font-normal leading-[150%] tracking-[-0.48px] mb-1">
-                  ELKE Mustamäe
-                  <br />
-                  Tallinn, Mustamäe tee 22
+                  {car.country || "Eesti"}
                 </p>
                 <p className="text-[#1A202C] text-base font-normal leading-[150%] tracking-[-0.48px] mb-1">
-                  +372 8888 8888
+                  {car.phone || "Telefon puudub"}
                 </p>
                 <p className="text-[#1A202C] text-base font-normal leading-[150%] tracking-[-0.48px]">
-                  Näide@elke.ee
+                  {car.email || "E-post puudub"}
                 </p>
               </div>
             </div>
@@ -418,16 +462,7 @@ export default function CarPageMobile() {
 
         {/* Related cars section */}
 
-        <section className="px-5 py-6">
-          <h2 className="text-black text-[26px] font-semibold mb-6">
-            Vaata viimast autot
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-            {relatedCars.map((car, index) => (
-              <CarCard key={index} {...car} />
-            ))}
-          </div>
-        </section>
+        <VehicleDetailsSection excludeCarId={car.id} />
       </main>
 
       <Footer />
