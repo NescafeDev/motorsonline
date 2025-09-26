@@ -7,6 +7,17 @@ import { createCar, getCarById, getAllCars, updateCar, deleteCar, getCarsByUserI
 import { pool } from '../db';
 import { DriveType } from '@shared/drive-types';
 
+// Helper function to safely convert to number
+const safeParseInt = (value: any): number => {
+  const parsed = parseInt(value);
+  return isNaN(parsed) ? 0 : parsed;
+};
+
+const safeParseFloat = (value: any): number => {
+  const parsed = parseFloat(value);
+  return isNaN(parsed) ? 0 : parsed;
+};
+
 // Car-related types
 export interface Car {
   id: number;
@@ -191,16 +202,16 @@ router.post('/', authenticateToken, upload.fields([
       return res.status(400).json({ message: 'Drive type is required.' });
     }
     
-    // Convert string IDs to numbers
-    data.brand_id = parseInt(data.brand_id);
-    data.model_id = parseInt(data.model_id);
-    data.year_id = parseInt(data.year_id);
-    data.drive_type_id = parseInt(data.drive_type_id);
+    // Convert string IDs to numbers with safe parsing
+    data.brand_id = safeParseInt(data.brand_id);
+    data.model_id = safeParseInt(data.model_id);
+    data.year_id = safeParseInt(data.year_id);
+    data.drive_type_id = safeParseInt(data.drive_type_id);
     
-    // Convert numeric fields
-    data.mileage = data.mileage ? parseInt(data.mileage) || 0 : 0;
-    data.price = data.price ? parseFloat(data.price) || 0 : 0;
-    data.discountPrice = data.discountPrice ? parseFloat(data.discountPrice) || 0 : 0;
+    // Convert numeric fields with safe parsing
+    data.mileage = data.mileage ? safeParseInt(data.mileage) : 0;
+    data.price = data.price ? safeParseFloat(data.price) : 0;
+    data.discountPrice = data.discountPrice ? safeParseFloat(data.discountPrice) : 0;
     
     // Convert empty strings to null for optional fields
     const optionalFields = ['plateNumber', 'month', 'power', 'displacement', 'technicalData', 'ownerCount', 'modelDetail', 'warranty', 'vatRefundable', 'vatRate', 'accident', 'vinCode', 'description', 'equipment', 'additionalInfo', 'phone', 'businessType', 'socialNetwork', 'email'];
@@ -738,16 +749,16 @@ router.put('/:id', authenticateToken, upload.fields([
       return res.status(400).json({ message: 'Drive type is required.' });
     }
     
-    // Convert string IDs to numbers
-    data.brand_id = parseInt(data.brand_id);
-    data.model_id = parseInt(data.model_id);
-    data.year_id = parseInt(data.year_id);
-    data.drive_type_id = parseInt(data.drive_type_id);
+    // Convert string IDs to numbers with safe parsing
+    data.brand_id = safeParseInt(data.brand_id);
+    data.model_id = safeParseInt(data.model_id);
+    data.year_id = safeParseInt(data.year_id);
+    data.drive_type_id = safeParseInt(data.drive_type_id);
     
-    // Convert numeric fields
-    data.mileage = data.mileage ? parseInt(data.mileage) || 0 : 0;
-    data.price = data.price ? parseFloat(data.price) || 0 : 0;
-    data.discountPrice = data.discountPrice ? parseFloat(data.discountPrice) || 0 : 0;
+    // Convert numeric fields with safe parsing
+    data.mileage = data.mileage ? safeParseInt(data.mileage) : 0;
+    data.price = data.price ? safeParseFloat(data.price) : 0;
+    data.discountPrice = data.discountPrice ? safeParseFloat(data.discountPrice) : 0;
     
     // Convert empty strings to null for optional fields
     const optionalFields = ['plateNumber', 'month', 'power', 'displacement', 'technicalData', 'ownerCount', 'modelDetail', 'warranty', 'vatRefundable', 'vatRate', 'accident', 'vinCode', 'description', 'equipment', 'additionalInfo', 'phone', 'businessType', 'socialNetwork', 'email'];

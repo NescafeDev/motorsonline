@@ -6,9 +6,9 @@ export interface DriveType {
 }
 
 export const DRIVE_TYPES = [
-  { id: 1, name: "kabriolett", ee_name: "Kabriolett", label: "Kabriolett" },
-  { id: 2, name: "karavan", ee_name: "Karavan", label: "Karavan" },
-  { id: 3, name: "kaubik", ee_name: "Kaubik", label: "Kaubik" },
+  { id: 1, name: "esivedu", ee_name: "Esivedu", label: "Esivedu" },
+  { id: 2, name: "tagavedu", ee_name: "Tagavedu", label: "Tagavedu" },
+  { id: 3, name: "nelikvedu", ee_name: "Nelikvedu", label: "Nelikvedu" },
   { id: 4, name: "kupee", ee_name: "Kupee", label: "Kupee" },
   { id: 5, name: "luukpara", ee_name: "Luukpära", label: "Luukpära" },
   { id: 6, name: "limusiin", ee_name: "Limusiin", label: "Limusiin" },

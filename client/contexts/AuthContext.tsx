@@ -40,7 +40,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Set up axios interceptor for authentication
   useEffect(() => {
-    console.log('token:', token);
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } else {
@@ -68,7 +67,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, [token]);
 
   const login = async (email: string, password: string) => {
-    console.log("login called with email:", email);
     try {
       const response = await axios.post('/api/auth/login', { email, password });
       console.log("login response:", response.data);
@@ -133,7 +131,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     loading
   };
 
-  console.log("AuthContext state - user:", user, "token:", token, "isAuthenticated:", !!user && !!token);
 
   return (
     <AuthContext.Provider value={value}>

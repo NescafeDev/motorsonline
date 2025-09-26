@@ -353,12 +353,16 @@ export default function HomePageMobile() {
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-6 leading-normal px-4">
               MotorsOnline – Leia oma järgmine auto siit!
             </h1>
+            <p className="font-normal text-[30px] mb-6 tracking-[-0.12px] italic">Drive your dream!</p>
             <p className="text-motors-dark leading-[150%] tracking-[-0.48px] mb-8 max-w-md mx-auto px-4">
               Lorem ipsum dolor sit amet consectetur. Quisque erat imperdiet
               egestas pretium. Nibh convallis id nulla non diam.
             </p>
-            <button className="w-full max-w-md bg-brand-primary text-white py-4 rounded-[10px] font-normal text-base leading-[150%] mb-8 mx-auto">
-              Lorem ipsum
+            <button 
+              onClick={() => navigate("/register")}
+              className="px-[30px] py-[15px] bg-[#06d6a0] rounded-[10px] text-white"
+            >
+            Registreeru
             </button>
           </div>
         </section>

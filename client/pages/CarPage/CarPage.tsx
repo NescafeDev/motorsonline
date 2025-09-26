@@ -51,6 +51,7 @@ interface CarData {
   country?: string;
   phone?: string;
   email?: string;
+  language?: string;
 }
 
 export default function CarPage() {
@@ -501,7 +502,8 @@ export default function CarPage() {
               address: car.country || "Tallinn, Mustamäe tee 22",
               contactPerson: "Kontaktisik",
               phone: car.phone || "+372 8888 8888",
-              email: car.email || "Näide@elke.ee"
+              email: car.email || "Näide@elke.ee",
+              language: car.language || "en"
             }}
           />
           <VehicleDetailsSection excludeCarId={car.id} />

@@ -32,7 +32,8 @@ async function runMigration() {
       '12-create-drive-type-table.sql',
       '13-create-favorites-table.sql',
       '14-add-views-to-cars.sql',
-      '15-update-approved-default.sql'
+      '15-update-approved-default.sql',
+      '16-add-language-address-to-cars.sql'
     ];
 
     for (const migrationFile of migrationFiles) {

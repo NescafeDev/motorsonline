@@ -1,0 +1,3 @@
+ALTER TABLE cars
+  ADD COLUMN language VARCHAR(50),
+  ADD COLUMN address TEXT;

@@ -22,6 +22,8 @@ import axios from "axios";
 
 // Import CarFilters from HomePage
 export interface CarFilters {
+  vehicleType?: string;
+  vehicleCondition?: string;
   brand_id?: number;
   model_id?: number;
   model_name?: string;
@@ -182,7 +184,7 @@ export const CarListingSection = ({
     { id: "lng", label: "Gaas (LNG/veeldatud maagaas)" },
     { id: "vesinik", label: "Vesinik" },
   ];
-
+  
   // Data for transmission types
   const transmissionTypes = [
     { id: "manuaal", label: "Manuaal" },
@@ -190,6 +192,31 @@ export const CarListingSection = ({
     { id: "poolautomaat", label: "Poolautomaat" },
   ];
 
+  const vehicleType = [
+    { id: "sõiduauto", label: "Sõiduauto"},
+    { id: "maastur", label: "Maastur"},
+    { id: "kaubik", label: "Kaubik"},
+    { id: "buss", label: "Buss"},
+    { id: "veoauto", label: "Veoauto"},
+    { id: "haagis", label: "Haagis"},
+    { id: "mototehnika", label: "Mototehnika"},
+    { id: "haagissuvila", label: "Haagissuvila"},
+    { id: "autoelamu", label: "Autoelamu"},
+    { id: "veesõiduk", label: "Veesõiduk"},
+    { id: "ehitustehnika", label: "Ehitustehnika"},
+    { id: "põllumajandustehnika", label: "Põllumajandustehnika"},
+    { id: "metsatehnika", label: "Metsatehnika"},
+    { id: "kommunaaltehnika", label: "Kommunaaltehnika"},
+    { id: "võistlussõiduk", label: "Võistlussõiduk"},
+    { id: "muu", label: "Muu"},
+  ];
+
+  // Data for vehicle condition
+  const vehicleCondition = [
+    { id: "uus", label: "Uus" },
+    { id: "kasutatud", label: "Kasutatud" },
+    { id: "avariiline", label: "Avariiline" },
+  ];
   // Data for category types
   const categoryTypes = [
     { id: "M1", label: "M1" },
@@ -262,7 +289,6 @@ export const CarListingSection = ({
 
   // Data for additional info
   const additionalInfo = [
-    { id: "metallikvärv", label: "Metallikvärv", filterKey: "metallic_paint" },
     { id: "vahetuse-voimalus", label: "Vahetuse võimalus", filterKey: "exchange_possible" },
     { id: "garantiiga", label: "Garantiiga", filterKey: "with_warranty" },
   ];
@@ -364,6 +390,55 @@ export const CarListingSection = ({
             Filtrid
           </h2>
 
+          {/* Sõiduki liik Section - First */}
+          <div className="space-y-3">
+            <Select value={filters.vehicleType} onValueChange={(value) => updateFilter('vehicleType', value)}>
+              <SelectTrigger className="w-full h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]">
+                <SelectValue placeholder="Sõiduki liik" />
+              </SelectTrigger>
+              <SelectContent>
+                {vehicleType.map((type) => (
+                  <SelectItem key={type.id} value={type.id}>
+                    {type.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Kategooria Section - Second */}
+          <div className="space-y-3">
+            <Select value={filters.category} onValueChange={(value) => updateFilter('category', value)}>
+              <SelectTrigger className="w-full h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]">
+                <SelectValue placeholder="Kategooria" />
+              </SelectTrigger>
+              <SelectContent>
+                {categoryTypes.map((category) => (
+                  <SelectItem key={category.id} value={category.id}>
+                    {category.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Sõiduki seisukord Section - Third */}
+          <div className="space-y-3">
+            <Select value={filters.vehicleCondition} onValueChange={(value) => updateFilter('vehicleCondition', value)}>
+              <SelectTrigger className="w-full h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]">
+                <SelectValue placeholder="Sõiduki seisukord" />
+              </SelectTrigger>
+              <SelectContent>
+                {vehicleCondition.map((condition) => (
+                  <SelectItem key={condition.id} value={condition.id}>
+                    {condition.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+
           {/* Make and Model Selectors */}
           <div className="space-y-3">
             {brandsLoading ? (
@@ -404,19 +479,6 @@ export const CarListingSection = ({
                 disabled={filters.brand_id === undefined || filters.brand_id === null}
               />
             )}
-
-            <Select value={filters.category} onValueChange={(value) => updateFilter('category', value)}>
-              <SelectTrigger className="w-full h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]">
-                <SelectValue placeholder="Kategooria" />
-              </SelectTrigger>
-              <SelectContent>
-                {categoryTypes.map((category) => (
-                  <SelectItem key={category.id} value={category.id}>
-                    {category.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
 
             <Input
               className="h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474] border-none"
@@ -790,6 +852,22 @@ export const CarListingSection = ({
                   >
                     {showAllColors ? '- Näita vähem' : '+ Vaata rohkem'}
                   </Button>
+                  
+                  {/* Metallikvärv checkbox */}
+                  <div className="flex items-center space-x-2 pt-2">
+                    <Checkbox
+                      id="metallikvärv"
+                      className="w-6 h-6 rounded border-[#ababab]"
+                      checked={filters.metallic_paint || false}
+                      onCheckedChange={(checked) => handleBooleanFilter('metallic_paint', checked as boolean)}
+                    />
+                    <label
+                      htmlFor="metallikvärv"
+                      className="font-['Poppins',Helvetica] font-normal text-base"
+                    >
+                      Metallikvärv
+                    </label>
+                  </div>
                 </div>
               </AccordionContent>
             </AccordionItem>

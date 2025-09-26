@@ -7,6 +7,7 @@ import FormSection, {
   CheckboxField,
 } from "@/components/FormSection";
 import ReactFlagsSelect from "react-flags-select";
+import LanguageSelect from '@/components/LanguageSelect';
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -91,20 +92,39 @@ const accessoriesOptions = [
 ];
 
 const carColorOptions = [
-  { value: "valge", label: "Valge" },
-  { value: "must", label: "Must" },
-  { value: "hall", label: "Hall" },
-  { value: "punane", label: "Punane" },
-  { value: "sinine", label: "Sinine" },
-  { value: "roheline", label: "Roheline" },
-  { value: "kollane", label: "Kollane" },
-  { value: "oranž", label: "Oranž" },
-  { value: "lilla", label: "Lilla" },
-  { value: "pruun", label: "Pruun" },
   { value: "beež", label: "Beež" },
+  { value: "helebeež", label: "Hele beež" },
+  { value: "hall", label: "Hall" },
+  { value: "helehall", label: "Hele hall" },
+  { value: "hellkollane", label: "Hele kollane" },
+  { value: "helelilla", label: "Hele Lilla" },
+  { value: "heleanž", label: "Heleanž" },
+  { value: "helepruun", label: "Hele Pruun" },
+  { value: "helepunane", label: "Hele Punane" },
+  { value: "heleroheline", label: "Pruun" },
+  { value: "helesinine", label: "Hele Sinine" },
   { value: "hõbedane", label: "Hõbedane" },
+  { value: "kollane", label: "Kollane" },
   { value: "kuldne", label: "Kuldne" },
-  { value: "muu", label: "Muu" },
+  { value: "lilla", label: "Lilla" },
+  { value: "heleoranž", label: "Hele Oranž" },
+  { value: "must", label: "Must" },
+  { value: "oranž", label: "Oranž" },
+  { value: "pruun", label: "Pruun" },
+  { value: "punane", label: "Punane" },
+  { value: "roheline", label: "Roheline" },
+  { value: "roosa", label: "Roosa" },
+  { value: "sinine", label: "Sinine" },
+  { value: "tumebeež", label: "Tume Beež" },
+  { value: "tumehall", label: "Tume Hall" },
+  { value: "tumekollane", label: "Tume Kollane" },
+  { value: "tumelilla", label: "Tume Lilla" },
+  { value: "tumeoranž", label: "Tume Oranž" },
+  { value: "tumerpruun", label: "Tumer Pruun" },
+  { value: "tumepunane", label: "Tume Punane" },
+  { value: "tumeroheline", label: "Tume Roheline" },
+  { value: "tumesinine", label: "Tume Sinine" },
+  { value: "valge", label: "Valge" },
 ];
 
 const salonColorOptions = [
@@ -242,7 +262,6 @@ export default function AddsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const { id: carId } = useParams<{ id: string }>();
-
   useEffect(() => {
     const initializeData = async () => {
       await Promise.all([
@@ -350,13 +369,13 @@ export default function AddsPage() {
   useEffect(() => {
     if (!editingCar) {
       // Set brand_id - don't auto-select, let placeholder show "Vali"
-      // if (brands.length > 0 && !formData.brand_id) {
-      //   setFormData((prev) => ({ ...prev, brand_id: brands[0].id.toString() }));
-      // }
+      if (brands.length > 0 && !formData.brand_id) {
+        setFormData((prev) => ({ ...prev, brand_id: "" }));
+      }
       // Set model_id - don't auto-select, let placeholder show "Vali"
-      // if (models.length > 0 && !formData.model_id) {
-      //   setFormData((prev) => ({ ...prev, model_id: models[0].id.toString() }));
-      // }
+      if (models.length > 0 && !formData.model_id) {
+        setFormData((prev) => ({ ...prev, model_id: "" }));
+      }
       // Set year_id to 2025 by default
       if (years.length > 0 && !formData.year_id) {
         // const year2025 = years.find(y => y.value === "2025");
@@ -373,7 +392,7 @@ export default function AddsPage() {
       }
       // Set vatRefundable
       if (!formData.vatRefundable) {
-        setFormData((prev) => ({ ...prev, vatRefundable: "" }));
+        setFormData((prev) => ({ ...prev, vatRefundable: "yes" }));
       }
       // Set vatRate
       if (!formData.vatRate) {
@@ -537,19 +556,19 @@ export default function AddsPage() {
     formDataObj.append('tech_check', techCheckSelected.join(','));
     formDataObj.append('accessories', accessoriesSelected.join(','));
     const token = localStorage.getItem("token");
-    
+
     try {
       if (editingCar) {
+        console.log('Editing Car:', editingCar);
         await axios.put(`/api/cars/${editingCar.id}`, formDataObj, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } else {
+        console.log('Form Data:', formDataObj);
         await axios.post("/api/cars", formDataObj, {
           headers: { Authorization: `Bearer ${token}` },
         });
       }
-      
-      console.log(editingCar)
       setEditingCar(null);
       setCarImages(Array(40).fill(null));
       setShowMorePhotos(false);
@@ -959,7 +978,7 @@ export default function AddsPage() {
                   value={formData.price}
                   onChange={(value) => handleInputChange("price", value)}
                 />
-                {(() => {
+                {/* {(() => {
                   const vatCalculation = calculateVatPrice();
                   if (vatCalculation) {
                     return (
@@ -983,7 +1002,7 @@ export default function AddsPage() {
                     );
                   }
                   return null;
-                })()}
+                })()} */}
               </div>
               <FormField
                 label="Soodushind"
@@ -1018,6 +1037,7 @@ export default function AddsPage() {
                   },
                 ]}
               />
+              <div>
               <FormField
                 label="Käibemaksumäär"
                 placeholder=""
@@ -1029,42 +1049,15 @@ export default function AddsPage() {
                 suffix="%"
                 step={1}
               />
-            </div>
-
-            {/* Checkboxes */}
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <FormField
-                  label="Sõiduki seisukord"
-                  placeholder=""
-                  value={formData.accident}
-                  onChange={(value) => handleInputChange("accident", value)}
-                  isSelect
-                  options={[
-                    {
-                      value: "",
-                      label: "Vali",
-                    },
-                    {
-                      value: "uus",
-                      label: "Uus",
-                    },
-                    {
-                      value: "kasutatud",
-                      label: "Kasutatud",
-                    },
-                    {
-                      value: "avariiline",
-                      label: "Avariiline",
-                    },
-                  ]}
-                />
+              <div className="mt-6">
+                
                 <FormField
                   label="VIN-kood"
                   placeholder="WDC000000000000"
                   value={formData.vinCode}
                   onChange={(value) => handleInputChange("vinCode", value)}
                 />
+              </div>
               </div>
               <div className="ml-2 space-y-1 pt-11">
                 <CheckboxField
@@ -1097,6 +1090,7 @@ export default function AddsPage() {
                 />
               </div>
             </div>
+            
           </FormSection>
 
           {/* Technical Details */}
@@ -1122,12 +1116,56 @@ export default function AddsPage() {
                     label: "Diisel",
                   },
                   {
-                    value: "hybrids",
-                    label: "Hübriid",
+                    value: "elekter",
+                    label: "Elekter",
                   },
                   {
-                    value: "electric",
-                    label: "Elektriline",
+                    value: "bensiin + gaas (LPG/Vedelgaas)",
+                    label: "Bensiin + Gaas (LPG/Vedelgaas)",
+                  },
+                  {
+                    value: "bensiin + gaas (LNG/veeldatud maagaas)",
+                    label: "Bensiin + Gaas (LNG/Veeldatud maagaas)",
+                  },
+                  {
+                    value: "bensiin + gaas (CNG/surugaas)",
+                    label: "Bensiin + Gaas (CNG/Surugaas)",
+                  },
+                  {
+                    value: "diisel + gaas (LNG/veeldatud maagaas)",
+                    label: "Diisel + Gaas (LNG/Veeldatud maagaas)",
+                  },
+                  {
+                    value: "gaas (LPG/vedelgaas)",
+                    label: "Gaas (LPG/Vedelgaas)",
+                  },
+                  {
+                    value: "gaas (CNG/surugaas)",
+                    label: "Gaas (CNG/Surugaas)",
+                  },
+                  {
+                    value: "gaas (LNG/veeldatud maagaas)",
+                    label: "Gaas (LNG/Veeldatud maagaas)",
+                  },
+                  {
+                    value: "hübriid (ensiin / elekter)",
+                    label: "Hübriid (Bensiin / Elekter)",
+                  },
+                  {
+                    value: "hübriid (diisel / elekter)",
+                    label: "Hübriid (Diisel / Elekter)",
+                  },
+                  {
+                    value: "pistikhübriid (bensiin / elekter)",
+                    label: "Pistikhübriid (Bensiin / Elekter)",
+                  },
+                  {
+                    value: "pistikhübriid (diisel / elekter)",
+                    label: "Pistikhübriid (Diisel / Elekter)",
+                  },
+                  {
+                    value: "vesinik",
+                    label: "Vesinik",
                   },
                 ]}
               />
@@ -1281,8 +1319,8 @@ export default function AddsPage() {
                 onChange={(value) => handleInputChange("technicalData", value)}
                 options={[
                   {
-                    value: "",
-                    label: "Vali",
+                    value: "uus",
+                    label: "Uus",
                   },
                   {
                     value: "kasutatud",
@@ -1334,7 +1372,18 @@ export default function AddsPage() {
                     value: "",
                     label: "Vali",
                   },
-                  ...driveTypes.map((dt) => ({ value: dt.id.toString(), label: dt.ee_name }))
+                  {
+                    value: "13",
+                    label: "Esivedu",
+                  },
+                  {
+                    value: "14",
+                    label: "Tagavedu",
+                  },
+                  {
+                    value: "15",
+                    label: "Nelikvedu",
+                  },
                 ]}
               />
               <FormField
@@ -1453,12 +1502,33 @@ export default function AddsPage() {
                 value={formData.address}
                 onChange={(value) => handleInputChange("address", value)}
               />
-              <FormField
+              {/* <FormField
                 label="Suhtluskeel"
                 placeholder="Suhtluskeel"
                 value={formData.language}
                 onChange={(value) => handleInputChange("language", value)}
-              />
+              /> */}
+              <div className="flex gap-4">
+                <div className="w-full">
+                  <label className="block text-motorsoline-text text-lg font-medium mb-3">
+                    Suhtluskeel
+                  </label>
+                  {/* <ReactLanguageSelect
+                    className="w-full rounded-lg bg-white text-lg"
+                    selected={formData.language}
+                    onSelect={(value) => handleInputChange("language", value)}
+                    placeholder="Valige keel"
+                    searchable={true}
+                  /> */}
+                  <LanguageSelect
+                    selected={formData.language}
+                    onSelect={(value) => handleInputChange("language", value)}
+                    placeholder="Valige keel"
+                    searchable={true}
+                    className="w-full"
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="mt-6">

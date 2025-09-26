@@ -1,7 +1,9 @@
 import React from "react";
 import { Button } from "../../../components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 export const HeroSection = (): JSX.Element => {
+  const navigate = useNavigate();
   return (
     <section className="relative">
       <div className="flex justify-between">
@@ -10,12 +12,16 @@ export const HeroSection = (): JSX.Element => {
             <h1 className="font-semibold text-[46px] leading-normal mb-6">
               MotorsOnline – Leia oma järgmine auto siit!
             </h1>
+            <p className="font-normal text-[30px] mb-6 tracking-[-0.12px] italic">Drive your dream!</p>
             <p className="font-normal text-lg text-secondary-500 tracking-[-0.54px] leading-[27px] max-w-[528px] mb-10 text-[18px]">
               Lorem ipsum dolor sit amet consectetur. Quisque erat
               imperdiet egestas pretium. Nibh convallis id nulla non diam.
             </p>
-            <Button className="px-[30px] py-[15px] bg-[#06d6a0] rounded-[10px] text-white">
-              Lorem ipsum
+            <Button 
+              onClick={() => navigate("/register")}
+              className="px-[30px] py-[15px] bg-[#06d6a0] rounded-[10px] text-white"
+            >
+            Registreeru
             </Button>
           </div>
         </div>

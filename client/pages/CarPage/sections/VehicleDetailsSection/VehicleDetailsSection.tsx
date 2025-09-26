@@ -166,7 +166,7 @@ export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionPro
     : cars;
 
   return (
-    <section className="relative w-full mx-auto py-12 px-4 sm:px-0">
+    <section className="max-w-[1400px] relative w-full mx-auto py-12 px-4 sm:px-0">
       <h2 className="font-semibold text-[46px] text-black [font-family:'Poppins',Helvetica] mb-12 text-center sm:text-left">
         Vaata viimast autot
       </h2>
@@ -175,7 +175,7 @@ export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionPro
         {filteredCars.slice(0, 8).map((car, index) => (
           <Card
             key={car.id}
-            className="w-full h-[376px] bg-white rounded-[10px] overflow-hidden relative cursor-pointer hover:shadow-lg transition-shadow"
+            className="w-full bg-white rounded-[10px] overflow-hidden relative cursor-pointer hover:shadow-lg transition-shadow"
             onClick={() => navigate(`/car/${car.id}`)}
           >
             <CardContent className="p-0">
