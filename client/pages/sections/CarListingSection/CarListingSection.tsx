@@ -26,6 +26,7 @@ export interface CarFilters {
   model_id?: number;
   model_name?: string;
   trim_level?: string;
+  category?: string;
   drive_type_id?: number[];
   seats?: number;
   doors?: number;
@@ -187,6 +188,27 @@ export const CarListingSection = ({
     { id: "manuaal", label: "Manuaal" },
     { id: "automaat", label: "Automaat" },
     { id: "poolautomaat", label: "Poolautomaat" },
+  ];
+
+  // Data for category types
+  const categoryTypes = [
+    { id: "M1", label: "M1" },
+    { id: "M2", label: "M2" },
+    { id: "M3", label: "M3" },
+    { id: "N1", label: "N1" },
+    { id: "N2", label: "N2" },
+    { id: "N3", label: "N3" },
+    { id: "L1e", label: "L1e" },
+    { id: "L2e", label: "L2e" },
+    { id: "L3e", label: "L3e" },
+    { id: "L4e", label: "L4e" },
+    { id: "L5e", label: "L5e" },
+    { id: "L6e", label: "L6e" },
+    { id: "L7e", label: "L7e" },
+    { id: "O1", label: "O1" },
+    { id: "O2", label: "O2" },
+    { id: "O3", label: "O3" },
+    { id: "O4", label: "O4" },
   ];
 
   // Data for colors - expanded array with 48 colors
@@ -382,6 +404,19 @@ export const CarListingSection = ({
                 disabled={filters.brand_id === undefined || filters.brand_id === null}
               />
             )}
+
+            <Select value={filters.category} onValueChange={(value) => updateFilter('category', value)}>
+              <SelectTrigger className="w-full h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]">
+                <SelectValue placeholder="Kategooria" />
+              </SelectTrigger>
+              <SelectContent>
+                {categoryTypes.map((category) => (
+                  <SelectItem key={category.id} value={category.id}>
+                    {category.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
             <Input
               className="h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474] border-none"

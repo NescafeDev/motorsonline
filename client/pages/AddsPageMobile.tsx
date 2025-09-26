@@ -1145,35 +1145,103 @@ export default function AddsPageMobile() {
                     label: "Vali",
                   },
                   {
-                    value: "hatchback",
-                    label: "Hatchback",
+                    value: "M1",
+                    label: "M1",
                   },
                   {
-                    value: "sedan",
-                    label: "Sedan",
+                    value: "M2",
+                    label: "M2",
                   },
                   {
-                    value: "suv",
-                    label: "SUV",
+                    value: "M3",
+                    label: "M3",
                   },
                   {
-                    value: "muv",
-                    label: "MUV",
+                    value: "N1",
+                    label: "N1",
                   },
                   {
-                    value: "coupe",
-                    label: "Coupe",
+                    value: "N2",
+                    label: "N2",
                   },
                   {
-                    value: "convertible",
-                    label: "Convertible",
+                    value: "N3",
+                    label: "N3",
                   },
                   {
-                    value: "pickup_truck",
-                    label: "Pickup Truck",
+                    value: "L1e",
+                    label: "L1e",
+                  },
+                  {
+                    value: "L2e",
+                    label: "L2e",
+                  },
+                  {
+                    value: "L3e",
+                    label: "L3e",
+                  },
+                  {
+                    value: "L4e",
+                    label: "L4e",
+                  },
+                  {
+                    value: "L5e",
+                    label: "L5e",
+                  },
+                  {
+                    value: "L6e",
+                    label: "L6e",
+                  },
+                  {
+                    value: "L7e",
+                    label: "L7e",
+                  },
+                  {
+                    value: "O1",
+                    label: "O1",
+                  },
+                  {
+                    value: "O2",
+                    label: "O2",
+                  },
+                  {
+                    value: "O3",
+                    label: "O3",
+                  },
+                  {
+                    value: "O4",
+                    label: "O4",
                   },
                 ]}
               />
+              {formData.category && (
+                <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-sm text-blue-800">
+                    {(() => {
+                      const descriptions: { [key: string]: string } = {
+                        "M1": "Sõiduautod, kuni 8 istekohta peale juhi",
+                        "M2": "Bussid/väikebussid, üle 8 istekoha, täismass ≤ 5 t",
+                        "M3": "Suured bussid, üle 8 istekoha, täismass > 5 t",
+                        "N1": "Kaubikud, täismass ≤ 3,5 t",
+                        "N2": "Veoautod, täismass 3,5–12 t",
+                        "N3": "Raskeveokid, täismass > 12 t",
+                        "L1e": "Kergetsiklid (≤ 50 cm³ ja ≤ 45 km/h)",
+                        "L2e": "Kolmerattalised kergetsiklid",
+                        "L3e": "Mootorrattad",
+                        "L4e": "Mootorrattad külgkorviga",
+                        "L5e": "Kolmerattalised mootorsõidukid",
+                        "L6e": "Kerge neljarattaline (≤ 45 km/h ja ≤ 425 kg)",
+                        "L7e": "Raske neljarattaline (> 45 km/h või > 425 kg)",
+                        "O1": "Kerghaagised, ≤ 0,75 t",
+                        "O2": "Haagised, 0,75–3,5 t",
+                        "O3": "Haagised, 3,5–10 t",
+                        "O4": "Haagised, > 10 t"
+                      };
+                      return descriptions[formData.category] || "";
+                    })()}
+                  </p>
+                </div>
+              )}
               <FormField
                 label="Käigukasti tüüp"
                 placeholder="Automaat"
