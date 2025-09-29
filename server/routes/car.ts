@@ -156,7 +156,7 @@ function requireAdmin(req, res, next) {
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    let dest = path.join(__dirname, '../../public/img/cars');
+    let dest = path.join(process.cwd(), 'public/img/cars');
     if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
     cb(null, dest);
   },
