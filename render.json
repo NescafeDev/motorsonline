@@ -1,0 +1,13 @@
+{
+  "name": "motorsonline",
+  "type": "web",
+  "env": "node",
+  "plan": "free",
+  "buildCommand": "npm install && npm run build",
+  "startCommand": "node dist/server/production.mjs",
+  "healthCheckPath": "/api/ping",
+  "envVars": {
+    "NODE_ENV": "production",
+    "PORT": "10000"
+  }
+}

@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: motorsonline
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: node dist/server/production.mjs
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+    healthCheckPath: /api/ping
