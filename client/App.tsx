@@ -151,7 +151,7 @@ const App = () => (
 );
 
 createRoot(document.getElementById("root")!).render(
-  <GoogleOAuthProvider clientId="https://604481839237-v5sgfq8jli9es2t6r9o82enqnpmdfa2q.apps.googleusercontent.com">
+  <GoogleOAuthProvider clientId="604481839237-v5sgfq8jli9es2t6r9o82enqnpmdfa2q.apps.googleusercontent.com">
     <App />
   </GoogleOAuthProvider>
 );
