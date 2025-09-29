@@ -66,7 +66,6 @@ export interface Car {
   importedFrom?: string;
   serviceBook?: string;
   inspection?: string;
-  metallicPaint?: string;
   exchangePossible?: string;
   fuelCityConsumption?: number;
   fuelHighwayConsumption?: number;
@@ -79,13 +78,17 @@ export interface Car {
   year_value?: number;
   drive_type_name?: string;
   drive_type_ee_name?: string;
+  carColorType?: string;
+  carColor?: string;
 }
 
 export interface CarFilters {
+  vehicleType?: string;
   brand_id?: number;
   model_id?: number;
   model_name?: string;
   trim_level?: string;
+  category?: string;
   drive_type_id?: number[];
   seats?: number;
   doors?: number;
@@ -118,10 +121,11 @@ export interface CarFilters {
   service_book?: boolean;
   inspection?: boolean;
   accident_free?: boolean;
-  metallic_paint?: boolean;
   exchange_possible?: boolean;
   with_warranty?: boolean;
   equipment?: string[];
+  carColorType?: string;
+  carColor?: string;
 }
 
 // API functions
@@ -366,8 +370,8 @@ export default function HomePage() {
                               alt="Car"
                               src={displayCar.image}
                             />
-                            <CardContent className="p-5 pt-5 pb-4 relative">
-                              <div className="flex justify-between items-start mb-1">
+                            <CardContent className="p-4 pt-5 pb-4 relative">
+                              {/* <div className="flex justify-between items-start mb-1">
                                 <div>
                                   <h3 className="font-semibold text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]">
                                     {displayCar.title}
@@ -420,9 +424,9 @@ export default function HomePage() {
                               </div>
 
                               <div className="flex justify-between items-center">
-                                <p className="font-semibold text-secondary-500 text-xl">
-                                  {displayCar.price}
-                                </p>
+                                  <p className="font-semibold text-secondary-500 text-xl">
+                                    {displayCar.price}
+                                  </p>
                                 <Button
                                   className="h-10 px-[30px] py-3 bg-[#06d6a0] text-white rounded-[10px]"
                                   onClick={(e) => {
@@ -433,7 +437,78 @@ export default function HomePage() {
                                 >
                                   Vaata
                                 </Button>
+                              </div> */}
+                               <div className="grid grid-cols-4 gap-4 mb-4 min-h-[60px] p-2">
+                                 <div className="col-span-3 flex flex-col justify-center">
+                                   <h3 className="font-semibold text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]">
+                                     {displayCar.title}
+                                   </h3>
+                                   <p className="font-medium text-[#747474] text-sm tracking-[-0.28px] leading-[21px]">
+                                     {displayCar.details}
+                                   </p>
+                                 </div>
+                                <div className="absolute right-6 top-8">
+                                  <button
+                                    className="w-6 h-6 cursor-pointer "
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      if (!isAuthenticated) {
+                                        // You could show a login prompt here
+                                        alert('Please log in to save favorites');
+                                        return;
+                                      }
+                                      toggleFavorite(car.id);
+                                    }}
+                                  >
+                                    <img
+                                      className="w-6 h-6"
+                                      alt="Favorite"
+                                      src={
+                                        isFavorite(car.id)
+                                          ? "/img/vuesax-bold-heart.svg"
+                                          : "/img/vuesax-linear-heart.svg"
+                                      }
+                                    />
+                                  </button>
+                                </div>
                               </div>
+                               <div className="grid grid-cols-2 mb-4 min-h-[80px]">
+                                 <div className="flex items-center">
+                                   <img
+                                     className="w-5 h-5 mr-2"
+                                     alt="Fuel type"
+                                     src="/img/vuesax-bold-gas-station.svg"
+                                   />
+                                   <span className="text-[#747474] text-sm tracking-[-0.28px] leading-[21px]">
+                                     {displayCar.fuel}
+                                   </span>
+                                 </div>
+                                 <div className="flex items-center mr-2 gap-2">
+                                   <img className="w-6 h-6 ml-2" alt="Google logo" src="/img/car/bevel.svg" />
+                                   <span className="text-[#747474] text-sm tracking-[-0.28px] leading-[21px]">
+                                     {displayCar.transmission}
+                                   </span>
+                                 </div>
+                               </div>
+                               <div className="grid grid-cols-2 min-h-[60px]">
+                                 <div className="flex items-center">
+                                   <p className="font-semibold text-secondary-500 text-xl">
+                                     {displayCar.price}
+                                   </p>
+                                 </div>
+                                 <div className="flex items-center justify-end">
+                                   <Button
+                                     className="h-10 px-[30px] py-3 bg-[#06d6a0] text-white rounded-[10px]"
+                                     onClick={(e) => {
+                                       e.stopPropagation();
+                                       navigate(`/car/${car.id}`);
+                                       window.scrollTo(0, 0);
+                                     }}
+                                   >
+                                     Vaata
+                                   </Button>
+                                 </div>
+                               </div>
                             </CardContent>
                           </Card>
                         );

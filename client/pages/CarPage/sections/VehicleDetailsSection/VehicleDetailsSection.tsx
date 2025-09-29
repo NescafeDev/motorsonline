@@ -56,7 +56,7 @@ export interface Car {
   importedFrom?: string;
   serviceBook?: string;
   inspection?: string;
-  metallicPaint?: string;
+  metallic_paint?: string;
   exchangePossible?: string;
   fuelCityConsumption?: number;
   fuelHighwayConsumption?: number;

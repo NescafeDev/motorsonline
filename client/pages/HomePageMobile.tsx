@@ -62,7 +62,7 @@ export interface Car {
   importedFrom?: string;
   serviceBook?: string;
   inspection?: string;
-  metallicPaint?: string;
+  metallic_paint?: string;
   exchangePossible?: string;
   fuelCityConsumption?: number;
   fuelHighwayConsumption?: number;
@@ -75,13 +75,17 @@ export interface Car {
   year_value?: number;
   drive_type_name?: string;
   drive_type_ee_name?: string;
+  carColorType?: string;
+  carColor?: string;
 }
 
 export interface CarFilters {
+  vehicleType?: string;
   brand_id?: number;
   model_id?: number;
   model_name?: string;
   trim_level?: string;
+  category?: string;
   drive_type_id?: number[];
   seats?: number;
   doors?: number;
@@ -118,6 +122,8 @@ export interface CarFilters {
   exchange_possible?: boolean;
   with_warranty?: boolean;
   equipment?: string[];
+  carColorType?: string;
+  carColor?: string;
 }
 
 // API functions
