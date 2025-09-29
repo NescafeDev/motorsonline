@@ -4,7 +4,7 @@
   "env": "node",
   "plan": "free",
   "buildCommand": "npm install && npm run build",
-  "startCommand": "node dist/server/production.mjs",
+  "startCommand": "node dist/server/node-build.mjs",
   "healthCheckPath": "/api/ping",
   "envVars": {
     "NODE_ENV": "production",

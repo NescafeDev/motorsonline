@@ -32,7 +32,7 @@ Your project is already configured for production deployment. The key files are:
    - **Name**: `motorsonline` (or your preferred name)
    - **Environment**: `Node`
    - **Build Command**: `npm install && npm run build`
-   - **Start Command**: `node dist/server/production.mjs`
+   - **Start Command**: `node dist/server/node-build.mjs`
    - **Plan**: Free (or choose a paid plan)
 
 4. **Set Environment Variables**
@@ -131,7 +131,7 @@ If you want to use a different database:
    - Ensure database is accessible from Render
 
 3. **Application Won't Start**
-   - Check start command: `node dist/server/production.mjs`
+   - Check start command: `node dist/server/node-build.mjs`
    - Verify the build output exists
    - Check runtime logs for errors
 
