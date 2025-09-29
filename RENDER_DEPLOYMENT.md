@@ -139,6 +139,11 @@ If you want to use a different database:
    - Ensure build process creates `dist/spa` directory
    - Check that static file serving is configured correctly
 
+5. **ES Module Errors (`__dirname is not defined`)**
+   - This has been fixed in the codebase
+   - The server now uses `process.cwd()` instead of `__dirname`
+   - If you encounter this error, ensure you're using the latest code
+
 ### Getting Help
 
 - Check Render documentation: https://render.com/docs
