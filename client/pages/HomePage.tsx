@@ -78,7 +78,7 @@ export interface Car {
   year_value?: number;
   drive_type_name?: string;
   drive_type_ee_name?: string;
-  carColorType?: boolean;
+  carColorType?: string;
   carColor?: string;
 }
 
@@ -124,7 +124,7 @@ export interface CarFilters {
   exchange_possible?: boolean;
   with_warranty?: boolean;
   equipment?: string[];
-  carColorType?: boolean;
+  carColorType?: string;
   carColor?: string;
 }
 

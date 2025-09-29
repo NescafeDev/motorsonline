@@ -191,7 +191,7 @@ export default function AddsPageMobile() {
     email: "",
     address: "",
     language: "",
-});
+  });
 
   const [checktechboxes, setCheckTechboxes] = useState({
     technicalInspection: false,
@@ -201,18 +201,59 @@ export default function AddsPageMobile() {
   });
 
   const [checkboxes, setCheckboxes] = useState({
-    abs: false,
-    adaptiveHeadlights: false,
-    alarmSystem: false,
-    ambientLighting: false,
-    appleCarplay: false,
-    armrest: false,
-    hillStartAssist: false,
-    automaticHighBeams: false,
-    bluetooth: false,
-    boardComputer: false,
-    cdPlayer: false,
-    electricWindows: false,
+    kokkupõrgetEnnetavPidurisüsteem: false,
+    pimenurgaHoiatus: false,
+    sõidurajaHoidmiseAbisüsteem: false,
+    sõidurajavahetamiseAbisüsteem: false,
+    adaptiivnePüsikiirusehoidja: false,
+    liiklusmärkidetuvastusJakuvamine: false,
+    parkimisanduridEesJaTaga: false,
+    parkimiskaamera: false,
+    parkimiskaamera360: false,
+    kaugtuledeümberlülitamiseAssistent: false,
+    LEDesituled: false,
+    Xenonesituled: false,
+    Lasersituled: false,
+    elektriliseSoojendusegaEsiklaas: false,
+    kliimaseade: false,
+    salongiEelsoojendus: false,
+    mootoriEelsoojendus: false,
+    salongiisasoojendus: false,
+    istmesoojendused: false,
+    elektriliseltReguleeritavadIstmed: false,
+    ComfortIstmed: false,
+    sportistmed: false,
+    nahkpolster: false,
+    poolnahkpolster: false,
+    tagaistmeSeljatugiAllaklapitav: false,
+    eraldiKliimaseadeTagaistmetele: false,
+    võtmetavamine: false,
+    võtmetaKäivitus: false,
+    pakiruumiAvamineJaSulgeminelektriliselt: false,
+    soojendusegaRool: false,
+    ventileeritavadstmed: false,
+    massaažifunktsioonigaIstmed: false,
+    infoKuvamineEsiklaasile: false,
+    panoraamkatusKlaasist: false,
+    katuseluuk: false,
+    usteServosulgurid: false,
+    topeltklaasid: false,
+    rulookardinadUstel: false,
+    integreeritudVäravapult: false,
+    AppleCarPlay: false,
+    AndroidAuto: false,
+    stereo: false,
+    näideBurmester: false,
+    õhkvedrustus: false,
+    reguleeritavVedrustus: false,
+    RattaPööramine: false,
+    veokonks: false,
+    elektrilisedLiuguksed: false,
+    öiseNägemiseAssistent: false,
+    valgustuspakett: false,
+    suverehvid: false,
+    talverehvid: false,
+    valuveljed: false,
   });
 
   const [showMoreEquipment, setShowMoreEquipment] = useState(false);
@@ -340,12 +381,12 @@ export default function AddsPageMobile() {
       }
       // Set year_id to 2025 by default
       if (years.length > 0 && !formData.year_id) {
-          // Fallback to first year if 2025 not found
-          setFormData((prev) => ({ ...prev, year_id: "" }));
+        // Fallback to first year if 2025 not found
+        setFormData((prev) => ({ ...prev, year_id: "" }));
       }
       // Set vatRefundable
       if (!formData.vatRefundable) {
-        setFormData((prev) => ({ ...prev, vatRefundable: "yes" }));
+        setFormData((prev) => ({ ...prev, vatRefundable: "" }));
       }
       // Set vatRate
       if (!formData.vatRate) {
@@ -655,18 +696,59 @@ export default function AddsPageMobile() {
         hideVin: false,
       });
       setCheckboxes({
-        abs: false,
-        adaptiveHeadlights: false,
-        alarmSystem: false,
-        ambientLighting: false,
-        appleCarplay: false,
-        armrest: false,
-        hillStartAssist: false,
-        automaticHighBeams: false,
-        bluetooth: false,
-        boardComputer: false,
-        cdPlayer: false,
-        electricWindows: false,
+        kokkupõrgetEnnetavPidurisüsteem: false,
+        pimenurgaHoiatus: false,
+        sõidurajaHoidmiseAbisüsteem: false,
+        sõidurajavahetamiseAbisüsteem: false,
+        adaptiivnePüsikiirusehoidja: false,
+        liiklusmärkidetuvastusJakuvamine: false,
+        parkimisanduridEesJaTaga: false,
+        parkimiskaamera: false,
+        parkimiskaamera360: false,
+        kaugtuledeümberlülitamiseAssistent: false,
+        LEDesituled: false,
+        Xenonesituled: false,
+        Lasersituled: false,
+        elektriliseSoojendusegaEsiklaas: false,
+        kliimaseade: false,
+        salongiEelsoojendus: false,
+        mootoriEelsoojendus: false,
+        salongiisasoojendus: false,
+        istmesoojendused: false,
+        elektriliseltReguleeritavadIstmed: false,
+        ComfortIstmed: false,
+        sportistmed: false,
+        nahkpolster: false,
+        poolnahkpolster: false,
+        tagaistmeSeljatugiAllaklapitav: false,
+        eraldiKliimaseadeTagaistmetele: false,
+        võtmetavamine: false,
+        võtmetaKäivitus: false,
+        pakiruumiAvamineJaSulgeminelektriliselt: false,
+        soojendusegaRool: false,
+        ventileeritavadstmed: false,
+        massaažifunktsioonigaIstmed: false,
+        infoKuvamineEsiklaasile: false,
+        panoraamkatusKlaasist: false,
+        katuseluuk: false,
+        usteServosulgurid: false,
+        topeltklaasid: false,
+        rulookardinadUstel: false,
+        integreeritudVäravapult: false,
+        AppleCarPlay: false,
+        AndroidAuto: false,
+        stereo: false,
+        näideBurmester: false,
+        õhkvedrustus: false,
+        reguleeritavVedrustus: false,
+        RattaPööramine: false,
+        veokonks: false,
+        elektrilisedLiuguksed: false,
+        öiseNägemiseAssistent: false,
+        valgustuspakett: false,
+        suverehvid: false,
+        talverehvid: false,
+        valuveljed: false,
       });
       setCarImages(Array(40).fill(null));
       setShowMorePhotos(false);
@@ -1049,31 +1131,6 @@ export default function AddsPageMobile() {
             <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <FormField
-                  label="Sõiduki seisukord"
-                  placeholder="näide: uus"
-                  value={formData.accident}
-                  onChange={(value) => handleInputChange("accident", value)}
-                  isSelect
-                  options={[
-                    {
-                      value: "",
-                      label: "Vali",
-                    },
-                    {
-                      value: "uus",
-                      label: "Uus",
-                    },
-                    {
-                      value: "kasutatud",
-                      label: "Kasutatud",
-                    },
-                    {
-                      value: "avariiline",
-                      label: "Avariiline",
-                    },
-                  ]}
-                />
-                <FormField
                   label="VIN-kood"
                   placeholder="WDC000000000000"
                   value={formData.vinCode}
@@ -1325,14 +1382,14 @@ export default function AddsPageMobile() {
                     label: "Automaat",
                   },
                   {
-                    value: "poolautomaat",
-                    label: "Poolautomaat",
+                    value: "pool automaat",
+                    label: "Pool automaat",
                   },
                 ]}
               />
               <FormField
                 label="Sõiduki seisukord"
-                placeholder="Kasutatud, avariivaba ..."
+                placeholder="Kasutatud, avariiline ..."
                 value={formData.technicalData}
                 isSelect
                 onChange={(value) => handleInputChange("technicalData", value)}
@@ -1346,8 +1403,8 @@ export default function AddsPageMobile() {
                     label: "Kasutatud",
                   },
                   {
-                    value: "avariivaba",
-                    label: "Avariivaba",
+                    value: "avariiline",
+                    label: "Avariiline",
                   },
                 ]}
               />

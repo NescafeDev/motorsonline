@@ -23,7 +23,7 @@ import axios from "axios";
 // Import CarFilters from HomePage
 export interface CarFilters {
   vehicleType?: string;
-  vehicleCondition?: string;
+  technicalData?: string;
   brand_id?: number;
   model_id?: number;
   model_name?: string;
@@ -65,6 +65,8 @@ export interface CarFilters {
   exchange_possible?: boolean;
   with_warranty?: boolean;
   equipment?: string[];
+  carColorType?: string;
+  carColor?: string;
 }
 
 interface CarListingSectionProps {
@@ -171,17 +173,17 @@ export const CarListingSection = ({
     { id: "bensiin", label: "Bensiin" },
     { id: "diisel", label: "Diisel" },
     { id: "elekter", label: "Elekter" },
-    { id: "hubriid-ben-el", label: "Hübriid (bensiin/elekter)" },
-    { id: "hubriid-dii-el", label: "Hübriid (diisel/elekter)" },
-    { id: "pistikhuubriid-ben-el", label: "Pistikhübriid (bensiin/elekter)" },
-    { id: "pistikhuubriid-dii-el", label: "Pistikhübriid (diisel/elekter)" },
-    { id: "bensiin-lpg", label: "Bensiin + Gaas (LPG/vedelgaas)" },
-    { id: "bensiin-cng", label: "Bensiin + Gaas (CNG/surugaas)" },
-    { id: "bensiin-lng", label: "Bensiin + Gaas (LNG/veeldatud maagaas)" },
-    { id: "diisel-cng", label: "Diisel + Gaas (LNG/veeldatud maagaas)" },
-    { id: "lpg", label: "Gaas (LPG/vedelgaas)" },
-    { id: "cng", label: "Gaas (CNG/surugaas)" },
-    { id: "lng", label: "Gaas (LNG/veeldatud maagaas)" },
+    { id: "hübriid (bensiin/elekter)", label: "Hübriid (bensiin/elekter)" },
+    { id: "hübriid (diisel/elekter)", label: "Hübriid (diisel/elekter)" },
+    { id: "pistikhübriid (bensiin/elekter)", label: "Pistikhübriid (bensiin/elekter)" },
+    { id: "pistikhübriid (diisel/elekter)", label: "Pistikhübriid (diisel/elekter)" },
+    { id: "bensiin + gaas (LPG/vedelgaas)", label: "Bensiin + Gaas (LPG/vedelgaas)" },
+    { id: "bensiin + gaas (CNG/surugaas)", label: "Bensiin + Gaas (CNG/surugaas)" },
+    { id: "bensiin + gaas (LNG/veeldatud maagaas)", label: "Bensiin + Gaas (LNG/veeldatud maagaas)" },
+    { id: "diisel + gaas (LNG/veeldatud maagaas)", label: "Diisel + Gaas (LNG/veeldatud maagaas)" },
+    { id: "gaas (LPG/vedelgaas)", label: "Gaas (LPG/vedelgaas)" },
+    { id: "gaas (CNG/surugaas)", label: "Gaas (CNG/surugaas)" },
+    { id: "gaas (LNG/veeldatud maagaas)", label: "Gaas (LNG/veeldatud maagaas)" },
     { id: "vesinik", label: "Vesinik" },
   ];
   
@@ -189,7 +191,7 @@ export const CarListingSection = ({
   const transmissionTypes = [
     { id: "manuaal", label: "Manuaal" },
     { id: "automaat", label: "Automaat" },
-    { id: "poolautomaat", label: "Poolautomaat" },
+    { id: "pool automaat", label: "Pool automaat" },
   ];
 
   const vehicleType = [
@@ -212,7 +214,7 @@ export const CarListingSection = ({
   ];
 
   // Data for vehicle condition
-  const vehicleCondition = [
+  const technicalData = [
     { id: "uus", label: "Uus" },
     { id: "kasutatud", label: "Kasutatud" },
     { id: "avariiline", label: "Avariiline" },
@@ -295,19 +297,13 @@ export const CarListingSection = ({
 
   // Data for equipment
   const equipment = [
-    {
-      id: "elektriliselt-reguleeritavad-istmed",
-      label: "Elektriliselt reguleeritavad istmed",
-    },
+    { id: "elektriliselt-reguleeritavad-istmed", label: "Elektriliselt reguleeritavad istmed",},
     { id: "istmesoojendused", label: "Istmesoojendused" },
     { id: "ventileeritavad-istmed", label: "Ventileeritavad istmed" },
     { id: "isofix-kinnituspunktid", label: "Isofix-kinnituspunktid" },
     { id: "pusikiirusehoidja", label: "Püsikiirusehoidja" },
     { id: "votmeta-sisenemine", label: "Võtmeta sisenemine" },
-    {
-      id: "head-up-display",
-      label: "Info kuvamine esiklaasile (head-up display)",
-    },
+    { id: "head-up-display", label: "Info kuvamine esiklaasile (head-up display)",},
     { id: "parkimisandurid", label: "Parkimisandurid" },
     { id: "carplay-android", label: "Apple CarPlay / Android Auto" },
     { id: "start-stop", label: "Start/stop süsteem" },
@@ -392,7 +388,16 @@ export const CarListingSection = ({
 
           {/* Sõiduki liik Section - First */}
           <div className="space-y-3">
-            <Select value={filters.vehicleType} onValueChange={(value) => updateFilter('vehicleType', value)}>
+            <Select 
+              value={filters.vehicleType || ""} 
+              onValueChange={(value) => {
+                if (value === "") {
+                  updateFilter('vehicleType', undefined);
+                } else {
+                  updateFilter('vehicleType', value);
+                }
+              }}
+            >
               <SelectTrigger className="w-full h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]">
                 <SelectValue placeholder="Sõiduki liik" />
               </SelectTrigger>
@@ -408,7 +413,16 @@ export const CarListingSection = ({
 
           {/* Kategooria Section - Second */}
           <div className="space-y-3">
-            <Select value={filters.category} onValueChange={(value) => updateFilter('category', value)}>
+            <Select 
+              value={filters.category || ""} 
+              onValueChange={(value) => {
+                if (value === "") {
+                  updateFilter('category', undefined);
+                } else {
+                  updateFilter('category', value);
+                }
+              }}
+            >
               <SelectTrigger className="w-full h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]">
                 <SelectValue placeholder="Kategooria" />
               </SelectTrigger>
@@ -424,12 +438,21 @@ export const CarListingSection = ({
 
           {/* Sõiduki seisukord Section - Third */}
           <div className="space-y-3">
-            <Select value={filters.vehicleCondition} onValueChange={(value) => updateFilter('vehicleCondition', value)}>
+            <Select 
+              value={filters.technicalData || ""} 
+              onValueChange={(value) => {
+                if (value === "") {
+                  updateFilter('technicalData', undefined);
+                } else {
+                  updateFilter('technicalData', value);
+                }
+              }}
+            >
               <SelectTrigger className="w-full h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]">
                 <SelectValue placeholder="Sõiduki seisukord" />
               </SelectTrigger>
               <SelectContent>
-                {vehicleCondition.map((condition) => (
+                {technicalData.map((condition) => (
                   <SelectItem key={condition.id} value={condition.id}>
                     {condition.label}
                   </SelectItem>

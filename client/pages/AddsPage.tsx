@@ -392,7 +392,7 @@ export default function AddsPage() {
       }
       // Set vatRefundable
       if (!formData.vatRefundable) {
-        setFormData((prev) => ({ ...prev, vatRefundable: "yes" }));
+        setFormData((prev) => ({ ...prev, vatRefundable: "" }));
       }
       // Set vatRate
       if (!formData.vatRate) {
@@ -577,7 +577,7 @@ export default function AddsPage() {
       // Navigate to user's listings after successful add or edit
       navigate("/user");
     } catch (error: any) {
-      console.error('Error submitting car:', error);
+      console.error('Error submitting car:', error, editingCar);
       if (error.response?.data?.message) {
         alert(`Viga: ${error.response.data.message}`);
       } else {
@@ -1112,7 +1112,7 @@ export default function AddsPage() {
                     label: "Bensiin",
                   },
                   {
-                    value: "diesel",
+                    value: "diisel",
                     label: "Diisel",
                   },
                   {
@@ -1306,14 +1306,14 @@ export default function AddsPage() {
                     label: "Automaat",
                   },
                   {
-                    value: "poolautomaat",
-                    label: "Poolautomaat",
+                    value: "pool automaat",
+                    label: "Pool automaat",
                   },
                 ]}
               />
               <FormField
                 label="Sõiduki seisukord"
-                placeholder="Kasutatud, avariivaba ..."
+                placeholder="Kasutatud, avariiline ..."
                 value={formData.technicalData}
                 isSelect
                 onChange={(value) => handleInputChange("technicalData", value)}
@@ -1327,8 +1327,8 @@ export default function AddsPage() {
                     label: "Kasutatud",
                   },
                   {
-                    value: "avariivaba",
-                    label: "Avariivaba",
+                    value: "avariiline",
+                    label: "Avariiline",
                   },
                 ]}
               />
