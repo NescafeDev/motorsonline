@@ -7,7 +7,7 @@ import { createJwt } from '../utils';
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
-const GOOGLE_CLIENT_ID = "521647250819-cjp9msd6vksihvkmbb77inp3omvkq9ga.apps.googleusercontent.com";
+const GOOGLE_CLIENT_ID = "https://604481839237-v5sgfq8jli9es2t6r9o82enqnpmdfa2q.apps.googleusercontent.com";
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 // Signup
