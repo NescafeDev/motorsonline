@@ -55,7 +55,7 @@ const accessoriesOptions = [
   { key: 'kliimaseade', label: 'Kliimaseade' },
   { key: 'salongiEelsoojendus', label: 'SalongiEelsoojendus' },
   { key: 'mootoriEelsoojendus', label: 'MootoriEelsoojendus' },
-  { key: 'salongiisasoojendus', label: 'Salongi Isasoojendus' },
+  { key: 'salongilisasoojendus', label: 'Salongi Lisasoojendus' },
   { key: 'istmesoojendused', label: 'Istmesoojendused' },
   { key: 'elektriliseltReguleeritavadIstmed', label: 'Elektriliselt Reguleeritavad Istmed' },
   { key: 'ComfortIstmed', label: 'Comfort Istmed' },
@@ -80,7 +80,6 @@ const accessoriesOptions = [
   { key: 'AppleCarPlay', label: 'Apple CarPlay' },
   { key: 'AndroidAuto', label: 'Android Auto' },
   { key: 'stereo', label: 'Stereo' },
-  { key: 'näideBurmester', label: 'Näide: Burmester' },
   { key: 'õhkvedrustus', label: 'Õhkvedrustus' },
   { key: 'reguleeritavVedrustus', label: 'Reguleeritav Vedrustus' },
   { key: 'RattaPööramine', label: '4-ratta Pööramine' },
@@ -218,7 +217,7 @@ export default function AddsPageMobile() {
     kliimaseade: false,
     salongiEelsoojendus: false,
     mootoriEelsoojendus: false,
-    salongiisasoojendus: false,
+    salongilisasoojendus: false,
     istmesoojendused: false,
     elektriliseltReguleeritavadIstmed: false,
     ComfortIstmed: false,
@@ -243,7 +242,6 @@ export default function AddsPageMobile() {
     AppleCarPlay: false,
     AndroidAuto: false,
     stereo: false,
-    näideBurmester: false,
     õhkvedrustus: false,
     reguleeritavVedrustus: false,
     RattaPööramine: false,
@@ -259,6 +257,7 @@ export default function AddsPageMobile() {
   const [showMoreEquipment, setShowMoreEquipment] = useState(false);
   const [showMorePhotos, setShowMorePhotos] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState("");
+  const [stereoInput, setStereoInput] = useState("");
   const [carImages, setCarImages] = useState<(File | null)[]>(Array(40).fill(null));
 
   // Data for dropdowns
@@ -485,6 +484,10 @@ export default function AddsPageMobile() {
     setCheckTechboxes((prev) => ({ ...prev, [field]: checked }));
   };
 
+  const handleStereoInputChange = (value: string) => {
+    setStereoInput(value);
+  };
+
   const handleCarImageChange = (index: number, file: File | null) => {
     setCarImages((prev) => {
       const updated = [...prev];
@@ -577,6 +580,13 @@ export default function AddsPageMobile() {
         return obj;
       });
     }
+    
+    // Load stereo input value if it exists
+    if (car.stereo_input) {
+      setStereoInput(car.stereo_input);
+    } else {
+      setStereoInput("");
+    }
   };
 
   const handleCarSubmit = async (e: React.FormEvent) => {
@@ -622,6 +632,7 @@ export default function AddsPageMobile() {
 
       formDataObj.append('tech_check', techCheckSelected.join(','));
       formDataObj.append('accessories', accessoriesSelected.join(','));
+      formDataObj.append('stereo_input', stereoInput);
 
       // Get auth token
       const token = localStorage.getItem("token");
@@ -713,7 +724,7 @@ export default function AddsPageMobile() {
         kliimaseade: false,
         salongiEelsoojendus: false,
         mootoriEelsoojendus: false,
-        salongiisasoojendus: false,
+        salongilisasoojendus: false,
         istmesoojendused: false,
         elektriliseltReguleeritavadIstmed: false,
         ComfortIstmed: false,
@@ -738,7 +749,6 @@ export default function AddsPageMobile() {
         AppleCarPlay: false,
         AndroidAuto: false,
         stereo: false,
-        näideBurmester: false,
         õhkvedrustus: false,
         reguleeritavVedrustus: false,
         RattaPööramine: false,
@@ -752,6 +762,7 @@ export default function AddsPageMobile() {
       });
       setCarImages(Array(40).fill(null));
       setShowMorePhotos(false);
+      setStereoInput("");
 
       // Navigate to user's listings
       navigate("/user");
@@ -1476,24 +1487,44 @@ export default function AddsPageMobile() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* First 12 checkboxes - always visible */}
               {accessoriesOptions.slice(0, 12).map((option) => (
-                <CheckboxField
-                  key={option.key}
-                  label={option.label}
-                  checked={checkboxes[option.key as keyof typeof checkboxes]}
-                  onChange={(checked) => handleCheckboxChange(option.key, checked)}
-                />
+                <div key={option.key} className="flex items-center gap-2">
+                  <CheckboxField
+                    label={option.label}
+                    checked={checkboxes[option.key as keyof typeof checkboxes]}
+                    onChange={(checked) => handleCheckboxChange(option.key, checked)}
+                  />
+                  {option.key === 'stereo' && (
+                    <input
+                      type="text"
+                      placeholder="abc"
+                      value={stereoInput}
+                      onChange={(e) => handleStereoInputChange(e.target.value)}
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  )}
+                </div>
               ))}
 
               {/* Additional 41 checkboxes - shown when expanded */}
               {showMoreEquipment && (
                 <>
                   {accessoriesOptions.slice(12).map((option) => (
-                    <CheckboxField
-                      key={option.key}
-                      label={option.label}
-                      checked={checkboxes[option.key as keyof typeof checkboxes]}
-                      onChange={(checked) => handleCheckboxChange(option.key, checked)}
-                    />
+                    <div key={option.key} className="flex items-center gap-2">
+                      <CheckboxField
+                        label={option.label}
+                        checked={checkboxes[option.key as keyof typeof checkboxes]}
+                        onChange={(checked) => handleCheckboxChange(option.key, checked)}
+                      />
+                      {option.key === 'stereo' && (
+                        <input
+                          type="text"
+                          placeholder="abc"
+                          value={stereoInput}
+                          onChange={(e) => handleStereoInputChange(e.target.value)}
+                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                      )}
+                    </div>
                   ))}
                 </>
               )}
@@ -1667,6 +1698,7 @@ export default function AddsPageMobile() {
                     });
                     setCarImages(Array(40).fill(null));
                     setShowMorePhotos(false);
+                    setStereoInput("");
                     navigate("/user");
                   }}
                 >
