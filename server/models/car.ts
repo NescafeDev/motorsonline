@@ -67,14 +67,15 @@ export interface Car {
   carColor?: string;
   carColorType?: string;
   vehicleType?: string;
+  website?: string;
 }
 
 export async function createCar(car: Omit<Car, 'id'>): Promise<Car> {
   const [result]: any = await pool.query(
     `INSERT INTO cars (
-      user_id, brand_id, model_id, year_id, drive_type_id, category, transmission, fuelType, plateNumber, month, mileage, power, displacement, technicalData, ownerCount, modelDetail, price, discountPrice, warranty, vatRefundable, vatRate, accident, vinCode, description, equipment, additionalInfo, country, phone, businessType, socialNetwork, email, image_1, image_2, image_3, image_4, image_5, image_6, image_7, image_8, tech_check, accessories, language, address, salonColor, bodyType, stereo, carColor, carColorType, vehicleType
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [car.user_id, car.brand_id, car.model_id, car.year_id, car.drive_type_id, car.category, car.transmission, car.fuelType, car.plateNumber, car.month, car.mileage, car.power, car.displacement, car.technicalData, car.ownerCount, car.modelDetail, car.price, car.discountPrice, car.warranty, car.vatRefundable, car.vatRate, car.accident, car.vinCode, car.description, car.equipment, car.additionalInfo, car.country, car.phone, car.businessType, car.socialNetwork, car.email, car.image_1, car.image_2, car.image_3, car.image_4, car.image_5, car.image_6, car.image_7, car.image_8, car.tech_check, car.accessories, car.language, car.address, car.salonColor, car.bodyType, car.stereo, car.carColor, car.carColorType, car.vehicleType]
+      user_id, brand_id, model_id, year_id, drive_type_id, category, transmission, fuelType, plateNumber, month, mileage, power, displacement, technicalData, ownerCount, modelDetail, price, discountPrice, warranty, vatRefundable, vatRate, accident, vinCode, description, equipment, additionalInfo, country, phone, businessType, socialNetwork, email, image_1, image_2, image_3, image_4, image_5, image_6, image_7, image_8, tech_check, accessories, language, address, salonColor, bodyType, stereo, carColor, carColorType, vehicleType, website
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [car.user_id, car.brand_id, car.model_id, car.year_id, car.drive_type_id, car.category, car.transmission, car.fuelType, car.plateNumber, car.month, car.mileage, car.power, car.displacement, car.technicalData, car.ownerCount, car.modelDetail, car.price, car.discountPrice, car.warranty, car.vatRefundable, car.vatRate, car.accident, car.vinCode, car.description, car.equipment, car.additionalInfo, car.country, car.phone, car.businessType, car.socialNetwork, car.email, car.image_1, car.image_2, car.image_3, car.image_4, car.image_5, car.image_6, car.image_7, car.image_8, car.tech_check, car.accessories, car.language, car.address, car.salonColor, car.bodyType, car.stereo, car.carColor, car.carColorType, car.vehicleType, car.website]
   );
   return { id: result.insertId, ...car };
 }
@@ -124,7 +125,7 @@ export async function getCarsByUserId(userId: number): Promise<any[]> {
 
 export async function updateCar(id: number, car: Partial<Omit<Car, 'id'>>): Promise<boolean> {
   // Filter out joined fields that don't exist in the cars table
-  const fieldsToExclude = ['brand_name', 'model_name', 'year_value', 'drive_type_name', 'drive_type_ee_name', 'favoriteCount'];
+  const fieldsToExclude = ['brand_name', 'model_name', 'year_value', 'drive_type_name', 'drive_type_ee_name', 'favoriteCount', 'stereo_input'];
   
   const filteredCar = Object.keys(car)
     .filter(key => !fieldsToExclude.includes(key))

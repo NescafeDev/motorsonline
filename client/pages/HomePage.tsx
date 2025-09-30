@@ -438,15 +438,15 @@ export default function HomePage() {
                                   Vaata
                                 </Button>
                               </div> */}
-                               <div className="grid grid-cols-4 gap-4 mb-4 min-h-[60px] p-2">
-                                 <div className="col-span-3 flex flex-col justify-center">
-                                   <h3 className="font-semibold text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]">
-                                     {displayCar.title}
-                                   </h3>
-                                   <p className="font-medium text-[#747474] text-sm tracking-[-0.28px] leading-[21px]">
-                                     {displayCar.details}
-                                   </p>
-                                 </div>
+                              <div className="grid grid-cols-4 gap-4 mb-4 h-20 p-2">
+                                <div className="col-span-3 flex flex-col justify-center">
+                                  <h3 className="font-semibold text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]">
+                                    {displayCar.title}
+                                  </h3>
+                                  <p className="font-medium text-[#747474] text-sm tracking-[-0.28px] leading-[21px]">
+                                    {displayCar.details}
+                                  </p>
+                                </div>
                                 <div className="absolute right-6 top-8">
                                   <button
                                     className="w-6 h-6 cursor-pointer "
@@ -472,43 +472,43 @@ export default function HomePage() {
                                   </button>
                                 </div>
                               </div>
-                               <div className="grid grid-cols-2 mb-4 min-h-[80px]">
-                                 <div className="flex items-center">
-                                   <img
-                                     className="w-5 h-5 mr-2"
-                                     alt="Fuel type"
-                                     src="/img/vuesax-bold-gas-station.svg"
-                                   />
-                                   <span className="text-[#747474] text-sm tracking-[-0.28px] leading-[21px]">
-                                     {displayCar.fuel}
-                                   </span>
-                                 </div>
-                                 <div className="flex items-center mr-2 gap-2">
-                                   <img className="w-6 h-6 ml-2" alt="Google logo" src="/img/car/bevel.svg" />
-                                   <span className="text-[#747474] text-sm tracking-[-0.28px] leading-[21px]">
-                                     {displayCar.transmission}
-                                   </span>
-                                 </div>
-                               </div>
-                               <div className="grid grid-cols-2 min-h-[60px]">
-                                 <div className="flex items-center">
-                                   <p className="font-semibold text-secondary-500 text-xl">
-                                     {displayCar.price}
-                                   </p>
-                                 </div>
-                                 <div className="flex items-center justify-end">
-                                   <Button
-                                     className="h-10 px-[30px] py-3 bg-[#06d6a0] text-white rounded-[10px]"
-                                     onClick={(e) => {
-                                       e.stopPropagation();
-                                       navigate(`/car/${car.id}`);
-                                       window.scrollTo(0, 0);
-                                     }}
-                                   >
-                                     Vaata
-                                   </Button>
-                                 </div>
-                               </div>
+                              <div className="grid grid-cols-2 mb-4 h-20">
+                                <div className="flex items-center">
+                                  <img
+                                    className="w-5 h-5 mr-2"
+                                    alt="Fuel type"
+                                    src="/img/vuesax-bold-gas-station.svg"
+                                  />
+                                  <span className="text-[#747474] text-sm tracking-[-0.28px] leading-[21px]">
+                                    {displayCar.fuel}
+                                  </span>
+                                </div>
+                                <div className="flex items-center mr-2 gap-2">
+                                  <img className="w-6 h-6 ml-2" alt="Google logo" src="/img/car/bevel.svg" />
+                                  <span className="text-[#747474] text-sm tracking-[-0.28px] leading-[21px]">
+                                    {displayCar.transmission}
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="grid grid-cols-2 h-20">
+                                <div className="flex items-center">
+                                  <p className="font-semibold text-secondary-500 text-xl">
+                                    {displayCar.price}
+                                  </p>
+                                </div>
+                                <div className="flex items-center justify-end">
+                                  <Button
+                                    className="h-10 px-[30px] py-3 bg-[#06d6a0] text-white rounded-[10px]"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      navigate(`/car/${car.id}`);
+                                      window.scrollTo(0, 0);
+                                    }}
+                                  >
+                                    Vaata
+                                  </Button>
+                                </div>
+                              </div>
                             </CardContent>
                           </Card>
                         );

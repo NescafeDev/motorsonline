@@ -361,8 +361,7 @@ export default function HomePageMobile() {
             </h1>
             <p className="font-normal text-[30px] mb-6 tracking-[-0.12px] italic">Drive your dream!</p>
             <p className="text-motors-dark leading-[150%] tracking-[-0.48px] mb-8 max-w-md mx-auto px-4">
-              Lorem ipsum dolor sit amet consectetur. Quisque erat imperdiet
-              egestas pretium. Nibh convallis id nulla non diam.
+            Motorsonline on sõidukite müügi- ja ostukeskkond, kus põhirõhk on lihtsusel ja selgusel. Motorsonlines on sõiduki müümine või ostmine mugav, sest kogu tähelepanu on suunatud ainult vajalikule. See on koht, kus tehingud saavad toimuda kiirelt ja arusaadavalt
             </p>
             <button 
               onClick={() => navigate("/register")}

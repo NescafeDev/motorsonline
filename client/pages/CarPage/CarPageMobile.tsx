@@ -21,6 +21,8 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useViews } from "../../hooks/useViews";
 import { useState, useEffect } from "react";
 import { VehicleDetailsSection } from "./sections/VehicleDetailsSection/VehicleDetailsSection";
+import { SpecificationsSection } from "./sections/SpecificationsSection/SpecificationsSection";
+
 
 interface CarData {
   id: number;
@@ -58,6 +60,7 @@ interface CarData {
   country?: string;
   phone?: string;
   email?: string;
+  language?: string;
 }
 
 export default function CarPageMobile() {
@@ -343,7 +346,7 @@ export default function CarPageMobile() {
                   Tehnilised andmed
                 </span>
                 <span className="text-[#1A202C] text-sm font-normal">
-                   {car.accident}
+                   {car.technicalData}
                 </span>
               </div>
               <div className="bg-white rounded-[10px] p-3 flex justify-between">
@@ -432,33 +435,17 @@ export default function CarPageMobile() {
         <ImageGallerySection car={car} />
 
         {/* Seller information section */}
-        <div className="px-5 mb-6">
-          <div className="bg-[#F6F7F9] rounded-[10px] p-5">
-            <h2 className="text-[#1A202C] text-lg font-semibold leading-[150%] tracking-[-0.54px] mb-5">
-              Müüja andmed
-            </h2>
-
-            <div className="flex items-start gap-4">
-              <div className="w-20 h-20 rounded-[10px] bg-gray-200 flex items-center justify-center">
-                <UserIcon />
-              </div>
-              <div className="flex-1">
-                <h3 className="text-[#1A202C] text-base font-medium leading-[150%] tracking-[-0.48px] mb-1">
-                  {car.businessType || "Müüja"}
-                </h3>
-                <p className="text-[#1A202C] text-base font-normal leading-[150%] tracking-[-0.48px] mb-1">
-                  {car.country || "Eesti"}
-                </p>
-                <p className="text-[#1A202C] text-base font-normal leading-[150%] tracking-[-0.48px] mb-1">
-                  {car.phone || "Telefon puudub"}
-                </p>
-                <p className="text-[#1A202C] text-base font-normal leading-[150%] tracking-[-0.48px]">
-                  {car.email || "E-post puudub"}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <SpecificationsSection
+            sellerData={{
+              title: "Müüja andmed",
+              company: car.businessType || "ELKE Mustamäe",
+              address: car.country || "Tallinn, Mustamäe tee 22",
+              contactPerson: "Kontaktisik",
+              phone: car.phone || "+372 8888 8888",
+              email: car.email || "Näide@elke.ee",
+              language: car.language || "en"
+            }}
+          />
 
         {/* Related cars section */}
 

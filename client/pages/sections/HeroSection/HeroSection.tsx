@@ -14,8 +14,7 @@ export const HeroSection = (): JSX.Element => {
             </h1>
             <p className="font-normal text-[30px] mb-6 tracking-[-0.12px] italic">Drive your dream!</p>
             <p className="font-normal text-lg text-secondary-500 tracking-[-0.54px] leading-[27px] max-w-[528px] mb-10 text-[18px]">
-              Lorem ipsum dolor sit amet consectetur. Quisque erat
-              imperdiet egestas pretium. Nibh convallis id nulla non diam.
+            Motorsonline on sõidukite müügi- ja ostukeskkond, kus põhirõhk on lihtsusel ja selgusel. Motorsonlines on sõiduki müümine või ostmine mugav, sest kogu tähelepanu on suunatud ainult vajalikule. See on koht, kus tehingud saavad toimuda kiirelt ja arusaadavalt
             </p>
             <Button 
               onClick={() => navigate("/register")}

@@ -74,7 +74,7 @@ export default function CarPage() {
 
     // If VAT rate is 24, show "Hind sisaldab käibemaksu 24%"
     // if (car.vatRate === '24') {
-      return 'Hind sisaldab käibemaksu 24%';
+    return 'Hind sisaldab käibemaksu 24%';
     // }
 
     // For any other VAT rate, show the specific rate
@@ -400,8 +400,8 @@ export default function CarPage() {
                         >
                           <HeartIcon
                             className={`w-[29px] h-[29px] transition-colors duration-200 ${isFavorite(car.id)
-                                ? "text-red-500 fill-red-500"
-                                : "text-gray-400 hover:text-red-400"
+                              ? "text-red-500 fill-red-500"
+                              : "text-gray-400 hover:text-red-400"
                               }`}
                           />
                         </Button>
@@ -417,21 +417,21 @@ export default function CarPage() {
                         Tehnilised andmed
                       </h2>
 
-                      <div className="grid grid-cols-2 gap-y-3 gap-x-4 mt-6">
+                      <div className="grid grid-cols-2 gap-y-3 gap-x-1 mt-6">
                         {vehicleDetails.map((detail, index) => (
-                          <div key={index} className="flex items-center">
-                            <div className="w-[60px] h-[60px] relative">
+                          <div key={index} className="flex items-center w-full">
+                            <div className="w-[60px] h-[60px] relative flex-shrink-0">
                               <img
                                 className="w-[40px] h-[40px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
                                 alt={detail.label}
                                 src={detail.icon}
                               />
                             </div>
-                            <div className="flex flex-col">
-                              <span className="font-normal text-secondary-500 text-[12px] tracking-[-0.42px] leading-[21px] [font-family:'Poppins',Helvetica]">
+                            <div className="flex flex-col min-w-0 flex-1">
+                              <span className="font-normal text-secondary-500 text-[12px] tracking-[-0.42px] leading-[21px] [font-family:'Poppins',Helvetica] break-words">
                                 {detail.label}
                               </span>
-                              <span className="font-medium text-secondary-500 text-[12px] tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica]">
+                              <span className="font-medium text-secondary-500 text-[12px] tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica] break-words">
                                 {detail.value}
                               </span>
                             </div>
@@ -465,9 +465,7 @@ export default function CarPage() {
                             <span className="font-semibold text-secondary-500 text-[24px] leading-[normal] [font-family:'Poppins',Helvetica]">
                               € {(car.discountPrice || car.price).toLocaleString()}
                             </span>
-                            <p className="text-[#747474] text-[10px] tracking-[-0.36px] leading-[18px] [font-family:'Poppins',Helvetica] mt-2">
-                              {getVatDisplayText(car)}
-                            </p>
+
                           </div>
                         </div>
                         <div
@@ -484,6 +482,9 @@ export default function CarPage() {
                               >
                                 Saada e-mail
                               </Button>
+                              <p className="text-[#747474] text-[10px] tracking-[-0.36px] leading-[18px] [font-family:'Poppins',Helvetica] mt-2">
+                                {getVatDisplayText(car)}
+                              </p>
                             </a>
                           </div>
                         </div>
@@ -495,7 +496,7 @@ export default function CarPage() {
             </div>
           </div>
           {/* Now, OUTSIDE the grid, render the next sections */}
-          <SpecificationsSection 
+          <SpecificationsSection
             sellerData={{
               title: "Müüja andmed",
               company: car.businessType || "ELKE Mustamäe",

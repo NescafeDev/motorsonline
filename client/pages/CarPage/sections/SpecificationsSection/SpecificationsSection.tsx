@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Avatar,
   AvatarFallback,
@@ -6,6 +6,8 @@ import {
 } from "../../../../components/ui/avatar";
 import { Card, CardContent } from "../../../../components/ui/card";
 import { CountryCode, CountryFlag } from 'react-country-flags-lazyload';
+import ReactCountryFlag from 'react-country-flag';
+import countryList from "react-select-country-list";
 
 export interface SellerData {
   title: string;
@@ -22,46 +24,6 @@ interface SpecificationsSectionProps {
   sellerData?: SellerData;
 }
 
-const getLanguageName = (countryCode: string): string => {
-  const languageMap: Record<string, string> = {
-    'EN': 'English',
-    'EE': 'Estonian',
-    'LV': 'Latvian', 
-    'LT': 'Lithuanian',
-    'FI': 'Finnish',
-    'SE': 'Swedish',
-    'NO': 'Norwegian',
-    'DK': 'Danish',
-    'DE': 'German',
-    'PL': 'Polish',
-    'RU': 'Russian',
-    'US': 'English',
-    'GB': 'English',
-    'FR': 'French',
-    'IT': 'Italian',
-    'ES': 'Spanish',
-    'NL': 'Dutch',
-    'BE': 'Dutch/French',
-    'AT': 'German',
-    'CH': 'German/French/Italian',
-    'CZ': 'Czech',
-    'SK': 'Slovak',
-    'HU': 'Hungarian',
-    'SI': 'Slovenian',
-    'HR': 'Croatian',
-    'BG': 'Bulgarian',
-    'RO': 'Romanian',
-    'GR': 'Greek',
-    'CY': 'Greek',
-    'MT': 'Maltese',
-    'IE': 'English',
-    'LU': 'Luxembourgish',
-    'PT': 'Portuguese'
-  };
-  
-  return languageMap[countryCode.toUpperCase()] || countryCode;
-};
-
 export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps): JSX.Element => {
   // Default fallback data if no seller data is provided
   const defaultSellerData: SellerData = {
@@ -71,11 +33,14 @@ export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps
     contactPerson: "Lorem Ipsum",
     phone: "+372 8888 8888",
     email: "Näide@elke.ee",
-    language: "en"
+    language: "en",
   };
+  const options = useMemo(() => countryList().getData(), []);
 
   // Use provided seller data or fallback to default
   const displayData = sellerData || defaultSellerData;
+
+  console.log(displayData)
 
   return (
     <section className="max-w-[1400px] w-full mx-auto my-8">
@@ -88,8 +53,16 @@ export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps
           <div className="[font-family:'Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]">
             {displayData.company}
             <br />
-            {/* {displayData.address} */}
-            <CountryFlag countryCode={displayData.address as CountryCode} className="w-10 h-10"/>
+            <ReactCountryFlag
+              countryCode={displayData.address as CountryCode}
+              svg
+              style={{
+                width: '1.5em',
+                height: '1.5em',
+                marginRight: '12px',
+              }}
+              title={displayData.address}
+            />
           </div>
 
           <div className="flex flex-col gap-2">
@@ -115,7 +88,8 @@ export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps
                   {displayData.email}
                 </p>
                 <p className="[font-family:'Poppins',Helvetica] font-normal text-lg text-secondary-500 tracking-[-0.54px] leading-[27px]">
-                  {getLanguageName(displayData.language || '')}
+                  {/* {getLanguageName(displayData.language || '')} */}
+                  {displayData.language.replace(',', ' ')}
                 </p>
               </div>
             </div>

@@ -53,7 +53,7 @@ export default function MultiLanguageSelect({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const selectedLanguages = languages.filter(lang => selected.includes(lang.code));
+  const selectedLanguages = languages.filter(lang => selected.includes(lang.name));
 
   const filteredLanguages = searchable && searchTerm
     ? languages.filter(lang => 
@@ -80,10 +80,10 @@ export default function MultiLanguageSelect({
     }
   }, [isOpen, searchable]);
 
-  const handleToggle = (languageCode: string) => {
-    const newSelected = selected.includes(languageCode)
-      ? selected.filter(code => code !== languageCode)
-      : [...selected, languageCode];
+  const handleToggle = (languageName: string) => {
+    const newSelected = selected.includes(languageName)
+      ? selected.filter(name => name !== languageName)
+      : [...selected, languageName];
     
     onSelect?.(newSelected);
   };
@@ -131,7 +131,7 @@ export default function MultiLanguageSelect({
               <div
                 key={language.code}
                 className="flex items-center justify-between px-3 py-2 hover:bg-gray-50 cursor-pointer"
-                onClick={() => handleToggle(language.code)}
+                onClick={() => handleToggle(language.name)}
               >
                 <div className="flex items-center flex-1">
                   <div className="w-6 h-6 mr-3 flex items-center justify-center bg-gray-100 rounded text-xs font-bold text-gray-600">
@@ -148,8 +148,8 @@ export default function MultiLanguageSelect({
                 </div>
                 <input
                   type="checkbox"
-                  checked={selected.includes(language.code)}
-                  onChange={() => handleToggle(language.code)}
+                  checked={selected.includes(language.name)}
+                  onChange={() => handleToggle(language.name)}
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                   onClick={(e) => e.stopPropagation()}
                 />

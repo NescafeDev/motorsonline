@@ -16,6 +16,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { boolean } from "zod/v4";
+import { CountryCodes } from "react-flags-select/build/types";
 const ChevronDownIcon = ({ className = "" }: { className?: string }) => (
   <svg
     width="16"
@@ -186,8 +187,9 @@ export default function AddsPage() {
     email: "",
     address: "",
     stereo: "",
+    website: "",
     language: [],
-    country: []
+    country: ""
   });
 
   const [checktechboxes, setCheckTechboxes] = useState({
@@ -352,12 +354,12 @@ export default function AddsPage() {
           } else {
             setFormData((prev) => ({ ...prev, language: [] }));
           }
-          if (car.country) {
-            const arr = Array.isArray(car.country) ? car.country : car.country.split(',');
-            setFormData((prev) => ({ ...prev, country: arr }));
-          } else {
-            setFormData((prev) => ({ ...prev, country: [] }));
-          }
+          // if (car.country) {
+          //   const arr = Array.isArray(car.country) ? car.country : car.country.split(',');
+          //   setFormData((prev) => ({ ...prev, country: arr }));
+          // } else {
+          //   setFormData((prev) => ({ ...prev, country: [] }));
+          // }
         } else {
           // If car not found, redirect to user page
           navigate('/user');
@@ -514,6 +516,7 @@ export default function AddsPage() {
   };
 
   const handleInputChange = (field: string, value: string) => {
+    console.log(field, value);
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -533,9 +536,9 @@ export default function AddsPage() {
     setFormData((prev) => ({ ...prev, language: languages }));
   };
 
-  const handleCountryChange = (countries: string[]) => {
-    setFormData((prev) => ({ ...prev, country: countries }));
-  };
+  // const handleCountryChange = (countries: string[]) => {
+  //   setFormData((prev) => ({ ...prev, country: countries }));
+  // };
 
   const handleCarImageChange = (index: number, file: File | null) => {
     setCarImages((prev) => {
@@ -597,7 +600,6 @@ export default function AddsPage() {
       .map(([k]) => k);
     formDataObj.append('tech_check', techCheckSelected.join(','));
     formDataObj.append('accessories', accessoriesSelected.join(','));
-    formDataObj.append('stereo_input', stereoInput);
     const token = localStorage.getItem("token");
 
     try {
@@ -691,12 +693,12 @@ export default function AddsPage() {
     }
 
     // Load country array if it exists
-    if (car.country) {
-      const countryArray = Array.isArray(car.country) ? car.country : car.country.split(',');
-      setFormData((prev) => ({ ...prev, country: countryArray }));
-    } else {
-      setFormData((prev) => ({ ...prev, country: [] }));
-    }
+    // if (car.country) {
+    //   const countryArray = Array.isArray(car.country) ? car.country : car.country.split(',');
+    //   setFormData((prev) => ({ ...prev, country: countryArray }));
+    // } else {
+    //   setFormData((prev) => ({ ...prev, country: [] }));
+    // }
   };
 
   const handleDeleteCar = async (id: number) => {
@@ -1524,9 +1526,9 @@ export default function AddsPage() {
                   <label className="block text-motorsoline-text text-lg font-medium mb-3">
                     Vali riik
                   </label>
-                  <MultiCountrySelect
+                  <ReactFlagsSelect
                     selected={formData.country}
-                    onSelect={handleCountryChange}
+                    onSelect={(value) => handleInputChange("country", value)}
                     placeholder="Valige riigid"
                     searchable={true}
                     className="w-full"
@@ -1564,14 +1566,22 @@ export default function AddsPage() {
                 value={formData.address}
                 onChange={(value) => handleInputChange("address", value)}
               />
+              <FormField
+                label="Koduleht"
+                placeholder="Koduleht"
+                value={formData.website}
+                onChange={(value) => handleInputChange("website", value)}
+              />
               {/* <FormField
                 label="Suhtluskeel"
                 placeholder="Suhtluskeel"
                 value={formData.language}
                 onChange={(value) => handleInputChange("language", value)}
               /> */}
-              <div className="flex gap-4">
-                <div className="w-full">
+              
+            </div>
+            <div className="flex gap-4">
+                <div className="w-full mt-7">
                   <label className="block text-motorsoline-text text-lg font-medium mb-3">
                     Suhtluskeel
                   </label>
@@ -1587,11 +1597,10 @@ export default function AddsPage() {
                     onSelect={handleLanguageChange}
                     placeholder="Valige keeled"
                     searchable={true}
-                    className="w-full"
+                    className="w-[585px]"
                   />
                 </div>
               </div>
-            </div>
 
             <div className="mt-6">
               <button className="flex items-center px-8 py-4 border border-brand-primary rounded-lg text-brand-primary hover:bg-motorsoline-primary hover:text-white transition-colors">
@@ -1662,8 +1671,9 @@ export default function AddsPage() {
                       email: "",
                       address: "",
                       stereo: "",
+                      website: "",
                       language: [],
-                      country: [],
+                      country: "",
                     });
                     setCarImages(Array(40).fill(null));
                     setShowMorePhotos(false);
