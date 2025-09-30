@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import PageContainer from "@/components/PageContainer";
 import PhotoUpload from "@/components/PhotoUpload";
 import FormSection, {
@@ -8,9 +8,14 @@ import FormSection, {
 } from "@/components/FormSection";
 import ReactFlagsSelect from "react-flags-select";
 import LanguageSelect from '@/components/LanguageSelect';
+import Select from "react-select";
+import countryList from "react-select-country-list"; 
+import MultiLanguageSelect from '@/components/MultiLanguageSelect';
+import MultiCountrySelect from '@/components/MultiCountrySelect';
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { boolean } from "zod/v4";
 const ChevronDownIcon = ({ className = "" }: { className?: string }) => (
   <svg
     width="16"
@@ -142,6 +147,7 @@ const salonColorOptions = [
 ];
 
 export default function AddsPage() {
+  const options = useMemo(() => countryList().getData(), []);
   const { user } = useAuth();
   const [formData, setFormData] = useState({
     brand_id: "",
@@ -174,13 +180,14 @@ export default function AddsPage() {
     description: "",
     equipment: "",
     additionalInfo: "",
-    country: "EE",
     phone: "",
     businessType: "",
     socialNetwork: "",
     email: "",
     address: "",
-    language: "",
+    stereo: "",
+    language: [],
+    country: []
   });
 
   const [checktechboxes, setCheckTechboxes] = useState({
@@ -250,6 +257,7 @@ export default function AddsPage() {
   const [stereoInput, setStereoInput] = useState("");
   const [cars, setCars] = useState<any[]>([]);
   const [editingCar, setEditingCar] = useState<any | null>(null);
+  const [modelLoading, setModelLoading] = useState<boolean>(false);
   const [carImages, setCarImages] = useState<(File | null)[]>(
     Array(40).fill(null),
   );
@@ -337,6 +345,18 @@ export default function AddsPage() {
               });
               return obj;
             });
+          }
+          if (car.language) {
+            const arr = Array.isArray(car.language) ? car.language : car.language.split(',');
+            setFormData((prev) => ({ ...prev, language: arr }));
+          } else {
+            setFormData((prev) => ({ ...prev, language: [] }));
+          }
+          if (car.country) {
+            const arr = Array.isArray(car.country) ? car.country : car.country.split(',');
+            setFormData((prev) => ({ ...prev, country: arr }));
+          } else {
+            setFormData((prev) => ({ ...prev, country: [] }));
           }
         } else {
           // If car not found, redirect to user page
@@ -434,11 +454,18 @@ export default function AddsPage() {
   }, [formData.brand_id]);
 
   const fetchModels = async (brand_id: string) => {
-    const token = localStorage.getItem("token");
-    const res = await axios.get(`/api/models?brand_id=${brand_id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    setModels(res.data);
+    try {
+      setModelLoading(true);
+      const token = localStorage.getItem("token");
+      const res = await axios.get(`/api/models?brand_id=${brand_id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setModels(res.data);
+    } catch(e) {
+      console.error(e);
+    } finally {
+      setModelLoading(false);
+    }
   };
 
   const fetchCars = async () => {
@@ -502,6 +529,14 @@ export default function AddsPage() {
     setStereoInput(value);
   };
 
+  const handleLanguageChange = (languages: string[]) => {
+    setFormData((prev) => ({ ...prev, language: languages }));
+  };
+
+  const handleCountryChange = (countries: string[]) => {
+    setFormData((prev) => ({ ...prev, country: countries }));
+  };
+
   const handleCarImageChange = (index: number, file: File | null) => {
     setCarImages((prev) => {
       const updated = [...prev];
@@ -544,7 +579,11 @@ export default function AddsPage() {
     // Map checkboxes to form fields if needed
     const formDataObj = new FormData();
     Object.entries(form).forEach(([key, value]) => {
-      formDataObj.append(key, value as string);
+      if ((key === 'language' || key === 'country') && Array.isArray(value)) {
+        formDataObj.append(key, value.join(','));
+      } else {
+        formDataObj.append(key, value as string);
+      }
     });
     carImages.forEach((file, idx) => {
       if (file) formDataObj.append(`image_${idx + 1}`, file);
@@ -594,6 +633,8 @@ export default function AddsPage() {
   const handleEditCar = (car: any) => {
     setEditingCar(car);
 
+    console.log('Editing Car:', car);
+
     // Calculate base price if VAT is applied
     let priceToShow = car.price?.toString() || "";
     if (car.vatRefundable === 'yes' && car.price && car.vatRate) {
@@ -641,11 +682,20 @@ export default function AddsPage() {
       });
     }
     
-    // Load stereo input value if it exists
-    if (car.stereo_input) {
-      setStereoInput(car.stereo_input);
+    // Load language array if it exists
+    if (car.language) {
+      const languageArray = Array.isArray(car.language) ? car.language : car.language.split(',');
+      setFormData((prev) => ({ ...prev, language: languageArray }));
     } else {
-      setStereoInput("");
+      setFormData((prev) => ({ ...prev, language: [] }));
+    }
+
+    // Load country array if it exists
+    if (car.country) {
+      const countryArray = Array.isArray(car.country) ? car.country : car.country.split(',');
+      setFormData((prev) => ({ ...prev, country: countryArray }));
+    } else {
+      setFormData((prev) => ({ ...prev, country: [] }));
     }
   };
 
@@ -736,6 +786,10 @@ export default function AddsPage() {
                 onChange={(value) => handleInputChange("technicalData", value)}
                 options={[
                   {
+                    value: "",
+                    label: "Vali",
+                  },
+                  {
                     value: "uus",
                     label: "Uus",
                   },
@@ -750,7 +804,7 @@ export default function AddsPage() {
                 ]}
               />
               <FormField
-                label="Omnike arv"
+                label="Omanike arv"
                 placeholder="1"
                 isSelect
                 value={formData.ownerCount}
@@ -922,6 +976,7 @@ export default function AddsPage() {
                   ...models.map((m) => ({ value: m.id, label: m.name }))
                 ]}
                 className={formData.brand_id}
+                disabled={modelLoading}
               />
               <div className="space-y-3">
                 <FormField
@@ -1401,15 +1456,6 @@ export default function AddsPage() {
                     checked={checkboxes[option.key as keyof typeof checkboxes]}
                     onChange={(checked) => handleCheckboxChange(option.key, checked)}
                   />
-                  {option.key === 'stereo' && (
-                    <input
-                      type="text"
-                      placeholder="Näide: Burmeister"
-                      value={stereoInput}
-                      onChange={(e) => handleStereoInputChange(e.target.value)}
-                      className="mx-5 flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  )}
                 </div>
               ))}
 
@@ -1426,10 +1472,11 @@ export default function AddsPage() {
                       {option.key === 'stereo' && (
                         <input
                           type="text"
-                          placeholder="abc"
-                          value={stereoInput}
-                          onChange={(e) => handleStereoInputChange(e.target.value)}
-                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          placeholder="Näide: Burmeister"
+                          value={formData.stereo}
+                          onChange={(e) => handleInputChange("stereo", e.target.value)}
+                          className="flex-1 ml-5 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          disabled={!checkboxes['stereo' as keyof typeof checkboxes]}
                         />
                       )}
                     </div>
@@ -1477,12 +1524,12 @@ export default function AddsPage() {
                   <label className="block text-motorsoline-text text-lg font-medium mb-3">
                     Vali riik
                   </label>
-                  <ReactFlagsSelect
-                    className="w-full rounded-lg bg-white text-lg"
+                  <MultiCountrySelect
                     selected={formData.country}
-                    onSelect={(value) => handleInputChange("country", value)}
-                    placeholder="Select a Country"
+                    onSelect={handleCountryChange}
+                    placeholder="Valige riigid"
                     searchable={true}
+                    className="w-full"
                   />
                 </div>
               </div>
@@ -1535,10 +1582,10 @@ export default function AddsPage() {
                     placeholder="Valige keel"
                     searchable={true}
                   /> */}
-                  <LanguageSelect
+                  <MultiLanguageSelect
                     selected={formData.language}
-                    onSelect={(value) => handleInputChange("language", value)}
-                    placeholder="Valige keel"
+                    onSelect={handleLanguageChange}
+                    placeholder="Valige keeled"
                     searchable={true}
                     className="w-full"
                   />
@@ -1609,13 +1656,14 @@ export default function AddsPage() {
                       description: "",
                       equipment: "",
                       additionalInfo: "",
-                      country: "EE",
                       phone: "",
                       businessType: "",
                       socialNetwork: "",
                       email: "",
                       address: "",
-                      language: "",
+                      stereo: "",
+                      language: [],
+                      country: [],
                     });
                     setCarImages(Array(40).fill(null));
                     setShowMorePhotos(false);

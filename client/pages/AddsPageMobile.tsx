@@ -11,6 +11,8 @@ import FormSection, {
 } from "@/components/FormSection";
 import ReactFlagsSelect from "react-flags-select";
 import LanguageSelect from '@/components/LanguageSelect';
+import MultiLanguageSelect from '@/components/MultiLanguageSelect';
+import MultiCountrySelect from '@/components/MultiCountrySelect';
 import { useAuth } from "@/contexts/AuthContext";
 const ChevronDownIcon = ({ className = "" }: { className?: string }) => (
   <svg
@@ -183,13 +185,13 @@ export default function AddsPageMobile() {
     description: "",
     equipment: "",
     additionalInfo: "",
-    country: "EE",
+    country: ["EE"],
     phone: "",
     businessType: "",
     socialNetwork: "",
     email: "",
     address: "",
-    language: "",
+    language: [],
   });
 
   const [checktechboxes, setCheckTechboxes] = useState({
@@ -308,6 +310,8 @@ export default function AddsPageMobile() {
             ownerCount: car.ownerCount?.toString() || "",
             vatRate: car.vatRate?.toString() || "",
             month: car.month?.toString() || "",
+            country: car.country ? (Array.isArray(car.country) ? car.country : car.country.split(',')) : ["EE"],
+            language: car.language ? (Array.isArray(car.language) ? car.language : car.language.split(',')) : [],
           };
 
           setFormData((prev) => ({
@@ -488,6 +492,14 @@ export default function AddsPageMobile() {
     setStereoInput(value);
   };
 
+  const handleLanguageChange = (languages: string[]) => {
+    setFormData((prev) => ({ ...prev, language: languages }));
+  };
+
+  const handleCountryChange = (countries: string[]) => {
+    setFormData((prev) => ({ ...prev, country: countries }));
+  };
+
   const handleCarImageChange = (index: number, file: File | null) => {
     setCarImages((prev) => {
       const updated = [...prev];
@@ -587,6 +599,14 @@ export default function AddsPageMobile() {
     } else {
       setStereoInput("");
     }
+    
+    // Load language array if it exists
+    if (car.language) {
+      const languageArray = Array.isArray(car.language) ? car.language : car.language.split(',');
+      setFormData((prev) => ({ ...prev, language: languageArray }));
+    } else {
+      setFormData((prev) => ({ ...prev, language: [] }));
+    }
   };
 
   const handleCarSubmit = async (e: React.FormEvent) => {
@@ -613,7 +633,11 @@ export default function AddsPageMobile() {
 
       // Add form fields
       Object.entries(formData).forEach(([key, value]) => {
-        if (value) formDataObj.append(key, value as string);
+        if ((key === 'language' || key === 'country') && Array.isArray(value)) {
+          formDataObj.append(key, value.join(','));
+        } else if (value) {
+          formDataObj.append(key, value as string);
+        }
       });
 
       // Add images
@@ -692,13 +716,13 @@ export default function AddsPageMobile() {
         description: "",
         equipment: "",
         additionalInfo: "",
-        country: "EE",
+        country: ["EE"],
         phone: "",
         businessType: "",
         socialNetwork: "",
         email: "",
         address: "",
-        language: "",
+        language: [],
       });
       setCheckTechboxes({
         technicalInspection: false,
@@ -1496,10 +1520,10 @@ export default function AddsPageMobile() {
                   {option.key === 'stereo' && (
                     <input
                       type="text"
-                      placeholder="abc"
+                      placeholder="Näide: Burmeister"
                       value={stereoInput}
                       onChange={(e) => handleStereoInputChange(e.target.value)}
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="mx-5 flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   )}
                 </div>
@@ -1518,10 +1542,10 @@ export default function AddsPageMobile() {
                       {option.key === 'stereo' && (
                         <input
                           type="text"
-                          placeholder="abc"
+                          placeholder="Näide: Burmeister"
                           value={stereoInput}
                           onChange={(e) => handleStereoInputChange(e.target.value)}
-                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="mx-5 flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                       )}
                     </div>
@@ -1569,12 +1593,12 @@ export default function AddsPageMobile() {
                   <label className="block text-motorsoline-text text-lg font-medium mb-3">
                     Vali riik
                   </label>
-                  <ReactFlagsSelect
-                    className="w-full rounded-lg bg-white text-lg"
+                  <MultiCountrySelect
                     selected={formData.country}
-                    onSelect={(value) => handleInputChange("country", value)}
-                    placeholder="Select a Country"
+                    onSelect={handleCountryChange}
+                    placeholder="Valige riigid"
                     searchable={true}
+                    className="w-full"
                   />
                 </div>
               </div>
@@ -1614,10 +1638,10 @@ export default function AddsPageMobile() {
                   <label className="block text-motorsoline-text text-lg font-medium mb-3">
                     Suhtluskeel
                   </label>
-                  <LanguageSelect
-                    selected={formData.language || "en"}
-                    onSelect={(value) => handleInputChange("language", value)}
-                    placeholder="Valige keel"
+                  <MultiLanguageSelect
+                    selected={formData.language}
+                    onSelect={handleLanguageChange}
+                    placeholder="Valige keeled"
                     searchable={true}
                     className="w-full"
                   />
@@ -1688,13 +1712,13 @@ export default function AddsPageMobile() {
                       description: "",
                       equipment: "",
                       additionalInfo: "",
-                      country: "EE",
+                      country: ["EE"],
                       phone: "",
                       businessType: "",
                       socialNetwork: "",
                       email: "",
                       address: "",
-                      language: "",
+                      language: [],
                     });
                     setCarImages(Array(40).fill(null));
                     setShowMorePhotos(false);

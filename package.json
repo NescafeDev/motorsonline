@@ -34,10 +34,13 @@
     "jwt-decode": "^4.0.0",
     "multer": "^2.0.1",
     "mysql2": "^3.9.7",
+    "react-country-flag": "^3.1.0",
     "react-country-flags-lazyload": "^1.0.9",
     "react-flags-select": "^2.5.0",
     "react-languages-select": "^1.0.20",
     "react-quill": "^2.0.0",
+    "react-select": "^5.10.2",
+    "react-select-country-list": "^2.2.3",
     "zod": "^3.23.8"
   },
   "devDependencies": {

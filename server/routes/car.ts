@@ -83,6 +83,12 @@ export interface Car {
   year_value?: number;
   drive_type_name?: string;
   drive_type_ee_name?: string;
+  salonColor?: string;
+  bodyType?: string;
+  stereo?: string;
+  carColor?: string;
+  carColorType?: string;
+  vehicleType?: string;
 }
 
 export interface CarFilters {
