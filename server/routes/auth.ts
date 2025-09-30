@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { createUser, findUserByEmail, validatePassword } from '../models/user';
 import { OAuth2Client } from 'google-auth-library';
 import { createJwt } from '../utils';
+import { basicAuth, generateBasicAuthHeader } from '../middleware/basicAuth';
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
@@ -61,5 +62,54 @@ router.post('/google', async (req, res) => {
     console.error(err);
   }
 })
+
+// Basic Auth protected route example
+// This route requires Basic Authentication
+// In production, use environment variables for credentials
+const basicAuthUsers = {
+  [process.env.BASIC_AUTH_ADMIN_USER || 'admin']: process.env.BASIC_AUTH_ADMIN_PASS || 'admin123',
+  [process.env.BASIC_AUTH_USER_USER || 'user']: process.env.BASIC_AUTH_USER_PASS || 'user123',
+  [process.env.BASIC_AUTH_TEST_USER || 'test']: process.env.BASIC_AUTH_TEST_PASS || 'test123'
+};
+
+router.get('/basic-auth-test', basicAuth({
+  users: basicAuthUsers,
+  realm: 'API Access',
+  message: 'Please provide valid credentials'
+}), (req, res) => {
+  // This route is now protected by Basic Auth
+  const user = (req as any).user;
+  res.json({ 
+    message: 'Successfully authenticated with Basic Auth',
+    user: user.username,
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Generate Basic Auth header endpoint (for testing)
+router.post('/generate-basic-auth', (req, res) => {
+  const { username, password } = req.body;
+  
+  if (!username || !password) {
+    return res.status(400).json({ 
+      error: 'Username and password are required' 
+    });
+  }
+
+  const authHeader = generateBasicAuthHeader(username, password);
+  
+  res.json({
+    username,
+    authHeader,
+    usage: {
+      curl: `curl -H "Authorization: ${authHeader}" http://localhost:8080/api/auth/basic-auth-test`,
+      javascript: `fetch('/api/auth/basic-auth-test', {
+        headers: {
+          'Authorization': '${authHeader}'
+        }
+      })`
+    }
+  });
+});
 
 export default router; 
