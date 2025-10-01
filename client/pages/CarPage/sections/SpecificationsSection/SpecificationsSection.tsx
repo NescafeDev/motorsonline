@@ -89,7 +89,8 @@ export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps
                 </p>
                 <p className="[font-family:'Poppins',Helvetica] font-normal text-lg text-secondary-500 tracking-[-0.54px] leading-[27px]">
                   {/* {getLanguageName(displayData.language || '')} */}
-                  {displayData.language.replace(/,/g, " , ")}
+                  {/* {displayData.language.replace(/,/g, " , ")} */}
+                  {Array.isArray(displayData.language) ? displayData.language.join(', ') : displayData.language?.replace(/,/g, " , ") || ''}
                 </p>
               </div>
             </div>

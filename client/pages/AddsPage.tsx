@@ -17,6 +17,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { boolean } from "zod/v4";
 import { CountryCodes } from "react-flags-select/build/types";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import CarPreview from "./CarPage/CarPreview";
 const ChevronDownIcon = ({ className = "" }: { className?: string }) => (
   <svg
     width="16"
@@ -316,6 +326,7 @@ export default function AddsPage() {
   const [years, setYears] = useState<{ id: number; value: string }[]>([]);
   const [driveTypes, setDriveTypes] = useState<{ id: number; name: string; ee_name: string }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const { id: carId } = useParams<{ id: string }>();
   useEffect(() => {
@@ -667,6 +678,9 @@ export default function AddsPage() {
       setShowMorePhotos(false);
       setStereoInput("");
       fetchCars();
+
+      // Close the modal
+      setIsModalOpen(false);
 
       // Navigate to user's listings after successful add or edit
       navigate("/user");
@@ -1693,76 +1707,136 @@ export default function AddsPage() {
           </FormSection>
 
           <FormSection title="">
-            <form onSubmit={handleCarSubmit} className="space-y-4">
-              <button
-                type="submit"
-                className="bg-brand-primary text-white px-4 py-2 rounded font-semibold"
-                disabled={carLoading}
-              >
-                {editingCar ? "Salvesta muudatused" : "Lisa kuulutus"}
-              </button>
-              {editingCar && (
-                <button
-                  type="button"
-                  className="bg-gray-300 px-4 py-2 rounded ml-2"
-                  onClick={() => {
-
-                    setEditingCar(null);
-                    setFormData({
-                      brand_id: "",
-                      model_id: "",
-                      year_id: "",
-                      drive_type_id: "",
-                      category: "",
-                      transmission: "",
-                      fuelType: "",
-                      plateNumber: "",
-                      vehicleType: "",
-                      bodyType: "",
-                      month: "",
-                      mileage: "",
-                      power: "",
-                      displacement: "",
-                      technicalData: "",
-                      ownerCount: "",
-                      modelDetail: "",
-                      price: "",
-                      discountPrice: "",
-                      warranty: "",
-                      vatRefundable: "",
-                      vatRate: "",
-                      accident: "",
-                      vinCode: "",
-                      carColor: "",
-                      carColorType: "",
-                      salonColor: "",
-                      description: "",
-                      equipment: "",
-                      additionalInfo: "",
-                      phone: "",
-                      businessType: "",
-                      socialNetwork: "",
-                      email: "",
-                      address: "",
-                      stereo: "",
-                      website: "",
-                      language: [],
-                      country: "",
-                      inspectionValidityPeriod: "",
-                    });
-                    setCarImages(Array(40).fill(null));
-                    setShowMorePhotos(false);
-                    setStereoInput("");
-                    navigate("/user");
-                  }}
-                >
-                  Tühista
-                </button>
-              )}
-            </form>
+            <div className="space-y-4">
+              <div className="flex gap-2">
+                {editingCar ? (
+                  <>
+                    <button
+                      type="button"
+                      className="bg-brand-primary text-white px-4 py-2 rounded font-semibold hover:bg-blue-600 transition-colors"
+                      onClick={handleCarSubmit}
+                      disabled={carLoading}
+                    >
+                      {carLoading ? "Salvestatakse..." : "Salvesta muudatused"}
+                    </button>
+                    <button
+                      type="button"
+                      className="bg-gray-300 px-4 py-2 rounded font-semibold hover:bg-gray-400 transition-colors"
+                      onClick={() => {
+                        setEditingCar(null);
+                        setFormData({
+                          brand_id: "",
+                          model_id: "",
+                          year_id: "",
+                          drive_type_id: "",
+                          category: "",
+                          transmission: "",
+                          fuelType: "",
+                          plateNumber: "",
+                          vehicleType: "",
+                          bodyType: "",
+                          month: "",
+                          mileage: "",
+                          power: "",
+                          displacement: "",
+                          technicalData: "",
+                          ownerCount: "",
+                          modelDetail: "",
+                          price: "",
+                          discountPrice: "",
+                          warranty: "",
+                          vatRefundable: "",
+                          vatRate: "",
+                          accident: "",
+                          vinCode: "",
+                          carColor: "",
+                          carColorType: "",
+                          salonColor: "",
+                          description: "",
+                          equipment: "",
+                          additionalInfo: "",
+                          phone: "",
+                          businessType: "",
+                          socialNetwork: "",
+                          email: "",
+                          address: "",
+                          stereo: "",
+                          website: "",
+                          language: [],
+                          country: "",
+                          inspectionValidityPeriod: "",
+                        });
+                        setCarImages(Array(40).fill(null));
+                        setShowMorePhotos(false);
+                        setStereoInput("");
+                        navigate("/user");
+                      }}
+                    >
+                      Tühista
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    className="bg-brand-primary text-white px-4 py-2 rounded font-semibold hover:bg-blue-600 transition-colors"
+                    onClick={() => setIsModalOpen(true)}
+                  >
+                    Eelvaade
+                  </button>
+                )}
+              </div>
+            </div>
           </FormSection>
         </div>
 
+        {/* Modal */}
+        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <DialogContent className="max-w-[100vw] max-h-[100vh] w-screen h-screen p-0 m-0 rounded-none flex flex-col">
+            <DialogHeader className="px-6 py-4 border-b flex-shrink-0">
+              <DialogTitle>Eelvaade</DialogTitle>
+              <DialogDescription>
+                Auto eelvaade - näete, kuidas teie kuulutus välja näeb
+              </DialogDescription>
+            </DialogHeader>
+            <div className="flex-1 overflow-y-auto overflow-x-hidden">
+              {!editingCar ? (
+                <CarPreview 
+                  formData={formData}
+                  brands={brands}
+                  models={models}
+                  years={years}
+                  driveTypes={driveTypes}
+                  carImages={carImages}
+                />
+              ) : (
+                <div className="p-6 text-center">
+                  <p className="text-gray-500">
+                    Salvestage auto andmed enne eelvaate vaatamist
+                  </p>
+                </div>
+              )}
+            </div>
+            <DialogFooter className="px-6 py-4 border-t flex-shrink-0">
+              <div className="flex gap-3 justify-end">
+                <button
+                  type="button"
+                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded font-semibold hover:bg-gray-400 transition-colors"
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  Sulge
+                </button>
+                <button
+                  type="button"
+                  className="bg-brand-primary text-white px-4 py-2 rounded font-semibold hover:bg-blue-600 transition-colors"
+                  disabled={carLoading}
+                  onClick={handleCarSubmit}
+                >
+                  {editingCar ? "Salvesta muudatused" : "Lisa kuulutus"}
+                </button>
+              </div>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
       </div>
     </PageContainer>

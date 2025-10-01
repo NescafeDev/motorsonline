@@ -1749,71 +1749,86 @@ export default function AddsPageMobile() {
           </FormSection>
 
           <FormSection title="">
-            <form onSubmit={handleCarSubmit} className="space-y-4">
-              <button
-                type="submit"
-                className="bg-brand-primary text-white px-4 py-2 rounded font-semibold"
-              >
-                {editingCar ? "Salvesta muudatused" : "Lisa kuulutus"}
-              </button>
-              {editingCar && (
-                <button
-                  type="button"
-                  className="bg-gray-300 px-4 py-2 rounded ml-2"
-                  onClick={() => {
-                    setEditingCar(null);
-                    setFormData({
-                      brand_id: "",
-                      model_id: "",
-                      year_id: "",
-                      drive_type_id: "",
-                      category: "",
-                      transmission: "",
-                      fuelType: "",
-                      plateNumber: "",
-                      vehicleType: "",
-                      bodyType: "",
-                      month: "",
-                      mileage: "",
-                      power: "",
-                      displacement: "",
-                      technicalData: "",
-                      ownerCount: "",
-                      modelDetail: "",
-                      price: "",
-                      discountPrice: "",
-                      warranty: "",
-                      vatRefundable: "",
-                      vatRate: "24",
-                      accident: "",
-                      vinCode: "",
-                      carColor: "",
-                      carColorType: "",
-                      salonColor: "",
-                      description: "",
-                      equipment: "",
-                      additionalInfo: "",
-                      phone: "",
-                      businessType: "",
-                      socialNetwork: "",
-                      email: "",
-                      address: "",
-                      stereo: "",
-                      website: "",
-                      inspectionValidityPeriod: "",
-                      language: [],
-                      country: "",
-                    });
-                    setCarImages(Array(40).fill(null));
-                    setShowMorePhotos(false);
-                    setStereoInput("");
-                    navigate("/user");
-                  }}
-                >
-                  Tühista
-                </button>
-              )}
-            </form>
+            <div className="space-y-4">
+              <div className="flex gap-2">
+                {editingCar ? (
+                  <>
+                    <button
+                      type="button"
+                      className="bg-brand-primary text-white px-4 py-2 rounded font-semibold hover:bg-blue-600 transition-colors"
+                      onClick={handleCarSubmit}
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Salvestatakse..." : "Salvesta muudatused"}
+                    </button>
+                    <button
+                      type="button"
+                      className="bg-gray-300 px-4 py-2 rounded font-semibold hover:bg-gray-400 transition-colors"
+                      onClick={() => {
+                        setEditingCar(null);
+                        setFormData({
+                          brand_id: "",
+                          model_id: "",
+                          year_id: "",
+                          drive_type_id: "",
+                          category: "",
+                          transmission: "",
+                          fuelType: "",
+                          plateNumber: "",
+                          vehicleType: "",
+                          bodyType: "",
+                          month: "",
+                          mileage: "",
+                          power: "",
+                          displacement: "",
+                          technicalData: "",
+                          ownerCount: "",
+                          modelDetail: "",
+                          price: "",
+                          discountPrice: "",
+                          warranty: "",
+                          vatRefundable: "",
+                          vatRate: "24",
+                          accident: "",
+                          vinCode: "",
+                          carColor: "",
+                          carColorType: "",
+                          salonColor: "",
+                          description: "",
+                          equipment: "",
+                          additionalInfo: "",
+                          phone: "",
+                          businessType: "",
+                          socialNetwork: "",
+                          email: "",
+                          address: "",
+                          stereo: "",
+                          website: "",
+                          inspectionValidityPeriod: "",
+                          language: [],
+                          country: "",
+                        });
+                        setCarImages(Array(40).fill(null));
+                        setShowMorePhotos(false);
+                        setStereoInput("");
+                        navigate("/user");
+                      }}
+                    >
+                      Tühista
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    className="bg-brand-primary text-white px-4 py-2 rounded font-semibold hover:bg-blue-600 transition-colors"
+                    onClick={handleCarSubmit}
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Salvestatakse..." : "Lisa kuulutus"}
+                  </button>
+                )}
+              </div>
+            </div>
           </FormSection>
         </div>
       </main>
