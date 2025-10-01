@@ -20,6 +20,7 @@ interface CarData {
   brand_name?: string;
   model_name?: string;
   year_value?: number;
+  month?: string;
   mileage: number;
   power: string;
   transmission: string;
@@ -242,7 +243,7 @@ export default function CarPage() {
     {
       icon: "/img/car/calendar.png",
       label: "Esmaregistreerimine:",
-      value: car.year_value?.toString() || "N/A",
+      value: car.year_value?.toString() + " - " + (car.month.length === 1 ? `0${car.month}` : car.month )|| "N/A",
     },
     {
       icon: "/img/car/gas_station.png",
@@ -348,12 +349,12 @@ export default function CarPage() {
                         {equipmentFeatures.slice(0, 12).map((feature, index) => (
                           <div
                             key={index}
-                            className="bg-white rounded-[10px] p-2.5 flex justify-between items-center"
+                            className="bg-white rounded-[10px] p-2.5 flex justify-between items-start gap-2"
                           >
-                            <span className="font-medium text-secondary-500 text-lg tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica]">
+                            <span className="font-medium text-secondary-500 text-lg tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica] break-words flex-1 min-w-0">
                               {feature.label}
                             </span>
-                            <div className="w-6 h-6 bg-[100%_100%]">
+                            <div className="w-6 h-6 bg-[100%_100%] flex-shrink-0">
                               <img className="w-6 h-6 " src={feature.icon} />
                             </div>
                           </div>
@@ -432,7 +433,7 @@ export default function CarPage() {
                                 {detail.label}
                               </span>
                               <span className="font-medium text-secondary-500 text-[12px] tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica] break-words">
-                                {detail.value}
+                                {detail.value}{}
                               </span>
                             </div>
                           </div>

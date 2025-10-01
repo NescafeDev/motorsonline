@@ -57,7 +57,9 @@ export const ImageGallerySection = ({ car }: ImageGallerySectionProps): JSX.Elem
             <ul className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px] list-disc pl-6 space-y-2">
               {car?.equipment && car.equipment.trim() ? (
                 car.equipment.split(',').map((item, index) => (
-                  <li key={index}>{item.trim()}</li>
+                  // <li key={index} className="break-words leading-relaxed py-1">{item.trim()}</li>
+                  <li key={index} className="break-all leading-relaxed py-1">{item.trim()}</li>
+                  // <li key={index} className="break-words">asd</li>
                 ))
               ) : (
                 <li>Varustuse andmed puuduvad</li>
@@ -71,61 +73,13 @@ export const ImageGallerySection = ({ car }: ImageGallerySectionProps): JSX.Elem
             </h2>
             <div className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]">
               {car?.description && car.description.trim() ? (
-                <p>{car.description}</p>
+                // <p className="break-words">{car.description}</p>
+                <p className="break-all leading-relaxed py-1">{car.description}</p>
               ) : (
                 <p>Kirjeldus puudub</p>
               )}
             </div>
           </div>
-          {/* Contact information */}
-          {/* <div className="space-y-4"> */}
-            {/* <h2 className="font-['Poppins',Helvetica] font-semibold text-secondary-500 text-xl tracking-[-0.60px] leading-[30px]"> */}
-              {/* Kui teil on küsimusi või soovite rohkem teada meie sõidukite */}
-              {/* kohta, ärge kõhelge meiega ühendust võtmast. Meie meeskond on teie */}
-              {/* jaoks olemas. */}
-            {/* </h2> */}
-            {/* <ul className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px] list-disc pl-6 space-y-2"> */}
-              
-            {/* </ul> */}
-          {/* </div> */}
-          {/* Social media */}
-          {/* <div className="space-y-4"> */}
-            {/* <h2 className="font-['Poppins',Helvetica] font-semibold text-secondary-500 text-xl tracking-[-0.60px] leading-[30px]"> */}
-              {/* Avastage meie eksklusiivsete luksusautode maailm ja olge kursis */}
-              {/* pakkumiste ja uudistega. Jälgige meid: */}
-            {/* </h2> */}
-            {/* <ul className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px] list-disc pl-6 space-y-2"> */}
-              
-            {/* </ul> */}
-          {/* </div> */}
-          {/* Financing */}
-          {/* <div className="space-y-4"> */}
-            {/* <h2 className="font-['Poppins',Helvetica] font-semibold text-secondary-500 text-xl tracking-[-0.60px] leading-[30px]"> */}
-              
-            {/* </h2> */}
-          {/* </div> */}
-          {/* Visit information */}
-          {/* <div className="space-y-4"> */}
-            {/* <h2 className="font-['Poppins',Helvetica] font-semibold text-secondary-500 text-xl tracking-[-0.60px] leading-[30px]"> */}
-              {/* Palume enne külastust kindlasti meiega ühendust võtta! */}
-            {/* </h2> */}
-            {/* <div className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]"> */}
-              
-            {/* </div> */}
-          {/* </div> */}
-          {/* Team information */}
-          {/* <div className="font-['Poppins',Helvetica] font-semibold text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]"> */}
-            
-          {/* </div> */}
-          {/* Legal information */}
-          {/* <div className="space-y-4"> */}
-            {/* <h2 className="font-['Poppins',Helvetica] font-semibold text-secondary-500 text-xl tracking-[-0.60px] leading-[30px]"> */}
-              {/* Õiguslik teave: */}
-            {/* </h2> */}
-            {/* <p className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]"> */}
-              
-            {/* </p> */}
-          {/* </div> */}
         </CardContent>
       </Card>
     </section>

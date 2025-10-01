@@ -63,9 +63,9 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
         </div>
 
         {/* Description */}
-        <p className="text-sm text-motors-gray leading-[21px] tracking-[-0.42px] mb-4 line-clamp-2">
+        {/* <p className="text-sm text-motors-gray leading-[21px] tracking-[-0.42px] mb-4 line-clamp-2">
           {description}
-        </p>
+        </p> */}
 
         {/* Price Section */}
         <div className="mb-4">

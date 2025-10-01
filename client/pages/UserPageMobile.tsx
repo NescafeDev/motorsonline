@@ -213,7 +213,7 @@ export default function UserPageMobile() {
 
         {/* Results Counter */}
         <p className="text-base leading-[150%] tracking-[-0.48px] text-motorsonline-gray mt-10">
-          {loading ? 'Laetakse...' : `Kuvatakse ${userCars.length} teavitust ${userCars.length}-st`}
+          {true ? 'Laetakse...' : `Kuvatakse ${userCars.length} teavitust ${userCars.length}-st`}
         </p>
       </main>
 

@@ -187,7 +187,7 @@ export const CarCard: React.FC<CarCardProps> = ({
       </div>
 
       {/* Description */}
-      <p className="w-[840px] text-[#1A202C] font-['Poppins'] text-[18px] font-normal leading-[150%] tracking-[-0.54px] absolute left-[370px] top-[156px] h-[54px]">
+      <p className="w-[830px] text-[#1A202C] font-['Poppins'] text-[18px] font-normal leading-[150%] tracking-[-0.54px] absolute left-[370px] top-[156px] h-[54px] overflow-hidden">
         {description}
       </p>
 

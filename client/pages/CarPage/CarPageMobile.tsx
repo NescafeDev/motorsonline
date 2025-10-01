@@ -410,7 +410,7 @@ export default function CarPageMobile() {
         </div>
 
         {/* High-value features section */}
-        <div className="px-5 mb-6">
+        {/* <div className="px-5 mb-6">
           <ExpandableSection title="Kõrgema väärtusega lisvarustus">
             <div className="space-y-3">
               {equipmentFeatures.length > 0 ? (
@@ -431,7 +431,7 @@ export default function CarPageMobile() {
               )}
             </div>
           </ExpandableSection>
-        </div>
+        </div> */}
         <ImageGallerySection car={car} />
 
         {/* Seller information section */}
