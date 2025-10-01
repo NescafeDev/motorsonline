@@ -145,6 +145,49 @@ const salonColorOptions = [
   { value: "valge", label: "Valge" },
   { value: "muu", label: "Muu" },
 ];
+const inspectionValidityOptions = [
+  { value: "", label: "otsi" },
+  { value: "09.2025", label: "09.2025" },
+  { value: "10.2025", label: "10.2025" },
+  { value: "11.2025", label: "11.2025" },
+  { value: "12.2025", label: "12.2025" },
+  { value: "01.2026", label: "01.2026" },
+  { value: "02.2026", label: "02.2026" },
+  { value: "03.2026", label: "03.2026" },
+  { value: "04.2026", label: "04.2026" },
+  { value: "05.2026", label: "05.2026" },
+  { value: "06.2026", label: "06.2026" },
+  { value: "07.2026", label: "07.2026" },
+  { value: "08.2026", label: "08.2026" },
+  { value: "09.2026", label: "09.2026" },
+  { value: "10.2026", label: "10.2026" },
+  { value: "11.2026", label: "11.2026" },
+  { value: "12.2026", label: "12.2026" },
+  { value: "01.2027", label: "01.2027" },
+  { value: "02.2027", label: "02.2027" },
+  { value: "03.2027", label: "03.2027" },
+  { value: "04.2027", label: "04.2027" },
+  { value: "05.2027", label: "05.2027" },
+  { value: "06.2027", label: "06.2027" },
+  { value: "07.2027", label: "07.2027" },
+  { value: "08.2027", label: "08.2027" },
+  { value: "09.2027", label: "09.2027" },
+  { value: "10.2027", label: "10.2027" },
+  { value: "11.2027", label: "11.2027" },
+  { value: "12.2027", label: "12.2027" },
+  { value: "01.2028", label: "01.2028" },
+  { value: "02.2028", label: "02.2028" },
+  { value: "03.2028", label: "03.2028" },
+  { value: "04.2028", label: "04.2028" },
+  { value: "05.2028", label: "05.2028" },
+  { value: "06.2028", label: "06.2028" },
+  { value: "07.2028", label: "07.2028" },
+  { value: "08.2028", label: "08.2028" },
+  { value: "09.2028", label: "09.2028" },
+  { value: "10.2028", label: "10.2028" },
+  { value: "11.2028", label: "11.2028" },
+  { value: "12.2028", label: "12.2028" },
+];
 
 export default function AddsPageMobile() {
   const { user } = useAuth();
@@ -195,6 +238,7 @@ export default function AddsPageMobile() {
     stereo: "",
     language: [],
     website: "",
+    inspectionValidityPeriod: "",
   });
 
   const [checktechboxes, setCheckTechboxes] = useState({
@@ -202,6 +246,7 @@ export default function AddsPageMobile() {
     technicalMaintenance: false,
     serviceBook: false,
     hideVin: false,
+    inspectionValid: false,
   });
 
   const [checkboxes, setCheckboxes] = useState({
@@ -443,7 +488,7 @@ export default function AddsPageMobile() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setModels(res.data);
-    } catch(e) {
+    } catch (e) {
       console.error(e);
     } finally {
       setModelLoading(false);
@@ -728,12 +773,14 @@ export default function AddsPageMobile() {
         website: "",
         language: [],
         country: "",
+        inspectionValidityPeriod: "",
       });
       setCheckTechboxes({
         technicalInspection: false,
         technicalMaintenance: false,
         serviceBook: false,
         hideVin: false,
+        inspectionValid: false,
       });
       setCheckboxes({
         kokkupõrgetEnnetavPidurisüsteem: false,
@@ -854,64 +901,9 @@ export default function AddsPageMobile() {
               onToggleShowMore={() => setShowMorePhotos(!showMorePhotos)}
             />
           </FormSection>
-
           {/* Vehicle Details */}
           <FormSection title="Mudelidetailid">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <FormField
-                label="Sõiduki seisukord"
-                placeholder="Kasutatud, avariiline ..."
-                value={formData.technicalData}
-                isSelect
-                onChange={(value) => handleInputChange("technicalData", value)}
-                options={[
-                  {
-                    value: "",
-                    label: "Vali",
-                  },
-                  {
-                    value: "uus",
-                    label: "Uus",
-                  },
-                  {
-                    value: "kasutatud",
-                    label: "Kasutatud",
-                  },
-                  {
-                    value: "avariiline",
-                    label: "Avariiline",
-                  },
-                ]}
-              />
-              <FormField
-                label="Omanike arv"
-                placeholder="1"
-                isSelect
-                value={formData.ownerCount}
-                onChange={(value) => handleInputChange("ownerCount", value)}
-                options={[
-                  {
-                    value: "",
-                    label: "Vali",
-                  },
-                  {
-                    value: "1",
-                    label: "1",
-                  },
-                  {
-                    value: "2",
-                    label: "2",
-                  },
-                  {
-                    value: "3",
-                    label: "3",
-                  },
-                  {
-                    value: "4+",
-                    label: "4+",
-                  },
-                ]}
-              />
               <FormField
                 label="Valige sõiduki liik"
                 placeholder="Vali sõiduki liik"
@@ -1059,119 +1051,16 @@ export default function AddsPageMobile() {
                 disabled={modelLoading}
               />
               <FormField
-                label="Kategooria tähis"
-                placeholder="Vali Kategooria tähis"
-                isSelect
-                value={formData.category}
-                onChange={(value) => handleInputChange("category", value)}
-                options={[
-                  {
-                    value: "",
-                    label: "Vali",
-                  },
-                  {
-                    value: "M1",
-                    label: "M1",
-                  },
-                  {
-                    value: "M2",
-                    label: "M2",
-                  },
-                  {
-                    value: "M3",
-                    label: "M3",
-                  },
-                  {
-                    value: "N1",
-                    label: "N1",
-                  },
-                  {
-                    value: "N2",
-                    label: "N2",
-                  },
-                  {
-                    value: "N3",
-                    label: "N3",
-                  },
-                  {
-                    value: "L1e",
-                    label: "L1e",
-                  },
-                  {
-                    value: "L2e",
-                    label: "L2e",
-                  },
-                  {
-                    value: "L3e",
-                    label: "L3e",
-                  },
-                  {
-                    value: "L4e",
-                    label: "L4e",
-                  },
-                  {
-                    value: "L5e",
-                    label: "L5e",
-                  },
-                  {
-                    value: "L6e",
-                    label: "L6e",
-                  },
-                  {
-                    value: "L7e",
-                    label: "L7e",
-                  },
-                  {
-                    value: "O1",
-                    label: "O1",
-                  },
-                  {
-                    value: "O2",
-                    label: "O2",
-                  },
-                  {
-                    value: "O3",
-                    label: "O3",
-                  },
-                  {
-                    value: "O4",
-                    label: "O4",
-                  },
-                ]}
-              />
-              {formData.category && (
-                <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <p className="text-sm text-blue-800">
-                    {(() => {
-                      const descriptions: { [key: string]: string } = {
-                        "M1": "Sõiduautod, kuni 8 istekohta peale juhi",
-                        "M2": "Bussid/väikebussid, üle 8 istekoha, täismass ≤ 5 t",
-                        "M3": "Suured bussid, üle 8 istekoha, täismass > 5 t",
-                        "N1": "Kaubikud, täismass ≤ 3,5 t",
-                        "N2": "Veoautod, täismass 3,5–12 t",
-                        "N3": "Raskeveokid, täismass > 12 t",
-                        "L1e": "Kergetsiklid (≤ 50 cm³ ja ≤ 45 km/h)",
-                        "L2e": "Kolmerattalised kergetsiklid",
-                        "L3e": "Mootorrattad",
-                        "L4e": "Mootorrattad külgkorviga",
-                        "L5e": "Kolmerattalised mootorsõidukid",
-                        "L6e": "Kerge neljarattaline (≤ 45 km/h ja ≤ 425 kg)",
-                        "L7e": "Raske neljarattaline (> 45 km/h või > 425 kg)",
-                        "O1": "Kerghaagised, ≤ 0,75 t",
-                        "O2": "Haagised, 0,75–3,5 t",
-                        "O3": "Haagised, 3,5–10 t",
-                        "O4": "Haagised, > 10 t"
-                      };
-                      return descriptions[formData.category] || "";
-                    })()}
-                  </p>
-                </div>
-              )}
-              <FormField
                 label="Muu mudel või täpsustus"
                 placeholder="näide: Long 4Matic"
                 value={formData.modelDetail}
                 onChange={(value) => handleInputChange("modelDetail", value)}
+              />
+              <FormField
+                label="Läbisõit"
+                placeholder="Läbisõit"
+                value={formData.mileage}
+                onChange={(value) => handleInputChange("mileage", value)}
               />
               <FormField
                 label="Esmane registreerimine"
@@ -1208,28 +1097,61 @@ export default function AddsPageMobile() {
                 ]}
               />
               <FormField
-                label="Läbisõit"
-                placeholder="Läbisõit"
-                value={formData.mileage}
-                onChange={(value) => handleInputChange("mileage", value)}
+                label="Omanike arv"
+                placeholder="1"
+                isSelect
+                value={formData.ownerCount}
+                onChange={(value) => handleInputChange("ownerCount", value)}
+                options={[
+                  {
+                    value: "",
+                    label: "Vali",
+                  },
+                  {
+                    value: "1",
+                    label: "1",
+                  },
+                  {
+                    value: "2",
+                    label: "2",
+                  },
+                  {
+                    value: "3",
+                    label: "3",
+                  },
+                  {
+                    value: "4+",
+                    label: "4+",
+                  },
+                ]}
               />
               <FormField
-                label="Võimsus (Kw)"
-                placeholder="0"
-                value={formData.power}
-                onChange={(value) => handleInputChange("power", value)}
+                label="Sõiduki seisukord"
+                placeholder="Kasutatud, avariiline ..."
+                value={formData.technicalData}
+                isSelect
+                onChange={(value) => handleInputChange("technicalData", value)}
+                options={[
+                  {
+                    value: "",
+                    label: "Vali",
+                  },
+                  {
+                    value: "uus",
+                    label: "Uus",
+                  },
+                  {
+                    value: "kasutatud",
+                    label: "Kasutatud",
+                  },
+                  {
+                    value: "avariiline",
+                    label: "Avariiline",
+                  },
+                ]}
               />
-
-
-
-
-
-
             </div>
-
-
           </FormSection>
-
           {/* Technical Details */}
           <FormSection title="Tehnilised detailandmed">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -1357,11 +1279,126 @@ export default function AddsPageMobile() {
                 ]}
               />
               <FormField
+                label="Võimsus (Kw)"
+                placeholder="0"
+                value={formData.power}
+                onChange={(value) => handleInputChange("power", value)}
+              />
+              <FormField
                 label="Töömaht (cm³)"
                 placeholder="0"
                 value={formData.displacement}
                 onChange={(value) => handleInputChange("displacement", value)}
               />
+              <FormField
+                label="Kategooria tähis"
+                placeholder="Vali Kategooria tähis"
+                isSelect
+                value={formData.category}
+                onChange={(value) => handleInputChange("category", value)}
+                options={[
+                  {
+                    value: "",
+                    label: "Vali",
+                  },
+                  {
+                    value: "M1",
+                    label: "M1",
+                  },
+                  {
+                    value: "M2",
+                    label: "M2",
+                  },
+                  {
+                    value: "M3",
+                    label: "M3",
+                  },
+                  {
+                    value: "N1",
+                    label: "N1",
+                  },
+                  {
+                    value: "N2",
+                    label: "N2",
+                  },
+                  {
+                    value: "N3",
+                    label: "N3",
+                  },
+                  {
+                    value: "L1e",
+                    label: "L1e",
+                  },
+                  {
+                    value: "L2e",
+                    label: "L2e",
+                  },
+                  {
+                    value: "L3e",
+                    label: "L3e",
+                  },
+                  {
+                    value: "L4e",
+                    label: "L4e",
+                  },
+                  {
+                    value: "L5e",
+                    label: "L5e",
+                  },
+                  {
+                    value: "L6e",
+                    label: "L6e",
+                  },
+                  {
+                    value: "L7e",
+                    label: "L7e",
+                  },
+                  {
+                    value: "O1",
+                    label: "O1",
+                  },
+                  {
+                    value: "O2",
+                    label: "O2",
+                  },
+                  {
+                    value: "O3",
+                    label: "O3",
+                  },
+                  {
+                    value: "O4",
+                    label: "O4",
+                  },
+                ]}
+              />
+              {formData.category && (
+                <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-sm text-blue-800">
+                    {(() => {
+                      const descriptions: { [key: string]: string } = {
+                        "M1": "Sõiduautod, kuni 8 istekohta peale juhi",
+                        "M2": "Bussid/väikebussid, üle 8 istekoha, täismass ≤ 5 t",
+                        "M3": "Suured bussid, üle 8 istekoha, täismass > 5 t",
+                        "N1": "Kaubikud, täismass ≤ 3,5 t",
+                        "N2": "Veoautod, täismass 3,5–12 t",
+                        "N3": "Raskeveokid, täismass > 12 t",
+                        "L1e": "Kergetsiklid (≤ 50 cm³ ja ≤ 45 km/h)",
+                        "L2e": "Kolmerattalised kergetsiklid",
+                        "L3e": "Mootorrattad",
+                        "L4e": "Mootorrattad külgkorviga",
+                        "L5e": "Kolmerattalised mootorsõidukid",
+                        "L6e": "Kerge neljarattaline (≤ 45 km/h ja ≤ 425 kg)",
+                        "L7e": "Raske neljarattaline (> 45 km/h või > 425 kg)",
+                        "O1": "Kerghaagised, ≤ 0,75 t",
+                        "O2": "Haagised, 0,75–3,5 t",
+                        "O3": "Haagised, 3,5–10 t",
+                        "O4": "Haagised, > 10 t"
+                      };
+                      return descriptions[formData.category] || "";
+                    })()}
+                  </p>
+                </div>
+              )}
               <FormField
                 label="Sõiduki värv"
                 placeholder="Vali sõiduki värv"
@@ -1435,12 +1472,7 @@ export default function AddsPageMobile() {
                 value={formData.discountPrice}
                 onChange={(value) => handleInputChange("discountPrice", value)}
               />
-              <FormField
-                label="Garantii"
-                placeholder="Kehtib kuni"
-                value={formData.warranty}
-                onChange={(value) => handleInputChange("warranty", value)}
-              />
+
               <FormField
                 label="Käibemaksu tagastatavus"
                 placeholder="Yes"
@@ -1473,6 +1505,12 @@ export default function AddsPageMobile() {
                 step={1}
                 suffix="%"
               />
+              <FormField
+                label="Garantii"
+                placeholder="Kehtib kuni"
+                value={formData.warranty}
+                onChange={(value) => handleInputChange("warranty", value)}
+              />
               {/* Checkboxes */}
               <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -1491,6 +1529,27 @@ export default function AddsPageMobile() {
                   />
                 </div>
                 <div className="my-auto space-y-3">
+                  <div className="flex items-center gap-2">
+                    <CheckboxField
+                      label="Ülevaatus kehtib"
+                      checked={checktechboxes.inspectionValid}
+                      onChange={(checked) =>
+                        handleCheckTechboxChange("inspectionValid", checked)
+                      }
+                      className="mt-4"
+                    />
+                    <div className="flex-1 ml-3">
+                      <FormField
+                        label=""
+                        placeholder="otsi"
+                        isSelect
+                        value={formData.inspectionValidityPeriod}
+                        onChange={(value) => handleInputChange("inspectionValidityPeriod", value)}
+                        options={inspectionValidityOptions}
+                        disabled={!checktechboxes.inspectionValid}
+                      />
+                    </div>
+                  </div>
                   <CheckboxField
                     label="Teostatud tehniline kontroll"
                     checked={checktechboxes.technicalInspection}
@@ -1555,7 +1614,7 @@ export default function AddsPageMobile() {
                           value={formData.stereo}
                           onChange={(e) => handleInputChange("stereo", e.target.value)}
                           disabled={!checkboxes['stereo' as keyof typeof checkboxes]}
-                          className="mx-5 flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="w-6 mx-5 flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                       )}
                     </div>
@@ -1613,7 +1672,7 @@ export default function AddsPageMobile() {
                   <ReactFlagsSelect
                     selected={formData.country}
                     onSelect={(value) => handleInputChange("country", value)}
-                    placeholder="Valige riigid"
+                    placeholder="Vali riik"
                     searchable={true}
                     className="w-full"
                   />
@@ -1741,7 +1800,7 @@ export default function AddsPageMobile() {
                       address: "",
                       stereo: "",
                       website: "",
-
+                      inspectionValidityPeriod: "",
                       language: [],
                       country: "",
                     });

@@ -323,7 +323,12 @@ export const CarListingSection = ({
     { id: "co2", label: "CO2 (100km)", minKey: "co2_min", maxKey: "co2_max" },
   ];
 
-  const [selectedColor, setSelectedColor] = useState<string | null>(filters.color || null);
+  const [selectedColor, setSelectedColor] = useState<string | null>(filters.carColor || null);
+
+  // Sync selectedColor with filters.carColor
+  useEffect(() => {
+    setSelectedColor(filters.carColor || null);
+  }, [filters.carColor]);
 
   // Helper function to update filters
   const updateFilter = (key: keyof CarFilters, value: any) => {
@@ -850,7 +855,7 @@ export const CarListingSection = ({
                             checked={selectedColor === color.id}
                             onChange={() => {
                               setSelectedColor(color.id);
-                              updateFilter('color', color.id);
+                              updateFilter('carColor', color.id);
                             }}
                             className="sr-only"
                           />

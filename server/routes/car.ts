@@ -89,6 +89,7 @@ export interface Car {
   carColor?: string;
   carColorType?: string;
   vehicleType?: string;
+  inspectionValidityPeriod?: string;
 }
 
 export interface CarFilters {
@@ -120,6 +121,7 @@ export interface CarFilters {
   fuel_type?: string[];
   transmission?: string[];
   color?: string;
+  carColor?: string;
   country?: string;
   registered_country?: string;
   imported_from?: string;
@@ -403,6 +405,7 @@ router.get('/public/filtered', async (req, res) => {
       fuel_type,
       transmission,
       color,
+      carColor,
       country,
       registered_country,
       imported_from,
@@ -573,6 +576,11 @@ router.get('/public/filtered', async (req, res) => {
     if (color) {
       query += ' AND cars.color LIKE ?';
       params.push(`%${color}%`);
+    }
+
+    if (carColor) {
+      query += ' AND cars.carColor LIKE ?';
+      params.push(`%${carColor}%`);
     }
 
     if (country) {

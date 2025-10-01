@@ -9,7 +9,7 @@ import FormSection, {
 import ReactFlagsSelect from "react-flags-select";
 import LanguageSelect from '@/components/LanguageSelect';
 import Select from "react-select";
-import countryList from "react-select-country-list"; 
+import countryList from "react-select-country-list";
 import MultiLanguageSelect from '@/components/MultiLanguageSelect';
 import MultiCountrySelect from '@/components/MultiCountrySelect';
 import axios from "axios";
@@ -147,6 +147,50 @@ const salonColorOptions = [
   { value: "muu", label: "Muu" },
 ];
 
+const inspectionValidityOptions = [
+  { value: "", label: "otsi" },
+  { value: "09.2025", label: "09.2025" },
+  { value: "10.2025", label: "10.2025" },
+  { value: "11.2025", label: "11.2025" },
+  { value: "12.2025", label: "12.2025" },
+  { value: "01.2026", label: "01.2026" },
+  { value: "02.2026", label: "02.2026" },
+  { value: "03.2026", label: "03.2026" },
+  { value: "04.2026", label: "04.2026" },
+  { value: "05.2026", label: "05.2026" },
+  { value: "06.2026", label: "06.2026" },
+  { value: "07.2026", label: "07.2026" },
+  { value: "08.2026", label: "08.2026" },
+  { value: "09.2026", label: "09.2026" },
+  { value: "10.2026", label: "10.2026" },
+  { value: "11.2026", label: "11.2026" },
+  { value: "12.2026", label: "12.2026" },
+  { value: "01.2027", label: "01.2027" },
+  { value: "02.2027", label: "02.2027" },
+  { value: "03.2027", label: "03.2027" },
+  { value: "04.2027", label: "04.2027" },
+  { value: "05.2027", label: "05.2027" },
+  { value: "06.2027", label: "06.2027" },
+  { value: "07.2027", label: "07.2027" },
+  { value: "08.2027", label: "08.2027" },
+  { value: "09.2027", label: "09.2027" },
+  { value: "10.2027", label: "10.2027" },
+  { value: "11.2027", label: "11.2027" },
+  { value: "12.2027", label: "12.2027" },
+  { value: "01.2028", label: "01.2028" },
+  { value: "02.2028", label: "02.2028" },
+  { value: "03.2028", label: "03.2028" },
+  { value: "04.2028", label: "04.2028" },
+  { value: "05.2028", label: "05.2028" },
+  { value: "06.2028", label: "06.2028" },
+  { value: "07.2028", label: "07.2028" },
+  { value: "08.2028", label: "08.2028" },
+  { value: "09.2028", label: "09.2028" },
+  { value: "10.2028", label: "10.2028" },
+  { value: "11.2028", label: "11.2028" },
+  { value: "12.2028", label: "12.2028" },
+];
+
 export default function AddsPage() {
   const options = useMemo(() => countryList().getData(), []);
   const { user } = useAuth();
@@ -189,7 +233,8 @@ export default function AddsPage() {
     stereo: "",
     website: "",
     language: [],
-    country: ""
+    country: "",
+    inspectionValidityPeriod: ""
   });
 
   const [checktechboxes, setCheckTechboxes] = useState({
@@ -197,6 +242,7 @@ export default function AddsPage() {
     technicalMaintenance: false,
     serviceBook: false,
     hideVin: false,
+    inspectionValid: false,
   });
 
   const [checkboxes, setCheckboxes] = useState({
@@ -463,7 +509,7 @@ export default function AddsPage() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setModels(res.data);
-    } catch(e) {
+    } catch (e) {
       console.error(e);
     } finally {
       setModelLoading(false);
@@ -683,7 +729,7 @@ export default function AddsPage() {
         return obj;
       });
     }
-    
+
     // Load language array if it exists
     if (car.language) {
       const languageArray = Array.isArray(car.language) ? car.language : car.language.split(',');
@@ -780,60 +826,7 @@ export default function AddsPage() {
           {/* Vehicle Details */}
           <FormSection title="Mudelidetailid">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <FormField
-                label="Sõiduki seisukord"
-                placeholder="Kasutatud, avariiline ..."
-                value={formData.technicalData}
-                isSelect
-                onChange={(value) => handleInputChange("technicalData", value)}
-                options={[
-                  {
-                    value: "",
-                    label: "Vali",
-                  },
-                  {
-                    value: "uus",
-                    label: "Uus",
-                  },
-                  {
-                    value: "kasutatud",
-                    label: "Kasutatud",
-                  },
-                  {
-                    value: "avariiline",
-                    label: "Avariiline",
-                  },
-                ]}
-              />
-              <FormField
-                label="Omanike arv"
-                placeholder="1"
-                isSelect
-                value={formData.ownerCount}
-                onChange={(value) => handleInputChange("ownerCount", value)}
-                options={[
-                  {
-                    value: "",
-                    label: "Vali",
-                  },
-                  {
-                    value: "1",
-                    label: "1",
-                  },
-                  {
-                    value: "2",
-                    label: "2",
-                  },
-                  {
-                    value: "3",
-                    label: "3",
-                  },
-                  {
-                    value: "4+",
-                    label: "4+",
-                  },
-                ]}
-              />
+
               <FormField
                 label="Valige sõiduki liik"
                 placeholder="Vali sõiduki liik"
@@ -911,6 +904,7 @@ export default function AddsPage() {
                   },
                 ]}
               />
+
               <FormField
                 label="Keretüüp"
                 placeholder="Keretüüp"
@@ -979,6 +973,253 @@ export default function AddsPage() {
                 ]}
                 className={formData.brand_id}
                 disabled={modelLoading}
+              />
+
+              <FormField
+                label="Muu mudel või täpsustus"
+                placeholder="näide: Long 4Matic"
+                value={formData.modelDetail}
+                onChange={(value) => handleInputChange("modelDetail", value)}
+              />
+              <FormField
+                label="Läbisõit"
+                placeholder="Läbisõit"
+                value={formData.mileage}
+                onChange={(value) => handleInputChange("mileage", value)}
+              />
+              <FormField
+                label="Esmane registreerimine"
+                placeholder="Aasta"
+                isSelect
+                value={formData.year_id}
+                onChange={(value) => handleInputChange("year_id", value)}
+                options={[
+                  { value: "", label: "Aasta" },
+                  ...years.map((y) => ({ value: y.id, label: y.value }))
+                ]}
+              />
+              <FormField
+                label=""
+                className="space-y-3 mt-7"
+                placeholder="Kuu"
+                isSelect
+                value={formData.month}
+                onChange={(value) => handleInputChange("month", value)}
+                options={[
+                  { value: "", label: "Kuu" },
+                  { value: "1", label: "1" },
+                  { value: "2", label: "2" },
+                  { value: "3", label: "3" },
+                  { value: "4", label: "4" },
+                  { value: "5", label: "5" },
+                  { value: "6", label: "6" },
+                  { value: "7", label: "7" },
+                  { value: "8", label: "8" },
+                  { value: "9", label: "9" },
+                  { value: "10", label: "10" },
+                  { value: "11", label: "11" },
+                  { value: "12", label: "12" },
+                ]}
+              />
+
+
+              <FormField
+                label="Omanike arv"
+                placeholder="1"
+                isSelect
+                value={formData.ownerCount}
+                onChange={(value) => handleInputChange("ownerCount", value)}
+                options={[
+                  {
+                    value: "",
+                    label: "Vali",
+                  },
+                  {
+                    value: "1",
+                    label: "1",
+                  },
+                  {
+                    value: "2",
+                    label: "2",
+                  },
+                  {
+                    value: "3",
+                    label: "3",
+                  },
+                  {
+                    value: "4+",
+                    label: "4+",
+                  },
+                ]}
+              />
+              <FormField
+                label="Sõiduki seisukord"
+                placeholder="Kasutatud, avariiline ..."
+                value={formData.technicalData}
+                isSelect
+                onChange={(value) => handleInputChange("technicalData", value)}
+                options={[
+                  {
+                    value: "",
+                    label: "Vali",
+                  },
+                  {
+                    value: "uus",
+                    label: "Uus",
+                  },
+                  {
+                    value: "kasutatud",
+                    label: "Kasutatud",
+                  },
+                  {
+                    value: "avariiline",
+                    label: "Avariiline",
+                  },
+                ]}
+              />
+            </div>
+
+          </FormSection>
+
+          {/* Technical Details */}
+          <FormSection title="Tehnilised detailandmed">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <FormField
+                label="Kütuse tüüp"
+                placeholder="Vali Kütuse tüüp"
+                isSelect
+                value={formData.fuelType}
+                onChange={(value) => handleInputChange("fuelType", value)}
+                options={[
+                  {
+                    value: "",
+                    label: "Vali",
+                  },
+                  {
+                    value: "bensiin",
+                    label: "Bensiin",
+                  },
+                  {
+                    value: "diisel",
+                    label: "Diisel",
+                  },
+                  {
+                    value: "elekter",
+                    label: "Elekter",
+                  },
+                  {
+                    value: "bensiin + gaas (LPG/Vedelgaas)",
+                    label: "Bensiin + Gaas (LPG/Vedelgaas)",
+                  },
+                  {
+                    value: "bensiin + gaas (LNG/veeldatud maagaas)",
+                    label: "Bensiin + Gaas (LNG/Veeldatud maagaas)",
+                  },
+                  {
+                    value: "bensiin + gaas (CNG/surugaas)",
+                    label: "Bensiin + Gaas (CNG/Surugaas)",
+                  },
+                  {
+                    value: "diisel + gaas (LNG/veeldatud maagaas)",
+                    label: "Diisel + Gaas (LNG/Veeldatud maagaas)",
+                  },
+                  {
+                    value: "gaas (LPG/vedelgaas)",
+                    label: "Gaas (LPG/Vedelgaas)",
+                  },
+                  {
+                    value: "gaas (CNG/surugaas)",
+                    label: "Gaas (CNG/Surugaas)",
+                  },
+                  {
+                    value: "gaas (LNG/veeldatud maagaas)",
+                    label: "Gaas (LNG/Veeldatud maagaas)",
+                  },
+                  {
+                    value: "hübriid (ensiin / elekter)",
+                    label: "Hübriid (Bensiin / Elekter)",
+                  },
+                  {
+                    value: "hübriid (diisel / elekter)",
+                    label: "Hübriid (Diisel / Elekter)",
+                  },
+                  {
+                    value: "pistikhübriid (bensiin / elekter)",
+                    label: "Pistikhübriid (Bensiin / Elekter)",
+                  },
+                  {
+                    value: "pistikhübriid (diisel / elekter)",
+                    label: "Pistikhübriid (Diisel / Elekter)",
+                  },
+                  {
+                    value: "vesinik",
+                    label: "Vesinik",
+                  },
+                ]}
+              />
+              <div>
+                <FormField
+                  label="Käigukasti tüüp"
+                  placeholder="Automaat"
+                  isSelect
+                  value={formData.transmission}
+                  onChange={(value) => handleInputChange("transmission", value)}
+                  options={[
+                    {
+                      value: "",
+                      label: "Vali",
+                    },
+                    {
+                      value: "manuaal",
+                      label: "Manuaal",
+                    },
+                    {
+                      value: "automaat",
+                      label: "Automaat",
+                    },
+                    {
+                      value: "pool automaat",
+                      label: "Pool automaat",
+                    },
+                  ]}
+                />
+              </div>
+              <FormField
+                label="Veoskeem:"
+                placeholder="Vali veoskeem"
+                isSelect
+                value={formData.drive_type_id}
+                onChange={(value) => handleInputChange("drive_type_id", value)}
+                options={[
+                  {
+                    value: "",
+                    label: "Vali",
+                  },
+                  {
+                    value: "13",
+                    label: "Esivedu",
+                  },
+                  {
+                    value: "14",
+                    label: "Tagavedu",
+                  },
+                  {
+                    value: "15",
+                    label: "Nelikvedu",
+                  },
+                ]}
+              />
+              <FormField
+                label="Võimsus (Kw)"
+                placeholder="0"
+                value={formData.power}
+                onChange={(value) => handleInputChange("power", value)}
+              />
+              <FormField
+                label="Töömaht (cm³)"
+                placeholder="0"
+                value={formData.displacement}
+                onChange={(value) => handleInputChange("displacement", value)}
               />
               <div className="space-y-3">
                 <FormField
@@ -1092,199 +1333,6 @@ export default function AddsPage() {
                 )}
               </div>
               <FormField
-                label="Muu mudel või täpsustus"
-                placeholder="näide: Long 4Matic"
-                value={formData.modelDetail}
-                onChange={(value) => handleInputChange("modelDetail", value)}
-              />
-              <FormField
-                label="Esmane registreerimine"
-                placeholder="Aasta"
-                isSelect
-                value={formData.year_id}
-                onChange={(value) => handleInputChange("year_id", value)}
-                options={[
-                  { value: "", label: "Aasta" },
-                  ...years.map((y) => ({ value: y.id, label: y.value }))
-                ]}
-              />
-              <FormField
-                label=""
-                className="space-y-3 mt-7"
-                placeholder="Kuu"
-                isSelect
-                value={formData.month}
-                onChange={(value) => handleInputChange("month", value)}
-                options={[
-                  { value: "", label: "Kuu" },
-                  { value: "1", label: "1" },
-                  { value: "2", label: "2" },
-                  { value: "3", label: "3" },
-                  { value: "4", label: "4" },
-                  { value: "5", label: "5" },
-                  { value: "6", label: "6" },
-                  { value: "7", label: "7" },
-                  { value: "8", label: "8" },
-                  { value: "9", label: "9" },
-                  { value: "10", label: "10" },
-                  { value: "11", label: "11" },
-                  { value: "12", label: "12" },
-                ]}
-              />
-              <FormField
-                label="Läbisõit"
-                placeholder="Läbisõit"
-                value={formData.mileage}
-                onChange={(value) => handleInputChange("mileage", value)}
-              />
-              <FormField
-                label="Võimsus (Kw)"
-                placeholder="0"
-                value={formData.power}
-                onChange={(value) => handleInputChange("power", value)}
-              />
-            </div>
-
-          </FormSection>
-
-          {/* Technical Details */}
-          <FormSection title="Tehnilised detailandmed">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <FormField
-                label="Kütuse tüüp"
-                placeholder="Vali Kütuse tüüp"
-                isSelect
-                value={formData.fuelType}
-                onChange={(value) => handleInputChange("fuelType", value)}
-                options={[
-                  {
-                    value: "",
-                    label: "Vali",
-                  },
-                  {
-                    value: "bensiin",
-                    label: "Bensiin",
-                  },
-                  {
-                    value: "diisel",
-                    label: "Diisel",
-                  },
-                  {
-                    value: "elekter",
-                    label: "Elekter",
-                  },
-                  {
-                    value: "bensiin + gaas (LPG/Vedelgaas)",
-                    label: "Bensiin + Gaas (LPG/Vedelgaas)",
-                  },
-                  {
-                    value: "bensiin + gaas (LNG/veeldatud maagaas)",
-                    label: "Bensiin + Gaas (LNG/Veeldatud maagaas)",
-                  },
-                  {
-                    value: "bensiin + gaas (CNG/surugaas)",
-                    label: "Bensiin + Gaas (CNG/Surugaas)",
-                  },
-                  {
-                    value: "diisel + gaas (LNG/veeldatud maagaas)",
-                    label: "Diisel + Gaas (LNG/Veeldatud maagaas)",
-                  },
-                  {
-                    value: "gaas (LPG/vedelgaas)",
-                    label: "Gaas (LPG/Vedelgaas)",
-                  },
-                  {
-                    value: "gaas (CNG/surugaas)",
-                    label: "Gaas (CNG/Surugaas)",
-                  },
-                  {
-                    value: "gaas (LNG/veeldatud maagaas)",
-                    label: "Gaas (LNG/Veeldatud maagaas)",
-                  },
-                  {
-                    value: "hübriid (ensiin / elekter)",
-                    label: "Hübriid (Bensiin / Elekter)",
-                  },
-                  {
-                    value: "hübriid (diisel / elekter)",
-                    label: "Hübriid (Diisel / Elekter)",
-                  },
-                  {
-                    value: "pistikhübriid (bensiin / elekter)",
-                    label: "Pistikhübriid (Bensiin / Elekter)",
-                  },
-                  {
-                    value: "pistikhübriid (diisel / elekter)",
-                    label: "Pistikhübriid (Diisel / Elekter)",
-                  },
-                  {
-                    value: "vesinik",
-                    label: "Vesinik",
-                  },
-                ]}
-              />
-              <div>
-                <FormField
-                  label="Käigukasti tüüp"
-                  placeholder="Automaat"
-                  isSelect
-                  value={formData.transmission}
-                  onChange={(value) => handleInputChange("transmission", value)}
-                  options={[
-                    {
-                      value: "",
-                      label: "Vali",
-                    },
-                    {
-                      value: "manuaal",
-                      label: "Manuaal",
-                    },
-                    {
-                      value: "automaat",
-                      label: "Automaat",
-                    },
-                    {
-                      value: "pool automaat",
-                      label: "Pool automaat",
-                    },
-                  ]}
-                />
-              </div>
-
-
-
-              <FormField
-                label="Veoskeem:"
-                placeholder="Vali veoskeem"
-                isSelect
-                value={formData.drive_type_id}
-                onChange={(value) => handleInputChange("drive_type_id", value)}
-                options={[
-                  {
-                    value: "",
-                    label: "Vali",
-                  },
-                  {
-                    value: "13",
-                    label: "Esivedu",
-                  },
-                  {
-                    value: "14",
-                    label: "Tagavedu",
-                  },
-                  {
-                    value: "15",
-                    label: "Nelikvedu",
-                  },
-                ]}
-              />
-              <FormField
-                label="Töömaht (cm³)"
-                placeholder="0"
-                value={formData.displacement}
-                onChange={(value) => handleInputChange("displacement", value)}
-              />
-              <FormField
                 label="Sõiduki värv"
                 placeholder="Vali sõiduki värv"
                 isSelect
@@ -1357,12 +1405,7 @@ export default function AddsPage() {
                 value={formData.discountPrice}
                 onChange={(value) => handleInputChange("discountPrice", value)}
               />
-              <FormField
-                label="Garantii"
-                placeholder="Kehtib kuni"
-                value={formData.warranty}
-                onChange={(value) => handleInputChange("warranty", value)}
-              />
+
               <FormField
                 label="Käibemaksu tagastatavus"
                 placeholder="Yes"
@@ -1395,6 +1438,12 @@ export default function AddsPage() {
                 suffix="%"
                 step={1}
               />
+              <FormField
+                label="Garantii"
+                placeholder="Kehtib kuni"
+                value={formData.warranty}
+                onChange={(value) => handleInputChange("warranty", value)}
+              />
               <div>
                 <FormField
                   label="VIN-kood"
@@ -1403,8 +1452,6 @@ export default function AddsPage() {
                   onChange={(value) => handleInputChange("vinCode", value)}
                 />
                 <div className="mt-6">
-
-
                   <FormField
                     label="Sõiduki number:"
                     placeholder="AA00000"
@@ -1412,8 +1459,30 @@ export default function AddsPage() {
                     onChange={(value) => handleInputChange("plateNumber", value)}
                   />
                 </div>
+
               </div>
-              <div className="ml-2 space-y-1 pt-11">
+              <div className="ml-2 space-y-3 pt-1">
+                <div className="flex items-center gap-2">
+                  <CheckboxField
+                    label="Ülevaatus kehtib"
+                    checked={checktechboxes.inspectionValid}
+                    onChange={(checked) =>
+                      handleCheckTechboxChange("inspectionValid", checked)
+                    }
+                    className="mt-4"
+                  />
+                  <div className="flex-1 items-center ml-7">
+                    <FormField
+                      label=""
+                      placeholder="otsi"
+                      isSelect
+                      value={formData.inspectionValidityPeriod}
+                      onChange={(value) => handleInputChange("inspectionValidityPeriod", value)}
+                      options={inspectionValidityOptions}
+                      disabled={!checktechboxes.inspectionValid}
+                    />
+                  </div>
+                </div>
                 <CheckboxField
                   label="Teostatud tehniline kontroll"
                   checked={checktechboxes.technicalInspection}
@@ -1529,7 +1598,7 @@ export default function AddsPage() {
                   <ReactFlagsSelect
                     selected={formData.country}
                     onSelect={(value) => handleInputChange("country", value)}
-                    placeholder="Valige riigid"
+                    placeholder="Vali riik"
                     searchable={true}
                     className="w-full"
                   />
@@ -1578,29 +1647,29 @@ export default function AddsPage() {
                 value={formData.language}
                 onChange={(value) => handleInputChange("language", value)}
               /> */}
-              
+
             </div>
             <div className="flex gap-4">
-                <div className="w-full mt-7">
-                  <label className="block text-motorsoline-text text-lg font-medium mb-3">
-                    Suhtluskeel
-                  </label>
-                  {/* <ReactLanguageSelect
+              <div className="w-full mt-7">
+                <label className="block text-motorsoline-text text-lg font-medium mb-3">
+                  Suhtluskeel
+                </label>
+                {/* <ReactLanguageSelect
                     className="w-full rounded-lg bg-white text-lg"
                     selected={formData.language}
                     onSelect={(value) => handleInputChange("language", value)}
                     placeholder="Valige keel"
                     searchable={true}
                   /> */}
-                  <MultiLanguageSelect
-                    selected={formData.language}
-                    onSelect={handleLanguageChange}
-                    placeholder="Valige keeled"
-                    searchable={true}
-                    className="w-[585px]"
-                  />
-                </div>
+                <MultiLanguageSelect
+                  selected={formData.language}
+                  onSelect={handleLanguageChange}
+                  placeholder="Valige keeled"
+                  searchable={true}
+                  className="w-[585px]"
+                />
               </div>
+            </div>
 
             <div className="mt-6">
               <button className="flex items-center px-8 py-4 border border-brand-primary rounded-lg text-brand-primary hover:bg-motorsoline-primary hover:text-white transition-colors">
@@ -1624,6 +1693,7 @@ export default function AddsPage() {
               <button
                 type="submit"
                 className="bg-brand-primary text-white px-4 py-2 rounded font-semibold"
+                disabled={modelLoading}
               >
                 {editingCar ? "Salvesta muudatused" : "Lisa kuulutus"}
               </button>
@@ -1674,6 +1744,7 @@ export default function AddsPage() {
                       website: "",
                       language: [],
                       country: "",
+                      inspectionValidityPeriod: "",
                     });
                     setCarImages(Array(40).fill(null));
                     setShowMorePhotos(false);
