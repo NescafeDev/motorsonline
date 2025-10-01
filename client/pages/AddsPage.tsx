@@ -306,6 +306,7 @@ export default function AddsPage() {
   const [cars, setCars] = useState<any[]>([]);
   const [editingCar, setEditingCar] = useState<any | null>(null);
   const [modelLoading, setModelLoading] = useState<boolean>(false);
+  const [carLoading, setCarLoading] = useState<boolean>(false);
   const [carImages, setCarImages] = useState<(File | null)[]>(
     Array(40).fill(null),
   );
@@ -649,6 +650,7 @@ export default function AddsPage() {
     const token = localStorage.getItem("token");
 
     try {
+      setCarLoading(true);
       if (editingCar) {
         console.log('Editing Car:', editingCar);
         await axios.put(`/api/cars/${editingCar.id}`, formDataObj, {
@@ -675,6 +677,8 @@ export default function AddsPage() {
       } else {
         alert('Viga kuulutuse salvestamisel. Palun proovige uuesti.');
       }
+    } finally {
+      setCarLoading(false);
     }
   };
 
@@ -1693,7 +1697,7 @@ export default function AddsPage() {
               <button
                 type="submit"
                 className="bg-brand-primary text-white px-4 py-2 rounded font-semibold"
-                disabled={modelLoading}
+                disabled={carLoading}
               >
                 {editingCar ? "Salvesta muudatused" : "Lisa kuulutus"}
               </button>
