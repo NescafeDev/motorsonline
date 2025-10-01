@@ -449,7 +449,7 @@ export default function CarPage() {
                                   <span className="font-medium text-[#747474] text-[14px] leading-[normal] [font-family:'Poppins',Helvetica]">
                                     € {car.price.toLocaleString()}
                                   </span>
-                                  <Separator className="absolute w-[68px] top-[12px] -left-1 bg-gray-400" />
+                                  <Separator className="absolute w-[40px] top-[12px] -left-1 bg-gray-400" />
                                 </div>
                                 {
                                   discountPercentage != 0 && (

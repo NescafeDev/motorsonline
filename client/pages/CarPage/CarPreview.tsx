@@ -41,82 +41,25 @@ export default function CarPreview({ formData, brands, models, years, driveTypes
   useEffect(() => {
     function handleScroll() {
       if (!sidebarRef.current || !gridRef.current) return;
-      
-      // Check if we're in a modal by looking for modal containers
-      const modalDialog = gridRef.current.closest('[role="dialog"]') || 
-                         gridRef.current.closest('[data-radix-dialog-content]');
-      
-      // Find the actual scrollable container within the modal
-      const scrollableContainer = modalDialog ? 
-        modalDialog.querySelector('.overflow-y-auto') || 
-        modalDialog.querySelector('[data-radix-dialog-content]') ||
-        modalDialog : 
-        null;
-      
       const gridRect = gridRef.current.getBoundingClientRect();
       const sidebarHeight = sidebarRef.current.offsetHeight;
-      
-      let scrollTop = 0;
-      let gridTop = 0;
-      let gridBottom = 0;
-      
-      if (scrollableContainer) {
-        // We're in a modal - use the modal container's scroll
-        scrollTop = scrollableContainer.scrollTop;
-        gridTop = gridRect.top - scrollableContainer.getBoundingClientRect().top;
-        gridBottom = gridRect.bottom - scrollableContainer.getBoundingClientRect().top;
-      } else {
-        // We're on the main page - use window scroll
-        scrollTop = window.scrollY;
-        gridTop = gridRect.top + window.scrollY;
-        gridBottom = gridRect.bottom + window.scrollY;
-      }
-      
+      const gridTop = gridRect.top + window.scrollY;
+      const gridBottom = gridRect.bottom + window.scrollY;
       const maxTop = gridBottom - sidebarHeight - gridTop;
-      
-      // Calculate scroll progress within the grid with speed multiplier
-      const scrollProgress = (scrollTop - gridTop) * 2.5; // 150% faster movement
-      let newTop = scrollProgress + offset;
-      
-      // Constrain the position
+
+      let newTop = window.scrollY + offset - gridTop;
       if (newTop < 0) newTop = 0;
       if (newTop > maxTop) newTop = maxTop;
-      
       setSidebarTop(newTop);
     }
 
-    // Find the scrollable container (modal or window)
-    const modalDialog = gridRef.current?.closest('[role="dialog"]') || 
-                       gridRef.current?.closest('[data-radix-dialog-content]');
-    
-    const scrollContainer = modalDialog ? 
-      modalDialog.querySelector('.overflow-y-auto') || 
-      modalDialog.querySelector('[data-radix-dialog-content]') ||
-      modalDialog : 
-      window;
-
-    // Add delay to ensure DOM is ready
-    const timeoutId = setTimeout(() => {
-      handleScroll();
-    }, 100);
-
-    if (scrollContainer === window) {
-      window.addEventListener("scroll", handleScroll, { passive: true });
-      window.addEventListener("resize", handleScroll);
-    } else {
-      scrollContainer.addEventListener("scroll", handleScroll, { passive: true });
-      window.addEventListener("resize", handleScroll);
-    }
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
+    handleScroll();
 
     return () => {
-      clearTimeout(timeoutId);
-      if (scrollContainer === window) {
-        window.removeEventListener("scroll", handleScroll);
-        window.removeEventListener("resize", handleScroll);
-      } else {
-        scrollContainer.removeEventListener("scroll", handleScroll);
-        window.removeEventListener("resize", handleScroll);
-      }
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
     };
   }, []);
 
@@ -265,7 +208,7 @@ export default function CarPreview({ formData, brands, models, years, driveTypes
                     Tehnilised andmed
                   </h2>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     {technicalSpecs.map((spec, index) => (
                       <div
                         key={index}

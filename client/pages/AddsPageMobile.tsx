@@ -15,6 +15,16 @@ import countryList from "react-select-country-list";
 import MultiLanguageSelect from '@/components/MultiLanguageSelect';
 import MultiCountrySelect from '@/components/MultiCountrySelect';
 import { useAuth } from "@/contexts/AuthContext";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import CarPreview from "./CarPage/CarPreview";
 const ChevronDownIcon = ({ className = "" }: { className?: string }) => (
   <svg
     width="16"
@@ -197,6 +207,7 @@ export default function AddsPageMobile() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [editingCar, setEditingCar] = useState<any | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const options = useMemo(() => countryList().getData(), []);
   const [formData, setFormData] = useState({
     brand_id: "",
@@ -730,6 +741,9 @@ export default function AddsPageMobile() {
       }
 
       console.log('Car saved successfully');
+
+      // Close the modal
+      setIsModalOpen(false);
 
       // Reset form and redirect
       setEditingCar(null);
@@ -1821,10 +1835,9 @@ export default function AddsPageMobile() {
                   <button
                     type="button"
                     className="bg-brand-primary text-white px-4 py-2 rounded font-semibold hover:bg-blue-600 transition-colors"
-                    onClick={handleCarSubmit}
-                    disabled={isSubmitting}
+                    onClick={() => setIsModalOpen(true)}
                   >
-                    {isSubmitting ? "Salvestatakse..." : "Lisa kuulutus"}
+                    Eelvaade
                   </button>
                 )}
               </div>
@@ -1832,6 +1845,55 @@ export default function AddsPageMobile() {
           </FormSection>
         </div>
       </main>
+
+      {/* Modal */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="max-w-[100vw] max-h-[100vh] w-screen h-screen p-0 m-0 rounded-none flex flex-col">
+          <DialogHeader className="px-6 py-4 border-b flex-shrink-0">
+            <DialogTitle>Eelvaade</DialogTitle>
+            <DialogDescription>
+              Auto eelvaade - näete, kuidas teie kuulutus välja näeb
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex-1 overflow-y-auto overflow-x-hidden">
+            {!editingCar ? (
+              <CarPreview 
+                formData={formData}
+                brands={brands}
+                models={models}
+                years={years}
+                driveTypes={driveTypes}
+                carImages={carImages}
+              />
+            ) : (
+              <div className="p-6 text-center">
+                <p className="text-gray-500">
+                  Salvestage auto andmed enne eelvaate vaatamist
+                </p>
+              </div>
+            )}
+          </div>
+          <DialogFooter className="px-6 py-4 border-t flex-shrink-0">
+            <div className="flex gap-3 justify-end">
+              <button
+                type="button"
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded font-semibold hover:bg-gray-400 transition-colors"
+                onClick={() => setIsModalOpen(false)}
+              >
+                Sulge
+              </button>
+              <button
+                type="button"
+                className="bg-brand-primary text-white px-4 py-2 rounded font-semibold hover:bg-blue-600 transition-colors"
+                disabled={isSubmitting}
+                onClick={handleCarSubmit}
+              >
+                {editingCar ? "Salvesta muudatused" : "Lisa kuulutus"}
+              </button>
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </div>
