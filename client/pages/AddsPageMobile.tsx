@@ -24,7 +24,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import CarPreview from "./CarPage/CarPreview";
+import CarMobilePreview from "./CarPage/CarMobilePreview";
 const ChevronDownIcon = ({ className = "" }: { className?: string }) => (
   <svg
     width="16"
@@ -208,7 +208,9 @@ export default function AddsPageMobile() {
   const [isLoading, setIsLoading] = useState(true);
   const [editingCar, setEditingCar] = useState<any | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [carLoading, setCarLoading] = useState<boolean>(false);
   const options = useMemo(() => countryList().getData(), []);
+  const [cars, setCars] = useState<any[]>([]);
   const [formData, setFormData] = useState({
     brand_id: "",
     model_id: "",
@@ -333,7 +335,8 @@ export default function AddsPageMobile() {
       await Promise.all([
         fetchBrands(),
         fetchYears(),
-        fetchDriveTypes()
+        fetchDriveTypes(),
+        fetchCars()
       ]);
 
       // If we have a carId in the URL, fetch that car for editing
@@ -505,6 +508,13 @@ export default function AddsPageMobile() {
       setModelLoading(false);
     }
   };
+  const fetchCars = async () => {
+    const token = localStorage.getItem("token");
+    const res = await axios.get("/api/cars", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setCars(res.data);
+  };
 
   const fetchCarById = async (id: string) => {
     const token = localStorage.getItem("token");
@@ -671,197 +681,82 @@ export default function AddsPageMobile() {
 
   const handleCarSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitError(null);
+
+    // Validate required fields before submission
+    if (!formData.brand_id || formData.brand_id === '') {
+      alert('Palun valige mark');
+      return;
+    }
+    if (!formData.model_id || formData.model_id === '') {
+      alert('Palun valige mudel');
+      return;
+    }
+    if (!formData.year_id || formData.year_id === '') {
+      alert('Palun valige aasta');
+      return;
+    }
+    if (!formData.drive_type_id || formData.drive_type_id === '') {
+      alert('Palun valige veoskeem');
+      return;
+    }
+
+    const form = { ...formData };
+    // Map checkboxes to form fields if needed
+    const formDataObj = new FormData();
+    Object.entries(form).forEach(([key, value]) => {
+      if ((key === 'language' || key === 'country') && Array.isArray(value)) {
+        formDataObj.append(key, value.join(','));
+      } else {
+        formDataObj.append(key, value as string);
+      }
+    });
+    carImages.forEach((file, idx) => {
+      if (file) formDataObj.append(`image_${idx + 1}`, file);
+    });
+
+    const techCheckSelected = Object.entries(checktechboxes)
+      .filter(([k, v]) => v)
+      .map(([k]) => k);
+    const accessoriesSelected = Object.entries(checkboxes)
+      .filter(([k, v]) => v)
+      .map(([k]) => k);
+    formDataObj.append('tech_check', techCheckSelected.join(','));
+    formDataObj.append('accessories', accessoriesSelected.join(','));
+    const token = localStorage.getItem("token");
 
     try {
-      // Validate required fields
-      const requiredFields = ['brand_id', 'model_id', 'year_id', 'price', 'phone', 'email'];
-      const missingFields = requiredFields.filter(field => !formData[field as keyof typeof formData]);
-
-      if (missingFields.length > 0) {
-        throw new Error(`Please fill in all required fields: ${missingFields.join(', ')}`);
-      }
-
-      // Check if at least one image is uploaded (only for new cars)
-      if (!editingCar && !carImages.some(img => img !== null)) {
-        throw new Error('Please upload at least one image');
-      }
-
-      // Prepare form data
-      const formDataObj = new FormData();
-
-      // Add form fields
-      Object.entries(formData).forEach(([key, value]) => {
-        if ((key === 'language' || key === 'country') && Array.isArray(value)) {
-          formDataObj.append(key, value.join(','));
-        } else if (value) {
-          formDataObj.append(key, value as string);
-        }
-      });
-
-      // Add images
-      carImages.forEach((file, idx) => {
-        if (file) formDataObj.append(`image_${idx + 1}`, file);
-      });
-
-      // Add checkboxes
-      const techCheckSelected = Object.entries(checktechboxes)
-        .filter(([k, v]) => v)
-        .map(([k]) => k);
-
-      const accessoriesSelected = Object.entries(checkboxes)
-        .filter(([k, v]) => v)
-        .map(([k]) => k);
-
-      formDataObj.append('tech_check', techCheckSelected.join(','));
-      formDataObj.append('accessories', accessoriesSelected.join(','));
-
-      // Get auth token
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error('Please log in to create a car listing');
-      }
-
-      // Submit to server
+      setCarLoading(true);
       if (editingCar) {
+        console.log('Editing Car:', editingCar);
         await axios.put(`/api/cars/${editingCar.id}`, formDataObj, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data'
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
       } else {
+        console.log('Form Data:', formDataObj);
         await axios.post("/api/cars", formDataObj, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data'
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
       }
-
-      console.log('Car saved successfully');
+      setEditingCar(null);
+      setCarImages(Array(40).fill(null));
+      setShowMorePhotos(false);
+      setStereoInput("");
+      fetchCars();
 
       // Close the modal
       setIsModalOpen(false);
 
-      // Reset form and redirect
-      setEditingCar(null);
-      setFormData({
-        brand_id: "",
-        model_id: "",
-        year_id: "",
-        drive_type_id: "",
-        category: "",
-        transmission: "",
-        fuelType: "",
-        plateNumber: "",
-        vehicleType: "",
-        bodyType: "",
-        month: "",
-        mileage: "",
-        power: "",
-        displacement: "",
-        technicalData: "",
-        ownerCount: "",
-        modelDetail: "",
-        price: "",
-        discountPrice: "",
-        warranty: "",
-        vatRefundable: "",
-        vatRate: "24",
-        accident: "",
-        vinCode: "",
-        carColor: "",
-        carColorType: "",
-        salonColor: "",
-        description: "",
-        equipment: "",
-        additionalInfo: "",
-        phone: "",
-        businessType: "",
-        socialNetwork: "",
-        email: "",
-        address: "",
-        stereo: "",
-        website: "",
-        language: [],
-        country: "",
-        inspectionValidityPeriod: "",
-      });
-      setCheckTechboxes({
-        technicalInspection: false,
-        technicalMaintenance: false,
-        serviceBook: false,
-        hideVin: false,
-        inspectionValid: false,
-      });
-      setCheckboxes({
-        kokkupõrgetEnnetavPidurisüsteem: false,
-        pimenurgaHoiatus: false,
-        sõidurajaHoidmiseAbisüsteem: false,
-        sõidurajavahetamiseAbisüsteem: false,
-        adaptiivnePüsikiirusehoidja: false,
-        liiklusmärkidetuvastusJakuvamine: false,
-        parkimisanduridEesJaTaga: false,
-        parkimiskaamera: false,
-        parkimiskaamera360: false,
-        kaugtuledeümberlülitamiseAssistent: false,
-        LEDesituled: false,
-        Xenonesituled: false,
-        Lasersituled: false,
-        elektriliseSoojendusegaEsiklaas: false,
-        kliimaseade: false,
-        salongiEelsoojendus: false,
-        mootoriEelsoojendus: false,
-        salongilisasoojendus: false,
-        istmesoojendused: false,
-        elektriliseltReguleeritavadIstmed: false,
-        ComfortIstmed: false,
-        sportistmed: false,
-        nahkpolster: false,
-        poolnahkpolster: false,
-        tagaistmeSeljatugiAllaklapitav: false,
-        eraldiKliimaseadeTagaistmetele: false,
-        võtmetavamine: false,
-        võtmetaKäivitus: false,
-        pakiruumiAvamineJaSulgeminelektriliselt: false,
-        soojendusegaRool: false,
-        ventileeritavadstmed: false,
-        massaažifunktsioonigaIstmed: false,
-        infoKuvamineEsiklaasile: false,
-        panoraamkatusKlaasist: false,
-        katuseluuk: false,
-        usteServosulgurid: false,
-        topeltklaasid: false,
-        rulookardinadUstel: false,
-        integreeritudVäravapult: false,
-        AppleCarPlay: false,
-        AndroidAuto: false,
-        stereo: false,
-        õhkvedrustus: false,
-        reguleeritavVedrustus: false,
-        RattaPööramine: false,
-        veokonks: false,
-        elektrilisedLiuguksed: false,
-        öiseNägemiseAssistent: false,
-        valgustuspakett: false,
-        suverehvid: false,
-        talverehvid: false,
-        valuveljed: false,
-      });
-      setCarImages(Array(40).fill(null));
-      setShowMorePhotos(false);
-      setStereoInput("");
-
-      // Navigate to user's listings
+      // Navigate to user's listings after successful add or edit
       navigate("/user");
-
     } catch (error: any) {
-      console.error('Error saving car:', error);
-      setSubmitError(error.response?.data?.message || error.message || 'An error occurred while saving the car listing');
+      console.error('Error submitting car:', error, editingCar);
+      if (error.response?.data?.message) {
+        alert(`Viga: ${error.response.data.message}`);
+      } else {
+        alert('Viga kuulutuse salvestamisel. Palun proovige uuesti.');
+      }
     } finally {
-      setIsSubmitting(false);
+      setCarLoading(false);
     }
   };
 
@@ -1771,9 +1666,9 @@ export default function AddsPageMobile() {
                       type="button"
                       className="bg-brand-primary text-white px-4 py-2 rounded font-semibold hover:bg-blue-600 transition-colors"
                       onClick={handleCarSubmit}
-                      disabled={isSubmitting}
+                      disabled={carLoading}
                     >
-                      {isSubmitting ? "Salvestatakse..." : "Salvesta muudatused"}
+                      {carLoading ? "Salvestatakse..." : "Salvesta muudatused"}
                     </button>
                     <button
                       type="button"
@@ -1802,7 +1697,7 @@ export default function AddsPageMobile() {
                           discountPrice: "",
                           warranty: "",
                           vatRefundable: "",
-                          vatRate: "24",
+                          vatRate: "",
                           accident: "",
                           vinCode: "",
                           carColor: "",
@@ -1818,9 +1713,9 @@ export default function AddsPageMobile() {
                           address: "",
                           stereo: "",
                           website: "",
-                          inspectionValidityPeriod: "",
                           language: [],
                           country: "",
+                          inspectionValidityPeriod: "",
                         });
                         setCarImages(Array(40).fill(null));
                         setShowMorePhotos(false);
@@ -1848,7 +1743,7 @@ export default function AddsPageMobile() {
 
       {/* Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="max-w-[100vw] max-h-[100vh] w-screen h-screen p-0 m-0 rounded-none flex flex-col">
+        <DialogContent className="max-w-[100vw] max-h-full w-screen h-screen p-0 m-0 rounded-none flex flex-col">
           <DialogHeader className="px-6 py-4 border-b flex-shrink-0">
             <DialogTitle>Eelvaade</DialogTitle>
             <DialogDescription>
@@ -1857,7 +1752,7 @@ export default function AddsPageMobile() {
           </DialogHeader>
           <div className="flex-1 overflow-y-auto overflow-x-hidden">
             {!editingCar ? (
-              <CarPreview 
+              <CarMobilePreview 
                 formData={formData}
                 brands={brands}
                 models={models}
@@ -1885,10 +1780,10 @@ export default function AddsPageMobile() {
               <button
                 type="button"
                 className="bg-brand-primary text-white px-4 py-2 rounded font-semibold hover:bg-blue-600 transition-colors"
-                disabled={isSubmitting}
+                disabled={carLoading}
                 onClick={handleCarSubmit}
               >
-                {editingCar ? "Salvesta muudatused" : "Lisa kuulutus"}
+                {carLoading ? "Salvestatakse..." : (editingCar ? "Salvesta muudatused" : "Lisa kuulutus")}
               </button>
             </div>
           </DialogFooter>

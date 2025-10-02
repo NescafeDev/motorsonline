@@ -1,3 +1,4 @@
+import { Edit , Trash2 } from "lucide-react";
 import React from "react";
 
 interface CarCardProps {
@@ -222,16 +223,19 @@ export const CarCard: React.FC<CarCardProps> = ({
       <div className="absolute right-[30px] top-[230px] flex items-center gap-[21px]">
         <button 
           onClick={onEdit}
-          className="flex h-[45px] px-[20px] py-[12px] justify-center items-center gap-[10px] rounded-[10px] border border-[#06D6A0]"
+          className="flex h-[45px] px-[20px] py-[12px] justify-center items-center gap-[10px] rounded-[10px] border border-[#06D6A0] text-[#06D6A0]"
         >
+          <Edit className="w-4 h-4" />
           <span className="text-[#06D6A0] text-center font-['Poppins'] text-[16px] font-normal leading-[150%]">
+          
             Redigeeri
           </span>
         </button>
         <button 
           onClick={onDelete}
-          className="flex h-[45px] px-[20px] py-[12px] justify-center items-center gap-[10px] rounded-[10px] border border-[#FF0000] hover:bg-[#FFE5E5]"
+          className="flex h-[45px] px-[20px] py-[12px] justify-center items-center gap-[10px] rounded-[10px] border border-[#FF0000]  text-[#FF0000] hover:bg-[#FFE5E5]"
         >
+          <Trash2 className="w-4 h-4" />
           <span className="text-[#FF0000] text-center font-['Poppins'] text-[16px] font-normal leading-[150%]">
             Kustuta
           </span>

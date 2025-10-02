@@ -35,7 +35,7 @@ export default function CarPreview({ formData, brands, models, years, driveTypes
     }
 
     // If VAT rate is 24, show "Hind sisaldab käibemaksu 24%"
-    return 'Hind sisaldab käibemaksu 24%';
+    return 'Hind sisaldab käibemaksu ' + car.vatRate + '%';
   };
 
   useEffect(() => {
@@ -344,7 +344,7 @@ export default function CarPreview({ formData, brands, models, years, driveTypes
                                 <span className="font-medium text-[#747474] text-[14px] leading-[normal] [font-family:'Poppins',Helvetica]">
                                   € {car.price.toLocaleString()}
                                 </span>
-                                <Separator className="absolute w-[68px] top-[12px] -left-1 bg-gray-400" />
+                                <Separator className="absolute w-[40px] top-[12px] -left-1 bg-gray-400" />
                               </div>
                               {
                                 discountPercentage != 0 && (

@@ -6,6 +6,9 @@ import PriceSection from "@/components/mobile/PriceSection";
 import ExpandableSection from "@/components/mobile/ExpandableSection";
 import { CarCard } from "@/components/mobile/CarCard";
 import Footer from "@/components/mobile/Footer";
+import { Badge } from "../../components/ui/badge";
+import { Button } from "../../components/ui/button";
+import { Separator } from "../../components/ui/separator";
 import {
   CarIcon,
   GearboxIcon,
@@ -72,17 +75,16 @@ export default function CarPageMobile() {
   // Function to get VAT display text
   const getVatDisplayText = (car: any) => {
     if (!car) return '';
-    
+
     // If there's no VAT rate or it's empty/null, show "Hind ei sisalda käibemaksu"
     if (!car.vatRate || car.vatRate === '' || car.vatRate === 'null') {
       return 'Hind ei sisalda käibemaksu';
     }
-    
     // If VAT rate is 24, show "Hind sisaldab käibemaksu 24%"
-    if (car.vatRate === '24') {
-      return 'Hind sisaldab käibemaksu 24%';
-    }
-    
+    // if (car.vatRate === '24') {
+    //   return 'Hind sisaldab käibemaksu 24%';
+    // }
+
     // For any other VAT rate, show the specific rate
     return `Hind sisaldab käibemaksu ${car.vatRate}%`;
   };
@@ -100,7 +102,7 @@ export default function CarPageMobile() {
       try {
         setLoading(true);
         setError(null);
-        
+
         const response = await fetch(`/api/cars/${id}`);
         if (!response.ok) {
           if (response.status === 404) {
@@ -108,10 +110,10 @@ export default function CarPageMobile() {
           }
           throw new Error('Failed to fetch car data');
         }
-        
+
         const carData = await response.json();
         setCar(carData);
-        
+
         // Increment view count when car data is successfully loaded
         try {
           await incrementView(carData.id);
@@ -132,7 +134,7 @@ export default function CarPageMobile() {
   // Handle heart icon click
   const handleHeartClick = async () => {
     if (!car) return;
-    
+
     if (!isAuthenticated) {
       alert('Please log in to save favorites');
       return;
@@ -258,7 +260,7 @@ export default function CarPageMobile() {
   };
 
 
-    const discountPercentage = car.discountPrice && car.price
+  const discountPercentage = car.discountPrice && car.price
     ? Math.round(((car.price - car.discountPrice) / car.price) * 100)
     : 0;
 
@@ -282,12 +284,11 @@ export default function CarPageMobile() {
               <h1 className="text-[#1A202C] text-[26px] font-semibold leading-[150%] tracking-[-0.78px]">
                 {car.brand_name} {car.model_name}
               </h1>
-              <Heart 
-                className={`w-6 h-6 transition-colors duration-200 cursor-pointer ${
-                  isFavorite(car.id) 
-                    ? "text-red-500 fill-red-500" 
+              <Heart
+                className={`w-6 h-6 transition-colors duration-200 cursor-pointer ${isFavorite(car.id)
+                    ? "text-red-500 fill-red-500"
                     : "text-gray-400 hover:text-red-400"
-                }`}
+                  }`}
                 onClick={handleHeartClick}
               />
             </div>
@@ -319,7 +320,7 @@ export default function CarPageMobile() {
               <SpecCard
                 icon={<CalendarIcon />}
                 label="Esmaregistreerimine:"
-                  value={car.year_value?.toString() || "N/A"}
+                value={car.year_value?.toString() || "N/A"}
               />
               <SpecCard icon={<FuelIcon />} label="Kütus:" value={car.fuelType} />
               <SpecCard icon={<UserIcon />} label="Omanike arv:" value={car.ownerCount} />
@@ -328,13 +329,41 @@ export default function CarPageMobile() {
         </div>
 
         {/* Price section */}
-        <div className=" px-5 my-8">
-          <PriceSection
-            currentPrice={car ? `€ ${(car.discountPrice || car.price).toLocaleString()}` : "€ 0"}
-            originalPrice={car && car.discountPrice && Math.round(((car.price - car.discountPrice) / car.price) * 100) > 0 ? `€ ${car.price.toLocaleString()}` : undefined}
-            discount={car && car.discountPrice && Math.round(((car.price - car.discountPrice) / car.price) * 100) > 0 ? `-${Math.round(((car.price - car.discountPrice) / car.price) * 100)}%` : undefined}
-            taxNote={getVatDisplayText(car)}
-          />
+        <div className="flex items-center justify-between mb-4 px-8">
+          <div className="flex-1">
+            <div className="flex items-center gap-2">
+              {car.discountPrice && (
+                <>
+                  <div className="relative">
+                    <span className="font-medium text-[#747474] text-sm leading-[20px]">
+                      € {car.price.toLocaleString()}
+                    </span>
+                    <Separator className="absolute w-[40px] top-[10px] -left-1 bg-gray-400" />
+                  </div>
+                  {discountPercentage != 0 && (
+                    <Badge className="bg-[#ffe5e5] text-[#ff0000] border border-[#ff0000] rounded-[100px] px-2 py-1 text-xs">
+                      {discountPercentage}%
+                    </Badge>
+                  )}
+                </>
+              )}
+            </div>
+            <div className="mt-1">
+              <span className="font-semibold text-secondary-500 text-2xl leading-[32px]">
+                € {(car.discountPrice || car.price).toLocaleString()}
+              </span>
+            </div>
+          </div>
+          <div className="ml-4 mt-7">
+            <Button
+              className="bg-[#06d6a0] text-white rounded-[10px] px-8 py-3 text-sm "
+            >
+              Saada e-mail
+            </Button>
+            <p className="text-[#747474] text-xs tracking-[-0.2px] leading-[16px] mt-1 text-center">
+              {getVatDisplayText(car)}
+            </p>
+          </div>
         </div>
 
         {/* Technical data section */}
@@ -346,7 +375,7 @@ export default function CarPageMobile() {
                   Tehnilised andmed
                 </span>
                 <span className="text-[#1A202C] text-sm font-normal">
-                   {car.technicalData}
+                  {car.technicalData}
                 </span>
               </div>
               <div className="bg-white rounded-[10px] p-3 flex justify-between">
@@ -354,7 +383,7 @@ export default function CarPageMobile() {
                   Kategooria:
                 </span>
                 <span className="text-[#1A202C] text-sm font-normal">
-                    {car.category}
+                  {car.category}
                 </span>
               </div>
               <div className="bg-white rounded-[10px] p-3 flex justify-between">
@@ -436,16 +465,16 @@ export default function CarPageMobile() {
 
         {/* Seller information section */}
         <SpecificationsSection
-            sellerData={{
-              title: "Müüja andmed",
-              company: car.businessType || "ELKE Mustamäe",
-              address: car.country || "Tallinn, Mustamäe tee 22",
-              contactPerson: "Kontaktisik",
-              phone: car.phone || "+372 8888 8888",
-              email: car.email || "Näide@elke.ee",
-              language: car.language || "en"
-            }}
-          />
+          sellerData={{
+            title: "Müüja andmed",
+            company: car.businessType || "ELKE Mustamäe",
+            address: car.country || "Tallinn, Mustamäe tee 22",
+            contactPerson: "Kontaktisik",
+            phone: car.phone || "+372 8888 8888",
+            email: car.email || "Näide@elke.ee",
+            language: car.language || "en"
+          }}
+        />
 
         {/* Related cars section */}
 

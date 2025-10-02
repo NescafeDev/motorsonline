@@ -35,7 +35,7 @@ export default function UserForm() {
     
     // If VAT rate is 24, show "Hind sisaldab käibemaksu 24%"
     // if (car.vatRate === '24') {
-      return 'Hind sisaldab käibemaksu 24%';
+      return 'Hind sisaldab käibemaksu ' + car.vatRate + '%';
     // }
     
     // For any other VAT rate, show the specific rate

@@ -103,7 +103,7 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
         <div className="flex gap-3">
           <button
             onClick={onEdit}
-            className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-[10px] border border-[#06D6A0] bg-white text-[#06D6A0] font-medium text-sm"
+            className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-[10px] border border-[#06D6A0] bg-white text-[#06D6A0] font-medium text-sm hover:"
           >
             <Edit className="w-4 h-4" />
             Redigeeri
