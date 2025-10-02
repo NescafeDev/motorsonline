@@ -40,6 +40,132 @@ export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps
   // Use provided seller data or fallback to default
   const displayData = sellerData || defaultSellerData;
 
+  // Function to map language codes to country codes for flags
+  const getCountryCodeFromLanguage = (languageCode: string): string => {
+    const languageToCountryMap: { [key: string]: string } = {
+      'en': 'US', // English -> United States
+      'et': 'EE', // Estonian -> Estonia
+      'fi': 'FI', // Finnish -> Finland
+      'sv': 'SE', // Swedish -> Sweden
+      'de': 'DE', // German -> Germany
+      'fr': 'FR', // French -> France
+      'es': 'ES', // Spanish -> Spain
+      'it': 'IT', // Italian -> Italy
+      'ru': 'RU', // Russian -> Russia
+      'lv': 'LV', // Latvian -> Latvia
+      'lt': 'LT', // Lithuanian -> Lithuania
+      'pl': 'PL', // Polish -> Poland
+      'no': 'NO', // Norwegian -> Norway
+      'da': 'DK', // Danish -> Denmark
+      'nl': 'NL', // Dutch -> Netherlands
+    };
+    return languageToCountryMap[languageCode.toLowerCase()] || 'US';
+  };
+
+  // Function to render language flags
+  const renderLanguageFlags = (languages: string | string[]) => {
+    const languageArray = Array.isArray(languages) ? languages : languages?.split(',') || [];
+    
+    return (
+      <div className="flex items-center gap-2 flex-wrap">
+        {languageArray.map((lang, index) => {
+          const trimmedLang = lang.trim();
+          console.log(`Processing language: "${trimmedLang}"`);
+          const countryCode = getCountryCodeFromCountry(trimmedLang);
+          console.log(`Final country code: "${countryCode}"`);
+          return (
+            <div key={index} className="flex items-center">
+              <ReactCountryFlag
+                countryCode={countryCode as CountryCode}
+                svg
+                style={{
+                  width: '1.5em',
+                  height: '1.5em',
+                }}
+                title={trimmedLang}
+              />
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  // Function to get country code from language or country name
+  const getCountryCodeFromCountry = (input: string): string => {
+    const trimmedInput = input.trim();
+    
+    // If it's already a 2-letter code, return it
+    if (trimmedInput.length === 2) {
+      return trimmedInput.toUpperCase();
+    }
+    
+    // Map common country names to codes (including variations)
+    const countryNameMap: { [key: string]: string } = {
+      'estonia': 'EE',
+      'estonian': 'EE',
+      'eesti': 'EE',
+      'eestlane': 'EE',
+      'finland': 'FI',
+      'finnish': 'FI',
+      'suomi': 'FI',
+      'sweden': 'SE',
+      'swedish': 'SE',
+      'sverige': 'SE',
+      'germany': 'DE',
+      'german': 'DE',
+      'deutschland': 'DE',
+      'france': 'FR',
+      'french': 'FR',
+      'spain': 'ES',
+      'spanish': 'ES',
+      'italy': 'IT',
+      'italian': 'IT',
+      'russia': 'RU',
+      'russian': 'RU',
+      'latvia': 'LV',
+      'latvian': 'LV',
+      'lithuania': 'LT',
+      'lithuanian': 'LT',
+      'poland': 'PL',
+      'polish': 'PL',
+      'norway': 'NO',
+      'norwegian': 'NO',
+      'denmark': 'DK',
+      'danish': 'DK',
+      'netherlands': 'NL',
+      'dutch': 'NL',
+      'united states': 'US',
+      'usa': 'US',
+      'american': 'US',
+      'united kingdom': 'GB',
+      'uk': 'GB',
+      'british': 'GB',
+    };
+    
+    const lowerInput = trimmedInput.toLowerCase();
+    console.log(`Looking for: "${lowerInput}" in country map`);
+    
+    // Check exact match first
+    if (countryNameMap[lowerInput]) {
+      console.log(`Found exact match: ${countryNameMap[lowerInput]}`);
+      return countryNameMap[lowerInput];
+    }
+    
+    // Check if input contains any country name
+    for (const [countryName, countryCode] of Object.entries(countryNameMap)) {
+      if (lowerInput.includes(countryName) || countryName.includes(lowerInput)) {
+        console.log(`Found partial match: "${countryName}" -> ${countryCode}`);
+        return countryCode;
+      }
+    }
+    
+    // If no country match, try language mapping
+    const languageResult = getCountryCodeFromLanguage(input);
+    console.log(`No country match, trying language: ${languageResult}`);
+    return languageResult;
+  };
+
   console.log(displayData)
 
   return (
@@ -87,11 +213,9 @@ export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps
                 <p className="[font-family:'Poppins',Helvetica] font-normal text-lg text-secondary-500 tracking-[-0.54px] leading-[27px]">
                   {displayData.email}
                 </p>
-                <p className="[font-family:'Poppins',Helvetica] font-normal text-lg text-secondary-500 tracking-[-0.54px] leading-[27px]">
-                  {/* {getLanguageName(displayData.language || '')} */}
-                  {/* {displayData.language.replace(/,/g, " , ")} */}
-                  {Array.isArray(displayData.language) ? displayData.language.join(', ') : displayData.language?.replace(/,/g, " , ") || ''}
-                </p>
+                <div className="[font-family:'Poppins',Helvetica] font-normal text-lg text-secondary-500 tracking-[-0.54px] leading-[27px]">
+                  {renderLanguageFlags(displayData.language || '')}
+                </div>
               </div>
             </div>
           </div>
