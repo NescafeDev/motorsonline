@@ -81,7 +81,7 @@ export default function CarGallery({
             {/* Previous button */}
             <button
               onClick={handlePreviousImage}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-40 hover:bg-opacity-70 rounded-full p-3 shadow-lg transition-all duration-200 hover:shadow-xl z-10"
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-40 hover:bg-opacity-70 rounded-full p-3 shadow-lg transition-all duration-200 hover:shadow-xl z-10"
               aria-label="Previous image"
             >
               <ChevronLeft className="w-6 h-6 text-gray-700" />
@@ -90,7 +90,7 @@ export default function CarGallery({
             {/* Next button */}
             <button
               onClick={handleNextImage}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-40 hover:bg-opacity-70 rounded-full p-3 shadow-lg transition-all duration-200 hover:shadow-xl z-10"
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-40 hover:bg-opacity-70 rounded-full p-3 shadow-lg transition-all duration-200 hover:shadow-xl z-10"
               aria-label="Next image"
             >
               <ChevronRight className="w-6 h-6 text-gray-700" />

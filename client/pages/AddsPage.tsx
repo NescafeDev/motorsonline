@@ -574,7 +574,6 @@ export default function AddsPage() {
   };
 
   const handleInputChange = (field: string, value: string) => {
-    console.log(field, value);
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -658,7 +657,6 @@ export default function AddsPage() {
       .map(([k]) => k);
     formDataObj.append('tech_check', techCheckSelected.join(','));
     formDataObj.append('accessories', accessoriesSelected.join(','));
-    console.log('accessories:',accessoriesSelected)
     const token = localStorage.getItem("token");
 
     try {
