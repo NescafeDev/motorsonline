@@ -6,9 +6,11 @@ import { Card, CardContent } from "../../components/ui/card";
 import { Separator } from "../../components/ui/separator";
 import { SpecificationsSection } from "./sections/SpecificationsSection";
 import CarGallery from "../../components/mobile/CarGallery";
+import { ImageGallerySection } from "./sections/ImageGallerySection";
 
 interface CarMobilePreviewProps {
     formData: any;
+    checkboxes: any;
     brands: { id: number; name: string }[];
     models: { id: number; name: string }[];
     years: { id: number; value: string }[];
@@ -16,7 +18,7 @@ interface CarMobilePreviewProps {
     carImages: (File | null)[];
 }
 
-export default function CarMobilePreview({ formData, brands, models, years, driveTypes, carImages }: CarMobilePreviewProps) {
+export default function CarMobilePreview({ formData, checkboxes, brands, models, years, driveTypes, carImages }: CarMobilePreviewProps) {
     // Function to get VAT display text
     const getVatDisplayText = (car: any) => {
         if (!car) return '';
@@ -36,7 +38,6 @@ export default function CarMobilePreview({ formData, brands, models, years, driv
         const selectedModel = models.find(m => m.id.toString() === formData.model_id);
         const selectedYear = years.find(y => y.id.toString() === formData.year_id);
         const selectedDriveType = driveTypes.find(d => d.id.toString() === formData.drive_type_id);
-
         return {
             id: 0, // Preview mode
             brand_name: selectedBrand?.name || '',
@@ -68,7 +69,6 @@ export default function CarMobilePreview({ formData, brands, models, years, driv
             image_8: carImages[7] ? URL.createObjectURL(carImages[7]) : undefined,
             equipment: formData.equipment || '',
             description: formData.description || '',
-            accessories: formData.accessories || '',
             businessType: formData.businessType || '',
             country: formData.country || '',
             phone: formData.phone || '',
@@ -138,11 +138,68 @@ export default function CarMobilePreview({ formData, brands, models, years, driv
     ];
 
     // Equipment features data - parse from equipment string
-    const equipmentFeatures = car.accessories
-        ? car.accessories.split(',').map(item => ({
-            label: item.trim(),
-            icon: "/img/car/check.svg"
-        }))
+    const accessoriesOptions = [
+        { key: 'kokkupõrgetEnnetavPidurisüsteem', label: 'Kokkupõrget Ennetav Pidurisüsteem' },
+        { key: 'pimenurgaHoiatus', label: 'Pimenurga Hoiatus' },
+        { key: 'sõidurajaHoidmiseAbisüsteem', label: 'Sõiduraja Hoidmise Abisüsteem' },
+        { key: 'sõidurajavahetamiseAbisüsteem', label: 'Sõidurajavahetamise Abisüsteem' },
+        { key: 'adaptiivnePüsikiirusehoidja', label: 'Adaptiivne Püsikiirusehoidja' },
+        { key: 'liiklusmärkidetuvastusJakuvamine', label: 'Liiklusmärkide Tuvastus ja Kuvamine' },
+        { key: 'parkimisanduridEesJaTaga', label: 'Parkimisandurid Ees ja Taga' },
+        { key: 'parkimiskaamera', label: 'Parkimiskaamera' },
+        { key: 'parkimiskaamera360', label: 'Parkimiskaamera 360°' },
+        { key: 'kaugtuledeümberlülitamiseAssistent', label: 'Kaugtulede ümberlülitamise Assistent' },
+        { key: 'LEDesituled', label: 'LED Esituled' },
+        { key: 'Xenonesituled', label: 'Xenon Esituled' },
+        { key: 'Lasersituled', label: 'Laser Esituled' },
+        { key: 'elektriliseSoojendusegaEsiklaas', label: 'Elektrilise Soojendusega Esiklaas' },
+        { key: 'kliimaseade', label: 'Kliimaseade' },
+        { key: 'salongiEelsoojendus', label: 'SalongiEelsoojendus' },
+        { key: 'mootoriEelsoojendus', label: 'MootoriEelsoojendus' },
+        { key: 'salongilisasoojendus', label: 'Salongi Lisasoojendus' },
+        { key: 'istmesoojendused', label: 'Istmesoojendused' },
+        { key: 'elektriliseltReguleeritavadIstmed', label: 'Elektriliselt Reguleeritavad Istmed' },
+        { key: 'ComfortIstmed', label: 'Comfort Istmed' },
+        { key: 'sportistmed', label: 'Sport Istmed' },
+        { key: 'nahkpolster', label: 'Nahkpolster' },
+        { key: 'poolnahkpolster', label: 'Poolnahkpolster' },
+        { key: 'tagaistmeSeljatugiAllaklapitav', label: 'Tagaistme Seljatugi Allaklapitav' },
+        { key: 'eraldiKliimaseadeTagaistmetele', label: 'Eraldi Kliimaseade Tagaistmetele' },
+        { key: 'võtmetavamine', label: 'Võtmeta Avamine' },
+        { key: 'võtmetaKäivitus', label: 'Võtmeta Käivitus' },
+        { key: 'pakiruumiAvamineJaSulgeminelektriliselt', label: 'Pakiruumi Avamine ja Sulgemine Elektriliselt' },
+        { key: 'soojendusegaRool', label: 'Soojendusega Rool' },
+        { key: 'ventileeritavadstmed', label: 'Ventileeritavad Istmed' },
+        { key: 'massaažifunktsioonigaIstmed', label: 'Massaažifunktsiooniga Istmed' },
+        { key: 'infoKuvamineEsiklaasile', label: 'Info Kuvamine Esiklaasile' },
+        { key: 'panoraamkatusKlaasist', label: 'Panoraamkatus (klaasist)' },
+        { key: 'katuseluuk', label: 'Katuseluuk' },
+        { key: 'usteServosulgurid', label: 'Uste Servosulgurid' },
+        { key: 'topeltklaasid', label: 'Topeltklaasid' },
+        { key: 'rulookardinadUstel', label: 'Rulookardinad Ustel' },
+        { key: 'integreeritudVäravapult', label: 'Integreeritud Väravapult' },
+        { key: 'AppleCarPlay', label: 'Apple CarPlay' },
+        { key: 'AndroidAuto', label: 'Android Auto' },
+        { key: 'stereo', label: 'Stereo' },
+        { key: 'õhkvedrustus', label: 'Õhkvedrustus' },
+        { key: 'reguleeritavVedrustus', label: 'Reguleeritav Vedrustus' },
+        { key: 'RattaPööramine', label: '4-ratta Pööramine' },
+        { key: 'veokonks', label: 'Veokonks' },
+        { key: 'elektrilisedLiuguksed', label: 'Elektrilised Liuguksed' },
+        { key: 'öiseNägemiseAssistent', label: 'Öise Nägemise Assistent' },
+        { key: 'valgustuspakett', label: 'Valgustuspakett' },
+        { key: 'suverehvid', label: 'Suverehvid' },
+        { key: 'talverehvid', label: 'Talverehvid' },
+        { key: 'valuveljed', label: 'Valuveljed' },
+    ];
+
+    const equipmentFeatures = checkboxes
+        ? accessoriesOptions
+            .filter(option => checkboxes[option.key])
+            .map(option => ({
+                label: option.label,
+                icon: "/img/car/check.svg"
+            }))
         : [];
 
     // Calculate discount percentage
@@ -308,32 +365,32 @@ export default function CarMobilePreview({ formData, brands, models, years, driv
 
                 {/* Equipment features */}
                 {equipmentFeatures.length > 0 && (
-                    <Card className="bg-[#f6f7f9] rounded-[10px] border-none">
-                        <CardContent className="p-4">
-                            <h2 className="font-semibold text-secondary-500 text-lg tracking-[-0.4px] leading-[24px] mb-4">
+                    <Card className="w-full mt-10 bg-[#f6f7f9] rounded-[10px] border-none">
+                        <CardContent className="p-5">
+                            <h2 className="font-semibold text-secondary-500 text-xl tracking-[-0.60px] leading-[30px] [font-family:'Poppins',Helvetica] mb-6">
                                 Kõrgema väärtusega lisvarustus
                             </h2>
 
-                            <div className="space-y-3">
-                                {equipmentFeatures.slice(0, 8).map((feature, index) => (
+                            <div className="grid grid-cols-1 gap-4">
+                                {equipmentFeatures.slice(0, 12).map((feature, index) => (
                                     <div
                                         key={index}
-                                        className="bg-white rounded-[10px] p-3 flex justify-between items-start gap-2"
+                                        className="bg-white rounded-[10px] p-2.5 flex justify-between items-start gap-2"
                                     >
-                                        <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words flex-1 min-w-0">
+                                        <span className="font-medium text-secondary-500 text-lg tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica] break-words flex-1 min-w-0">
                                             {feature.label}
                                         </span>
-                                        <div className="w-5 h-5 bg-[100%_100%] flex-shrink-0">
-                                            <img className="w-5 h-5" src={feature.icon} alt="check" />
+                                        <div className="w-6 h-6 bg-[100%_100%] flex-shrink-0">
+                                            <img className="w-6 h-6 " src={feature.icon} />
                                         </div>
                                     </div>
                                 ))}
                             </div>
 
-                            <div className="flex justify-center mt-6">
+                            <div className="flex justify-center mt-8">
                                 <Button
                                     variant="outline"
-                                    className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2 px-4 py-2"
+                                    className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2.5"
                                 >
                                     Näita rohkem
                                     <ChevronDownIcon className="w-4 h-4" />
@@ -343,40 +400,7 @@ export default function CarMobilePreview({ formData, brands, models, years, driv
                     </Card>
                 )}
 
-                {/* Additional images */}
-                {carImagesArray.length > 1 && (
-                    <Card className="bg-[#f6f7f9] rounded-[10px] border-none">
-                        <CardContent className="p-4">
-                            <h2 className="font-semibold text-secondary-500 text-lg tracking-[-0.4px] leading-[24px] mb-4">
-                                Lisapildid
-                            </h2>
-                            <div className="grid grid-cols-2 gap-3">
-                                {carImagesArray.slice(1, 5).map((image, index) => (
-                                    <img
-                                        key={index}
-                                        src={image}
-                                        alt={`${car.brand_name} ${car.model_name} - ${index + 2}`}
-                                        className="w-full h-32 object-cover rounded-lg"
-                                    />
-                                ))}
-                            </div>
-                        </CardContent>
-                    </Card>
-                )}
-
-                {/* Description */}
-                {car.description && (
-                    <Card className="bg-[#f6f7f9] rounded-[10px] border-none">
-                        <CardContent className="p-4">
-                            <h2 className="font-semibold text-secondary-500 text-lg tracking-[-0.4px] leading-[24px] mb-4">
-                                Kirjeldus puudub
-                            </h2>
-                            <p className="text-secondary-500 text-sm whitespace-pre-wrap break-all leading-relaxed py-1">
-                                {car.description}
-                            </p>
-                        </CardContent>
-                    </Card>
-                )}
+                <ImageGallerySection car={car} />
 
                 {/* Seller information - using the same component as CarPage.tsx */}
                 <SpecificationsSection

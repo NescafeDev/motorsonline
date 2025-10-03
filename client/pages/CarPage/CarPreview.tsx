@@ -12,6 +12,7 @@ import CarGallery from "./sections/CarGallery";
 
 interface CarPreviewProps {
   formData: any;
+  checkboxes: any;
   brands: { id: number; name: string }[];
   models: { id: number; name: string }[];
   years: { id: number; value: string }[];
@@ -19,7 +20,7 @@ interface CarPreviewProps {
   carImages: (File | null)[];
 }
 
-export default function CarPreview({ formData, brands, models, years, driveTypes, carImages }: CarPreviewProps) {
+export default function CarPreview({ formData, checkboxes, brands, models, years, driveTypes, carImages }: CarPreviewProps) {
   const sidebarRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const [sidebarTop, setSidebarTop] = useState(0);
@@ -36,6 +37,8 @@ export default function CarPreview({ formData, brands, models, years, driveTypes
 
     // If VAT rate is 24, show "Hind sisaldab käibemaksu 24%"
     return 'Hind sisaldab käibemaksu ' + car.vatRate + '%';
+    
+
   };
 
   useEffect(() => {
@@ -56,6 +59,11 @@ export default function CarPreview({ formData, brands, models, years, driveTypes
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleScroll);
     handleScroll();
+
+    console.log(checkboxes);
+    // console.log(car.accessories)
+    console.log(formData)
+
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -101,7 +109,6 @@ export default function CarPreview({ formData, brands, models, years, driveTypes
       image_8: carImages[7] ? URL.createObjectURL(carImages[7]) : undefined,
       equipment: formData.equipment || '',
       description: formData.description || '',
-      accessories: formData.accessories || '',
       businessType: formData.businessType || '',
       country: formData.country || '',
       phone: formData.phone || '',
@@ -170,12 +177,69 @@ export default function CarPreview({ formData, brands, models, years, driveTypes
     { label: "Kütuse tüüp:", value: car.fuelType },
   ];
 
-  // Equipment features data - parse from equipment string
-  const equipmentFeatures = car.accessories
-    ? car.accessories.split(',').map(item => ({
-      label: item.trim(),
-      icon: "/img/car/check.svg"
-    }))
+  // Equipment features data - get from checkboxes
+  const accessoriesOptions = [
+    { key: 'kokkupõrgetEnnetavPidurisüsteem', label: 'Kokkupõrget Ennetav Pidurisüsteem' },
+    { key: 'pimenurgaHoiatus', label: 'Pimenurga Hoiatus' },
+    { key: 'sõidurajaHoidmiseAbisüsteem', label: 'Sõiduraja Hoidmise Abisüsteem' },
+    { key: 'sõidurajavahetamiseAbisüsteem', label: 'Sõidurajavahetamise Abisüsteem' },
+    { key: 'adaptiivnePüsikiirusehoidja', label: 'Adaptiivne Püsikiirusehoidja' },
+    { key: 'liiklusmärkidetuvastusJakuvamine', label: 'Liiklusmärkide Tuvastus ja Kuvamine' },
+    { key: 'parkimisanduridEesJaTaga', label: 'Parkimisandurid Ees ja Taga' },
+    { key: 'parkimiskaamera', label: 'Parkimiskaamera' },
+    { key: 'parkimiskaamera360', label: 'Parkimiskaamera 360°' },
+    { key: 'kaugtuledeümberlülitamiseAssistent', label: 'Kaugtulede ümberlülitamise Assistent' },
+    { key: 'LEDesituled', label: 'LED Esituled' },
+    { key: 'Xenonesituled', label: 'Xenon Esituled' },
+    { key: 'Lasersituled', label: 'Laser Esituled' },
+    { key: 'elektriliseSoojendusegaEsiklaas', label: 'Elektrilise Soojendusega Esiklaas' },
+    { key: 'kliimaseade', label: 'Kliimaseade' },
+    { key: 'salongiEelsoojendus', label: 'SalongiEelsoojendus' },
+    { key: 'mootoriEelsoojendus', label: 'MootoriEelsoojendus' },
+    { key: 'salongilisasoojendus', label: 'Salongi Lisasoojendus' },
+    { key: 'istmesoojendused', label: 'Istmesoojendused' },
+    { key: 'elektriliseltReguleeritavadIstmed', label: 'Elektriliselt Reguleeritavad Istmed' },
+    { key: 'ComfortIstmed', label: 'Comfort Istmed' },
+    { key: 'sportistmed', label: 'Sport Istmed' },
+    { key: 'nahkpolster', label: 'Nahkpolster' },
+    { key: 'poolnahkpolster', label: 'Poolnahkpolster' },
+    { key: 'tagaistmeSeljatugiAllaklapitav', label: 'Tagaistme Seljatugi Allaklapitav' },
+    { key: 'eraldiKliimaseadeTagaistmetele', label: 'Eraldi Kliimaseade Tagaistmetele' },
+    { key: 'võtmetavamine', label: 'Võtmeta Avamine' },
+    { key: 'võtmetaKäivitus', label: 'Võtmeta Käivitus' },
+    { key: 'pakiruumiAvamineJaSulgeminelektriliselt', label: 'Pakiruumi Avamine ja Sulgemine Elektriliselt' },
+    { key: 'soojendusegaRool', label: 'Soojendusega Rool' },
+    { key: 'ventileeritavadstmed', label: 'Ventileeritavad Istmed' },
+    { key: 'massaažifunktsioonigaIstmed', label: 'Massaažifunktsiooniga Istmed' },
+    { key: 'infoKuvamineEsiklaasile', label: 'Info Kuvamine Esiklaasile' },
+    { key: 'panoraamkatusKlaasist', label: 'Panoraamkatus (klaasist)' },
+    { key: 'katuseluuk', label: 'Katuseluuk' },
+    { key: 'usteServosulgurid', label: 'Uste Servosulgurid' },
+    { key: 'topeltklaasid', label: 'Topeltklaasid' },
+    { key: 'rulookardinadUstel', label: 'Rulookardinad Ustel' },
+    { key: 'integreeritudVäravapult', label: 'Integreeritud Väravapult' },
+    { key: 'AppleCarPlay', label: 'Apple CarPlay' },
+    { key: 'AndroidAuto', label: 'Android Auto' },
+    { key: 'stereo', label: 'Stereo' },
+    { key: 'õhkvedrustus', label: 'Õhkvedrustus' },
+    { key: 'reguleeritavVedrustus', label: 'Reguleeritav Vedrustus' },
+    { key: 'RattaPööramine', label: '4-ratta Pööramine' },
+    { key: 'veokonks', label: 'Veokonks' },
+    { key: 'elektrilisedLiuguksed', label: 'Elektrilised Liuguksed' },
+    { key: 'öiseNägemiseAssistent', label: 'Öise Nägemise Assistent' },
+    { key: 'valgustuspakett', label: 'Valgustuspakett' },
+    { key: 'suverehvid', label: 'Suverehvid' },
+    { key: 'talverehvid', label: 'Talverehvid' },
+    { key: 'valuveljed', label: 'Valuveljed' },
+  ];
+
+  const equipmentFeatures = checkboxes 
+    ? accessoriesOptions
+        .filter(option => checkboxes[option.key])
+        .map(option => ({
+          label: option.label,
+          icon: "/img/car/check.svg"
+        }))
     : [];
 
   // Calculate discount percentage
@@ -242,10 +306,10 @@ export default function CarPreview({ formData, brands, models, years, driveTypes
                 <Card className="w-full mt-10 bg-[#f6f7f9] rounded-[10px] border-none">
                   <CardContent className="p-5">
                     <h2 className="font-semibold text-secondary-500 text-xl tracking-[-0.60px] leading-[30px] [font-family:'Poppins',Helvetica] mb-6">
-                      Kõrgema väärtusega lisvarustus
+                      Kõrgema väärtusega lisvarustus 
                     </h2>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4">
                       {equipmentFeatures.slice(0, 12).map((feature, index) => (
                         <div
                           key={index}

@@ -244,7 +244,9 @@ export default function AddsPage() {
     website: "",
     language: [],
     country: "",
-    inspectionValidityPeriod: ""
+    inspectionValidityPeriod: "",
+    seats: "",
+    doors: "",
   });
 
   const [checktechboxes, setCheckTechboxes] = useState({
@@ -726,26 +728,26 @@ export default function AddsPage() {
       fetchModels(car.brand_id.toString());
     }
 
-    if (car.tech_check) {
-      const arr = Array.isArray(car.tech_check) ? car.tech_check : car.tech_check.split(',');
-      setCheckTechboxes((prev) => {
-        const obj: any = {};
-        techCheckOptions.forEach(opt => {
-          obj[opt.key] = arr.includes(opt.key);
-        });
-        return obj;
-      });
-    }
-    if (car.accessories) {
-      const arr = Array.isArray(car.accessories) ? car.accessories : car.accessories.split(',');
-      setCheckboxes((prev) => {
-        const obj: any = {};
-        accessoriesOptions.forEach(opt => {
-          obj[opt.key] = arr.includes(opt.key);
-        });
-        return obj;
-      });
-    }
+    // if (car.tech_check) {
+    //   const arr = Array.isArray(car.tech_check) ? car.tech_check : car.tech_check.split(',');
+    //   setCheckTechboxes((prev) => {
+    //     const obj: any = {};
+    //     techCheckOptions.forEach(opt => {
+    //       obj[opt.key] = arr.includes(opt.key);
+    //     });
+    //     return obj;
+    //   });
+    // }
+    // if (car.accessories) {
+    //   const arr = Array.isArray(car.accessories) ? car.accessories : car.accessories.split(',');
+    //   setCheckboxes((prev) => {
+    //     const obj: any = {};
+    //     accessoriesOptions.forEach(opt => {
+    //       obj[opt.key] = arr.includes(opt.key);
+    //     });
+    //     return obj;
+    //   });
+    // }
 
     // Load language array if it exists
     if (car.language) {
@@ -1226,6 +1228,83 @@ export default function AddsPage() {
                   },
                 ]}
               />
+              <div className="space-y-3"></div>
+              {/* <div className="w-full flex items-center gap-4">
+                <div className="flex-1">
+                  <FormField
+                    label="Min istmed"
+                    placeholder="0"
+                    value={formData.seatsMin}
+                    onChange={(value) => handleInputChange("seatsMin", value)}
+                  />
+                </div>
+                <span className="flex items-center text-gray-500 font-medium mt-8">-</span>
+                <div className="flex-1">
+                  <FormField
+                    label="Max istmed"
+                    placeholder="0"
+                    value={formData.seatsMax}
+                    onChange={(value) => handleInputChange("seatsMax", value)}
+                  />
+                </div>
+              </div>
+              <div className="w-full flex items-center gap-4">
+                <div className="flex-1">
+                  <FormField
+                    label="Min istmed"
+                    placeholder="0"
+                    value={formData.seatsMin}
+                    onChange={(value) => handleInputChange("seatsMin", value)}
+                  />
+                </div>
+                <span className="flex items-center text-gray-500 font-medium mt-8">-</span>
+                <div className="flex-1">
+                  <FormField
+                    label="Max istmed"
+                    placeholder="0"
+                    value={formData.seatsMax}
+                    onChange={(value) => handleInputChange("seatsMax", value)}
+                  />
+                </div>
+              </div>
+              <div className="w-full flex items-center gap-4">
+                <div className="flex-1">
+                  <FormField
+                    label="Min istmed"
+                    placeholder="0"
+                    value={formData.seatsMin}
+                    onChange={(value) => handleInputChange("seatsMin", value)}
+                  />
+                </div>
+                <span className="flex items-center text-gray-500 font-medium mt-8">-</span>
+                <div className="flex-1">
+                  <FormField
+                    label="Max istmed"
+                    placeholder="0"
+                    value={formData.seatsMax}
+                    onChange={(value) => handleInputChange("seatsMax", value)}
+                  />
+                </div>
+              </div>
+              <div className="w-full flex items-center gap-4 ">
+                <div className="flex-1">
+                  <FormField
+                    label="Min istmed"
+                    placeholder="0"
+                    value={formData.seatsMin}
+                    onChange={(value) => handleInputChange("seatsMin", value)}
+                  />
+                </div>
+                <span className="flex items-center text-gray-500 font-medium mt-8">-</span>
+                <div className="flex-1">
+                  <FormField
+                    label="Max istmed"
+                    placeholder="0"
+                    value={formData.seatsMax}
+                    onChange={(value) => handleInputChange("seatsMax", value)}
+                  />
+                </div>
+              </div> */}
               <FormField
                 label="Võimsus (Kw)"
                 placeholder="0"
@@ -1237,6 +1316,18 @@ export default function AddsPage() {
                 placeholder="0"
                 value={formData.displacement}
                 onChange={(value) => handleInputChange("displacement", value)}
+              />
+              <FormField
+                label="Istekoht"
+                placeholder="0"
+                value={formData.seats}
+                onChange={(value) => handleInputChange("seats", value)}
+              />
+              <FormField
+                label="Uksed"
+                placeholder="0"
+                value={formData.doors}
+                onChange={(value) => handleInputChange("doors", value)}
               />
               <div className="space-y-3">
                 <FormField
@@ -1416,6 +1507,7 @@ export default function AddsPage() {
                   return null;
                 })()} */}
               </div>
+
               <FormField
                 label="Soodushind"
                 placeholder="€"
@@ -1468,15 +1560,14 @@ export default function AddsPage() {
                   value={formData.vinCode}
                   onChange={(value) => handleInputChange("vinCode", value)}
                 />
-                <div className="mt-6">
-                  <FormField
-                    label="Sõiduki number:"
-                    placeholder="AA00000"
-                    value={formData.plateNumber}
-                    onChange={(value) => handleInputChange("plateNumber", value)}
-                  />
-                </div>
-
+              </div>
+              <div className="mt-6">
+                <FormField
+                  label="Sõiduki number:"
+                  placeholder="AA00000"
+                  value={formData.plateNumber}
+                  onChange={(value) => handleInputChange("plateNumber", value)}
+                />
               </div>
               <div className="ml-2 space-y-3 pt-1">
                 <div className="flex items-center gap-2">
@@ -1764,6 +1855,8 @@ export default function AddsPage() {
                           language: [],
                           country: "",
                           inspectionValidityPeriod: "",
+                          seats: "",
+                          doors: "",
                         });
                         setCarImages(Array(40).fill(null));
                         setShowMorePhotos(false);
@@ -1799,8 +1892,9 @@ export default function AddsPage() {
             </DialogHeader>
             <div className="flex-1 overflow-y-auto overflow-x-hidden">
               {!editingCar ? (
-                <CarPreview 
+                <CarPreview
                   formData={formData}
+                  checkboxes={checkboxes}
                   brands={brands}
                   models={models}
                   years={years}

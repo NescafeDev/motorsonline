@@ -252,6 +252,8 @@ export default function AddsPageMobile() {
     language: [],
     website: "",
     inspectionValidityPeriod: "",
+    seats: "",
+    doors: "",
   });
 
   const [checktechboxes, setCheckTechboxes] = useState({
@@ -1200,6 +1202,18 @@ export default function AddsPageMobile() {
                 onChange={(value) => handleInputChange("displacement", value)}
               />
               <FormField
+                label="Istekoht"
+                placeholder="0"
+                value={formData.seats}
+                onChange={(value) => handleInputChange("seats", value)}
+              />
+              <FormField
+                label="Uksed"
+                placeholder="0"
+                value={formData.doors}
+                onChange={(value) => handleInputChange("doors", value)}
+              />
+              <FormField
                 label="Kategooria tähis"
                 placeholder="Vali Kategooria tähis"
                 isSelect
@@ -1716,6 +1730,8 @@ export default function AddsPageMobile() {
                           language: [],
                           country: "",
                           inspectionValidityPeriod: "",
+                          seats: "",
+                          doors: "",
                         });
                         setCarImages(Array(40).fill(null));
                         setShowMorePhotos(false);
@@ -1754,6 +1770,7 @@ export default function AddsPageMobile() {
             {!editingCar ? (
               <CarMobilePreview 
                 formData={formData}
+                checkboxes={checkboxes}
                 brands={brands}
                 models={models}
                 years={years}

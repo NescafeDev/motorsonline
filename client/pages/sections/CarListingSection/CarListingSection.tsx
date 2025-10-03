@@ -312,6 +312,8 @@ export const CarListingSection = ({
 
   // Range input groups
   const rangeInputGroups = [
+    { id: "seats", label: "Istekohti", minKey: "seats_min", maxKey: "seats_max" },
+    { id: "doors", label: "Uste arv", minKey: "doors_min", maxKey: "doors_max" },
     { id: "price", label: "Hind", minKey: "price_min", maxKey: "price_max" },
     { id: "year", label: "Aasta", minKey: "year_min", maxKey: "year_max" },
     { id: "mileage", label: "Läbisõit (km)", minKey: "mileage_min", maxKey: "mileage_max" },
@@ -556,33 +558,8 @@ export const CarListingSection = ({
 
           <Separator className="my-2" />
 
-          {/* Seats Section */}
-          <Select value={filters.seats?.toString()} onValueChange={(value) => updateFilter('seats', Number(value))}>
-            <SelectTrigger className="w-full h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]">
-              <SelectValue placeholder="Istekohti" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="2">2</SelectItem>
-              <SelectItem value="4">4</SelectItem>
-              <SelectItem value="5">5</SelectItem>
-              <SelectItem value="7">7</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select value={filters.doors?.toString()} onValueChange={(value) => updateFilter('doors', Number(value))}>
-            <SelectTrigger className="w-full h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]">
-              <SelectValue placeholder="Uste arv" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="2">2</SelectItem>
-              <SelectItem value="3">3</SelectItem>
-              <SelectItem value="4">4</SelectItem>
-              <SelectItem value="5">5</SelectItem>
-            </SelectContent>
-          </Select>
-
           {/* Range Input Groups */}
-          {rangeInputGroups.slice(0, 3).map((group) => (
+          {rangeInputGroups.slice(0, 5).map((group) => (
             <div key={group.id} className="space-y-2">
               <label className="block font-['Poppins',Helvetica] font-normal text-[#747474] text-base">
                 {group.label}
