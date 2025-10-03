@@ -5,6 +5,7 @@ import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
 import { Separator } from "../../components/ui/separator";
 import { SpecificationsSection } from "./sections/SpecificationsSection";
+import CarGallery from "../../components/mobile/CarGallery";
 
 interface CarMobilePreviewProps {
     formData: any;
@@ -67,6 +68,7 @@ export default function CarMobilePreview({ formData, brands, models, years, driv
             image_8: carImages[7] ? URL.createObjectURL(carImages[7]) : undefined,
             equipment: formData.equipment || '',
             description: formData.description || '',
+            accessories: formData.accessories || '',
             businessType: formData.businessType || '',
             country: formData.country || '',
             phone: formData.phone || '',
@@ -136,8 +138,8 @@ export default function CarMobilePreview({ formData, brands, models, years, driv
     ];
 
     // Equipment features data - parse from equipment string
-    const equipmentFeatures = car.equipment
-        ? car.equipment.split(',').map(item => ({
+    const equipmentFeatures = car.accessories
+        ? car.accessories.split(',').map(item => ({
             label: item.trim(),
             icon: "/img/car/check.svg"
         }))
@@ -154,11 +156,27 @@ export default function CarMobilePreview({ formData, brands, models, years, driv
             <div className="px-4 py-6 space-y-6">
                 {/* Main car image */}
                 <div className="w-full">
-                    <img
+                    {/* <img
                         src={carImagesArray[0] || "/img/placeholder.png"}
                         alt={`${car.brand_name} ${car.model_name}`}
                         className="w-full h-64 object-cover rounded-lg"
-                    />
+                    /> */}
+                    <CarGallery
+                        mainImage={carImagesArray[0] || "/img/placeholder.png"}
+                        thumbnails={carImagesArray.slice(1)}
+                        totalImages={carImagesArray.length}
+                        onImageClick={(index) => {
+                            console.log('Image clicked:', index);
+                        }}
+                    >
+                        {/* {carImagesArray.map((image, index) => (
+                            <img
+                                key={index}
+                                src={image}
+                                alt={`${car.brand_name} ${car.model_name} - ${index + 1}`}
+                            />
+                        ))} */}
+                    </CarGallery>
                 </div>
 
                 {/* Car title and price */}

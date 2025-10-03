@@ -43,6 +43,7 @@ interface CarData {
   technicalData: string;
   category: string;
   plateNumber: string;
+  accessories?: string;
   price: number;
   discountPrice?: number;
   vatRate?: string;
@@ -236,8 +237,8 @@ export default function CarPageMobile() {
     { label: "Kütuse tüüp:", value: car.fuelType },
   ];
 
-  const equipmentFeatures = car.equipment
-    ? car.equipment.split(',').map(item => ({
+  const equipmentFeatures = car.accessories
+    ? car.accessories.split(',').map(item => ({
       label: item.trim(),
       icon: "/img/car/check.svg"
     }))

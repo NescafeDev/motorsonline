@@ -1,5 +1,6 @@
 import React from "react";
-import { Eye, Heart, Edit, Trash2 } from "lucide-react";
+import { Eye, Heart, Edit, Trash2, } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface UserCarCardProps {
   id: number;
@@ -19,6 +20,7 @@ interface UserCarCardProps {
 }
 
 export const UserCarCard: React.FC<UserCarCardProps> = ({
+  id,
   title,
   breadcrumb,
   image,
@@ -33,6 +35,11 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
   onDelete,
   onEdit,
 }) => {
+  const navigate = useNavigate();
+
+  const handleViewCar = () => {
+    navigate(`/car/${id}`);
+  };
   return (
     <div className="bg-white rounded-[13px] overflow-hidden shadow-sm w-full max-w-md mx-auto">
       {/* Image Section */}
@@ -101,20 +108,29 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
 
         {/* Action Buttons */}
         <div className="flex gap-3">
+          {/* View Car Button - Full Width */}
           <button
-            onClick={onEdit}
-            className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-[10px] border border-[#06D6A0] bg-white text-[#06D6A0] font-medium text-sm hover:"
+            onClick={handleViewCar}
+            className="flex-1 flex items-center justify-center gap-0 py-3 px-2 rounded-[10px] border border-[#3B82F6] text-[#3B82F6] hover:bg-[#EBF4FF] font-medium transition-colors"
           >
-            <Edit className="w-4 h-4" />
-            Redigeeri
+            <Eye className="w-4 h-4" />
+              Eelvaade
           </button>
-          <button
-            onClick={onDelete}
-            className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-[10px] border border-[#FF0000] bg-white text-[#FF0000] font-medium text-sm"
-          >
-            <Trash2 className="w-4 h-4" />
-            Kustuta
-          </button>
+          {/* Edit and Delete Buttons */}
+            <button
+              onClick={onEdit}
+              className="flex-1 flex items-center justify-center gap-2 py-3 px-2 rounded-[10px] border border-[#06D6A0] bg-white text-[#06D6A0] font-medium text-sm hover:bg-[#06D6A0] hover:text-white transition-colors"
+            >
+              <Edit className="w-4 h-4" />
+              Redigeeri
+            </button>
+            <button
+              onClick={onDelete}
+              className="flex-1 flex items-center justify-center gap-2 py-3 px-2 rounded-[10px] border border-[#FF0000] bg-white text-[#FF0000] font-medium text-sm hover:bg-[#FF0000] hover:text-white transition-colors"
+            >
+              <Trash2 className="w-4 h-4" />
+              Kustuta
+            </button>
         </div>
       </div>
     </div>

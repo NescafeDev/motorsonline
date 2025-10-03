@@ -1062,7 +1062,7 @@ export default function AddsPageMobile() {
             </div>
           </FormSection>
           {/* Technical Details */}
-          <FormSection title="Tehnilised detailandmed">
+          <FormSection title="">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <FormField
                 label="Kütuse tüüp"

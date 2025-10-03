@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface CarGalleryProps {
   mainImage: string;
@@ -16,6 +17,14 @@ export default function CarGallery({
 
   const handleThumbnailClick = (index: number) => {
     setSelectedImage(index);
+  };
+
+  const handlePreviousImage = () => {
+    setSelectedImage((prev) => (prev === 0 ? validImages.length - 1 : prev - 1));
+  };
+
+  const handleNextImage = () => {
+    setSelectedImage((prev) => (prev === validImages.length - 1 ? 0 : prev + 1));
   };
 
   const allImages = [mainImage, ...thumbnails];
@@ -63,8 +72,38 @@ export default function CarGallery({
         <img
           src={currentMainImage || validImages[0]}
           alt="Car main view"
-          className="w-full h-[650px] object-cover transition-all duration-300 ease-in-out transform rounded-[7.5px]"
+          className="w-full h-[400px] object-cover transition-all duration-300 ease-in-out transform rounded-[7.5px]"
         />
+        
+        {/* Navigation arrows - only show if there are multiple images */}
+        {validImages.length > 1 && (
+          <>
+            {/* Previous button */}
+            <button
+              onClick={handlePreviousImage}
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-40 hover:bg-opacity-70 rounded-full p-3 shadow-lg transition-all duration-200 hover:shadow-xl z-10"
+              aria-label="Previous image"
+            >
+              <ChevronLeft className="w-6 h-6 text-gray-700" />
+            </button>
+            
+            {/* Next button */}
+            <button
+              onClick={handleNextImage}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-40 hover:bg-opacity-70 rounded-full p-3 shadow-lg transition-all duration-200 hover:shadow-xl z-10"
+              aria-label="Next image"
+            >
+              <ChevronRight className="w-6 h-6 text-gray-700" />
+            </button>
+          </>
+        )}
+        
+        {/* Image counter */}
+        {validImages.length > 1 && (
+          <div className="absolute bottom-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm">
+            {selectedImage + 1} / {validImages.length}
+          </div>
+        )}
       </div>
 
       {/* Thumbnails - only show if there are valid thumbnails */}

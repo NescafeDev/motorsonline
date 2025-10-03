@@ -47,6 +47,7 @@ interface CarData {
   equipment?: string;
   description?: string;
   created_at?: string;
+  accessories?: string;
   // Seller information
   businessType?: string;
   country?: string;
@@ -270,8 +271,8 @@ export default function CarPage() {
   ];
 
   // Equipment features data - parse from equipment string
-  const equipmentFeatures = car.equipment
-    ? car.equipment.split(',').map(item => ({
+    const equipmentFeatures = car.accessories
+    ? car.accessories.split(',').map(item => ({
       label: item.trim(),
       icon: "/img/car/check.svg"
     }))
@@ -345,7 +346,7 @@ export default function CarPage() {
                         Kõrgema väärtusega lisvarustus
                       </h2>
 
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 gap-4">
                         {equipmentFeatures.slice(0, 12).map((feature, index) => (
                           <div
                             key={index}

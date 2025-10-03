@@ -658,6 +658,7 @@ export default function AddsPage() {
       .map(([k]) => k);
     formDataObj.append('tech_check', techCheckSelected.join(','));
     formDataObj.append('accessories', accessoriesSelected.join(','));
+    console.log('accessories:',accessoriesSelected)
     const token = localStorage.getItem("token");
 
     try {
@@ -1100,7 +1101,7 @@ export default function AddsPage() {
           </FormSection>
 
           {/* Technical Details */}
-          <FormSection title="Tehnilised detailandmed">
+          <FormSection title="" className="mt-0">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <FormField
                 label="Kütuse tüüp"

@@ -101,6 +101,7 @@ export default function CarPreview({ formData, brands, models, years, driveTypes
       image_8: carImages[7] ? URL.createObjectURL(carImages[7]) : undefined,
       equipment: formData.equipment || '',
       description: formData.description || '',
+      accessories: formData.accessories || '',
       businessType: formData.businessType || '',
       country: formData.country || '',
       phone: formData.phone || '',
@@ -170,8 +171,8 @@ export default function CarPreview({ formData, brands, models, years, driveTypes
   ];
 
   // Equipment features data - parse from equipment string
-  const equipmentFeatures = car.equipment
-    ? car.equipment.split(',').map(item => ({
+  const equipmentFeatures = car.accessories
+    ? car.accessories.split(',').map(item => ({
       label: item.trim(),
       icon: "/img/car/check.svg"
     }))

@@ -43,7 +43,7 @@ export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps
   // Function to map language codes to country codes for flags
   const getCountryCodeFromLanguage = (languageCode: string): string => {
     const languageToCountryMap: { [key: string]: string } = {
-      'en': 'US', // English -> United States
+      'en': 'GB', // English -> United Kingdom
       'et': 'EE', // Estonian -> Estonia
       'fi': 'FI', // Finnish -> Finland
       'sv': 'SE', // Swedish -> Sweden
@@ -59,7 +59,7 @@ export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps
       'da': 'DK', // Danish -> Denmark
       'nl': 'NL', // Dutch -> Netherlands
     };
-    return languageToCountryMap[languageCode.toLowerCase()] || 'US';
+    return languageToCountryMap[languageCode.toLowerCase()] || 'GB';
   };
 
   // Function to render language flags
@@ -70,9 +70,7 @@ export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps
       <div className="flex items-center gap-2 flex-wrap">
         {languageArray.map((lang, index) => {
           const trimmedLang = lang.trim();
-          console.log(`Processing language: "${trimmedLang}"`);
           const countryCode = getCountryCodeFromCountry(trimmedLang);
-          console.log(`Final country code: "${countryCode}"`);
           return (
             <div key={index} className="flex items-center">
               <ReactCountryFlag
@@ -144,29 +142,24 @@ export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps
     };
     
     const lowerInput = trimmedInput.toLowerCase();
-    console.log(`Looking for: "${lowerInput}" in country map`);
     
     // Check exact match first
     if (countryNameMap[lowerInput]) {
-      console.log(`Found exact match: ${countryNameMap[lowerInput]}`);
       return countryNameMap[lowerInput];
     }
     
     // Check if input contains any country name
     for (const [countryName, countryCode] of Object.entries(countryNameMap)) {
       if (lowerInput.includes(countryName) || countryName.includes(lowerInput)) {
-        console.log(`Found partial match: "${countryName}" -> ${countryCode}`);
         return countryCode;
       }
     }
     
     // If no country match, try language mapping
     const languageResult = getCountryCodeFromLanguage(input);
-    console.log(`No country match, trying language: ${languageResult}`);
     return languageResult;
   };
 
-  console.log(displayData)
 
   return (
     <section className="max-w-[1400px] w-full mx-auto my-8">

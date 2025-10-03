@@ -191,6 +191,7 @@ export default function UserForm() {
                 vatNote={getVatDisplayText(car)}
                 onDelete={() => handleDeleteCar(car.id)}
                 onEdit={() => handleEditCar(car.id)}
+                onPreview={() => navigate(`/car/${car.id}`)}
               />
             ))
           ) : (

@@ -54,11 +54,17 @@ export const ImageGallerySection = ({ car }: ImageGallerySectionProps): JSX.Elem
             <h2 className="font-['Poppins',Helvetica] font-semibold text-secondary-500 text-lg tracking-[-0.60px] leading-[30px]">
               Varustus:
             </h2>
-            <ul className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px] list-disc pl-6 space-y-2">
+            <ul className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px] pl-6 space-y-2">
               {car?.equipment && car.equipment.trim() ? (
-                car.equipment.split(',').map((item, index) => (
+                car.equipment.split(/\r?\n|\r|\n/g).map((item, index) => (
                   // <li key={index} className="break-words leading-relaxed py-1">{item.trim()}</li>
-                  <li key={index} className="break-all leading-relaxed py-1">{item.trim()}</li>
+                  <li key={index} className="break-all leading-relaxed">{
+                      item.trim().includes('•') ? (
+                        item.trim()
+                      ) : (
+                        <p className="font-semibold mt-5">{item.trim()}</p>
+                      )
+                    }</li>
                   // <li key={index} className="break-words">asd</li>
                 ))
               ) : (

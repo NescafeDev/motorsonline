@@ -1,4 +1,4 @@
-import { Edit , Trash2 } from "lucide-react";
+import { Edit , Trash2, Eye } from "lucide-react";
 import React from "react";
 
 interface CarCardProps {
@@ -16,6 +16,7 @@ interface CarCardProps {
   className?: string;
   onDelete?: () => void;
   onEdit?: () => void;
+  onPreview?: () => void;
 }
 
 const CalendarIcon = () => (
@@ -135,6 +136,7 @@ export const CarCard: React.FC<CarCardProps> = ({
   className = "",
   onDelete,
   onEdit,
+  onPreview,
 }) => {
   return (
     <div className={`w-100 h-[307px] relative ${className}`}>
@@ -203,7 +205,7 @@ export const CarCard: React.FC<CarCardProps> = ({
         </div>
 
         {/* Views */}
-        <div className="flex items-center gap-[10px] ml-[50px]">
+        <div className="flex items-center gap-[10px] ml-[25px]">
           <EyeIcon />
           <span className="text-[#1A202C] font-['Poppins'] text-[18px] font-normal leading-[150%] tracking-[-0.54px]">
             {views}
@@ -221,6 +223,15 @@ export const CarCard: React.FC<CarCardProps> = ({
 
       {/* Action Buttons */}
       <div className="absolute right-[30px] top-[230px] flex items-center gap-[21px]">
+        <button 
+          onClick={onPreview}
+          className="flex h-[45px] px-[20px] py-[12px] justify-center items-center gap-[10px] rounded-[10px] border border-[#3B82F6] text-[#3B82F6] hover:bg-[#EBF4FF]"
+        >
+          <Eye className="w-4 h-4" />
+          <span className="text-[#3B82F6] text-center font-['Poppins'] text-[16px] font-normal leading-[150%]">
+            Eelvaade
+          </span>
+        </button>
         <button 
           onClick={onEdit}
           className="flex h-[45px] px-[20px] py-[12px] justify-center items-center gap-[10px] rounded-[10px] border border-[#06D6A0] text-[#06D6A0]"
