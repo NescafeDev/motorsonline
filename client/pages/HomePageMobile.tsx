@@ -294,6 +294,19 @@ export default function HomePageMobile() {
     setFiltersApplied(false); // Reset filter state when searching
   };
 
+  // Function to get VAT display text
+  const getVatDisplayText = (car: Car) => {
+    if (!car) return '';
+
+    // If there's no VAT rate or it's empty/null, show "Hind ei sisalda käibemaksu"
+    if (!car.vatRate || car.vatRate === '' || car.vatRate === 'null') {
+      return 'Hind ei sisalda käibemaksu';
+    }
+
+    // For any other VAT rate, show the specific rate
+    return `Hind sisaldab käibemaksu ${car.vatRate}%`;
+  };
+
   // Format car data for display
   const formatCarForDisplay = (car: Car) => ({
     id: car.id,
@@ -301,6 +314,8 @@ export default function HomePageMobile() {
     year: car.year_value || 0,
     mileage: `${car.mileage?.toLocaleString() || 'N/A'} km`,
     price: `€ ${car.price?.toLocaleString() || 'N/A'}`,
+    discountPrice: car.discountPrice ? `€ ${car.discountPrice.toLocaleString()}` : `€ ${car.price?.toLocaleString() || 'N/A'}`,
+    vatNote: getVatDisplayText(car),
     fuel: car.fuelType || 'N/A',
     transmission: car.transmission || 'N/A',
     image: car.image_1 || "img/Rectangle 34624924.png",
@@ -354,7 +369,7 @@ export default function HomePageMobile() {
       {/* Main Content */}
       <main className="bg-[#F6F7F9]">
         {/* Hero Section */}
-        <section className="bg-motors-light px-5 py-10 lg:py-16">
+        <section className="bg-motors-light px-2 py-10 lg:py-16">
           <div className="text-center mb-12 max-w-4xl mx-auto px-[20px]">
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-6 leading-normal px-4">
               MotorsOnline – Leia oma järgmine auto siit!
@@ -373,7 +388,7 @@ export default function HomePageMobile() {
         </section>
 
         {/* Car Hero Image */}
-        <section className="px-0">
+        <section className="px-5">
           <div className="w-full h-[374px] bg-gray-200 overflow-hidden">
             <img
               src="/img/mobile/hero.png"

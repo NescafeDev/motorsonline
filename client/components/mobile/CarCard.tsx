@@ -2,12 +2,16 @@ import { Heart, Fuel } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useFavorites } from "../../hooks/useFavorites";
 import { useAuth } from "../../contexts/AuthContext";
+import { Separator } from "@/components/ui/separator";
+
 interface CarCardProps {
   id: number;
   title: string;
   year: number;
   mileage: string;
   price: string;
+  discountPrice: string;
+  vatNote: string;
   fuel: string;
   transmission: string;
   image: string;
@@ -20,6 +24,8 @@ export function CarCard({
   year,
   mileage,
   price,
+  discountPrice,
+  vatNote,
   fuel,
   transmission,
   image,
@@ -28,22 +34,102 @@ export function CarCard({
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const { isFavorite: isFav, toggleFavorite } = useFavorites();
+
   return (
     <div className="bg-white rounded-[13px] overflow-hidden shadow-sm w-full max-w-md mx-auto"
-    onClick={() => {
-      navigate(`/car/${id}`);
-      window.scrollTo(0, 0);
-    }}>
+      onClick={() => {
+        navigate(`/car/${id}`);
+        window.scrollTo(0, 0);
+      }}>
       <div className="relative">
         <img
           src={image}
           alt={title}
-          className="w-full h-[200px] md:h-[247px] object-cover"
+          className="w-full h-[247px] md:h-full object-cover"
         />
       </div>
 
-      <div className="p-4 md:p-5">
-        <div className="flex items-start justify-between mb-4">
+      <div className="p-4 md:p-2">
+        <div className="grid grid-cols-5 gap-2 h-20 p-2">
+          <div className="col-span-4 flex flex-col justify-center">
+            <h3 className="text-xl font-semibold text-motors-dark mb-1 leading-[30px] tracking-[-0.6px]">
+              {title}
+            </h3>
+            <p className="text-sm text-motors-gray font-medium leading-[21px] tracking-[-0.28px]">
+              {year}, {mileage}
+            </p>
+          </div>
+          <div className="justify-self-end">
+            <button
+              className="w-6 h-6 cursor-pointer "
+              onClick={(e) => {
+                e.stopPropagation();
+                if (!isAuthenticated) {
+                  // You could show a login prompt here
+                  alert('Please log in to save favorites');
+                  return;
+                }
+                toggleFavorite(id);
+              }}
+            >
+              <img
+                className="w-6 h-6"
+                alt="Favorite"
+                src={
+                  isFav(id)
+                    ? "/img/vuesax-bold-heart.svg"
+                    : "/img/vuesax-linear-heart.svg"
+                }
+              />
+            </button>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-2 h-20 p-2">
+          <div className="flex items-center">
+            <img
+              className="w-5 h-5 mr-2"
+              alt="Fuel type"
+              src="/img/vuesax-bold-gas-station.svg"
+            />
+            <span className="text-motors-gray tracking-[-0.32px]">{fuel}</span>
+          </div>
+
+          <div className="flex items-center">
+            <img className="w-6 h-6 ml-2" alt="Google logo" src="/img/car/bevel.svg" />
+            <span className="text-motors-gray tracking-[-0.32px]">
+              {transmission}
+            </span>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 h-2 mx-2 justify-center">
+          {discountPrice && (
+            <>
+              <div className="relative">
+                <span className="font-medium text-[#747474] text-[14px] leading-[normal] [font-family:'Poppins',Helvetica]">
+                  {price.toLocaleString()}
+                </span>
+                <Separator className="absolute w-[40px] top-[12px] -left-1 bg-gray-400" />
+              </div>
+
+            </>
+          )}
+        </div>
+        <div className="grid grid-cols-2 h-20 mx-2">
+
+          <div className="col-span-1 flex items-center gap-1">
+
+            <p className="font-semibold text-secondary-500 text-[24px] leading-[normal] [font-family:'Poppins',Helvetica]">
+              {discountPrice}
+            </p>
+
+          </div>
+          <div className="col-span-1 flex items-center justify-end">
+            <p className="text-[#747474] text-xs tracking-[-0.2px] leading-[16px] mt-1 text-center">
+              {vatNote}
+            </p>
+          </div>
+        </div>
+        {/* <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
             <h3 className="text-xl font-semibold text-motors-dark mb-1 leading-[30px] tracking-[-0.6px]">
               {title}
@@ -69,9 +155,9 @@ export function CarCard({
               }`}
             />
           </button>
-        </div>
+        </div> */}
 
-        <div className="flex items-center gap-6 mb-4">
+        {/* <div className="flex items-center gap-6 mb-4">
           <div className="flex items-center gap-2.5">
             <Fuel className="w-6 h-6 text-black" />
             <span className="text-motors-gray tracking-[-0.32px]">{fuel}</span>
@@ -90,23 +176,13 @@ export function CarCard({
               {transmission}
             </span>
           </div>
-        </div>
+        </div> */}
 
-        <div className="flex items-center justify-between">
+        {/* <div className="flex items-center justify-between">
           <span className="text-xl md:text-2xl font-semibold text-motors-dark">
             {price}
           </span>
-          <button 
-            className="bg-brand-primary text-white px-6 md:px-10 py-3 md:py-4 rounded-[13px] font-normal tracking-[-0.32px] text-sm md:text-base"
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate(`/car/${id}`);
-              window.scrollTo(0, 0);
-            }}
-          >
-            Vaata
-          </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

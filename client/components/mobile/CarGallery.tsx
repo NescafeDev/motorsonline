@@ -1,5 +1,10 @@
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
+import { Lightbox } from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
+import { Fullscreen } from "yet-another-react-lightbox/plugins";
+import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 
 interface CarGalleryProps {
   mainImage: string;
@@ -25,6 +30,10 @@ export default function CarGallery({
   // State for current image index
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   
+  // Lightbox state
+  const [isOpen, setIsOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  
   // Navigation functions
   const goToPrevious = () => {
     setCurrentImageIndex((prev) => (prev > 0 ? prev - 1 : allImages.length - 1));
@@ -39,17 +48,41 @@ export default function CarGallery({
     setCurrentImageIndex(index);
     onImageClick?.(index);
   };
+  
+  // Handle main image click to open lightbox
+  const handleMainImageClick = () => {
+    setLightboxIndex(currentImageIndex);
+    setIsOpen(true);
+  };
+  
+  // Handle keyboard navigation for accessibility
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      setLightboxIndex(currentImageIndex);
+      setIsOpen(true);
+    }
+  };
 
   return (
     <div className="px-5">
       {/* Main image */}
-      <div className="relative mb-4">
+      <div className="relative mb-4 h-[280px] w-full">
         <img
           src={allImages[currentImageIndex]}
           alt="Car main view"
-          className="w-full h-full object-cover rounded-[10px] cursor-pointer hover:opacity-95 transition-opacity"
-          onClick={() => handleImageClick(currentImageIndex)}
+          className="w-full h-[280px] object-fit rounded-[10px] cursor-pointer hover:opacity-95 transition-opacity"
+          onClick={handleMainImageClick}
+          onKeyDown={handleKeyDown}
+          tabIndex={0}
+          role="button"
+          aria-label="Open image in lightbox"
         />
+        
+        {/* Lightbox indicator */}
+        <div className="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full opacity-0 hover:opacity-100 transition-opacity duration-200">
+          <Maximize2 className="w-4 h-4" />
+        </div>
         
         {/* Navigation arrows - only show if there are multiple images */}
         {hasImages && allImages.length > 1 && (
@@ -120,6 +153,33 @@ export default function CarGallery({
           <p>No images available for this car</p>
         </div>
       )}
+      
+      {/* Lightbox */}
+      <Lightbox
+        open={isOpen}
+        close={() => setIsOpen(false)}
+        slides={allImages.map((img) => ({ src: img }))}
+        plugins={[Fullscreen, Thumbnails]}
+        index={lightboxIndex}
+        thumbnails={{
+          position: 'bottom',
+          width: 80,
+          height: 60,
+          border: 1,
+          borderRadius: 4,
+          padding: 2,
+          gap: 4,
+          borderColor: 'white',
+          imageFit: 'cover',
+        }}
+        carousel={{
+          finite: false,
+        }}
+        render={{
+          buttonPrev: allImages.length > 1 ? undefined : () => null,
+          buttonNext: allImages.length > 1 ? undefined : () => null,
+        }}
+      />
     </div>
   );
 }

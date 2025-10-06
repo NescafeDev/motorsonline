@@ -4,6 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
 import { createCar, getCarById, getAllCars, updateCar, deleteCar, getCarsByUserId } from '../models/car';
+import { createContact, updateContact, getContactByCarId } from '../models/contact';
 import { pool } from '../db';
 import { DriveType } from '@shared/drive-types';
 
@@ -221,8 +222,30 @@ router.post('/', authenticateToken, upload.fields([
     data.price = data.price ? safeParseFloat(data.price) : 0;
     data.discountPrice = data.discountPrice ? safeParseFloat(data.discountPrice) : 0;
     
+    // Separate contact data from car data
+    const contactData = {
+      phone: data.phone || null,
+      businessType: data.businessType || null,
+      socialNetwork: data.socialNetwork || null,
+      email: data.email || null,
+      address: data.address || null,
+      website: data.website || null,
+      language: data.language || null,
+      country: data.country || null,
+    };
+
+    // Remove contact fields from car data
+    delete data.phone;
+    delete data.businessType;
+    delete data.socialNetwork;
+    delete data.email;
+    delete data.address;
+    delete data.website;
+    delete data.language;
+    delete data.country;
+    
     // Convert empty strings to null for optional fields
-    const optionalFields = ['plateNumber', 'month', 'power', 'displacement', 'technicalData', 'ownerCount', 'modelDetail', 'warranty', 'vatRefundable', 'vatRate', 'accident', 'vinCode', 'description', 'equipment', 'additionalInfo', 'phone', 'businessType', 'socialNetwork', 'email'];
+    const optionalFields = ['plateNumber', 'month', 'power', 'displacement', 'technicalData', 'ownerCount', 'modelDetail', 'warranty', 'vatRefundable', 'vatRate', 'accident', 'vinCode', 'description', 'equipment', 'additionalInfo'];
     optionalFields.forEach(field => {
       if (data[field] === '') {
         data[field] = null;
@@ -248,6 +271,17 @@ router.post('/', authenticateToken, upload.fields([
     if (Array.isArray(data.accessories)) data.accessories = data.accessories.join(',');
     
     const car = await createCar(data);
+    
+    // Create contact record if contact data exists
+    if (contactData.phone || contactData.businessType || contactData.socialNetwork || 
+        contactData.email || contactData.address || contactData.website || 
+        contactData.language || contactData.country) {
+      await createContact({
+        car_id: car.id,
+        ...contactData
+      });
+    }
+    
     res.status(201).json(car);
   } catch (err: any) {
     console.error('Car creation error:', err);

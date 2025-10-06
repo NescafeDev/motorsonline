@@ -59,17 +59,20 @@ interface CarData {
   equipment?: string;
   description?: string;
   created_at?: string;
+  modelDetail?: string;
   // Seller information
   businessType?: string;
   country?: string;
   phone?: string;
   email?: string;
   language?: string;
+  website?: string;
 }
 
 export default function CarPageMobile() {
   const { id } = useParams();
   const [car, setCar] = useState<any>(null);
+  const [contacts, setContacts] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -114,6 +117,22 @@ export default function CarPageMobile() {
 
         const carData = await response.json();
         setCar(carData);
+
+        // Fetch contact data for this car
+        try {
+          const contactResponse = await fetch(`/api/contacts/car/${carData.id}`);
+          if (contactResponse.ok) {
+            const contactData = await contactResponse.json();
+            console.log('ContactData:', contactData);
+            setContacts(contactData);
+          } else {
+            console.log('No contact data found for car:', carData.id);
+            setContacts(null);
+          }
+        } catch (contactError) {
+          console.log('Error fetching contact data:', contactError);
+          setContacts(null);
+        }
 
         // Increment view count when car data is successfully loaded
         try {
@@ -268,7 +287,7 @@ export default function CarPageMobile() {
 
 
   return (
-    <div className="min-h-screen bg-white font-['Poppins']">
+    <div className="min-h-screen  bg-white font-['Poppins']">
       <Header />
 
       <main className="pb-20">
@@ -283,7 +302,7 @@ export default function CarPageMobile() {
           <div className="bg-[#F6F7F9] rounded-[10px] px-5 py-[30px]">
             <div className="flex items-start justify-between mb-2">
               <h1 className="text-[#1A202C] text-[26px] font-semibold leading-[150%] tracking-[-0.78px]">
-                {car.brand_name} {car.model_name}
+                {car.brand_name} {car.model_name} {car.modelDetail}
               </h1>
               <Heart
                 className={`w-6 h-6 transition-colors duration-200 cursor-pointer ${isFavorite(car.id)
@@ -468,12 +487,14 @@ export default function CarPageMobile() {
         <SpecificationsSection
           sellerData={{
             title: "Müüja andmed",
-            company: car.businessType || "ELKE Mustamäe",
-            address: car.country || "Tallinn, Mustamäe tee 22",
+            company: contacts?.businessType || car.businessType || "ELKE Mustamäe",
+            country: contacts?.country || contacts?.country || car.country || "EE",
+            address: contacts?.address || car.address || "Tallinn, Mustamäe tee 22",
             contactPerson: "Kontaktisik",
-            phone: car.phone || "+372 8888 8888",
-            email: car.email || "Näide@elke.ee",
-            language: car.language || "en"
+            phone: contacts?.phone || car.phone || "+372 8888 8888",
+            email: contacts?.email || car.email || "Näide@elke.ee",
+            language: contacts?.language || car.language || "en",
+            website: contacts?.website || car.website || "example.com"
           }}
         />
 

@@ -11,6 +11,7 @@ interface Car {
   id: number;
   brand_name?: string;
   model_name?: string;
+  modelDetail?: string;
   year_value?: number;
   price?: number;
   discountPrice?: number;
@@ -187,7 +188,7 @@ export default function UserPageMobile() {
               <UserCarCard
                 key={car.id || index}
                 id={car.id}
-                title={`${car.brand_name || 'Unknown'} ${car.model_name || ''}`}
+                title={`${car.brand_name || 'Unknown'} ${car.model_name || ''} ${car.modelDetail || ''}`}
                 breadcrumb={`Kasutatud autod  »  ${car.brand_name || 'Unknown'} ${car.model_name || ''}  »  ${car.year_value || ''}`}
                 image={car.image_1 || "https://cdn.builder.io/api/v1/image/assets/TEMP/cc7bda4b04e2c28565ece34ac8989e7268a2a60f?width=620"}
                 description={car.description || "No description available"}

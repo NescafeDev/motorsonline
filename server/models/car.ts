@@ -29,11 +29,6 @@ export interface Car {
   description: string;
   equipment: string;
   additionalInfo: string;
-  country: string;
-  phone: string;
-  businessType: string;
-  socialNetwork: string;
-  email: string;
   image_1?: string;
   image_2?: string;
   image_3?: string;
@@ -59,51 +54,53 @@ export interface Car {
   co2Emission?: number;
   created_at?: string;
   updated_at?: string;
-  language?: string;
-  address?: string;
   salonColor?: string;
   bodyType?: string;
   stereo?: string;
+  valuveljed?: string;
   carColor?: string;
   carColorType?: string;
   vehicleType?: string;
-  website?: string;
   inspectionValidityPeriod?: string;
 }
 
 export async function createCar(car: Omit<Car, 'id'>): Promise<Car> {
   const [result]: any = await pool.query(
     `INSERT INTO cars (
-      user_id, brand_id, model_id, year_id, drive_type_id, category, transmission, fuelType, plateNumber, month, mileage, power, displacement, technicalData, ownerCount, modelDetail, price, discountPrice, warranty, vatRefundable, vatRate, accident, vinCode, description, equipment, additionalInfo, country, phone, businessType, socialNetwork, email, image_1, image_2, image_3, image_4, image_5, image_6, image_7, image_8, tech_check, accessories, language, address, salonColor, bodyType, stereo, carColor, carColorType, vehicleType, website, inspectionValidityPeriod, seats, doors
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [car.user_id, car.brand_id, car.model_id, car.year_id, car.drive_type_id, car.category, car.transmission, car.fuelType, car.plateNumber, car.month, car.mileage, car.power, car.displacement, car.technicalData, car.ownerCount, car.modelDetail, car.price, car.discountPrice, car.warranty, car.vatRefundable, car.vatRate, car.accident, car.vinCode, car.description, car.equipment, car.additionalInfo, car.country, car.phone, car.businessType, car.socialNetwork, car.email, car.image_1, car.image_2, car.image_3, car.image_4, car.image_5, car.image_6, car.image_7, car.image_8, car.tech_check, car.accessories, car.language, car.address, car.salonColor, car.bodyType, car.stereo, car.carColor, car.carColorType, car.vehicleType, car.website, car.inspectionValidityPeriod, car.seats, car.doors]
+      user_id, brand_id, model_id, year_id, drive_type_id, category, transmission, fuelType, plateNumber, month, mileage, power, displacement, technicalData, ownerCount, modelDetail, price, discountPrice, warranty, vatRefundable, vatRate, accident, vinCode, description, equipment, additionalInfo, image_1, image_2, image_3, image_4, image_5, image_6, image_7, image_8, tech_check, accessories, salonColor, bodyType, stereo, carColor, carColorType, vehicleType, inspectionValidityPeriod, seats, doors, valuveljed
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [car.user_id, car.brand_id, car.model_id, car.year_id, car.drive_type_id, car.category, car.transmission, car.fuelType, car.plateNumber, car.month, car.mileage, car.power, car.displacement, car.technicalData, car.ownerCount, car.modelDetail, car.price, car.discountPrice, car.warranty, car.vatRefundable, car.vatRate, car.accident, car.vinCode, car.description, car.equipment, car.additionalInfo,  car.image_1, car.image_2, car.image_3, car.image_4, car.image_5, car.image_6, car.image_7, car.image_8, car.tech_check, car.accessories, car.salonColor, car.bodyType, car.stereo, car.carColor, car.carColorType, car.vehicleType, car.inspectionValidityPeriod, car.seats, car.doors, car.valuveljed]
   );
   return { id: result.insertId, ...car };
 }
 
 export async function getCarById(id: number): Promise<any | null> {
   const [rows]: any = await pool.query(`
-    SELECT cars.*, brand.name as brand_name, model.name as model_name, year.value as year_value, drive_type.name as drive_type_name, drive_type.ee_name as drive_type_ee_name
+    SELECT cars.*, brand.name as brand_name, model.name as model_name, year.value as year_value, drive_type.name as drive_type_name, drive_type.ee_name as drive_type_ee_name,
+           contacts.phone, contacts.businessType, contacts.socialNetwork, contacts.email, contacts.address, contacts.website, contacts.language, contacts.country
     FROM cars
     LEFT JOIN brand ON cars.brand_id = brand.id
     LEFT JOIN model ON cars.model_id = model.id
     LEFT JOIN year ON cars.year_id = year.id
     LEFT JOIN drive_type ON cars.drive_type_id = drive_type.id
+    LEFT JOIN contacts ON cars.id = contacts.car_id
     WHERE cars.id = ?
   `, [id]);
   if (rows.length === 0) return null;
-  // Split tech_check and accessories into arrays if not nul
+  // Split tech_check and accessories into arrays if not null
   return rows[0];
 }
 
 export async function getAllCars(): Promise<any[]> {
   const [rows]: any = await pool.query(`
-    SELECT cars.*, brand.name as brand_name, model.name as model_name, year.value as year_value, drive_type.name as drive_type_name, drive_type.ee_name as drive_type_ee_name
+    SELECT cars.*, brand.name as brand_name, model.name as model_name, year.value as year_value, drive_type.name as drive_type_name, drive_type.ee_name as drive_type_ee_name,
+           contacts.phone, contacts.businessType, contacts.socialNetwork, contacts.email, contacts.address, contacts.website, contacts.language, contacts.country
     FROM cars
     LEFT JOIN brand ON cars.brand_id = brand.id
     LEFT JOIN model ON cars.model_id = model.id
     LEFT JOIN year ON cars.year_id = year.id
     LEFT JOIN drive_type ON cars.drive_type_id = drive_type.id
+    LEFT JOIN contacts ON cars.id = contacts.car_id
     ORDER BY cars.created_at DESC
   `);
   // Split tech_check and accessories into arrays if not null
@@ -112,12 +109,14 @@ export async function getAllCars(): Promise<any[]> {
 
 export async function getCarsByUserId(userId: number): Promise<any[]> {
   const [rows]: any = await pool.query(`
-    SELECT cars.*, brand.name as brand_name, model.name as model_name, year.value as year_value, drive_type.name as drive_type_name, drive_type.ee_name as drive_type_ee_name
+    SELECT cars.*, brand.name as brand_name, model.name as model_name, year.value as year_value, drive_type.name as drive_type_name, drive_type.ee_name as drive_type_ee_name,
+           contacts.phone, contacts.businessType, contacts.socialNetwork, contacts.email, contacts.address, contacts.website, contacts.language, contacts.country
     FROM cars
     LEFT JOIN brand ON cars.brand_id = brand.id
     LEFT JOIN model ON cars.model_id = model.id
     LEFT JOIN year ON cars.year_id = year.id
     LEFT JOIN drive_type ON cars.drive_type_id = drive_type.id
+    LEFT JOIN contacts ON cars.id = contacts.car_id
     WHERE cars.user_id = ?
     ORDER BY cars.created_at DESC
   `, [userId]);

@@ -351,7 +351,7 @@ export const CarListingSection = ({
   };
 
   // Helper function to update range filters
-  const updateRangeFilter = (minKey: keyof CarFilters, maxKey: keyof CarFilters, minValue: string, maxValue: string) => {
+  const updateRangeFilter = (minKey: keyof CarFilters, maxKey: keyof CarFilters, minValue: string | number , maxValue: string | number) => {
     const updates: Partial<CarFilters> = {};
     if (minValue) {
       (updates as any)[minKey] = Number(minValue);
@@ -690,7 +690,7 @@ export const CarListingSection = ({
           <Separator className="my-2" />
 
           {/* Technical Specifications */}
-          {rangeInputGroups.slice(3, 5).map((group) => (
+          {rangeInputGroups.slice(2, 5).map((group) => (
             <div key={group.id} className="space-y-2">
               <label className="block font-['Poppins',Helvetica] font-normal text-[#747474] text-base">
                 {group.label}

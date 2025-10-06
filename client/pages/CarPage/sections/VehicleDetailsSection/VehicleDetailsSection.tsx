@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../../../components/ui/button";
 import { Card, CardContent } from "../../../../components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import axios from "axios";
 
 // Car interface (matching HomePage structure)
@@ -93,6 +94,16 @@ interface VehicleDetailsSectionProps {
   excludeCarId?: number;
 }
 
+// Helper function to get VAT display text (matching HomePage)
+const getVatDisplayText = (car: Car): string => {
+  if (car.vatRefundable === 'yes') {
+    return 'KM tagastatav';
+  } else if (car.vatRefundable === 'no') {
+    return 'KM ei ole tagastatav';
+  }
+  return '';
+};
+
 export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionProps): JSX.Element => {
   const navigate = useNavigate();
   const [cars, setCars] = useState<Car[]>([]);
@@ -178,65 +189,77 @@ export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionPro
             className="w-full bg-white rounded-[10px] overflow-hidden relative cursor-pointer hover:shadow-lg transition-shadow"
             onClick={() => navigate(`/car/${car.id}`)}
           >
-            <CardContent className="p-0">
-              <img
+            <img
                 className="w-full h-[189px] object-cover"
                 alt={`${car.brand_name || 'Unknown'} ${car.model_name || ''}`}
                 src={car.image_1 || "/img/Rectangle 34624924.png"}
               />
+            <CardContent className="p-4 pt-5 pb-3 relative">
+              {/* <img
+                className="w-full h-[189px] object-cover"
+                alt={`${car.brand_name || 'Unknown'} ${car.model_name || ''}`}
+                src={car.image_1 || "/img/Rectangle 34624924.png"}
+              /> */}
 
-              <div className="flex flex-col items-start gap-1 p-5 pt-5 relative">
-                <div className="flex justify-between items-start w-full">
-                  <div className="flex flex-col gap-1">
-                    <h3 className="font-semibold text-secondary-500 text-lg tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica]">
-                      {car.brand_name || 'Unknown'} {car.model_name || ''}
-                    </h3>
-                    <p className="font-medium text-[#747474] text-sm tracking-[-0.28px] leading-[21px] [font-family:'Poppins',Helvetica]">
-                      {car.year_value || 'N/A'}, {car.mileage?.toLocaleString() || 'N/A'} km
-                    </p>
-                  </div>
-                  <button className="flex items-center justify-center">
-                    <HeartIcon className="w-6 h-6 text-gray-400" />
+              <div className="grid grid-cols-4 gap-4 mb-4 h-20 p-2">
+                <div className="col-span-3 flex flex-col justify-center">
+                  <h3 className="font-semibold text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]">
+                    {car.brand_name || 'Unknown'} {car.model_name || ''} {car.modelDetail || ''}
+                  </h3>
+                  <p className="font-medium text-[#747474] text-sm tracking-[-0.28px] leading-[21px]">
+                    {car.year_value || 'N/A'}, {car.mileage?.toLocaleString() || 'N/A'} km
+                  </p>
+                </div>
+                <div className="absolute right-6 top-8">
+                  <button className="w-6 h-6 cursor-pointer">
+                    <img
+                      className="w-6 h-6"
+                      alt="Favorite"
+                      src="/img/vuesax-linear-heart.svg"
+                    />
                   </button>
                 </div>
-
-                <div className="flex items-center gap-5 mt-4">
-                  <div className="flex items-center gap-2">
-                    <img
-                      className="w-5 h-5"
-                      alt="Gas station icon"
-                      src="/img/vuesax-bold-gas-station.svg"
-                    />
-                    <span className="font-normal text-[#747474] text-sm tracking-[-0.28px] leading-[21px] [font-family:'Poppins',Helvetica]">
-                      {car.fuelType || 'N/A'}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <div className="relative w-5 h-5">
-                    <img className="w-6 h-6" alt="Google logo" src="/img/car/bevel.svg" />
-                    </div>
-                    <span className="font-normal text-[#747474] text-sm tracking-[-0.28px] leading-[21px] [font-family:'Poppins',Helvetica]">
-                      {car.transmission || 'N/A'}
-                    </span>
-                  </div>
+              </div>
+              <div className="grid grid-cols-2 mb-4 h-20">
+                <div className="flex items-center">
+                  <img
+                    className="w-5 h-5 mr-2"
+                    alt="Fuel type"
+                    src="/img/vuesax-bold-gas-station.svg"
+                  />
+                  <span className="text-[#747474] text-sm tracking-[-0.28px] leading-[21px]">
+                    {car.fuelType || 'N/A'}
+                  </span>
                 </div>
-
-                <div className="flex justify-between items-center w-full mt-4">
-                  <p className="font-semibold text-secondary-500 text-xl [font-family:'Poppins',Helvetica]">
-                    € {car.price?.toLocaleString() || 'N/A'}
-                  </p>
-                  <Button 
-                    className="h-10 px-[30px] py-3 bg-[#06d6a0] text-primary-0 rounded-[10px] hover:bg-[#05c090]"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate(`/car/${car.id}`);
-                    }}
-                  >
-                    <span className="font-normal text-base text-center text-white tracking-[-0.32px] leading-6 [font-family:'Poppins',Helvetica]">
-                      Vaata
+                <div className="flex items-center mr-2 gap-2">
+                  <img className="w-6 h-6 ml-4" alt="Transmission" src="/img/car/bevel.svg" />
+                  <span className="text-[#747474] text-sm tracking-[-0.28px] leading-[21px]">
+                    {car.transmission || 'N/A'}
+                  </span>
+                </div>
+              </div>
+              <div className="col-6 h-3 w-full">
+                {car.discountPrice && (
+                  <>
+                    <div className="relative">
+                      <span className="font-medium text-[#747474] text-[14px] leading-[normal] [font-family:'Poppins',Helvetica]">
+                        € {car.price.toLocaleString()}
+                      </span>
+                      <Separator className="absolute w-[40px] top-[12px] -left-1 bg-gray-400" />
+                    </div>
+                  </>
+                )}
+              </div>
+              <div className="grid grid-cols-1 h-20">
+                <div className="flex items-center gap-1">
+                  <div className="mt-2">
+                    <span className="font-semibold text-secondary-500 text-[24px] leading-[normal] [font-family:'Poppins',Helvetica]">
+                      € {car.discountPrice?.toLocaleString() || car.price?.toLocaleString() || 'N/A'}
                     </span>
-                  </Button>
+                    <p className="text-[#747474] text-xs tracking-[-0.2px] leading-[16px] mt-1 text-center">
+                      {getVatDisplayText(car)}
+                    </p>
+                  </div>
                 </div>
               </div>
             </CardContent>

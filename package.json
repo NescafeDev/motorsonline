@@ -37,10 +37,12 @@
     "react-country-flag": "^3.1.0",
     "react-country-flags-lazyload": "^1.0.9",
     "react-flags-select": "^2.5.0",
+    "react-image-lightbox": "^5.1.4",
     "react-languages-select": "^1.0.20",
     "react-quill": "^2.0.0",
     "react-select": "^5.10.2",
     "react-select-country-list": "^2.2.3",
+    "yet-another-react-lightbox": "^3.25.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

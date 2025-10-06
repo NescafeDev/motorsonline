@@ -43,11 +43,11 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
   return (
     <div className="bg-white rounded-[13px] overflow-hidden shadow-sm w-full max-w-md mx-auto">
       {/* Image Section */}
-      <div className="relative">
+      <div className="relative mb-5">
         <img
           src={image}
           alt={title}
-          className="w-full h-[200px] object-cover"
+          className="w-full h-[247px] object-cover"
         />
         {/* Discount Badge */}
         {discount && (
@@ -58,7 +58,7 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
       </div>
 
       {/* Content Section */}
-      <div className="p-4">
+      <div className="">
         {/* Title and Breadcrumb */}
         <div className="mb-3">
           <h3 className="text-lg font-semibold text-motors-dark mb-1 leading-[27px] tracking-[-0.54px]">

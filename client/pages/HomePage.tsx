@@ -1,4 +1,5 @@
 import { SearchIcon } from "lucide-react";
+import { Badge } from "../components/ui/badge";
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
@@ -14,6 +15,7 @@ import PageContainer from "../components/PageContainer";
 import axios from "axios";
 import { useFavorites } from "../hooks/useFavorites";
 import { useAuth } from "../contexts/AuthContext";
+import { Separator } from "@/components/ui/separator";
 
 // Car-related types
 export interface Car {
@@ -87,6 +89,7 @@ export interface CarFilters {
   brand_id?: number;
   model_id?: number;
   model_name?: string;
+  modelDetail?: string;
   trim_level?: string;
   category?: string;
   drive_type_id?: number[];
@@ -191,10 +194,27 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filtersApplied, setFiltersApplied] = useState(false);
+  const getVatDisplayText = (car: Car | null) => {
+    if (!car) return '';
 
-  // console.log('HomePage render - isAuthenticated:', isAuthenticated);
-  // console.log('HomePage render - user:', user);
+    // If there's no VAT rate or it's empty/null, show "Hind ei sisalda käibemaksu"
+    if (car.vatRefundable == 'no') {
+      return 'Hind ei sisalda käibemaksu';
+    }
 
+    // If VAT rate is 24, show "Hind sisaldab käibemaksu 24%"
+    // if (car.vatRate === '24') {
+    return 'Hind sisaldab käibemaksu ' + car.vatRate + '%';
+    // }
+
+    // For any other VAT rate, show the specific rate
+    // return `Hind sisaldab käibemaksu ${car.vatRate}%`;
+  };
+
+  // Calculate discount percentage
+  const discountPercentage = (car: Car) => {
+    return Math.round(((car.price - car.discountPrice) / car.price) * 100);
+  };
   // Load initial cars
   useEffect(() => {
     console.log('Initial load cars effect triggered');
@@ -284,6 +304,7 @@ export default function HomePage() {
     }
   };
 
+
   const handleApplyFilters = () => {
     if (Object.keys(filters).length > 0) {
       loadFilteredCarsWithFilters(filters);
@@ -302,12 +323,14 @@ export default function HomePage() {
   // Format car data for display
   const formatCarForDisplay = (car: Car) => ({
     image: car.image_1 || "img/Rectangle 34624924.png",
-    title: `${car.brand_name || 'Unknown'} ${car.model_name || ''}`,
+    title: `${car.brand_name || 'Unknown'} ${car.model_name || ''} ${car.modelDetail || ''}`,
     details: `${car.year_value || 'N/A'}, ${car.mileage?.toLocaleString() || 'N/A'} km`,
     fuel: car.fuelType || 'N/A',
     transmission: car.transmission || 'N/A',
     price: `€ ${car.price?.toLocaleString() || 'N/A'}`,
     isFavorite: false,
+    discountPrice: `€ ${car.discountPrice?.toLocaleString() || 'N/A'}`,
+    discountPercentage: discountPercentage(car),
   });
 
   return (
@@ -482,6 +505,7 @@ export default function HomePage() {
                                   <span className="text-[#747474] text-sm tracking-[-0.28px] leading-[21px]">
                                     {displayCar.fuel}
                                   </span>
+
                                 </div>
                                 <div className="flex items-center mr-2 gap-2">
                                   <img className="w-6 h-6 ml-2" alt="Google logo" src="/img/car/bevel.svg" />
@@ -490,13 +514,38 @@ export default function HomePage() {
                                   </span>
                                 </div>
                               </div>
-                              <div className="grid grid-cols-2 h-20">
-                                <div className="flex items-center">
-                                  <p className="font-semibold text-secondary-500 text-xl">
-                                    {displayCar.price}
-                                  </p>
+                              <div className="col-6 h-3 w-full">
+                                {car.discountPrice && (
+                                  <>
+                                    <div className="relative">
+                                      <span className="font-medium text-[#747474] text-[14px] leading-[normal] [font-family:'Poppins',Helvetica]">
+                                        {displayCar.price.toLocaleString()}
+                                      </span>
+                                      <Separator className="absolute w-[40px] top-[12px] -left-1 bg-gray-400" />
+                                      {
+                                        displayCar.discountPercentage != 0 && (
+                                          <Badge className="bg-[#ffe5e5] text-[#ff0000] border border-[#ff0000] rounded-[100px] ml-1 mt-1 px-2.5 py-0.4 text-[12px]">
+                                            {displayCar.discountPercentage}%
+                                          </Badge>
+                                        )
+                                      }
+                                    </div>
+
+                                  </>
+                                )}
+                              </div>
+                              <div className="grid grid-cols-1 h-20">
+                                <div className="flex items-center gap-1">
+                                  <div className="mt-2">
+                                    <span className="font-semibold text-secondary-500 text-[24px] leading-[normal] [font-family:'Poppins',Helvetica]">
+                                      € {car.discountPrice.toLocaleString()}
+                                    </span>
+                                    <p className="text-[#747474] text-xs tracking-[-0.2px] leading-[16px] mt-1 text-center">
+                                      {getVatDisplayText(car)}
+                                    </p>
+                                  </div>
                                 </div>
-                                <div className="flex items-center justify-end">
+                                {/* <div className="flex items-center justify-end">
                                   <Button
                                     className="h-10 px-[30px] py-3 bg-[#06d6a0] text-white rounded-[10px]"
                                     onClick={(e) => {
@@ -507,7 +556,7 @@ export default function HomePage() {
                                   >
                                     Vaata
                                   </Button>
-                                </div>
+                                </div> */}
                               </div>
                             </CardContent>
                           </Card>

@@ -1,5 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
+import { Lightbox } from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
+import { Fullscreen } from "yet-another-react-lightbox/plugins";
+import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 
 interface CarGalleryProps {
   mainImage: string;
@@ -25,6 +30,22 @@ export default function CarGallery({
 
   const handleNextImage = () => {
     setSelectedImage((prev) => (prev === validImages.length - 1 ? 0 : prev + 1));
+  };
+  const [isOpen, setIsOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  console.log('lightboxIndex', lightboxIndex);
+  const handleImageClick = () => {
+    console.log('Image clicked');
+    setLightboxIndex(selectedImage);
+    setIsOpen(true);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      setLightboxIndex(selectedImage);
+      setIsOpen(true);
+    }
   };
 
   const allImages = [mainImage, ...thumbnails];
@@ -68,13 +89,39 @@ export default function CarGallery({
   return (
     <div className="px-5">
       {/* Main image */}
-      <div className="relative mb-4">
+      <div className="relative mb-4 group w-full h-[450px]">
         <img
           src={currentMainImage || validImages[0]}
           alt="Car main view"
-          className="w-full h-[400px] object-cover transition-all duration-300 ease-in-out transform rounded-[7.5px]"
+          className="w-full h-full object-fit transition-all duration-300 ease-in-out transform rounded-[7.5px] cursor-pointer"
+          onClick={handleImageClick}
+          onKeyDown={handleKeyDown}
+          tabIndex={lightboxIndex}
+          role="button"
+          aria-label="Open image in lightbox"
         />
-        
+        {/* Lightbox indicator */}
+        <div className="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          <Maximize2 className="w-4 h-4" />
+        </div>
+          <Lightbox
+            open={isOpen}
+            close={() => setIsOpen(false)}
+            slides={allImages.map((img) => ({ src: img }))}
+            plugins={[Fullscreen, Thumbnails]}
+            index={lightboxIndex}
+            thumbnails={{
+              position: 'bottom',
+              width: 120,
+              height: 80,
+              border: 2,
+              borderRadius: 5,
+              padding: 1,
+              gap: 5,
+              borderColor: 'white',
+              imageFit: 'cover',
+            }}
+          />
         {/* Navigation arrows - only show if there are multiple images */}
         {validImages.length > 1 && (
           <>
@@ -86,7 +133,7 @@ export default function CarGallery({
             >
               <ChevronLeft className="w-6 h-6 text-gray-700" />
             </button>
-            
+
             {/* Next button */}
             <button
               onClick={handleNextImage}
@@ -97,7 +144,7 @@ export default function CarGallery({
             </button>
           </>
         )}
-        
+
         {/* Image counter */}
         {validImages.length > 1 && (
           <div className="absolute bottom-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm">
@@ -112,20 +159,20 @@ export default function CarGallery({
           {/* Thumbnails container with overflow hidden */}
           <div className="flex gap-[7px] overflow-hidden">
             {getCurrentThumbnails().map((thumb, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className="relative w-[24.4%] flex-shrink-0"
                 onClick={() => {
                   handleThumbnailClick(index + 1);
-                  // handleThumbnailInteraction();
+                  setLightboxIndex(index + 1);
+                  setIsOpen(true);
                 }}
               >
                 <div
-                  className={`w-full h-[94px] rounded-[6.951px] overflow-hidden cursor-pointer transition-all duration-200 ease-in-out transform hover:scale-105 ${
-                    selectedImage === index + 1
-                      ? "border-[3px] border-green-500 shadow-lg rounded-lg py-1 px-2"
+                  className={`w-full h-[94px] rounded-[6.951px] overflow-hidden cursor-pointer transition-all duration-200 ease-in-out transform hover:scale-105 ${selectedImage === index + 1
+                      ? "border-[3px] border-red-500 shadow-lg rounded-lg"
                       : "border-[1.697px] border-transparent hover:border-gray-300"
-                  }`}
+                    }`}
                 >
                   <img
                     src={thumb}
@@ -147,11 +194,10 @@ export default function CarGallery({
                     goToSlide(index);
                     // handleThumbnailInteraction();
                   }}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    currentSlide === index 
-                      ? 'bg-green-500' 
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${currentSlide === index
+                      ? 'bg-green-500'
                       : 'bg-gray-300 hover:bg-gray-400'
-                  }`}
+                    }`}
                   aria-label={`Go to slide ${index + 1}`}
                 />
               ))}

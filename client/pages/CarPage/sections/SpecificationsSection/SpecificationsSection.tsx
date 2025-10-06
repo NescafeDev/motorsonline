@@ -18,6 +18,8 @@ export interface SellerData {
   email?: string;
   avatar?: string;
   language?: string;
+  website?: string;
+  country?: string;
 }
 
 interface SpecificationsSectionProps {
@@ -34,6 +36,8 @@ export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps
     phone: "+372 8888 8888",
     email: "Näide@elke.ee",
     language: "en",
+    website: "example.com",
+    country: "EE"
   };
   const options = useMemo(() => countryList().getData(), []);
 
@@ -173,14 +177,14 @@ export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps
             {displayData.company}
             <br />
             <ReactCountryFlag
-              countryCode={displayData.address as CountryCode}
+              countryCode={displayData.country as CountryCode}
               svg
               style={{
                 width: '1.5em',
                 height: '1.5em',
                 marginRight: '12px',
               }}
-              title={displayData.address}
+              title={displayData.country}
             />
           </div>
 
@@ -205,6 +209,12 @@ export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps
                 </p>
                 <p className="[font-family:'Poppins',Helvetica] font-normal text-lg text-secondary-500 tracking-[-0.54px] leading-[27px]">
                   {displayData.email}
+                </p>
+                <p className="[font-family:'Poppins',Helvetica] font-normal text-lg text-secondary-500 tracking-[-0.54px] leading-[27px]">
+                  {displayData.website}
+                </p>
+                <p className="[font-family:'Poppins',Helvetica] font-normal text-lg text-secondary-500 tracking-[-0.54px] leading-[27px]">
+                  {displayData.address}
                 </p>
                 <div className="[font-family:'Poppins',Helvetica] font-normal text-lg text-secondary-500 tracking-[-0.54px] leading-[27px]">
                   {renderLanguageFlags(displayData.language || '')}

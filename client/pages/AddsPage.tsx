@@ -52,54 +52,54 @@ const techCheckOptions = [
   { key: 'hideVin', label: 'Peida VIN-kood' },
 ];
 const accessoriesOptions = [
-  { key: 'kokkupõrgetEnnetavPidurisüsteem', label: 'Kokkupõrget Ennetav Pidurisüsteem' },
-  { key: 'pimenurgaHoiatus', label: 'Pimenurga Hoiatus' },
-  { key: 'sõidurajaHoidmiseAbisüsteem', label: 'Sõiduraja Hoidmise Abisüsteem' },
-  { key: 'sõidurajavahetamiseAbisüsteem', label: 'Sõidurajavahetamise Abisüsteem' },
-  { key: 'adaptiivnePüsikiirusehoidja', label: 'Adaptiivne Püsikiirusehoidja' },
-  { key: 'liiklusmärkidetuvastusJakuvamine', label: 'Liiklusmärkide Tuvastus ja Kuvamine' },
-  { key: 'parkimisanduridEesJaTaga', label: 'Parkimisandurid Ees ja Taga' },
+  { key: 'kokkupõrgetennetavpidurisüsteem', label: 'Kokkupõrget Ennetav Pidurisüsteem' },
+  { key: 'pimenurgahoiatus', label: 'Pimenurga Hoiatus' },
+  { key: 'sõidurajahoidmiseabisüsteem', label: 'Sõiduraja Hoidmise Abisüsteem' },
+  { key: 'sõidurajavahetamiseabisüsteem', label: 'Sõidurajavahetamise Abisüsteem' },
+  { key: 'adaptiivnepüsikiirusehoidja', label: 'Adaptiivne Püsikiirusehoidja' },
+  { key: 'liiklusmärkidetuvastusjakuvamine', label: 'Liiklusmärkide Tuvastus ja Kuvamine' },
+  { key: 'parkimisandurideesjataga', label: 'Parkimisandurid Ees ja Taga' },
   { key: 'parkimiskaamera', label: 'Parkimiskaamera' },
   { key: 'parkimiskaamera360', label: 'Parkimiskaamera 360°' },
-  { key: 'kaugtuledeümberlülitamiseAssistent', label: 'Kaugtulede ümberlülitamise Assistent' },
+  { key: 'kaugtuledeümberlülitamiseassistent', label: 'Kaugtulede ümberlülitamise Assistent' },
   { key: 'LEDesituled', label: 'LED Esituled' },
   { key: 'Xenonesituled', label: 'Xenon Esituled' },
-  { key: 'Lasersituled', label: 'Laser Esituled' },
-  { key: 'elektriliseSoojendusegaEsiklaas', label: 'Elektrilise Soojendusega Esiklaas' },
+  { key: 'lasersituled', label: 'Laser Esituled' },
+  { key: 'elektriliseoojendusegaesiklaas', label: 'Elektrilise Soojendusega Esiklaas' },
   { key: 'kliimaseade', label: 'Kliimaseade' },
-  { key: 'salongiEelsoojendus', label: 'SalongiEelsoojendus' },
-  { key: 'mootoriEelsoojendus', label: 'MootoriEelsoojendus' },
-  { key: 'salongilisasoojendus', label: 'Salongi Lisasoojendus' },
+  { key: 'salongieelsoojendus', label: 'SalongiEelsoojendus' },
+  { key: 'mootorieelsoojendus', label: 'MootoriEelsoojendus' },
+  { key: 'salongilisaoojendus', label: 'Salongi Lisasoojendus' },
   { key: 'istmesoojendused', label: 'Istmesoojendused' },
-  { key: 'elektriliseltReguleeritavadIstmed', label: 'Elektriliselt Reguleeritavad Istmed' },
-  { key: 'ComfortIstmed', label: 'Comfort Istmed' },
+  { key: 'elektriliseltreguleeritavadIstmed', label: 'Elektriliselt Reguleeritavad Istmed' },
+  { key: 'comfortistmed', label: 'Comfort Istmed' },
   { key: 'sportistmed', label: 'Sport Istmed' },
   { key: 'nahkpolster', label: 'Nahkpolster' },
   { key: 'poolnahkpolster', label: 'Poolnahkpolster' },
-  { key: 'tagaistmeSeljatugiAllaklapitav', label: 'Tagaistme Seljatugi Allaklapitav' },
-  { key: 'eraldiKliimaseadeTagaistmetele', label: 'Eraldi Kliimaseade Tagaistmetele' },
+  { key: 'tagaistmeseljatugiallaklapitav', label: 'Tagaistme Seljatugi Allaklapitav' },
+  { key: 'eraldikliimaseadetagaistmetele', label: 'Eraldi Kliimaseade Tagaistmetele' },
   { key: 'võtmetavamine', label: 'Võtmeta Avamine' },
-  { key: 'võtmetaKäivitus', label: 'Võtmeta Käivitus' },
-  { key: 'pakiruumiAvamineJaSulgeminelektriliselt', label: 'Pakiruumi Avamine ja Sulgemine Elektriliselt' },
-  { key: 'soojendusegaRool', label: 'Soojendusega Rool' },
+  { key: 'võtmetaäivitus', label: 'Võtmeta Käivitus' },
+  { key: 'pakiruumiavaminejasulgeminelektriliselt', label: 'Pakiruumi Avamine ja Sulgemine Elektriliselt' },
+  { key: 'soojendusegarool', label: 'Soojendusega Rool' },
   { key: 'ventileeritavadstmed', label: 'Ventileeritavad Istmed' },
-  { key: 'massaažifunktsioonigaIstmed', label: 'Massaažifunktsiooniga Istmed' },
-  { key: 'infoKuvamineEsiklaasile', label: 'Info Kuvamine Esiklaasile' },
-  { key: 'panoraamkatusKlaasist', label: 'Panoraamkatus (klaasist)' },
+  { key: 'massaažifunktsioonigaiistmed', label: 'Massaažifunktsiooniga Istmed' },
+  { key: 'infokuvamineesiklaasile', label: 'Info Kuvamine Esiklaasile' },
+  { key: 'panoraamkatusklaasist', label: 'Panoraamkatus (klaasist)' },
   { key: 'katuseluuk', label: 'Katuseluuk' },
-  { key: 'usteServosulgurid', label: 'Uste Servosulgurid' },
+  { key: 'usteservosulgurid', label: 'Uste Servosulgurid' },
   { key: 'topeltklaasid', label: 'Topeltklaasid' },
-  { key: 'rulookardinadUstel', label: 'Rulookardinad Ustel' },
+  { key: 'rulookardinadustel', label: 'Rulookardinad Ustel' },
   { key: 'integreeritudVäravapult', label: 'Integreeritud Väravapult' },
   { key: 'AppleCarPlay', label: 'Apple CarPlay' },
   { key: 'AndroidAuto', label: 'Android Auto' },
   { key: 'stereo', label: 'Stereo' },
   { key: 'õhkvedrustus', label: 'Õhkvedrustus' },
-  { key: 'reguleeritavVedrustus', label: 'Reguleeritav Vedrustus' },
-  { key: 'RattaPööramine', label: '4-ratta Pööramine' },
+  { key: 'reguleeritavvedrustus', label: 'Reguleeritav Vedrustus' },
+  { key: '4-rattapööramine', label: '4-ratta Pööramine' },
   { key: 'veokonks', label: 'Veokonks' },
-  { key: 'elektrilisedLiuguksed', label: 'Elektrilised Liuguksed' },
-  { key: 'öiseNägemiseAssistent', label: 'Öise Nägemise Assistent' },
+  { key: 'elektrilisedliuguksed', label: 'Elektrilised Liuguksed' },
+  { key: 'öiseNägemiseassistent', label: 'Öise Nägemise Assistent' },
   { key: 'valgustuspakett', label: 'Valgustuspakett' },
   { key: 'suverehvid', label: 'Suverehvid' },
   { key: 'talverehvid', label: 'Talverehvid' },
@@ -235,19 +235,25 @@ export default function AddsPage() {
     description: "",
     equipment: "",
     additionalInfo: "",
+    stereo: "",
+    valuveljed: "",
+    inspectionValidityPeriod: "",
+    seats: "",
+    doors: "",
+  });
+
+  const [contactFormData, setContactFormData] = useState({
     phone: "",
     businessType: "",
     socialNetwork: "",
     email: "",
     address: "",
-    stereo: "",
     website: "",
     language: [],
     country: "",
-    inspectionValidityPeriod: "",
-    seats: "",
-    doors: "",
   });
+
+  const [contactSaved, setContactSaved] = useState(false);
 
   const [checktechboxes, setCheckTechboxes] = useState({
     technicalInspection: false,
@@ -258,54 +264,54 @@ export default function AddsPage() {
   });
 
   const [checkboxes, setCheckboxes] = useState({
-    kokkupõrgetEnnetavPidurisüsteem: false,
-    pimenurgaHoiatus: false,
-    sõidurajaHoidmiseAbisüsteem: false,
-    sõidurajavahetamiseAbisüsteem: false,
-    adaptiivnePüsikiirusehoidja: false,
-    liiklusmärkidetuvastusJakuvamine: false,
-    parkimisanduridEesJaTaga: false,
+    kokkupõrgetennetavpidurisüsteem: false,
+    pimenurgahoiatus: false,
+    sõidurajahoidmiseabisüsteem: false,
+    sõidurajavahetamiseabisüsteem: false,
+    adaptiivnepüsikiirusehoidja: false,
+    liiklusmärkidetuvastusjakuvamine: false,
+    parkimisandurideesjataga: false,
     parkimiskaamera: false,
     parkimiskaamera360: false,
-    kaugtuledeümberlülitamiseAssistent: false,
+    kaugtuledeümberlülitamiseassistent: false,
     LEDesituled: false,
     Xenonesituled: false,
     Lasersituled: false,
-    elektriliseSoojendusegaEsiklaas: false,
+    elektriliseoojendusegaesiklaas: false,
     kliimaseade: false,
-    salongiEelsoojendus: false,
+    salongieelsoojendus: false,
     mootoriEelsoojendus: false,
     salongilisasoojendus: false,
     istmesoojendused: false,
-    elektriliseltReguleeritavadIstmed: false,
-    ComfortIstmed: false,
+    elektriliseltreguleeritavadIstmed: false,
+    comfortistmed: false,
     sportistmed: false,
     nahkpolster: false,
     poolnahkpolster: false,
-    tagaistmeSeljatugiAllaklapitav: false,
-    eraldiKliimaseadeTagaistmetele: false,
+    tagaistmeseljatugiallaklapitav: false,
+    eraldikliimaseadetagaistmetele: false,
     võtmetavamine: false,
-    võtmetaKäivitus: false,
-    pakiruumiAvamineJaSulgeminelektriliselt: false,
-    soojendusegaRool: false,
+    võtmetaäivitus: false,
+    pakiruumiavaminejasulgeminelektriliselt: false,
+    soojendusegarool: false,
     ventileeritavadstmed: false,
-    massaažifunktsioonigaIstmed: false,
-    infoKuvamineEsiklaasile: false,
-    panoraamkatusKlaasist: false,
+    massaažifunktsioonigaiistmed: false,
+    infokuvamineesiklaasile: false,
+    panoraamkatusklaasist: false,
     katuseluuk: false,
-    usteServosulgurid: false,
+    usteservosulgurid: false,
     topeltklaasid: false,
-    rulookardinadUstel: false,
-    integreeritudVäravapult: false,
+    rulookardinadustel: false,
+    integreeritudväravapult: false,
     AppleCarPlay: false,
     AndroidAuto: false,
     stereo: false,
     õhkvedrustus: false,
-    reguleeritavVedrustus: false,
-    RattaPööramine: false,
+    reguleeritavvedrustus: false,
+    rattaPööramine: false,
     veokonks: false,
-    elektrilisedLiuguksed: false,
-    öiseNägemiseAssistent: false,
+    elektrilisedliuguksed: false,
+    öisenägemiseassistent: false,
     valgustuspakett: false,
     suverehvid: false,
     talverehvid: false,
@@ -408,12 +414,38 @@ export default function AddsPage() {
               return obj;
             });
           }
-          if (car.language) {
-            const arr = Array.isArray(car.language) ? car.language : car.language.split(',');
-            setFormData((prev) => ({ ...prev, language: arr }));
-          } else {
-            setFormData((prev) => ({ ...prev, language: [] }));
-          }
+
+          // Load contact data from contacts API for editing
+          const loadContactData = async () => {
+            try {
+              const token = localStorage.getItem("token");
+              if (token) {
+                const contactResponse = await axios.get(`/api/contacts/car/${car.id}`, {
+                  headers: { Authorization: `Bearer ${token}` },
+                });
+                if (contactResponse.data) {
+                  setContactFormData({
+                    phone: contactResponse.data.phone || "",
+                    businessType: contactResponse.data.businessType || "",
+                    socialNetwork: contactResponse.data.socialNetwork || "",
+                    email: contactResponse.data.email || "",
+                    address: contactResponse.data.address || "",
+                    website: contactResponse.data.website || "",
+                    language: contactResponse.data.language ? (Array.isArray(contactResponse.data.language) ? contactResponse.data.language : contactResponse.data.language.split(',')) : [],
+                    country: contactResponse.data.country || "",
+                  });
+                  setContactSaved(true); // Mark as saved since we loaded existing data
+                } else {
+                  setContactSaved(false); // No existing contact data
+                }
+              }
+            } catch (error) {
+              console.log('No contact data found or error loading contact data:', error);
+              setContactSaved(false); // No existing contact data
+            }
+          };
+
+          loadContactData();
           // if (car.country) {
           //   const arr = Array.isArray(car.country) ? car.country : car.country.split(',');
           //   setFormData((prev) => ({ ...prev, country: arr }));
@@ -444,6 +476,20 @@ export default function AddsPage() {
     initializeData().finally(() => {
       setIsLoading(false);
     });
+
+    // Load pending contact data from localStorage if it exists (only for new cars, not editing)
+    if (!carId) {
+      const pendingContactData = localStorage.getItem('pendingContactData');
+      if (pendingContactData) {
+        try {
+          const parsedData = JSON.parse(pendingContactData);
+          setContactFormData(parsedData);
+          setContactSaved(true); // Mark as saved since it was previously saved
+        } catch (error) {
+          console.error('Error loading pending contact data:', error);
+        }
+      }
+    }
   }, [carId]);
 
   // Auto-select first option for selects on add (not edit)
@@ -579,6 +625,11 @@ export default function AddsPage() {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  const handleContactInputChange = (field: string, value: string | string[]) => {
+    setContactFormData((prev) => ({ ...prev, [field]: value }));
+    setContactSaved(false); // Reset saved state when data changes
+  };
+
   const handleCheckboxChange = (field: string, checked: boolean) => {
     setCheckboxes((prev) => ({ ...prev, [field]: checked }));
   };
@@ -592,7 +643,98 @@ export default function AddsPage() {
   };
 
   const handleLanguageChange = (languages: string[]) => {
-    setFormData((prev) => ({ ...prev, language: languages }));
+    setContactFormData((prev) => ({ ...prev, language: languages }));
+    setContactSaved(false); // Reset saved state when data changes
+  };
+
+  // Function to save contact data independently
+  const handleSaveContact = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Please log in to save contact information");
+      return;
+    }
+
+    // Check if we have any contact data to save
+    const hasContactData = contactFormData.phone || 
+                           contactFormData.businessType || 
+                           contactFormData.socialNetwork || 
+                           contactFormData.email || 
+                           contactFormData.address || 
+                           contactFormData.website || 
+                           contactFormData.language?.length > 0 || 
+                           contactFormData.country;
+
+    if (!hasContactData) {
+      alert("Please fill in at least one contact field before saving");
+      return;
+    }
+
+    try {
+      if (editingCar) {
+        // If editing an existing car, save/update contact data
+        try {
+          // Check if contact data already exists for this car
+          const existingContact = await axios.get(`/api/contacts/car/${editingCar.id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (existingContact.data) {
+            // Update existing contact
+            await axios.put(`/api/contacts/car/${editingCar.id}`, contactFormData, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            alert("Contact information updated successfully!");
+            setContactSaved(true);
+          } else {
+            // Create new contact
+            await axios.post("/api/contacts", {
+              car_id: editingCar.id,
+              ...contactFormData
+            }, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            alert("Contact information saved successfully!");
+            setContactSaved(true);
+          }
+        } catch (error: any) {
+          if (error.response?.status === 404) {
+            // Contact doesn't exist, create new one
+            await axios.post("/api/contacts", {
+              car_id: editingCar.id,
+              ...contactFormData
+            }, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            alert("Contact information saved successfully!");
+            setContactSaved(true);
+          } else {
+            throw error;
+          }
+        }
+      } else {
+        // If creating a new car, save contact data to localStorage temporarily
+        localStorage.setItem('pendingContactData', JSON.stringify(contactFormData));
+        setContactSaved(true);
+      }
+    } catch (error: any) {
+      console.error('Error saving contact:', error);
+      alert("Failed to save contact information");
+    }
+  };
+  const handleDeleteContact = () => {
+    localStorage.removeItem('pendingContactData');
+    setContactFormData({
+      phone: "",
+      businessType: "",
+      socialNetwork: "",
+      email: "",
+      address: "",
+      website: "",
+      language: [],
+      country: "",
+    });
+    setContactSaved(false);
   };
 
   // const handleCountryChange = (countries: string[]) => {
@@ -668,11 +810,40 @@ export default function AddsPage() {
         await axios.put(`/api/cars/${editingCar.id}`, formDataObj, {
           headers: { Authorization: `Bearer ${token}` },
         });
-      } else {
-        console.log('Form Data:', formDataObj);
-        await axios.post("/api/cars", formDataObj, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        } else {
+          console.log('Form Data:', formDataObj);
+          console.log('Contact Form Data:', contactFormData);
+          
+          // Send car data first
+          const carResponse = await axios.post("/api/cars", formDataObj, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          
+          // Check for pending contact data in localStorage
+          const pendingContactData = localStorage.getItem('pendingContactData');
+          let contactDataToSave = contactFormData;
+          
+          if (pendingContactData) {
+            try {
+              contactDataToSave = JSON.parse(pendingContactData);
+              // Clear the pending data from localStorage
+              // localStorage.removeItem('pendingContactData');
+            } catch (error) {
+              console.error('Error parsing pending contact data:', error);
+            }
+          }
+          
+          // Send contact data separately if it exists
+          if (contactDataToSave.phone || contactDataToSave.businessType || contactDataToSave.socialNetwork || 
+              contactDataToSave.email || contactDataToSave.address || contactDataToSave.website || 
+              contactDataToSave.language || contactDataToSave.country) {
+            await axios.post("/api/contacts", {
+              car_id: carResponse.data.id,
+              ...contactDataToSave
+            }, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+          }
       }
       setEditingCar(null);
       setCarImages(Array(40).fill(null));
@@ -715,14 +886,29 @@ export default function AddsPage() {
       }
     }
 
+    // Separate contact fields from car data
+    const { phone, businessType, socialNetwork, email, address, website, language, country, ...carData } = car;
+    
     setFormData((prev) => ({
       ...prev,
-      ...car,
+      ...carData,
       price: priceToShow,
     }));
+
+    // Set contact form data separately
+    setContactFormData({
+      phone: phone || "",
+      businessType: businessType || "",
+      socialNetwork: socialNetwork || "",
+      email: email || "",
+      address: address || "",
+      website: website || "",
+      language: language ? (Array.isArray(language) ? language : language.split(',')) : [],
+      country: country || "",
+    });
     setCarImages(Array(40).fill(null));
     setShowMorePhotos(false);
-
+    console.log('Contact Form Data:', contactFormData);
     // Fetch models for the selected brand when editing
     if (car.brand_id) {
       fetchModels(car.brand_id.toString());
@@ -749,14 +935,7 @@ export default function AddsPage() {
     //   });
     // }
 
-    // Load language array if it exists
-    if (car.language) {
-      const languageArray = Array.isArray(car.language) ? car.language : car.language.split(',');
-      setFormData((prev) => ({ ...prev, language: languageArray }));
-    } else {
-      setFormData((prev) => ({ ...prev, language: [] }));
-    }
-
+    // Language is now handled in contactFormData above
     // Load country array if it exists
     // if (car.country) {
     //   const countryArray = Array.isArray(car.country) ? car.country : car.country.split(',');
@@ -764,8 +943,39 @@ export default function AddsPage() {
     // } else {
     //   setFormData((prev) => ({ ...prev, country: [] }));
     // }
-  };
 
+    // Load contact data from contacts table if it exists
+    const loadContactData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (token) {
+          const contactResponse = await axios.get(`/api/contacts/car/${car.id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (contactResponse.data) {
+            setContactFormData({
+              phone: contactResponse.data.phone || "",
+              businessType: contactResponse.data.businessType || "",
+              socialNetwork: contactResponse.data.socialNetwork || "",
+              email: contactResponse.data.email || "",
+              address: contactResponse.data.address || "",
+              website: contactResponse.data.website || "",
+              language: contactResponse.data.language ? (Array.isArray(contactResponse.data.language) ? contactResponse.data.language : contactResponse.data.language.split(',')) : [],
+              country: contactResponse.data.country || "",
+            });
+            setContactSaved(true); // Mark as saved since we loaded existing data
+          } else {
+            setContactSaved(false); // No existing contact data
+          }
+        }
+      } catch (error) {
+        console.log('No contact data found or error loading contact data:', error);
+        setContactSaved(false); // No existing contact data
+      }
+    };
+    
+    loadContactData();
+  };
   const handleDeleteCar = async (id: number) => {
     const token = localStorage.getItem("token");
     await axios.delete(`/api/cars/${id}`, {
@@ -773,14 +983,12 @@ export default function AddsPage() {
     });
     fetchCars();
   };
-
   // Calculate VAT price for display
   const calculateVatPrice = () => {
     if (formData.vatRefundable === 'yes' && formData.price && formData.vatRate) {
       const basePrice = parseFloat(formData.price);
       // const vatRate = parseFloat(formData.vatRate);
       const vatRate = 24;
-
       if (!isNaN(basePrice) && !isNaN(vatRate)) {
         const vatAmount = basePrice * (vatRate / 100);
         const totalPrice = basePrice + vatAmount;
@@ -793,7 +1001,6 @@ export default function AddsPage() {
     }
     return null;
   };
-
   // Calculate base price from total price (for editing cars with VAT)
   const calculateBasePriceFromTotal = (totalPrice: number, vatRate: number) => {
     if (vatRate > 0) {
@@ -801,7 +1008,6 @@ export default function AddsPage() {
     }
     return totalPrice;
   };
-
   if (isLoading) {
     return (
       <PageContainer>
@@ -815,14 +1021,12 @@ export default function AddsPage() {
       </PageContainer>
     );
   }
-
   return (
     <PageContainer>
       <div className="max-w-[1440px] mx-auto px-6 lg:px-[100px] py-16">
         <h1 className="text-motorsoline-text text-3xl font-semibold mb-8">
           {editingCar ? 'Redigeeri kuulutus' : 'Loo kuulutus'}
         </h1>
-
         <div className="space-y-6">
           {/* Photo Upload Section */}
           <FormSection title="">
@@ -841,11 +1045,9 @@ export default function AddsPage() {
               onToggleShowMore={() => setShowMorePhotos(!showMorePhotos)}
             />
           </FormSection>
-
           {/* Vehicle Details */}
           <FormSection title="Mudelidetailid">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
               <FormField
                 label="Valige sõiduki liik"
                 placeholder="Vali sõiduki liik"
@@ -923,7 +1125,6 @@ export default function AddsPage() {
                   },
                 ]}
               />
-
               <FormField
                 label="Keretüüp"
                 placeholder="Keretüüp"
@@ -993,7 +1194,6 @@ export default function AddsPage() {
                 className={formData.brand_id}
                 disabled={modelLoading}
               />
-
               <FormField
                 label="Muu mudel või täpsustus"
                 placeholder="näide: Long 4Matic"
@@ -1040,8 +1240,6 @@ export default function AddsPage() {
                   { value: "12", label: "12" },
                 ]}
               />
-
-
               <FormField
                 label="Omanike arv"
                 placeholder="1"
@@ -1099,7 +1297,6 @@ export default function AddsPage() {
             </div>
 
           </FormSection>
-
           {/* Technical Details */}
           <FormSection title="" className="mt-0">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -1267,43 +1464,6 @@ export default function AddsPage() {
                   />
                 </div>
               </div>
-              <div className="w-full flex items-center gap-4">
-                <div className="flex-1">
-                  <FormField
-                    label="Min istmed"
-                    placeholder="0"
-                    value={formData.seatsMin}
-                    onChange={(value) => handleInputChange("seatsMin", value)}
-                  />
-                </div>
-                <span className="flex items-center text-gray-500 font-medium mt-8">-</span>
-                <div className="flex-1">
-                  <FormField
-                    label="Max istmed"
-                    placeholder="0"
-                    value={formData.seatsMax}
-                    onChange={(value) => handleInputChange("seatsMax", value)}
-                  />
-                </div>
-              </div>
-              <div className="w-full flex items-center gap-4 ">
-                <div className="flex-1">
-                  <FormField
-                    label="Min istmed"
-                    placeholder="0"
-                    value={formData.seatsMin}
-                    onChange={(value) => handleInputChange("seatsMin", value)}
-                  />
-                </div>
-                <span className="flex items-center text-gray-500 font-medium mt-8">-</span>
-                <div className="flex-1">
-                  <FormField
-                    label="Max istmed"
-                    placeholder="0"
-                    value={formData.seatsMax}
-                    onChange={(value) => handleInputChange("seatsMax", value)}
-                  />
-                </div>
               </div> */}
               <FormField
                 label="Võimsus (Kw)"
@@ -1481,33 +1641,7 @@ export default function AddsPage() {
                   value={formData.price}
                   onChange={(value) => handleInputChange("price", value)}
                 />
-                {/* {(() => {
-                  const vatCalculation = calculateVatPrice();
-                  if (vatCalculation) {
-                    return (
-                      <p className="text-sm text-gray-600">
-                        {editingCar ? (
-                          <>
-                            Baashind: €{vatCalculation.basePrice.toLocaleString()} +
-                            KM (24%): €{vatCalculation.vatAmount.toLocaleString()} =
-                            <span className="font-semibold text-motorsoline-primary"> €{vatCalculation.totalPrice.toLocaleString()}</span>
-                            <br />
-                            <span className="text-xs text-blue-600">(Salvestatud hind: €{editingCar.price?.toLocaleString()})</span>
-                          </>
-                        ) : (
-                          <>
-                            Baashind: €{vatCalculation.basePrice.toLocaleString()} +
-                            KM (24%): €{vatCalculation.vatAmount.toLocaleString()} =
-                            <span className="font-semibold text-motorsoline-primary"> €{vatCalculation.totalPrice.toLocaleString()}</span>
-                          </>
-                        )}
-                      </p>
-                    );
-                  }
-                  return null;
-                })()} */}
               </div>
-
               <FormField
                 label="Soodushind"
                 placeholder="€"
@@ -1547,13 +1681,13 @@ export default function AddsPage() {
                 suffix="%"
                 step={1}
               />
-              <FormField
-                label="Garantii"
-                placeholder="Kehtib kuni"
-                value={formData.warranty}
-                onChange={(value) => handleInputChange("warranty", value)}
-              />
-              <div>
+              <div className="space-y-3 mt-3">
+                <FormField
+                  label="Garantii"
+                  placeholder="Kehtib kuni"
+                  value={formData.warranty}
+                  onChange={(value) => handleInputChange("warranty", value)}
+                />
                 <FormField
                   label="VIN-kood"
                   placeholder="WDC000000000000"
@@ -1561,15 +1695,7 @@ export default function AddsPage() {
                   onChange={(value) => handleInputChange("vinCode", value)}
                 />
               </div>
-              <div className="mt-6">
-                <FormField
-                  label="Sõiduki number:"
-                  placeholder="AA00000"
-                  value={formData.plateNumber}
-                  onChange={(value) => handleInputChange("plateNumber", value)}
-                />
-              </div>
-              <div className="ml-2 space-y-3 pt-1">
+              <div className="ml-2 space-y-3 pt-1 mt-3">
                 <div className="flex items-center gap-2">
                   <CheckboxField
                     label="Ülevaatus kehtib"
@@ -1621,9 +1747,16 @@ export default function AddsPage() {
                 />
 
               </div>
+              <div className="mt-0">
+                <FormField
+                  label="Sõiduki number:"
+                  placeholder="AA00000"
+                  value={formData.plateNumber}
+                  onChange={(value) => handleInputChange("plateNumber", value)}
+                />
+              </div>
             </div>
           </FormSection>
-
           {/* Equipment Section */}
           <FormSection title="Kõrgema väärtusega lisavarustus">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1658,6 +1791,16 @@ export default function AddsPage() {
                           disabled={!checkboxes['stereo' as keyof typeof checkboxes]}
                         />
                       )}
+                      {option.key === 'valuveljed' && (
+                        <input
+                          type="text"
+                          placeholder="Mõõt"
+                          value={formData.valuveljed}
+                          onChange={(e) => handleInputChange("valuveljed", e.target.value)}
+                          className="flex-1 ml-5 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          disabled={!checkboxes['valuveljed' as keyof typeof checkboxes]}
+                        />
+                      )}
                     </div>
                   ))}
                 </>
@@ -1674,7 +1817,6 @@ export default function AddsPage() {
               </button>
             </div>
           </FormSection>
-
           {/* Equipment Section */}
           <FormSection title="">
             <TextAreaField
@@ -1704,8 +1846,8 @@ export default function AddsPage() {
                     Vali riik
                   </label>
                   <ReactFlagsSelect
-                    selected={formData.country}
-                    onSelect={(value) => handleInputChange("country", value)}
+                    selected={contactFormData.country}
+                    onSelect={(value) => handleContactInputChange("country", value)}
                     placeholder="Vali riik"
                     searchable={true}
                     className="w-full"
@@ -1715,39 +1857,39 @@ export default function AddsPage() {
               <FormField
                 label="Telefoninumber"
                 placeholder="+372 1234 567"
-                value={formData.phone}
-                onChange={(value) => handleInputChange("phone", value)}
+                value={contactFormData.phone}
+                onChange={(value) => handleContactInputChange("phone", value)}
               />
               <FormField
                 label="Sotsiaalvõrgustik"
                 placeholder="www.youtube.com/Näide"
-                value={formData.socialNetwork}
-                onChange={(value) => handleInputChange("socialNetwork", value)}
+                value={contactFormData.socialNetwork}
+                onChange={(value) => handleContactInputChange("socialNetwork", value)}
               />
               <FormField
                 label={user?.userType === "company" ? "Ettevõte" : "Eraisik"}
                 placeholder={user?.userType === "company" ? "Sisesta ettevõte" : "Sisesta eraisik"}
-                value={formData.businessType}
-                onChange={(value) => handleInputChange("businessType", value)}
+                value={contactFormData.businessType}
+                onChange={(value) => handleContactInputChange("businessType", value)}
               />
               <FormField
                 label="E-post"
                 placeholder="Näide@elke.ee"
                 type="email"
-                value={formData.email}
-                onChange={(value) => handleInputChange("email", value)}
+                value={contactFormData.email}
+                onChange={(value) => handleContactInputChange("email", value)}
               />
               <FormField
                 label="Aadress"
                 placeholder="Aadress"
-                value={formData.address}
-                onChange={(value) => handleInputChange("address", value)}
+                value={contactFormData.address}
+                onChange={(value) => handleContactInputChange("address", value)}
               />
               <FormField
                 label="Koduleht"
                 placeholder="Koduleht"
-                value={formData.website}
-                onChange={(value) => handleInputChange("website", value)}
+                value={contactFormData.website}
+                onChange={(value) => handleContactInputChange("website", value)}
               />
               {/* <FormField
                 label="Suhtluskeel"
@@ -1755,10 +1897,7 @@ export default function AddsPage() {
                 value={formData.language}
                 onChange={(value) => handleInputChange("language", value)}
               /> */}
-
-            </div>
-            <div className="flex gap-4">
-              <div className="w-full mt-7">
+              <div className="w-full mt-0">
                 <label className="block text-motorsoline-text text-lg font-medium mb-3">
                   Suhtluskeel
                 </label>
@@ -1770,20 +1909,43 @@ export default function AddsPage() {
                     searchable={true}
                   /> */}
                 <MultiLanguageSelect
-                  selected={formData.language}
+                  selected={contactFormData.language}
                   onSelect={handleLanguageChange}
                   placeholder="Valige keeled"
                   searchable={true}
-                  className="w-[585px]"
+                  className="w-[530px]"
                 />
               </div>
             </div>
 
-            <div className="mt-6">
+            <div className="mt-6 flex gap-4 items-center">
               <button className="flex items-center px-8 py-4 border border-brand-primary rounded-lg text-brand-primary hover:bg-motorsoline-primary hover:text-white transition-colors">
                 + Lisa sotsiaalvõrgustik
               </button>
+              <button 
+                onClick={handleSaveContact}
+                className={`flex items-center px-4 py-4 rounded-lg text-white transition-colors ${
+                  contactSaved 
+                    ? 'bg-green-500 hover:bg-green-600' 
+                    : 'bg-brand-primary hover:bg-motorsoline-primary'
+                }`}
+              >
+                {contactSaved ? '✓ Kontaktid salvestatud' : (editingCar ? 'Salvesta kontaktid' : 'Salvesta kontaktid (ajutiselt)')}
+              </button>
+              {/* {contactSaved && (
+                <span className="text-green-600 text-sm font-medium">
+                  {editingCar ? 'Kontaktandmed on salvestatud andmebaasi' : 'Kontaktandmed on ajutiselt salvestatud'}
+                </span>
+              )} */}
+              {/* <button 
+                onClick={handleDeleteContact}
+                className={`flex items-center px-8 py-4 rounded-lg text-white transition-colors bg-red-500 hover:bg-red-600 
+                }`}
+              >
+                Lähtesta kontakt
+              </button> */}
             </div>
+            
           </FormSection>
 
           {/* Additional Info Section */}
@@ -1845,18 +2007,21 @@ export default function AddsPage() {
                           description: "",
                           equipment: "",
                           additionalInfo: "",
+                          stereo: "",
+                          valuveljed: "",
+                          inspectionValidityPeriod: "",
+                          seats: "",
+                          doors: "",
+                        });
+                        setContactFormData({
                           phone: "",
                           businessType: "",
                           socialNetwork: "",
                           email: "",
                           address: "",
-                          stereo: "",
                           website: "",
                           language: [],
                           country: "",
-                          inspectionValidityPeriod: "",
-                          seats: "",
-                          doors: "",
                         });
                         setCarImages(Array(40).fill(null));
                         setShowMorePhotos(false);
@@ -1897,6 +2062,7 @@ export default function AddsPage() {
                   checkboxes={checkboxes}
                   brands={brands}
                   models={models}
+                  contactFormData={contactFormData}
                   years={years}
                   driveTypes={driveTypes}
                   carImages={carImages}
@@ -1920,11 +2086,11 @@ export default function AddsPage() {
                 </button>
                 <button
                   type="button"
-                  className="bg-brand-primary text-white px-4 py-2 rounded font-semibold hover:bg-blue-600 transition-colors"
+                  className="bg-brand-primary text-white px-4 py-2 rounded font-semibold hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={carLoading}
                   onClick={handleCarSubmit}
                 >
-                  {editingCar ? "Salvesta muudatused" : "Lisa kuulutus"}
+                  {carLoading ? "Salvestatakse..." : (editingCar ? "Salvesta muudatused" : "Lisa kuulutus")}
                 </button>
               </div>
             </DialogFooter>

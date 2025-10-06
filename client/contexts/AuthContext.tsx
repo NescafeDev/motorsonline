@@ -117,6 +117,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setUser(null);
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('pendingContactData')
     delete axios.defaults.headers.common['Authorization'];
     console.log("Logout completed");
   };

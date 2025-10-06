@@ -14,7 +14,7 @@ export default function PriceSection({
   originalPrice,
 }: PriceSectionProps) {
   return (
-    <div className="px-5">
+    <div className="px-2">
       {/* Original price with strikethrough */}
       {discountPrice && (
         <div className="flex items-center gap-[10px] mb-4">

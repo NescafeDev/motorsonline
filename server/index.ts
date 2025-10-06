@@ -4,6 +4,7 @@ import path from "path";
 import authRoutes from "./routes/auth";
 import blogRoutes from "./routes/blog";
 import carRoutes from "./routes/car";
+import contactRoutes from "./routes/contact";
 import brandRoutes from "./routes/brand";
 import modelRoutes from "./routes/model";
 import yearRoutes from "./routes/year";
@@ -25,6 +26,7 @@ export function createServer() {
   app.use("/api/auth", authRoutes);
   app.use("/api/blogs", blogRoutes);
   app.use("/api/cars", carRoutes);
+  app.use("/api/contacts", contactRoutes);
   app.use("/api/brands", brandRoutes);
   app.use("/api/models", modelRoutes);
   app.use("/api/years", yearRoutes);

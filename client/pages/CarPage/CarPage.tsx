@@ -48,12 +48,15 @@ interface CarData {
   description?: string;
   created_at?: string;
   accessories?: string;
+  modelDetail?: string;
   // Seller information
   businessType?: string;
   country?: string;
+  address?: string;
   phone?: string;
   email?: string;
   language?: string;
+  website? : string;
 }
 
 export default function CarPage() {
@@ -93,6 +96,7 @@ export default function CarPage() {
 
   const { id } = useParams();
   const [car, setCar] = useState<CarData | null>(null);
+  const [contacts, setContacts] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -145,6 +149,22 @@ export default function CarPage() {
         const carData = await response.json();
         console.log('CarData:', carData);
         setCar(carData);
+
+        // Fetch contact data for this car
+        try {
+          const contactResponse = await fetch(`/api/contacts/car/${carData.id}`);
+          if (contactResponse.ok) {
+            const contactData = await contactResponse.json();
+            setContacts(contactData);
+          } else {
+            const errorText = await contactResponse.text();
+            console.log('No contact data found for car:', carData.id, 'Status:', contactResponse.status, 'Error:', errorText);
+            setContacts(null);
+          }
+        } catch (contactError) {
+          console.log('Error fetching contact data:', contactError);
+          setContacts(null);
+        }
 
         // Increment view count when car data is successfully loaded
         try {
@@ -291,7 +311,7 @@ export default function CarPage() {
           {/* Car details and gallery section - Sticky sidebar */}
           <div className="w-full max-w-[1400px] mx-auto">
             <div
-              className="grid grid-cols-1 md:grid-cols-3 gap-10"
+              className="grid grid-cols-1 md:grid-cols-3 gap-1"
               ref={gridRef}
               style={{ position: "relative" }}
             >
@@ -393,7 +413,7 @@ export default function CarPage() {
                     <CardContent className="px-[20px] py-[30px]">
                       <div className="flex justify-between items-start">
                         <h1 className="text-[30px] font-semibold text-secondary-500 tracking-[-1.20px] leading-[60px] [font-family:'Poppins',Helvetica] ">
-                          {car.brand_name} {car.model_name}
+                          {car.brand_name} {car.model_name} {car.modelDetail}
                         </h1>
                         <Button
                           variant="ghost"
@@ -475,10 +495,10 @@ export default function CarPage() {
                           style={{ minHeight: "80px" }}
                         >
                           <div className="absolute right-0 bottom-0">
-                            <a href="mailto:futuresea.dev@gmail.com">
+                            <a href={`mailto:${contacts?.email || car.email || 'futuresea.dev@gmail.com'}`}>
                               <Button
                                 onClick={() => {
-                                  window.open('mailto:futuresea.dev@gmail.com');
+                                  window.open(`mailto:${contacts?.email || car.email || 'futuresea.dev@gmail.com'}`);
                                 }}
                                 className="bg-[#06d6a0] text-white rounded-[10px] px-[30px] py-[15px]"
                               >
@@ -501,12 +521,14 @@ export default function CarPage() {
           <SpecificationsSection
             sellerData={{
               title: "Müüja andmed",
-              company: car.businessType || "ELKE Mustamäe",
-              address: car.country || "Tallinn, Mustamäe tee 22",
+              company: contacts?.businessType || car.businessType || "ELKE Mustamäe",
+              country: contacts?.country || car.country || "EE",
               contactPerson: "Kontaktisik",
-              phone: car.phone || "+372 8888 8888",
-              email: car.email || "Näide@elke.ee",
-              language: car.language || "en"
+              phone: contacts?.phone || car.phone || "+372 8888 8888",
+              email: contacts?.email || car.email || "Näide@elke.ee",
+              language: contacts?.language || car.language || "en",
+              website: contacts?.website || car.website || "example.com",
+              address: contacts?.address || car.address || "Tallinn, Mustamäe tee 22"
             }}
           />
           <VehicleDetailsSection excludeCarId={car.id} />

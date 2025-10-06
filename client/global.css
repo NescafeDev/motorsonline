@@ -4,6 +4,15 @@
 @tailwind components;
 @tailwind utilities;
 
+.yarl__thumbnails_thumbnail {
+  border: 2px solid white !important;
+}
+
+.yarl__thumbnails_thumbnail_active {
+  border-color: red !important; 
+}
+
+
 @layer base {
   /**
    * Tailwind CSS theme
@@ -104,5 +113,6 @@
 
   body {
     @apply bg-background text-foreground;
+    overflow-x: hidden;
   }
 }

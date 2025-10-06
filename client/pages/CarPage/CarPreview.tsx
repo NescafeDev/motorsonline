@@ -1,4 +1,4 @@
-import { ChevronDownIcon, HeartIcon } from "lucide-react";
+import { ChevronDownIcon, Contact, HeartIcon } from "lucide-react";
 import React, { useRef, useEffect, useState } from "react";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
@@ -12,6 +12,7 @@ import CarGallery from "./sections/CarGallery";
 
 interface CarPreviewProps {
   formData: any;
+  contactFormData: any;
   checkboxes: any;
   brands: { id: number; name: string }[];
   models: { id: number; name: string }[];
@@ -20,7 +21,7 @@ interface CarPreviewProps {
   carImages: (File | null)[];
 }
 
-export default function CarPreview({ formData, checkboxes, brands, models, years, driveTypes, carImages }: CarPreviewProps) {
+export default function CarPreview({ formData, contactFormData, checkboxes, brands, models, years, driveTypes, carImages }: CarPreviewProps) {
   const sidebarRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const [sidebarTop, setSidebarTop] = useState(0);
@@ -87,6 +88,7 @@ export default function CarPreview({ formData, checkboxes, brands, models, years
       mileage: parseInt(formData.mileage) || 0,
       power: formData.power || '',
       transmission: formData.transmission || '',
+      modelDetail: formData.modelDetail || '',
       fuelType: formData.fuelType || '',
       drive_type_id: formData.drive_type_id || '',
       drive_type_ee_name: selectedDriveType?.ee_name || '',
@@ -109,11 +111,13 @@ export default function CarPreview({ formData, checkboxes, brands, models, years
       image_8: carImages[7] ? URL.createObjectURL(carImages[7]) : undefined,
       equipment: formData.equipment || '',
       description: formData.description || '',
-      businessType: formData.businessType || '',
-      country: formData.country || '',
-      phone: formData.phone || '',
-      email: formData.email || '',
-      language: formData.language || '',
+      businessType: contactFormData.businessType || '',
+      country: contactFormData.country || '',
+      phone: contactFormData.phone || '',
+      email: contactFormData.email || '',
+      language: contactFormData.language || '',
+      website: contactFormData.website || '',
+      address: contactFormData.address || ''
     };
   };
 
@@ -179,54 +183,54 @@ export default function CarPreview({ formData, checkboxes, brands, models, years
 
   // Equipment features data - get from checkboxes
   const accessoriesOptions = [
-    { key: 'kokkupõrgetEnnetavPidurisüsteem', label: 'Kokkupõrget Ennetav Pidurisüsteem' },
-    { key: 'pimenurgaHoiatus', label: 'Pimenurga Hoiatus' },
-    { key: 'sõidurajaHoidmiseAbisüsteem', label: 'Sõiduraja Hoidmise Abisüsteem' },
-    { key: 'sõidurajavahetamiseAbisüsteem', label: 'Sõidurajavahetamise Abisüsteem' },
-    { key: 'adaptiivnePüsikiirusehoidja', label: 'Adaptiivne Püsikiirusehoidja' },
-    { key: 'liiklusmärkidetuvastusJakuvamine', label: 'Liiklusmärkide Tuvastus ja Kuvamine' },
-    { key: 'parkimisanduridEesJaTaga', label: 'Parkimisandurid Ees ja Taga' },
+    { key: 'kokkupõrgetennetavpidurisüsteem', label: 'Kokkupõrget Ennetav Pidurisüsteem' },
+    { key: 'pimenurgahoiatus', label: 'Pimenurga Hoiatus' },
+    { key: 'sõidurajahoidmiseabisüsteem', label: 'Sõiduraja Hoidmise Abisüsteem' },
+    { key: 'sõidurajavahetamiseabisüsteem', label: 'Sõidurajavahetamise Abisüsteem' },
+    { key: 'adaptiivnepüsikiirusehoidja', label: 'Adaptiivne Püsikiirusehoidja' },
+    { key: 'liiklusmärkidetuvastusjakuvamine', label: 'Liiklusmärkide Tuvastus ja Kuvamine' },
+    { key: 'parkimisandurideesjataga', label: 'Parkimisandurid Ees ja Taga' },
     { key: 'parkimiskaamera', label: 'Parkimiskaamera' },
     { key: 'parkimiskaamera360', label: 'Parkimiskaamera 360°' },
-    { key: 'kaugtuledeümberlülitamiseAssistent', label: 'Kaugtulede ümberlülitamise Assistent' },
+    { key: 'kaugtuledeümberlülitamiseassistent', label: 'Kaugtulede ümberlülitamise Assistent' },
     { key: 'LEDesituled', label: 'LED Esituled' },
     { key: 'Xenonesituled', label: 'Xenon Esituled' },
-    { key: 'Lasersituled', label: 'Laser Esituled' },
-    { key: 'elektriliseSoojendusegaEsiklaas', label: 'Elektrilise Soojendusega Esiklaas' },
+    { key: 'lasersituled', label: 'Laser Esituled' },
+    { key: 'elektriliseoojendusegaesiklaas', label: 'Elektrilise Soojendusega Esiklaas' },
     { key: 'kliimaseade', label: 'Kliimaseade' },
-    { key: 'salongiEelsoojendus', label: 'SalongiEelsoojendus' },
-    { key: 'mootoriEelsoojendus', label: 'MootoriEelsoojendus' },
-    { key: 'salongilisasoojendus', label: 'Salongi Lisasoojendus' },
+    { key: 'salongieelsoojendus', label: 'SalongiEelsoojendus' },
+    { key: 'mootorieelsoojendus', label: 'MootoriEelsoojendus' },
+    { key: 'salongilisaoojendus', label: 'Salongi Lisasoojendus' },
     { key: 'istmesoojendused', label: 'Istmesoojendused' },
-    { key: 'elektriliseltReguleeritavadIstmed', label: 'Elektriliselt Reguleeritavad Istmed' },
-    { key: 'ComfortIstmed', label: 'Comfort Istmed' },
+    { key: 'elektriliseltreguleeritavadIstmed', label: 'Elektriliselt Reguleeritavad Istmed' },
+    { key: 'comfortistmed', label: 'Comfort Istmed' },
     { key: 'sportistmed', label: 'Sport Istmed' },
     { key: 'nahkpolster', label: 'Nahkpolster' },
     { key: 'poolnahkpolster', label: 'Poolnahkpolster' },
-    { key: 'tagaistmeSeljatugiAllaklapitav', label: 'Tagaistme Seljatugi Allaklapitav' },
-    { key: 'eraldiKliimaseadeTagaistmetele', label: 'Eraldi Kliimaseade Tagaistmetele' },
+    { key: 'tagaistmeseljatugiallaklapitav', label: 'Tagaistme Seljatugi Allaklapitav' },
+    { key: 'eraldikliimaseadetagaistmetele', label: 'Eraldi Kliimaseade Tagaistmetele' },
     { key: 'võtmetavamine', label: 'Võtmeta Avamine' },
-    { key: 'võtmetaKäivitus', label: 'Võtmeta Käivitus' },
-    { key: 'pakiruumiAvamineJaSulgeminelektriliselt', label: 'Pakiruumi Avamine ja Sulgemine Elektriliselt' },
-    { key: 'soojendusegaRool', label: 'Soojendusega Rool' },
+    { key: 'võtmetaäivitus', label: 'Võtmeta Käivitus' },
+    { key: 'pakiruumiavaminejasulgeminelektriliselt', label: 'Pakiruumi Avamine ja Sulgemine Elektriliselt' },
+    { key: 'soojendusegarool', label: 'Soojendusega Rool' },
     { key: 'ventileeritavadstmed', label: 'Ventileeritavad Istmed' },
-    { key: 'massaažifunktsioonigaIstmed', label: 'Massaažifunktsiooniga Istmed' },
-    { key: 'infoKuvamineEsiklaasile', label: 'Info Kuvamine Esiklaasile' },
-    { key: 'panoraamkatusKlaasist', label: 'Panoraamkatus (klaasist)' },
+    { key: 'massaažifunktsioonigaiistmed', label: 'Massaažifunktsiooniga Istmed' },
+    { key: 'infokuvamineesiklaasile', label: 'Info Kuvamine Esiklaasile' },
+    { key: 'panoraamkatusklaasist', label: 'Panoraamkatus (klaasist)' },
     { key: 'katuseluuk', label: 'Katuseluuk' },
-    { key: 'usteServosulgurid', label: 'Uste Servosulgurid' },
+    { key: 'usteservosulgurid', label: 'Uste Servosulgurid' },
     { key: 'topeltklaasid', label: 'Topeltklaasid' },
-    { key: 'rulookardinadUstel', label: 'Rulookardinad Ustel' },
+    { key: 'rulookardinadustel', label: 'Rulookardinad Ustel' },
     { key: 'integreeritudVäravapult', label: 'Integreeritud Väravapult' },
     { key: 'AppleCarPlay', label: 'Apple CarPlay' },
     { key: 'AndroidAuto', label: 'Android Auto' },
     { key: 'stereo', label: 'Stereo' },
     { key: 'õhkvedrustus', label: 'Õhkvedrustus' },
-    { key: 'reguleeritavVedrustus', label: 'Reguleeritav Vedrustus' },
-    { key: 'RattaPööramine', label: '4-ratta Pööramine' },
+    { key: 'reguleeritavvedrustus', label: 'Reguleeritav Vedrustus' },
+    { key: '4-rattapööramine', label: '4-ratta Pööramine' },
     { key: 'veokonks', label: 'Veokonks' },
-    { key: 'elektrilisedLiuguksed', label: 'Elektrilised Liuguksed' },
-    { key: 'öiseNägemiseAssistent', label: 'Öise Nägemise Assistent' },
+    { key: 'elektrilisedliuguksed', label: 'Elektrilised Liuguksed' },
+    { key: 'öiseNägemiseassistent', label: 'Öise Nägemise Assistent' },
     { key: 'valgustuspakett', label: 'Valgustuspakett' },
     { key: 'suverehvid', label: 'Suverehvid' },
     { key: 'talverehvid', label: 'Talverehvid' },
@@ -356,7 +360,7 @@ export default function CarPreview({ formData, checkboxes, brands, models, years
                   <CardContent className="px-[20px] py-[30px]">
                     <div className="flex justify-between items-start">
                       <h1 className="text-[30px] font-semibold text-secondary-500 tracking-[-1.20px] leading-[60px] [font-family:'Poppins',Helvetica] ">
-                        {car.brand_name} {car.model_name}
+                        {car.brand_name} {car.model_name} {car.modelDetail}
                       </h1>
                       <Button
                         variant="ghost"
@@ -454,12 +458,14 @@ export default function CarPreview({ formData, checkboxes, brands, models, years
         <SpecificationsSection
           sellerData={{
             title: "Müüja andmed",
-            company: car.businessType || "ELKE Mustamäe",
-            address: car.country || "Tallinn, Mustamäe tee 22",
+            company: contactFormData.businessType || "ELKE Mustamäe",
+            country: contactFormData.country || "EE",
+            address: contactFormData.address || "Tallinn, Mustamäe tee 22",
             contactPerson: "Kontaktisik",
-            phone: car.phone || "+372 8888 8888",
-            email: car.email || "Näide@elke.ee",
-            language: car.language || "en"
+            phone: contactFormData.phone || "+372 8888 8888",
+            email: contactFormData.email || "Näide@elke.ee",
+            language: contactFormData.language || "en",
+            website: contactFormData.website || "example.com"
           }}
         />
       </main>
