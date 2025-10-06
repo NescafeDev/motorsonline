@@ -1893,7 +1893,7 @@ export default function AddsPageMobile() {
             <div className="mt-6 flex gap-4 items-center justify-center">
               <button
                 onClick={handleSaveContact}
-                className={`flex items-center px-3 py-4 rounded-lg text-white transition-colors ${contactSaved
+                className={`flex items-center px-12 py-4 rounded-lg text-white transition-colors ${contactSaved
                   ? 'bg-green-500 hover:bg-green-600'
                   : 'bg-brand-primary hover:bg-motorsoline-primary'
                   }`}
