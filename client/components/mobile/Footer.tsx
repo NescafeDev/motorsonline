@@ -1,7 +1,11 @@
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext"
 
 export default function Footer() {
   const navigate = useNavigate();
+  const { isAuthenticated , user } = useAuth()
+
+
   return (
     <footer className="bg-[#1D1D1D] text-white px-5 py-16 mt-[10%]">
       <div className="space-y-12 max-w-7xl mx-auto px-3">
@@ -27,14 +31,16 @@ export default function Footer() {
         </div>
 
         <div className="flex md:flex-row justify-between grid-cols-3 gap-4 md:gap-0">
-          <div className="space-y-1" onClick={() => navigate("/blog")}>
-            <p className="text-[#B1B1B1] text-center">Lorem ipsum</p>
+          <div className="space-y-1" >
+            <p className="text-[#B1B1B1] text-center" onClick={() => navigate("/blog")}>Blogi</p>
           </div>
-          <div className="space-y-1" onClick={() => navigate("/user")}>
-            <p className="text-[#B1B1B1] text-center">Lorem ipsum</p>
+          <div className="space-y-1" >
+            <p className="text-[#B1B1B1] text-center" onClick={() => navigate("/user")}>Minu kuulutused</p>
           </div>
-          <div className="space-y-1" onClick={() => navigate("/adds")}>
-            <p className="text-[#B1B1B1] text-center">Lorem ipsum</p>
+          <div className="space-y-1">
+            {isAuthenticated && (
+              <p className="text-[#B1B1B1] text-center"onClick={() => navigate("/adds")}>Lisa uus kuulutus</p>
+            )}
           </div>
         </div>
 

@@ -30,8 +30,10 @@ export interface CarFilters {
   trim_level?: string;
   category?: string;
   drive_type_id?: number[];
-  seats?: number;
-  doors?: number;
+  seats_min?: number;
+  seats_max?: number;
+  doors_min?: number;
+  doors_max?: number;
   price_min?: number;
   price_max?: number;
   year_min?: number;
@@ -692,9 +694,6 @@ export const CarListingSection = ({
                 Käibemaksuga
               </label>
             </div>
-          </div>
-
-          <div className="space-y-2">
             <div className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
               <Checkbox
                 id="hooldusraamat"

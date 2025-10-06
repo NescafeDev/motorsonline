@@ -1,7 +1,10 @@
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Footer() {
   const navigate = useNavigate();
+  const { isAuthenticated, user } = useAuth();
+
   return (
     <footer className="w-full bg-brand-dark">
       <div className="px-6 lg:px-[100px] py-[100px]">
@@ -10,6 +13,7 @@ export default function Footer() {
           {/* Logo */}
           <div className="flex-shrink-0">
             <svg
+              onClick={() => navigate("/")}
               width="251"
               height="28"
               viewBox="0 0 251 28"
@@ -35,22 +39,30 @@ export default function Footer() {
             <div className="flex flex-col lg:flex-row gap-4 lg:gap-[157px]">
               <a
                 onClick={() => navigate("/blog")}
-                className="text-[#B1B1B1] text-center font-poppins text-lg font-normal leading-[140%] hover:text-white transition-colors"
+                className="text-[#B1B1B1] text-center font-poppins text-lg font-normal leading-[140%] hover:text-white transition-colors cursor-pointer"
               >
-                Lorem ipsum
+                Blogi
               </a>
               <a
                 onClick={() => navigate("/user")}
-                className="text-[#B1B1B1] text-center font-poppins text-lg font-normal leading-[140%] hover:text-white transition-colors"
+                className="text-[#B1B1B1] text-center font-poppins text-lg font-normal leading-[140%] hover:text-white transition-colors cursor-pointer"
               >
-                Lorem ipsum
+                Minu kuulutused
               </a>
-              <a
+              {/* <a
                 onClick={() => navigate("/adds")}
                 className="text-[#B1B1B1] text-center font-poppins text-lg font-normal leading-[140%] hover:text-white transition-colors"
               >
-                Lorem ipsum
-              </a>
+                Lisa uus kuulutus
+              </a> */}
+              {isAuthenticated && (
+                <a
+                  onClick={() => navigate("/adds")}
+                  className="text-[#B1B1B1] text-center font-poppins text-lg font-normal leading-[140%] hover:text-white transition-colors cursor-pointer"
+                >
+                  Lisa uus kuulutus
+                </a>
+              )}
             </div>
           </div>
         </div>
