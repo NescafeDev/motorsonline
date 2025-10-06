@@ -453,7 +453,11 @@ router.get('/public/filtered', async (req, res) => {
       with_warranty,
       equipment,
       power_kw_min,
-      power_kw_max
+      power_kw_max,
+      bodyType,
+      vehicleType,
+      category,
+      technicalData,
     } = req.query;
 
     let query = `
@@ -671,6 +675,26 @@ router.get('/public/filtered', async (req, res) => {
         query += ' AND cars.equipment LIKE ?';
         params.push(`%${eq}%`);
       });
+    }
+
+    if (bodyType) {
+      query += ' AND cars.bodyType = ?';
+      params.push(bodyType);
+    }
+
+    if (vehicleType) {
+      query += ' AND cars.vehicleType = ?';
+      params.push(vehicleType);
+    }
+
+    if (category) {
+      query += ' AND cars.category = ?';
+      params.push(category);
+    }
+
+    if (technicalData) {
+      query += ' AND cars.technicalData = ?';
+      params.push(technicalData);
     }
 
     query += ' ORDER BY cars.created_at DESC';
