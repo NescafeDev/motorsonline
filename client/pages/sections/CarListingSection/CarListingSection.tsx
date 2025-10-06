@@ -723,10 +723,9 @@ export const CarListingSection = ({
             </AccordionItem>
           </Accordion>
 
-          <Separator className="my-2" />
 
           {/* Technical Specifications */}
-          {rangeInputGroups.slice(2, 5).map((group) => (
+          {/* {rangeInputGroups.slice(2, 5).map((group) => (
             <div key={group.id} className="space-y-2">
               <label className="block font-['Poppins',Helvetica] font-normal text-[#747474] text-base">
                 {group.label}
@@ -759,9 +758,8 @@ export const CarListingSection = ({
                 />
               </div>
             </div>
-          ))}
+          ))} */}
 
-          <Separator className="my-2" />
 
           {/* Transmission Type Section */}
           <Accordion type="single" collapsible defaultValue="transmission">

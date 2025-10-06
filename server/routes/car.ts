@@ -99,8 +99,10 @@ export interface CarFilters {
   model_name?: string;
   trim_level?: string;
   drive_type_id?: number[];
-  seats?: number;
-  doors?: number;
+  seats_min?: number;
+  seats_max?: number;
+  doors_min?: number;
+  doors_max?: number;
   price_min?: number;
   price_max?: number;
   year_min?: number;
@@ -420,8 +422,10 @@ router.get('/public/filtered', async (req, res) => {
       model_name,
       trim_level,
       drive_type_id,
-      seats,
-      doors,
+      seats_min,
+      seats_max,
+      doors_min,
+      doors_max,
       price_min,
       price_max,
       year_min,
@@ -503,14 +507,23 @@ router.get('/public/filtered', async (req, res) => {
       params.push(...driveTypeIds);
     }
 
-    if (seats) {
-      query += ' AND cars.seats = ?';
-      params.push(seats);
+    if (seats_min) {
+      query += ' AND cars.seats >= ?';
+      params.push(seats_min);
+    }
+    if (seats_max) {
+      query += ' AND cars.seats <= ?';
+      params.push(seats_max);
     }
 
-    if (doors) {
-      query += ' AND cars.doors = ?';
-      params.push(doors);
+    if (doors_min) {
+      query += ' AND cars.doors >= ?';
+      params.push(doors_min);
+    }
+
+    if (doors_max) {
+      query += ' AND cars.doors <= ?';
+      params.push(doors_max);
     }
 
     if (price_min) {
