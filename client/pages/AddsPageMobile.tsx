@@ -1898,7 +1898,7 @@ export default function AddsPageMobile() {
                   : 'bg-brand-primary hover:bg-motorsoline-primary'
                   }`}
               >
-                {contactSaved ? '✓ Kontaktid salvestatud' : (editingCar ? 'Salvesta kontaktid' : 'Salvesta kontaktid (ajutiselt)')}
+                {contactSaved ? '✓ Kontaktid salvestatud' : (editingCar ? 'Salvesta kontaktid' : 'Salvesta kontaktid')}
               </button>
               {/* {contactSaved && (
                   <span className="text-green-600 text-sm font-medium">

@@ -531,7 +531,7 @@ export const CarListingSection = ({
           <Accordion type="single" collapsible defaultValue="drive-type">
             <AccordionItem value="drive-type" className="border-none">
               <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica]">
-                Keretüüp
+                Veoskeem
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-2">
