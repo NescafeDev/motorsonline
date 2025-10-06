@@ -67,6 +67,7 @@ export interface CarFilters {
   equipment?: string[];
   carColorType?: string;
   carColor?: string;
+  bodyType?: string;
 }
 
 interface CarListingSectionProps {
@@ -212,6 +213,17 @@ export const CarListingSection = ({
     { id: "võistlussõiduk", label: "Võistlussõiduk"},
     { id: "muu", label: "Muu"},
   ];
+
+  const bodyType = [
+    { id: "sedaan", label: "Sedaan"},
+    { id: "luukpara", label: "Luukpära"},
+    { id: "universaal", label: "Universaal"},
+    { id: "mahtuniversaal", label: "Mahtuniversaal"},
+    { id: "kupee", label: "Kupee"},
+    { id: "kabriolett", label: "Kabriolett"},
+    { id: "pikap", label: "Pikap"},
+    { id: "limusiin", label: "Limusiin"},
+  ]
 
   // Data for vehicle condition
   const technicalData = [
@@ -410,6 +422,30 @@ export const CarListingSection = ({
               </SelectTrigger>
               <SelectContent>
                 {vehicleType.map((type) => (
+                  <SelectItem key={type.id} value={type.id}>
+                    {type.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-3">
+            <Select 
+              value={filters.bodyType || ""} 
+              onValueChange={(value) => {
+                if (value === "") {
+                  updateFilter('bodyType', undefined);
+                } else {
+                  updateFilter('bodyType', value);
+                }
+              }}
+            >
+              <SelectTrigger className="w-full h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]">
+                <SelectValue placeholder="Keretüüp" />
+              </SelectTrigger>
+              <SelectContent>
+                {bodyType.map((type) => (
                   <SelectItem key={type.id} value={type.id}>
                     {type.label}
                   </SelectItem>
