@@ -135,6 +135,10 @@ export interface CarFilters {
   exchange_possible?: boolean;
   with_warranty?: boolean;
   equipment?: string[];
+  bodyType?: string;
+  vehicleType?: string;
+  category?: string;
+  technicalData?: string;
 }
 
 const router = express.Router();
