@@ -196,6 +196,7 @@ export const CarListingSection = ({
   ];
 
   const vehicleType = [
+    { id: "vali", label: "Vali" },
     { id: "sõiduauto", label: "Sõiduauto"},
     { id: "maastur", label: "Maastur"},
     { id: "kaubik", label: "Kaubik"},
@@ -214,7 +215,10 @@ export const CarListingSection = ({
     { id: "muu", label: "Muu"},
   ];
 
+  const [showAllEquipment, setShowAllEquipment] = useState(false);
+
   const bodyType = [
+    { id: "vali", label: "Vali"},
     { id: "sedaan", label: "Sedaan"},
     { id: "luukpara", label: "Luukpära"},
     { id: "universaal", label: "Universaal"},
@@ -227,12 +231,14 @@ export const CarListingSection = ({
 
   // Data for vehicle condition
   const technicalData = [
+    { id: "vali", label: "Vali" },
     { id: "uus", label: "Uus" },
     { id: "kasutatud", label: "Kasutatud" },
     { id: "avariiline", label: "Avariiline" },
   ];
   // Data for category types
   const categoryTypes = [
+    { id: "vali", label: "Vali" },
     { id: "M1", label: "M1" },
     { id: "M2", label: "M2" },
     { id: "M3", label: "M3" },
@@ -308,18 +314,59 @@ export const CarListingSection = ({
   ];
 
   // Data for equipment
-  const equipment = [
-    { id: "elektriliselt-reguleeritavad-istmed", label: "Elektriliselt reguleeritavad istmed",},
-    { id: "istmesoojendused", label: "Istmesoojendused" },
-    { id: "ventileeritavad-istmed", label: "Ventileeritavad istmed" },
-    { id: "isofix-kinnituspunktid", label: "Isofix-kinnituspunktid" },
-    { id: "pusikiirusehoidja", label: "Püsikiirusehoidja" },
-    { id: "votmeta-sisenemine", label: "Võtmeta sisenemine" },
-    { id: "head-up-display", label: "Info kuvamine esiklaasile (head-up display)",},
-    { id: "parkimisandurid", label: "Parkimisandurid" },
-    { id: "carplay-android", label: "Apple CarPlay / Android Auto" },
-    { id: "start-stop", label: "Start/stop süsteem" },
-    { id: "veokonks", label: "Veokonks" },
+  const accessoriesOptions = [
+    { key: 'kokkupõrgetennetavpidurisüsteem', label: 'Kokkupõrget Ennetav Pidurisüsteem' },
+    { key: 'pimenurgahoiatus', label: 'Pimenurga Hoiatus' },
+    { key: 'sõidurajahoidmiseabisüsteem', label: 'Sõiduraja Hoidmise Abisüsteem' },
+    { key: 'sõidurajavahetamiseabisüsteem', label: 'Sõidurajavahetamise Abisüsteem' },
+    { key: 'adaptiivnepüsikiirusehoidja', label: 'Adaptiivne Püsikiirusehoidja' },
+    { key: 'liiklusmärkidetuvastusjakuvamine', label: 'Liiklusmärkide Tuvastus ja Kuvamine' },
+    { key: 'parkimisandurideesjataga', label: 'Parkimisandurid Ees ja Taga' },
+    { key: 'parkimiskaamera', label: 'Parkimiskaamera' },
+    { key: 'parkimiskaamera360', label: 'Parkimiskaamera 360°' },
+    { key: 'kaugtuledeümberlülitamiseassistent', label: 'Kaugtulede ümberlülitamise Assistent' },
+    { key: 'LEDesituled', label: 'LED Esituled' },
+    { key: 'Xenonesituled', label: 'Xenon Esituled' },
+    { key: 'lasersituled', label: 'Laser Esituled' },
+    { key: 'elektriliseoojendusegaesiklaas', label: 'Elektrilise Soojendusega Esiklaas' },
+    { key: 'kliimaseade', label: 'Kliimaseade' },
+    { key: 'salongieelsoojendus', label: 'SalongiEelsoojendus' },
+    { key: 'mootorieelsoojendus', label: 'MootoriEelsoojendus' },
+    { key: 'salongilisaoojendus', label: 'Salongi Lisasoojendus' },
+    { key: 'istmesoojendused', label: 'Istmesoojendused' },
+    { key: 'elektriliseltreguleeritavadIstmed', label: 'Elektriliselt Reguleeritavad Istmed' },
+    { key: 'comfortistmed', label: 'Comfort Istmed' },
+    { key: 'sportistmed', label: 'Sport Istmed' },
+    { key: 'nahkpolster', label: 'Nahkpolster' },
+    { key: 'poolnahkpolster', label: 'Poolnahkpolster' },
+    { key: 'tagaistmeseljatugiallaklapitav', label: 'Tagaistme Seljatugi Allaklapitav' },
+    { key: 'eraldikliimaseadetagaistmetele', label: 'Eraldi Kliimaseade Tagaistmetele' },
+    { key: 'võtmetavamine', label: 'Võtmeta Avamine' },
+    { key: 'võtmetaäivitus', label: 'Võtmeta Käivitus' },
+    { key: 'pakiruumiavaminejasulgeminelektriliselt', label: 'Pakiruumi Avamine ja Sulgemine Elektriliselt' },
+    { key: 'soojendusegarool', label: 'Soojendusega Rool' },
+    { key: 'ventileeritavadstmed', label: 'Ventileeritavad Istmed' },
+    { key: 'massaažifunktsioonigaiistmed', label: 'Massaažifunktsiooniga Istmed' },
+    { key: 'infokuvamineesiklaasile', label: 'Info Kuvamine Esiklaasile' },
+    { key: 'panoraamkatusklaasist', label: 'Panoraamkatus (klaasist)' },
+    { key: 'katuseluuk', label: 'Katuseluuk' },
+    { key: 'usteservosulgurid', label: 'Uste Servosulgurid' },
+    { key: 'topeltklaasid', label: 'Topeltklaasid' },
+    { key: 'rulookardinadustel', label: 'Rulookardinad Ustel' },
+    { key: 'integreeritudVäravapult', label: 'Integreeritud Väravapult' },
+    { key: 'AppleCarPlay', label: 'Apple CarPlay' },
+    { key: 'AndroidAuto', label: 'Android Auto' },
+    { key: 'stereo', label: 'Stereo' },
+    { key: 'õhkvedrustus', label: 'Õhkvedrustus' },
+    { key: 'reguleeritavvedrustus', label: 'Reguleeritav Vedrustus' },
+    { key: '4-rattapööramine', label: '4-ratta Pööramine' },
+    { key: 'veokonks', label: 'Veokonks' },
+    { key: 'elektrilisedliuguksed', label: 'Elektrilised Liuguksed' },
+    { key: 'öiseNägemiseassistent', label: 'Öise Nägemise Assistent' },
+    { key: 'valgustuspakett', label: 'Valgustuspakett' },
+    { key: 'suverehvid', label: 'Suverehvid' },
+    { key: 'talverehvid', label: 'Talverehvid' },
+    { key: 'valuveljed', label: 'Valuveljed' },
   ];
 
   // Range input groups
@@ -410,7 +457,7 @@ export const CarListingSection = ({
             <Select 
               value={filters.vehicleType || ""} 
               onValueChange={(value) => {
-                if (value === "") {
+                if (value === "vali") {
                   updateFilter('vehicleType', undefined);
                 } else {
                   updateFilter('vehicleType', value);
@@ -434,7 +481,7 @@ export const CarListingSection = ({
             <Select 
               value={filters.bodyType || ""} 
               onValueChange={(value) => {
-                if (value === "") {
+                if (value === "vali") {
                   updateFilter('bodyType', undefined);
                 } else {
                   updateFilter('bodyType', value);
@@ -459,7 +506,7 @@ export const CarListingSection = ({
             <Select 
               value={filters.category || ""} 
               onValueChange={(value) => {
-                if (value === "") {
+                if (value === "vali") {
                   updateFilter('category', undefined);
                 } else {
                   updateFilter('category', value);
@@ -484,7 +531,7 @@ export const CarListingSection = ({
             <Select 
               value={filters.technicalData || ""} 
               onValueChange={(value) => {
-                if (value === "") {
+                if (value === "vali") {
                   updateFilter('technicalData', undefined);
                 } else {
                   updateFilter('technicalData', value);
@@ -765,7 +812,7 @@ export const CarListingSection = ({
           <Accordion type="single" collapsible defaultValue="transmission">
             <AccordionItem value="transmission" className="border-none">
               <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica]">
-                Käigukast
+                Käigukasti tüüp
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-2">
@@ -1004,22 +1051,44 @@ export const CarListingSection = ({
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-2">
-                  {equipment.map((item) => (
-                    <div key={item.id} className="flex items-center space-x-2">
+                  {showAllEquipment ? accessoriesOptions.map((item) => (
+                    <div key={item.key} className="flex items-center space-x-2">
                       <Checkbox
-                        id={item.id}
+                        id={item.key}
                         className="w-6 h-6 rounded border-[#ababab]"
-                        checked={(filters.equipment || []).includes(item.id)}
-                        onCheckedChange={(checked) => handleArrayFilter('equipment', item.id, checked as boolean)}
+                        checked={(filters.equipment || []).includes(item.key)}
+                        onCheckedChange={(checked) => handleArrayFilter('equipment', item.key, checked as boolean)}
                       />
                       <label
-                        htmlFor={item.id}
+                        htmlFor={item.key}
+                        className="font-['Poppins',Helvetica] font-normal text-base max-w-[218px]"
+                      >
+                        {item.label}
+                      </label>
+                    </div>
+                  )) : accessoriesOptions.slice(0, 8).map((item) => (
+                    <div key={item.key} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={item.key}
+                        className="w-6 h-6 rounded border-[#ababab]"
+                        checked={(filters.equipment || []).includes(item.key)}
+                        onCheckedChange={(checked) => handleArrayFilter('equipment', item.key, checked as boolean)}
+                      />
+                      <label
+                        htmlFor={item.key}
                         className="font-['Poppins',Helvetica] font-normal text-base max-w-[218px]"
                       >
                         {item.label}
                       </label>
                     </div>
                   ))}
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowAllEquipment(!showAllEquipment)}
+                    className="w-full h-[42px] rounded-[10px] border-[#06d6a0] text-[#06d6a0] font-['Poppins',Helvetica] font-medium"
+                  >
+                    {showAllEquipment ? '- Näita vähem' : '+ Vaata rohkem'}
+                  </Button>
                 </div>
               </AccordionContent>
             </AccordionItem>
