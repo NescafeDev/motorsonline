@@ -161,6 +161,10 @@ export default function CarGallery({
         slides={allImages.map((img) => ({ src: img }))}
         plugins={[Fullscreen, Thumbnails]}
         index={lightboxIndex}
+        on={{ view: ({ index }) => setLightboxIndex(index) }}
+        portal={{ root: typeof document !== 'undefined' ? document.body : undefined }}
+        styles={{ container: { zIndex: 2147483647, pointerEvents: 'auto' } }}
+        controller={{ closeOnBackdropClick: true, preventDefaultWheelX: true, preventDefaultWheelY: true }}
         thumbnails={{
           position: 'bottom',
           width: 80,
@@ -171,13 +175,6 @@ export default function CarGallery({
           gap: 4,
           borderColor: 'white',
           imageFit: 'cover',
-        }}
-        carousel={{
-          finite: false,
-        }}
-        render={{
-          buttonPrev: allImages.length > 1 ? undefined : () => null,
-          buttonNext: allImages.length > 1 ? undefined : () => null,
         }}
       />
     </div>
