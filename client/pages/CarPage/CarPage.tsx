@@ -56,7 +56,7 @@ interface CarData {
   phone?: string;
   email?: string;
   language?: string;
-  website? : string;
+  website?: string;
 }
 
 export default function CarPage() {
@@ -73,7 +73,7 @@ export default function CarPage() {
     if (!car) return '';
 
     // If there's no VAT rate or it's empty/null, show "Hind ei sisalda käibemaksu"
-    if (car.vatRefundable == 'no') {
+    if (car.vatRefundable === 'no' || car.vatRefundable === 'ei') {
       return 'Hind ei sisalda käibemaksu';
     }
 
@@ -264,7 +264,7 @@ export default function CarPage() {
     {
       icon: "/img/car/calendar.png",
       label: "Esmaregistreerimine:",
-      value: car.year_value?.toString() + " - " + (car.month.length === 1 ? `0${car.month}` : car.month )|| "N/A",
+      value: car.year_value?.toString() + " - " + (car.month.length === 1 ? `0${car.month}` : car.month) || "N/A",
     },
     {
       icon: "/img/car/gas_station.png",
@@ -291,7 +291,7 @@ export default function CarPage() {
   ];
 
   // Equipment features data - parse from equipment string
-    const equipmentFeatures = car.accessories
+  const equipmentFeatures = car.accessories
     ? car.accessories.split(',').map(item => ({
       label: item.trim(),
       icon: "/img/car/check.svg"
@@ -454,7 +454,7 @@ export default function CarPage() {
                                 {detail.label}
                               </span>
                               <span className="font-medium text-secondary-500 text-[12px] tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica] break-words">
-                                {detail.value}{}
+                                {detail.value}{ }
                               </span>
                             </div>
                           </div>
@@ -487,14 +487,16 @@ export default function CarPage() {
                             <span className="font-semibold text-secondary-500 text-[24px] leading-[normal] [font-family:'Poppins',Helvetica]">
                               € {(car.discountPrice || car.price).toLocaleString()}
                             </span>
-
+                            <p className="text-[#747474] text-[10px] tracking-[-0.36px] leading-[18px] [font-family:'Poppins',Helvetica] mt-2">
+                              {getVatDisplayText(car)}
+                            </p>
                           </div>
                         </div>
                         <div
                           className="col-6 w-full relative"
                           style={{ minHeight: "80px" }}
                         >
-                          <div className="absolute right-0 bottom-0">
+                          <div className="absolute right-0 bottom-6">
                             <a href={`mailto:${contacts?.email || car.email || 'futuresea.dev@gmail.com'}`}>
                               <Button
                                 onClick={() => {
@@ -504,9 +506,7 @@ export default function CarPage() {
                               >
                                 Saada e-mail
                               </Button>
-                              <p className="text-[#747474] text-[10px] tracking-[-0.36px] leading-[18px] [font-family:'Poppins',Helvetica] mt-2">
-                                {getVatDisplayText(car)}
-                              </p>
+
                             </a>
                           </div>
                         </div>

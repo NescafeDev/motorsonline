@@ -34,7 +34,7 @@ export default function UserPageMobile() {
     console.log('Vat Refundable:', car.vatRefundable);
     
     // If there's no VAT rate or it's empty/null, show "Hind ei sisalda käibemaksu"
-    if (car.vatRefundable == "no") {
+    if (car.vatRefundable === "no" || car.vatRefundable === 'ei') {
       return 'Hind ei sisalda käibemaksu';
     }
     

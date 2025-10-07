@@ -299,7 +299,7 @@ export default function HomePageMobile() {
     if (!car) return '';
 
     // If there's no VAT rate or it's empty/null, show "Hind ei sisalda käibemaksu"
-    if (!car.vatRate || car.vatRate === '' || car.vatRate === 'null') {
+    if (!car.vatRate || car.vatRate === '' || car.vatRate === 'null' || car.vatRefundable === 'ei' || car.vatRefundable === 'no') {
       return 'Hind ei sisalda käibemaksu';
     }
 

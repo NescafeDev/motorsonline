@@ -167,16 +167,29 @@ export function CheckboxField({
   className = "",
 }: CheckboxFieldProps) {
   return (
-    <div className={`flex items-center space-x-3 ${className}`}>
+    <div
+      className={`flex items-center space-x-3 cursor-pointer select-none ${className}`}
+      role="checkbox"
+      aria-checked={checked}
+      tabIndex={0}
+      onClick={() => onChange?.(!checked)}
+      onKeyDown={(e) => {
+        if (e.key === " " || e.key === "Enter") {
+          e.preventDefault();
+          onChange?.(!checked);
+        }
+      }}
+    >
       <div className="relative">
         <input
           type="checkbox"
           checked={checked}
           onChange={(e) => onChange?.(e.target.checked)}
+          onClick={(e) => e.stopPropagation()}
           className="w-6 h-6 rounded border border-motorsoline-form-border bg-white focus:outline-none focus:ring-2 focus:ring-motorsoline-primary"
         />
       </div>
-      <label className="text-motorsoline-text text-lg">{label}</label>
+      <span className="text-motorsoline-text text-lg">{label}</span>
     </div>
   );
 }

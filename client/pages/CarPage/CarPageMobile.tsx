@@ -81,7 +81,7 @@ export default function CarPageMobile() {
     if (!car) return '';
 
     // If there's no VAT rate or it's empty/null, show "Hind ei sisalda käibemaksu"
-    if (!car.vatRate || car.vatRate === '' || car.vatRate === 'null') {
+    if (!car.vatRate || car.vatRate === '' || car.vatRate === 'null' || car.vatRefundable === 'ei' || car.vatRefundable === 'no') {
       return 'Hind ei sisalda käibemaksu';
     }
     // If VAT rate is 24, show "Hind sisaldab käibemaksu 24%"
@@ -372,6 +372,9 @@ export default function CarPageMobile() {
               <span className="font-semibold text-secondary-500 text-2xl leading-[32px]">
                 € {(car.discountPrice || car.price).toLocaleString()}
               </span>
+              <p className="text-[#747474] text-xs tracking-[-0.2px] leading-[16px] mt-1 text-center">
+                {getVatDisplayText(car)}
+              </p>
             </div>
           </div>
           <div className="ml-4 mt-7">
@@ -380,9 +383,6 @@ export default function CarPageMobile() {
             >
               Saada e-mail
             </Button>
-            <p className="text-[#747474] text-xs tracking-[-0.2px] leading-[16px] mt-1 text-center">
-              {getVatDisplayText(car)}
-            </p>
           </div>
         </div>
 

@@ -114,20 +114,19 @@ export function CarCard({
             </>
           )}
         </div>
-        <div className="grid grid-cols-2 h-20 mx-2">
+        <div className="grid grid-cols-2 h-15 mx-2">
 
-          <div className="col-span-1 flex items-center gap-1">
+          <div className="col-span-1 flex items-center gap-1 mt-5">
 
             <p className="font-semibold text-secondary-500 text-[24px] leading-[normal] [font-family:'Poppins',Helvetica]">
               {discountPrice}
             </p>
-
           </div>
-          <div className="col-span-1 flex items-center justify-end">
-            <p className="text-[#747474] text-xs tracking-[-0.2px] leading-[16px] mt-1 text-center">
-              {vatNote}
-            </p>
-          </div>
+        </div>
+        <div className="grid grid-cols-1 h-5 mx-2">
+          <p className="text-[#747474] text-xs tracking-[-0.2px] leading-[16px] mt-1 text-start">
+            {vatNote}
+          </p>
         </div>
         {/* <div className="flex items-start justify-between mb-4">
           <div className="flex-1">

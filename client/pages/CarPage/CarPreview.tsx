@@ -32,7 +32,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
     if (!car) return '';
 
     // If there's no VAT rate or it's empty/null, show "Hind ei sisalda käibemaksu"
-    if (car.vatRefundable === 'no') {
+    if (car.vatRefundable === 'no' || car.vatRefundable === 'ei') {
       return 'Hind ei sisalda käibemaksu';
     }
 
@@ -430,21 +430,22 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
                           <span className="font-semibold text-secondary-500 text-[24px] leading-[normal] [font-family:'Poppins',Helvetica]">
                             € {(car.discountPrice || car.price).toLocaleString()}
                           </span>
+                          <p className="text-[#747474] text-[10px] tracking-[-0.36px] leading-[18px] [font-family:'Poppins',Helvetica] mt-2">
+                            {getVatDisplayText(car)}
+                          </p>
                         </div>
                       </div>
                       <div
                         className="col-6 w-full relative"
                         style={{ minHeight: "80px" }}
                       >
-                        <div className="absolute right-0 bottom-0">
+                        <div className="absolute right-0 bottom-6">
                           <Button
                             className="bg-[#06d6a0] text-white rounded-[10px] px-[30px] py-[15px]"
                           >
                             Saada e-mail
                           </Button>
-                          <p className="text-[#747474] text-[10px] tracking-[-0.36px] leading-[18px] [font-family:'Poppins',Helvetica] mt-2">
-                            {getVatDisplayText(car)}
-                          </p>
+                          
                         </div>
                       </div>
                     </div>
