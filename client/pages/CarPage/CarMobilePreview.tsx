@@ -29,7 +29,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
 
         // If there's no VAT rate or it's empty/null, show "Hind ei sisalda käibemaksu"
         if (car.vatRefundable === 'no' || car.vatRefundable === 'ei') {
-            return 'Hind ei sisalda käibemaksu';
+            return 'KM 0% (käibemaksu ei lisandu)';
         }
 
         // If VAT rate is 24, show "Hind sisaldab käibemaksu 24%"

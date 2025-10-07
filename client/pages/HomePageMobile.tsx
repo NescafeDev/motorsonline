@@ -300,7 +300,7 @@ export default function HomePageMobile() {
 
     // If there's no VAT rate or it's empty/null, show "Hind ei sisalda käibemaksu"
     if (!car.vatRate || car.vatRate === '' || car.vatRate === 'null' || car.vatRefundable === 'ei' || car.vatRefundable === 'no') {
-      return 'Hind ei sisalda käibemaksu';
+      return 'KM 0% (käibemaksu ei lisandu)';
     }
 
     // For any other VAT rate, show the specific rate

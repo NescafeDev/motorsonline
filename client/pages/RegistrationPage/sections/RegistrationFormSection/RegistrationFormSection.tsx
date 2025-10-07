@@ -210,7 +210,7 @@ export const RegistrationFormSection = (): JSX.Element => {
           <div className="flex items-start space-x-4 pt-4 mb-5">
             <Checkbox
               id="terms"
-              className="w-6 h-6 rounded bg-[#06d6a0] data-[state=checked]:bg-[#06d6a0] border-none mt-1"
+              className="w-6 h-6 rounded bg-white data-[state=checked]:bg-[#06d6a0] border-[#06d6a0] mt-1"
               checked={form.terms}
               onCheckedChange={(checked) => setForm((prev) => ({ ...prev, terms: !!checked }))}
             />

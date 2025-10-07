@@ -99,7 +99,7 @@ export default function CarGallery({
         <img
           src={currentMainImage || validImages[0]}
           alt="Car main view"
-          className="absolute inset-0 max-w-full max-h-full object-contain transition-all duration-300 ease-in-out transform cursor-pointer w-full h-full"
+          className="absolute object-cover transition-all duration-300 ease-in-out transform cursor-pointer w-full h-[480px]"
           onClick={handleImageClick}
           onKeyDown={handleKeyDown}
           tabIndex={0}
@@ -159,7 +159,7 @@ export default function CarGallery({
                   }}
                 >
                   <div
-                    className={`w-full h-[94px] rounded-[6.951px] overflow-hidden cursor-pointer transition-all duration-200 ease-in-out transform hover:scale-105 ${selectedImage === uniqueKey
+                    className={`w-full h-[140px] rounded-[6.951px] overflow-hidden cursor-pointer transition-all duration-200 ease-in-out transform hover:scale-105 ${selectedImage === uniqueKey
                         ? "border-[3px] border-red-500 shadow-lg rounded-lg"
                         : "border-[1.697px] border-transparent hover:border-gray-300"
                       }`}

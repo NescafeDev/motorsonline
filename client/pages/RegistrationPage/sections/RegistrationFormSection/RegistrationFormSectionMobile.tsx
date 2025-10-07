@@ -223,7 +223,7 @@ export const RegistrationFormSectionMobile = (): JSX.Element => {
             <div className="flex items-start space-x-3 pt-4">
               <Checkbox
                 id="terms"
-                className="w-5 h-5 rounded bg-[#06d6a0] data-[state=checked]:bg-[#06d6a0] border-none mt-1 flex-shrink-0"
+                className="w-5 h-5 rounded bg-white data-[state=checked]:bg-[#06d6a0] border-[#06d6a0] mt-1 flex-shrink-0"
                 checked={form.terms}
                 onCheckedChange={(checked) => setForm((prev) => ({ ...prev, terms: !!checked }))}
               />
