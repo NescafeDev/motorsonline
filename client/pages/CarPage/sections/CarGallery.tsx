@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
-import { Lightbox } from "yet-another-react-lightbox";
+import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
-import { Fullscreen } from "yet-another-react-lightbox/plugins";
+import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 
 interface CarGalleryProps {
@@ -25,15 +25,18 @@ export default function CarGallery({
   };
 
   const handlePreviousImage = () => {
+    console.log('Previous clicked!');
     setSelectedImage((prev) => (prev === 0 ? validImages.length - 1 : prev - 1));
   };
 
   const handleNextImage = () => {
+    console.log('Next clicked!');
     setSelectedImage((prev) => (prev === validImages.length - 1 ? 0 : prev + 1));
   };
   const [isOpen, setIsOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   console.log('lightboxIndex', lightboxIndex);
+
   const handleImageClick = () => {
     console.log('Image clicked');
     setLightboxIndex(selectedImage);
@@ -48,15 +51,18 @@ export default function CarGallery({
     }
   };
 
-  const allImages = [mainImage, ...thumbnails];
+  // Build images without duplicates; don't repeat main image in thumbnails
+  const validThumbnails = thumbnails.filter(
+    (img) => img && img.trim() !== '' && img !== mainImage
+  );
+  const allImages = [mainImage, ...validThumbnails];
   const currentMainImage = allImages[selectedImage];
 
   // Filter out empty or null images
   const validImages = allImages.filter(img => img && img.trim() !== '');
-  const validThumbnails = thumbnails.filter(img => img && img.trim() !== '');
 
-  // Calculate how many thumbnails to show at once (4 in this case)
-  const thumbnailsPerView = 4;
+  // Calculate how many thumbnails to show at once
+  const thumbnailsPerView = Math.min(4, validThumbnails.length || 1);
   const totalSlides = Math.ceil(validThumbnails.length / thumbnailsPerView);
 
 
@@ -96,7 +102,7 @@ export default function CarGallery({
           className="absolute inset-0 max-w-full max-h-full object-contain transition-all duration-300 ease-in-out transform cursor-pointer w-full h-full"
           onClick={handleImageClick}
           onKeyDown={handleKeyDown}
-          tabIndex={lightboxIndex}
+          tabIndex={0}
           role="button"
           aria-label="Open image in lightbox"
         />
@@ -104,24 +110,6 @@ export default function CarGallery({
         <div className="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           <Maximize2 className="w-4 h-4" />
         </div>
-          <Lightbox
-            open={isOpen}
-            close={() => setIsOpen(false)}
-            slides={allImages.map((img) => ({ src: img }))}
-            plugins={[Fullscreen, Thumbnails]}
-            index={lightboxIndex}
-            thumbnails={{
-              position: 'bottom',
-              width: 120,
-              height: 80,
-              border: 2,
-              borderRadius: 5,
-              padding: 1,
-              gap: 5,
-              borderColor: 'white',
-              imageFit: 'cover',
-            }}
-          />
         {/* Navigation arrows - only show if there are multiple images */}
         {validImages.length > 1 && (
           <>
@@ -148,7 +136,7 @@ export default function CarGallery({
         {/* Image counter */}
         {validImages.length > 1 && (
           <div className="absolute bottom-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm">
-            {selectedImage + 1} / {validImages.length}
+            {selectedImage +1 } / {validImages.length }
           </div>
         )}
       </div>
@@ -158,30 +146,33 @@ export default function CarGallery({
         <div className="relative">
           {/* Thumbnails container with overflow hidden */}
           <div className="flex gap-[7px] overflow-hidden">
-            {getCurrentThumbnails().map((thumb, index) => (
-              <div
-                key={index}
-                className="relative w-[24.4%] flex-shrink-0"
-                onClick={() => {
-                  handleThumbnailClick(index + 1);
-                  setLightboxIndex(index + 1);
-                  setIsOpen(true);
-                }}
-              >
+            {getCurrentThumbnails().map((thumb, index) => {
+              const actualIndex = currentSlide * thumbnailsPerView + index + 1; // +1 because mainImage is index 0
+              return (
                 <div
-                  className={`w-full h-[94px] rounded-[6.951px] overflow-hidden cursor-pointer transition-all duration-200 ease-in-out transform hover:scale-105 ${selectedImage === index + 1
-                      ? "border-[3px] border-red-500 shadow-lg rounded-lg"
-                      : "border-[1.697px] border-transparent hover:border-gray-300"
-                    }`}
+                  key={actualIndex}
+                  className="relative w-[24.4%] flex-shrink-0"
+                  onClick={() => {
+                    handleThumbnailClick(actualIndex);
+                    setLightboxIndex(actualIndex);
+                    setIsOpen(true);
+                  }}
                 >
-                  <img
-                    src={thumb}
-                    alt={`Car view ${index + 1}`}
-                    className="w-full h-full object-cover transition-transform duration-200 hover:scale-110 rounded-[6.951px]"
-                  />
+                  <div
+                    className={`w-full h-[94px] rounded-[6.951px] overflow-hidden cursor-pointer transition-all duration-200 ease-in-out transform hover:scale-105 ${selectedImage === actualIndex
+                        ? "border-[3px] border-red-500 shadow-lg rounded-lg"
+                        : "border-[1.697px] border-transparent hover:border-gray-300"
+                      }`}
+                  >
+                    <img
+                      src={thumb}
+                      alt={`Car view ${actualIndex}`}
+                      className="w-full h-full object-cover transition-transform duration-200 hover:scale-110 rounded-[6.951px]"
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Slide indicators - only show when auto-sliding is active */}
@@ -235,6 +226,29 @@ export default function CarGallery({
           )} */}
         </div>
       )}
+      {/* Render Lightbox outside positioned containers to avoid stacking issues */}
+      <Lightbox
+        open={isOpen}
+        close={() => setIsOpen(false)}
+        slides={allImages.map((img) => ({ src: img }))}
+        plugins={[Fullscreen, Thumbnails]}
+        index={lightboxIndex}
+        on={{ view: ({ index }) => setLightboxIndex(index) }}
+        portal={{ root: typeof document !== 'undefined' ? document.body : undefined }}
+        styles={{ container: { zIndex: 2147483647, pointerEvents: 'auto' } }}
+        controller={{ closeOnBackdropClick: true, preventDefaultWheelX: true, preventDefaultWheelY: true }}
+        thumbnails={{
+          position: 'bottom',
+          width: 120,
+          height: 80,
+          border: 2,
+          borderRadius: 5,
+          padding: 1,
+          gap: 5,
+          borderColor: 'white',
+          imageFit: 'cover',
+        }}
+      />
     </div>
   );
 }

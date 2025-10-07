@@ -2,7 +2,7 @@ import { pool } from '../db';
 
 export interface Contact {
   id: number;
-  car_id: number;
+  user_id: number;
   phone?: string;
   businessType?: string;
   socialNetwork?: string;
@@ -23,10 +23,10 @@ export async function createContact(contact: Omit<Contact, 'id'>): Promise<Conta
 
   const [result]: any = await pool.query(
     `INSERT INTO contacts (
-      car_id, phone, businessType, socialNetwork, email, address, website, language, country
+      user_id, phone, businessType, socialNetwork, email, address, website, language, country
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
-      contact.car_id,
+      contact.user_id,
       contact.phone,
       contact.businessType,
       contact.socialNetwork,
@@ -40,10 +40,10 @@ export async function createContact(contact: Omit<Contact, 'id'>): Promise<Conta
   return { id: result.insertId, ...contact };
 }
 
-export async function getContactByCarId(carId: number): Promise<Contact | null> {
+export async function getContactByUserId(userId: number): Promise<Contact | null> {
   const [rows]: any = await pool.query(
-    'SELECT * FROM contacts WHERE car_id = ?',
-    [carId]
+    'SELECT * FROM contacts WHERE user_id = ?',
+    [userId]
   );
   if (rows.length === 0) return null;
   
@@ -56,7 +56,7 @@ export async function getContactByCarId(carId: number): Promise<Contact | null> 
   return contact;
 }
 
-export async function updateContact(carId: number, contact: Partial<Omit<Contact, 'id' | 'car_id'>>): Promise<boolean> {
+export async function updateContact(userId: number, contact: Partial<Omit<Contact, 'id' | 'user_id'>>): Promise<boolean> {
   // Convert language array to comma-separated string if it's an array
   const processedContact = { ...contact };
   if (processedContact.language && Array.isArray(processedContact.language)) {
@@ -68,13 +68,13 @@ export async function updateContact(carId: number, contact: Partial<Omit<Contact
   if (!fields) return false;
   
   const [result]: any = await pool.query(
-    `UPDATE contacts SET ${fields}, updated_at = NOW() WHERE car_id = ?`,
-    [...values, carId]
+    `UPDATE contacts SET ${fields}, updated_at = NOW() WHERE user_id = ?`,
+    [...values, userId]
   );
   return result.affectedRows > 0;
 }
 
-export async function deleteContact(carId: number): Promise<boolean> {
-  const [result]: any = await pool.query('DELETE FROM contacts WHERE car_id = ?', [carId]);
+export async function deleteContact(userId: number): Promise<boolean> {
+  const [result]: any = await pool.query('DELETE FROM contacts WHERE user_id = ?', [userId]);
   return result.affectedRows > 0;
 }

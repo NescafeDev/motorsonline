@@ -83,7 +83,7 @@ export async function getCarById(id: number): Promise<any | null> {
     LEFT JOIN model ON cars.model_id = model.id
     LEFT JOIN year ON cars.year_id = year.id
     LEFT JOIN drive_type ON cars.drive_type_id = drive_type.id
-    LEFT JOIN contacts ON cars.id = contacts.car_id
+    LEFT JOIN contacts ON cars.user_id = contacts.user_id
     WHERE cars.id = ?
   `, [id]);
   if (rows.length === 0) return null;
@@ -100,7 +100,7 @@ export async function getAllCars(): Promise<any[]> {
     LEFT JOIN model ON cars.model_id = model.id
     LEFT JOIN year ON cars.year_id = year.id
     LEFT JOIN drive_type ON cars.drive_type_id = drive_type.id
-    LEFT JOIN contacts ON cars.id = contacts.car_id
+    LEFT JOIN contacts ON cars.user_id = contacts.user_id
     ORDER BY cars.created_at DESC
   `);
   // Split tech_check and accessories into arrays if not null
@@ -116,7 +116,7 @@ export async function getCarsByUserId(userId: number): Promise<any[]> {
     LEFT JOIN model ON cars.model_id = model.id
     LEFT JOIN year ON cars.year_id = year.id
     LEFT JOIN drive_type ON cars.drive_type_id = drive_type.id
-    LEFT JOIN contacts ON cars.id = contacts.car_id
+    LEFT JOIN contacts ON cars.user_id = contacts.user_id
     WHERE cars.user_id = ?
     ORDER BY cars.created_at DESC
   `, [userId]);

@@ -4,7 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
 import { createCar, getCarById, getAllCars, updateCar, deleteCar, getCarsByUserId } from '../models/car';
-import { createContact, updateContact, getContactByCarId } from '../models/contact';
+import { createContact, updateContact, getContactByUserId } from '../models/contact';
 import { pool } from '../db';
 import { DriveType } from '@shared/drive-types';
 
@@ -283,7 +283,7 @@ router.post('/', authenticateToken, upload.fields([
         contactData.email || contactData.address || contactData.website || 
         contactData.language || contactData.country) {
       await createContact({
-        car_id: car.id,
+        user_id: car.user_id,
         ...contactData
       });
     }

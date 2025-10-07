@@ -153,15 +153,15 @@ export default function CarPage() {
         console.log('CarData:', carData);
         setCar(carData);
 
-        // Fetch contact data for this car
+        // Fetch contact data for this car's owner
         try {
-          const contactResponse = await fetch(`/api/contacts/car/${carData.id}`);
+          const contactResponse = await fetch(`/api/contacts/user/${carData.user_id}`);
           if (contactResponse.ok) {
             const contactData = await contactResponse.json();
             setContacts(contactData);
           } else {
             const errorText = await contactResponse.text();
-            console.log('No contact data found for car:', carData.id, 'Status:', contactResponse.status, 'Error:', errorText);
+            console.log('No contact data found for user:', carData.user_id, 'Status:', contactResponse.status, 'Error:', errorText);
             setContacts(null);
           }
         } catch (contactError) {

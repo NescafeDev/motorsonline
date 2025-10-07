@@ -1,6 +1,6 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import { createContact, updateContact, getContactByCarId, deleteContact } from '../models/contact';
+import { createContact, updateContact, getContactByUserId, deleteContact } from '../models/contact';
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
@@ -36,7 +36,14 @@ router.post('/', authenticateToken, async (req: any, res) => {
     console.log('Creating contact with data:', req.body);
     console.log('Language field type:', typeof req.body.language, 'Value:', req.body.language);
     console.log('User making request:', req.user);
-    const contact = await createContact(req.body);
+    
+    // Use the authenticated user's ID
+    const contactData = {
+      ...req.body,
+      user_id: req.user.id
+    };
+    
+    const contact = await createContact(contactData);
     console.log('Contact created successfully:', contact);
     res.status(201).json(contact);
   } catch (err: any) {
@@ -45,15 +52,33 @@ router.post('/', authenticateToken, async (req: any, res) => {
   }
 });
 
-// Get contact by car ID
-router.get('/car/:carId', async (req, res) => {
+// Get contact by authenticated user
+router.get('/user', authenticateToken, async (req: any, res) => {
   try {
-    const carId = parseInt(req.params.carId);
-    console.log('Fetching contact for car ID:', carId);
-    const contact = await getContactByCarId(carId);
+    const userId = req.user.id;
+    console.log('Fetching contact for user ID:', userId);
+    const contact = await getContactByUserId(userId);
     console.log('Contact found:', contact);
     if (!contact) {
-      console.log('No contact found for car ID:', carId);
+      console.log('No contact found for user ID:', userId);
+      return res.status(404).json({ message: 'Contact not found' });
+    }
+    res.json(contact);
+  } catch (err: any) {
+    console.error('Get contact error:', err);
+    res.status(400).json({ message: 'Failed to get contact.', error: err.message });
+  }
+});
+
+// Get contact by user ID (public endpoint for car pages)
+router.get('/user/:userId', async (req, res) => {
+  try {
+    const userId = parseInt(req.params.userId);
+    console.log('Fetching contact for user ID:', userId);
+    const contact = await getContactByUserId(userId);
+    console.log('Contact found:', contact);
+    if (!contact) {
+      console.log('No contact found for user ID:', userId);
       return res.status(404).json({ message: 'Contact not found' });
     }
     res.json(contact);
@@ -64,10 +89,10 @@ router.get('/car/:carId', async (req, res) => {
 });
 
 // Update contact
-router.put('/car/:carId', authenticateToken, async (req, res) => {
+router.put('/user', authenticateToken, async (req: any, res) => {
   try {
-    const carId = parseInt(req.params.carId);
-    const success = await updateContact(carId, req.body);
+    const userId = req.user.id;
+    const success = await updateContact(userId, req.body);
     if (!success) {
       return res.status(404).json({ message: 'Contact not found' });
     }
@@ -79,10 +104,10 @@ router.put('/car/:carId', authenticateToken, async (req, res) => {
 });
 
 // Delete contact
-router.delete('/car/:carId', authenticateToken, async (req, res) => {
+router.delete('/user', authenticateToken, async (req: any, res) => {
   try {
-    const carId = parseInt(req.params.carId);
-    const success = await deleteContact(carId);
+    const userId = req.user.id;
+    const success = await deleteContact(userId);
     if (!success) {
       return res.status(404).json({ message: 'Contact not found' });
     }
