@@ -119,15 +119,15 @@ export default function CarPageMobile() {
         const carData = await response.json();
         setCar(carData);
 
-        // Fetch contact data for this car
+        // Fetch contact data for this car's owner
         try {
-          const contactResponse = await fetch(`/api/contacts/car/${carData.id}`);
+          const contactResponse = await fetch(`/api/contacts/user/${carData.user_id}`);
           if (contactResponse.ok) {
             const contactData = await contactResponse.json();
             console.log('ContactData:', contactData);
             setContacts(contactData);
           } else {
-            console.log('No contact data found for car:', carData.id);
+            console.log('No contact data found for user:', carData.user_id);
             setContacts(null);
           }
         } catch (contactError) {
@@ -488,14 +488,14 @@ export default function CarPageMobile() {
         <SpecificationsSection
           sellerData={{
             title: "Müüja andmed",
-            company: contacts?.businessType || car.businessType || "ELKE Mustamäe",
-            country: contacts?.country || contacts?.country || car.country || "EE",
-            address: contacts?.address || car.address || "Tallinn, Mustamäe tee 22",
+            company: contacts?.businessType || "ELKE Mustamäe",
+            country: contacts?.country || "EE",
+            address: contacts?.address || "Tallinn, Mustamäe tee 22",
             contactPerson: user?.userType || "Eraisik",
-            phone: contacts?.phone || car.phone || "+372 8888 8888",
-            email: contacts?.email || car.email || "Näide@elke.ee",
-            language: contacts?.language || car.language || "en",
-            website: contacts?.website || car.website || "example.com"
+            phone: contacts?.phone || "+372 8888 8888",
+            email: contacts?.email || "Näide@elke.ee",
+            language: contacts?.language || "en",
+            website: contacts?.website || "example.com"
           }}
         />
 

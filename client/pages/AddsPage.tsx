@@ -361,9 +361,9 @@ export default function AddsPage() {
           console.log('Loaded existing contact data:', contactResponse.data);
         }
       }
-    } catch (error) {
-      console.log('No existing contact data found or error loading:', error);
-      // Don't set contactSaved to false here, let it remain as is
+    } catch (error: any) {
+      console.log('Error loading contact data:', error);
+      setContactSaved(false);
     }
   };
 
@@ -469,9 +469,9 @@ export default function AddsPage() {
                   setContactSaved(false); // No existing contact data
                 }
               }
-            } catch (error) {
-              console.log('No contact data found or error loading contact data:', error);
-              setContactSaved(false); // No existing contact data
+            } catch (error: any) {
+              console.log('Error loading contact data:', error);
+              setContactSaved(false);
             }
           };
 

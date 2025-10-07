@@ -11,10 +11,13 @@ import FormSection, {
 } from "@/components/FormSection";
 import ReactFlagsSelect from "react-flags-select";
 import LanguageSelect from '@/components/LanguageSelect';
+import Select from "react-select";
 import countryList from "react-select-country-list";
 import MultiLanguageSelect from '@/components/MultiLanguageSelect';
 import MultiCountrySelect from '@/components/MultiCountrySelect';
 import { useAuth } from "@/contexts/AuthContext";
+import { boolean } from "zod/v4";
+import { CountryCodes } from "react-flags-select/build/types";
 import {
   Dialog,
   DialogContent,
@@ -338,13 +341,42 @@ export default function AddsPageMobile() {
   const [years, setYears] = useState<{ id: number; value: string }[]>([]);
   const [driveTypes, setDriveTypes] = useState<{ id: number; name: string; ee_name: string }[]>([]);
 
+  // Function to load existing contact data for the user
+  const loadUserContactData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const contactResponse = await axios.get(`/api/contacts/user`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (contactResponse.data) {
+          setContactFormData({
+            phone: contactResponse.data.phone || "",
+            businessType: contactResponse.data.businessType || "",
+            socialNetwork: contactResponse.data.socialNetwork || "",
+            email: contactResponse.data.email || "",
+            address: contactResponse.data.address || "",
+            website: contactResponse.data.website || "",
+            language: contactResponse.data.language ? (Array.isArray(contactResponse.data.language) ? contactResponse.data.language : contactResponse.data.language.split(',')) : [],
+            country: contactResponse.data.country || "",
+          });
+          setContactSaved(true); // Mark as saved since we loaded existing data
+          console.log('Loaded existing contact data:', contactResponse.data);
+        }
+      }
+    } catch (error: any) {
+      console.log('Error loading contact data:', error);
+      setContactSaved(false);
+    }
+  };
+
   useEffect(() => {
     const initializeData = async () => {
       await Promise.all([
+        fetchCars(),
         fetchBrands(),
         fetchYears(),
-        fetchDriveTypes(),
-        fetchCars()
+        fetchDriveTypes()
       ]);
 
       // If we have a carId in the URL, fetch that car for editing
@@ -422,7 +454,7 @@ export default function AddsPageMobile() {
             try {
               const token = localStorage.getItem("token");
               if (token) {
-                const contactResponse = await axios.get(`/api/contacts/car/${car.id}`, {
+                const contactResponse = await axios.get(`/api/contacts/user`, {
                   headers: { Authorization: `Bearer ${token}` },
                 });
                 if (contactResponse.data) {
@@ -441,9 +473,9 @@ export default function AddsPageMobile() {
                   setContactSaved(false); // No existing contact data
                 }
               }
-            } catch (error) {
-              console.log('No contact data found or error loading contact data:', error);
-              setContactSaved(false); // No existing contact data
+            } catch (error: any) {
+              console.log('Error loading contact data:', error);
+              setContactSaved(false);
             }
           };
 
@@ -465,6 +497,8 @@ export default function AddsPageMobile() {
             console.error('Error parsing editing car data:', error);
             localStorage.removeItem('editingCar');
           }
+        } else {
+          await loadUserContactData();
         }
       }
     };
@@ -472,6 +506,8 @@ export default function AddsPageMobile() {
     initializeData().finally(() => {
       setIsLoading(false);
     });
+
+    // Load user contact data for new cars (not editing)
 
     // Load pending contact data from localStorage if it exists (only for new cars, not editing)
     if (!carId) {
@@ -661,53 +697,32 @@ export default function AddsPageMobile() {
     }
 
     try {
-      if (editingCar) {
-        // If editing an existing car, save/update contact data
+        // Always save/update user contact data (not car-specific)
         try {
-          // Check if contact data already exists for this car
-          const existingContact = await axios.get(`/api/contacts/car/${editingCar.id}`, {
+          // Check if contact data already exists for this user
+          const existingContact = await axios.get(`/api/contacts/user`, {
             headers: { Authorization: `Bearer ${token}` },
           });
 
           if (existingContact.data) {
             // Update existing contact
-            await axios.put(`/api/contacts/car/${editingCar.id}`, contactFormData, {
+            await axios.put(`/api/contacts/user`, contactFormData, {
               headers: { Authorization: `Bearer ${token}` },
             });
             alert("Contact information updated successfully!");
             setContactSaved(true);
           } else {
             // Create new contact
-            await axios.post("/api/contacts", {
-              car_id: editingCar.id,
-              ...contactFormData
-            }, {
+            await axios.post("/api/contacts", contactFormData, {
               headers: { Authorization: `Bearer ${token}` },
             });
             alert("Contact information saved successfully!");
             setContactSaved(true);
           }
         } catch (error: any) {
-          if (error.response?.status === 404) {
-            // Contact doesn't exist, create new one
-            await axios.post("/api/contacts", {
-              car_id: editingCar.id,
-              ...contactFormData
-            }, {
-              headers: { Authorization: `Bearer ${token}` },
-            });
-            alert("Contact information saved successfully!");
-            setContactSaved(true);
-          } else {
-            throw error;
-          }
+          console.error('Error saving contact:', error);
+          throw error;
         }
-      } else {
-        // If creating a new car, save contact data to localStorage temporarily
-        localStorage.setItem('pendingContactData', JSON.stringify(contactFormData));
-        alert("Contact information saved temporarily. It will be linked to the car when you save the car.");
-        setContactSaved(true);
-      }
     } catch (error: any) {
       console.error('Error saving contact:', error);
       alert("Failed to save contact information");
@@ -927,38 +942,11 @@ export default function AddsPageMobile() {
         });
       } else {
         console.log('Form Data:', formDataObj);
-        console.log('Contact Form Data:', contactFormData);
 
-        // Send car data first
-        const carResponse = await axios.post("/api/cars", formDataObj, {
+        // Send car data
+        await axios.post("/api/cars", formDataObj, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
-        // Check for pending contact data in localStorage
-        const pendingContactData = localStorage.getItem('pendingContactData');
-        let contactDataToSave = contactFormData;
-
-        if (pendingContactData) {
-          try {
-            contactDataToSave = JSON.parse(pendingContactData);
-            // Clear the pending data from localStorage
-            // localStorage.removeItem('pendingContactData');
-          } catch (error) {
-            console.error('Error parsing pending contact data:', error);
-          }
-        }
-
-        // Send contact data separately if it exists
-        if (contactDataToSave.phone || contactDataToSave.businessType || contactDataToSave.socialNetwork ||
-          contactDataToSave.email || contactDataToSave.address || contactDataToSave.website ||
-          contactDataToSave.language || contactDataToSave.country) {
-          await axios.post("/api/contacts", {
-            car_id: carResponse.data.id,
-            ...contactDataToSave
-          }, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-        }
       }
       setEditingCar(null);
       setCarImages(Array(40).fill(null));

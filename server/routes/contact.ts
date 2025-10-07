@@ -58,10 +58,8 @@ router.get('/user', authenticateToken, async (req: any, res) => {
     const userId = req.user.id;
     console.log('Fetching contact for user ID:', userId);
     const contact = await getContactByUserId(userId);
-    console.log('Contact found:', contact);
     if (!contact) {
-      console.log('No contact found for user ID:', userId);
-      return res.status(404).json({ message: 'Contact not found' });
+      return res.status(200).json(null); // Return 200 with null instead of 404
     }
     res.json(contact);
   } catch (err: any) {

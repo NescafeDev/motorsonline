@@ -147,26 +147,26 @@ export default function CarGallery({
           {/* Thumbnails container with overflow hidden */}
           <div className="flex gap-[7px] overflow-hidden">
             {getCurrentThumbnails().map((thumb, index) => {
-              const actualIndex = currentSlide * thumbnailsPerView + index + 1; // +1 because mainImage is index 0
+              const uniqueKey = currentSlide * thumbnailsPerView + index + 1; // +1 because mainImage is index 0
               return (
                 <div
-                  key={actualIndex}
+                  key={uniqueKey}
                   className="relative w-[24.4%] flex-shrink-0"
                   onClick={() => {
-                    handleThumbnailClick(actualIndex);
-                    setLightboxIndex(actualIndex);
+                    handleThumbnailClick(uniqueKey);
+                    setLightboxIndex(uniqueKey);
                     setIsOpen(true);
                   }}
                 >
                   <div
-                    className={`w-full h-[94px] rounded-[6.951px] overflow-hidden cursor-pointer transition-all duration-200 ease-in-out transform hover:scale-105 ${selectedImage === actualIndex
+                    className={`w-full h-[94px] rounded-[6.951px] overflow-hidden cursor-pointer transition-all duration-200 ease-in-out transform hover:scale-105 ${selectedImage === uniqueKey
                         ? "border-[3px] border-red-500 shadow-lg rounded-lg"
                         : "border-[1.697px] border-transparent hover:border-gray-300"
                       }`}
                   >
                     <img
                       src={thumb}
-                      alt={`Car view ${actualIndex}`}
+                      alt={`Car view ${uniqueKey}`}
                       className="w-full h-full object-cover transition-transform duration-200 hover:scale-110 rounded-[6.951px]"
                     />
                   </div>
