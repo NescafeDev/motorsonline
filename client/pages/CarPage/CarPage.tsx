@@ -60,6 +60,7 @@ interface CarData {
 }
 
 export default function CarPage() {
+
   // Gallery images
   const galleryImages = [
     { src: "/view.svg", main: true },
@@ -99,6 +100,8 @@ export default function CarPage() {
   const [contacts, setContacts] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { user } = useAuth();
+
 
   // Favorites functionality
   const { isAuthenticated } = useAuth();
@@ -366,7 +369,7 @@ export default function CarPage() {
                         Kõrgema väärtusega lisvarustus
                       </h2>
 
-                      <div className="grid grid-cols-1 gap-4">
+                      <div className="grid grid-cols-2 gap-4">
                         {equipmentFeatures.slice(0, 12).map((feature, index) => (
                           <div
                             key={index}
@@ -523,8 +526,8 @@ export default function CarPage() {
               title: "Müüja andmed",
               company: contacts?.businessType || car.businessType || "ELKE Mustamäe",
               country: contacts?.country || car.country || "EE",
-              contactPerson: "Kontaktisik",
               phone: contacts?.phone || car.phone || "+372 8888 8888",
+              contactPerson: user?.userType || "Eraisik",
               email: contacts?.email || car.email || "Näide@elke.ee",
               language: contacts?.language || car.language || "en",
               website: contacts?.website || car.website || "example.com",

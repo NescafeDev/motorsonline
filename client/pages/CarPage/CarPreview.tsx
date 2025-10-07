@@ -9,6 +9,7 @@ import { RecentListingsSection } from "./sections/RecentListingsSection";
 import { SpecificationsSection } from "./sections/SpecificationsSection";
 import { VehicleDetailsSection } from "./sections/VehicleDetailsSection/VehicleDetailsSection";
 import CarGallery from "./sections/CarGallery";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface CarPreviewProps {
   formData: any;
@@ -26,7 +27,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
   const gridRef = useRef<HTMLDivElement>(null);
   const [sidebarTop, setSidebarTop] = useState(0);
   const offset = 20; // px from top of viewport
-
+  const { user } = useAuth();
   // Function to get VAT display text
   const getVatDisplayText = (car: any) => {
     if (!car) return '';
@@ -313,7 +314,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
                       Kõrgema väärtusega lisvarustus 
                     </h2>
 
-                    <div className="grid grid-cols-1 gap-4">
+                    <div className="grid grid-cols-2 gap-4">
                       {equipmentFeatures.slice(0, 12).map((feature, index) => (
                         <div
                           key={index}
@@ -462,7 +463,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
             company: contactFormData.businessType || "ELKE Mustamäe",
             country: contactFormData.country || "EE",
             address: contactFormData.address || "Tallinn, Mustamäe tee 22",
-            contactPerson: "Kontaktisik",
+            contactPerson: user?.userType || "Eraisik",
             phone: contactFormData.phone || "+372 8888 8888",
             email: contactFormData.email || "Näide@elke.ee",
             language: contactFormData.language || "en",

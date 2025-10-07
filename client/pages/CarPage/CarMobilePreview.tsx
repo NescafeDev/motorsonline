@@ -7,6 +7,7 @@ import { Separator } from "../../components/ui/separator";
 import { SpecificationsSection } from "./sections/SpecificationsSection";
 import CarGallery from "../../components/mobile/CarGallery";
 import { ImageGallerySection } from "./sections/ImageGallerySection";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface CarMobilePreviewProps {
     formData: any;
@@ -20,6 +21,8 @@ interface CarMobilePreviewProps {
 }
 
 export default function CarMobilePreview({ formData, contactFormData, checkboxes, brands, models, years, driveTypes, carImages }: CarMobilePreviewProps) {
+    const { user } = useAuth();
+    
     // Function to get VAT display text
     const getVatDisplayText = (car: any) => {
         if (!car) return '';
@@ -413,8 +416,8 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                         title: "Müüja andmed",
                         company: contactFormData.businessType || "ELKE Mustamäe",
                         address: contactFormData.address || "Tallinn, Mustamäe tee 22",
-                        contactPerson: "Kontaktisik",
                         phone: contactFormData.phone || "+372 8888 8888",
+                        contactPerson: user?.userType || "Eraisik",
                         email: contactFormData.email || "Näide@elke.ee",
                         language: contactFormData.language || "en",
                         website: contactFormData.website || "example.com",

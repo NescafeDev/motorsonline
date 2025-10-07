@@ -8,6 +8,7 @@ import { Card, CardContent } from "../../../../components/ui/card";
 import { CountryCode, CountryFlag } from 'react-country-flags-lazyload';
 import ReactCountryFlag from 'react-country-flag';
 import countryList from "react-select-country-list";
+import { useAuth } from "../../../../contexts/AuthContext";
 
 export interface SellerData {
   title: string;
@@ -27,12 +28,13 @@ interface SpecificationsSectionProps {
 }
 
 export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps): JSX.Element => {
+  const { user } = useAuth();
   // Default fallback data if no seller data is provided
   const defaultSellerData: SellerData = {
     title: "Müüja andmed",
     company: "ELKE Mustamäe",
     address: "Tallinn, Mustamäe tee 22",
-    contactPerson: "Lorem Ipsum",
+    contactPerson: user?.userType || "Lorem Ipsum",
     phone: "+372 8888 8888",
     email: "Näide@elke.ee",
     language: "en",
@@ -69,7 +71,7 @@ export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps
   // Function to render language flags
   const renderLanguageFlags = (languages: string | string[]) => {
     const languageArray = Array.isArray(languages) ? languages : languages?.split(',') || [];
-    
+
     return (
       <div className="flex items-center gap-2 flex-wrap">
         {languageArray.map((lang, index) => {
@@ -96,12 +98,12 @@ export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps
   // Function to get country code from language or country name
   const getCountryCodeFromCountry = (input: string): string => {
     const trimmedInput = input.trim();
-    
+
     // If it's already a 2-letter code, return it
     if (trimmedInput.length === 2) {
       return trimmedInput.toUpperCase();
     }
-    
+
     // Map common country names to codes (including variations)
     const countryNameMap: { [key: string]: string } = {
       'estonia': 'EE',
@@ -144,21 +146,21 @@ export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps
       'uk': 'GB',
       'british': 'GB',
     };
-    
+
     const lowerInput = trimmedInput.toLowerCase();
-    
+
     // Check exact match first
     if (countryNameMap[lowerInput]) {
       return countryNameMap[lowerInput];
     }
-    
+
     // Check if input contains any country name
     for (const [countryName, countryCode] of Object.entries(countryNameMap)) {
       if (lowerInput.includes(countryName) || countryName.includes(lowerInput)) {
         return countryCode;
       }
     }
-    
+
     // If no country match, try language mapping
     const languageResult = getCountryCodeFromLanguage(input);
     return languageResult;
@@ -169,10 +171,12 @@ export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps
     <section className="max-w-[1400px] w-full mx-auto my-8">
       <Card className="w-full bg-[#f6f7f9] rounded-[10px] p-5">
         <CardContent className="p-0">
-          <h3 className="font-semibold text-xl tracking-[-0.60px] leading-[30px] text-secondary-500 [font-family:'Poppins',Helvetica] mb-5">
+          <h3 className="font-semibold text-xl tracking-[-0.60px] leading-[30px] text-secondary-500 [font-family:'Poppins',Helvetica] mb-2">
             {displayData.title}
           </h3>
-
+          <p className="[font-family:'Poppins',Helvetica] font-medium text-lg text-secondary-500 tracking-[-0.54px] leading-[27px]">
+            {displayData.contactPerson === "company" ? "Ettevõte" : "Eraisik"}
+          </p>
           <div className="[font-family:'Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]">
             {displayData.company}
             <br />
@@ -201,9 +205,7 @@ export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps
               </Avatar>
 
               <div className="flex flex-col gap-1">
-                <p className="[font-family:'Poppins',Helvetica] font-medium text-lg text-secondary-500 tracking-[-0.54px] leading-[27px]">
-                  {displayData.contactPerson}
-                </p>
+
                 <p className="[font-family:'Poppins',Helvetica] font-normal text-lg text-secondary-500 tracking-[-0.54px] leading-[27px]">
                   {displayData.phone}
                 </p>

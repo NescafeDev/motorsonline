@@ -75,6 +75,7 @@ export default function CarPageMobile() {
   const [contacts, setContacts] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { user } = useAuth();
 
   // Function to get VAT display text
   const getVatDisplayText = (car: any) => {
@@ -490,7 +491,7 @@ export default function CarPageMobile() {
             company: contacts?.businessType || car.businessType || "ELKE Mustamäe",
             country: contacts?.country || contacts?.country || car.country || "EE",
             address: contacts?.address || car.address || "Tallinn, Mustamäe tee 22",
-            contactPerson: "Kontaktisik",
+            contactPerson: user?.userType || "Eraisik",
             phone: contacts?.phone || car.phone || "+372 8888 8888",
             email: contacts?.email || car.email || "Näide@elke.ee",
             language: contacts?.language || car.language || "en",
