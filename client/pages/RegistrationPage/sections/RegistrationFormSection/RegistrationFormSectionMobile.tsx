@@ -153,35 +153,13 @@ export const RegistrationFormSectionMobile = (): JSX.Element => {
             <h1 className="font-semibold text-2xl text-secondary-500 tracking-[-0.90px] [font-family:'Poppins',Helvetica] text-center">
               Loo oma kasutajakonto!
             </h1>
-
-            <div className="space-y-4">
-              {formFields.map((field) => (
-                <div key={field.id} className="space-y-2">
-                  <label
-                    htmlFor={field.id}
-                    className="block font-medium text-base text-black [font-family:'Poppins',Helvetica]"
-                  >
-                    {field.label}
-                  </label>
-                  <Input
-                    id={field.id}
-                    type={field.type || "text"}
-                    placeholder={field.placeholder}
-                    className="h-[50px] bg-white rounded-[10px] border border-solid border-[#545454] px-4 [font-family:'Poppins',Helvetica] text-base placeholder:text-[#bfbfbf]"
-                    value={form[field.id as keyof typeof form] as string}
-                    onChange={handleChange}
-                    autoComplete={field.id}
-                  />
-                </div>
-              ))}
-            </div>
-
             {/* User Type Radio Buttons */}
-            <div className="space-y-3">
+            <div className="space-y-5">
               <label className="block font-medium text-base text-black [font-family:'Poppins',Helvetica]">
-                Kasutaja tüüp
+                Vali kasutaja
               </label>
-              <div className="flex space-x-4">
+              
+            <div className="flex space-x-4">
                 <div className="flex items-center space-x-2">
                   <input
                     type="radio"
@@ -218,6 +196,29 @@ export const RegistrationFormSectionMobile = (): JSX.Element => {
                 </div>
               </div>
             </div>
+            <div className="space-y-4">
+              {formFields.map((field) => (
+                <div key={field.id} className="space-y-2">
+                  <label
+                    htmlFor={field.id}
+                    className="block font-medium text-base text-black [font-family:'Poppins',Helvetica]"
+                  >
+                    {field.label}
+                  </label>
+                  <Input
+                    id={field.id}
+                    type={field.type || "text"}
+                    placeholder={field.placeholder}
+                    className="h-[50px] bg-white rounded-[10px] border border-solid border-[#545454] px-4 [font-family:'Poppins',Helvetica] text-base placeholder:text-[#bfbfbf]"
+                    value={form[field.id as keyof typeof form] as string}
+                    onChange={handleChange}
+                    autoComplete={field.id}
+                  />
+                </div>
+              ))}
+            </div>
+
+            
 
             <div className="flex items-start space-x-3 pt-4">
               <Checkbox
