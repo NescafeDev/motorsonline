@@ -4,7 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
 import { createCar, getCarById, getAllCars, updateCar, deleteCar, getCarsByUserId } from '../models/car';
-import { createContact, updateContact, getContactByUserId } from '../models/contact';
+import { updateContact, getContactByUserId } from '../models/contact';
 import { pool } from '../db';
 import { DriveType } from '@shared/drive-types';
 
@@ -278,15 +278,8 @@ router.post('/', authenticateToken, upload.fields([
     
     const car = await createCar(data);
     
-    // Create contact record if contact data exists
-    if (contactData.phone || contactData.businessType || contactData.socialNetwork || 
-        contactData.email || contactData.address || contactData.website || 
-        contactData.language || contactData.country) {
-      await createContact({
-        user_id: car.user_id,
-        ...contactData
-      });
-    }
+    // Note: Contact creation is now handled separately by the frontend
+    // to avoid duplicate contact records
     
     res.status(201).json(car);
   } catch (err: any) {

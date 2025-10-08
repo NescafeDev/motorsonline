@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Accordion,
   AccordionContent,
@@ -76,6 +77,7 @@ interface CarListingSectionProps {
   filters: CarFilters;
   onFiltersChange: (filters: CarFilters) => void;
   onApplyFilters: () => void;
+  navigateToSearch?: boolean; // New prop to control navigation behavior
 }
 
 // API client with same configuration as HomePage
@@ -90,8 +92,10 @@ const apiClient = axios.create({
 export const CarListingSection = ({
   filters,
   onFiltersChange,
-  onApplyFilters
+  onApplyFilters,
+  navigateToSearch = false
 }: CarListingSectionProps): JSX.Element => {
+  const navigate = useNavigate();
   // Data for drive types - will be fetched from API
   const [driveTypes, setDriveTypes] = useState<{ id: number; name: string; ee_name: string }[]>([]);
 
@@ -1098,7 +1102,29 @@ export const CarListingSection = ({
           {/* Apply Filters Button */}
           <div className="space-y-2">
             <Button
-              onClick={onApplyFilters}
+              // onClick={() => {
+              // //   if (navigateToSearch) {
+              // //     // Navigate to search page with filters as URL parameters
+              // //     const params = new URLSearchParams();
+              // //     Object.entries(filters).forEach(([key, value]) => {
+              // //       if (value !== undefined && value !== null && value !== '') {
+              // //         if (Array.isArray(value)) {
+              // //           value.forEach(v => params.append(`${key}[]`, String(v)));
+              // //         } else {
+              // //           params.append(key, String(value));
+              // //         }
+              // //       }
+              // //     });
+              //     navigate(`/search?${params.toString()}`);
+              // //   } else {
+              // //     onApplyFilters();
+              // //   }
+              // }}
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate("/search");
+                window.scrollTo(0, 0);
+              }}
               className="w-full h-[43px] bg-[#06d6a0] text-white font-['Poppins',Helvetica] font-medium rounded-[10px]"
             >
               Rakenda filtrid

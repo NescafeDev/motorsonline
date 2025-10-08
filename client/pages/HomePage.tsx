@@ -82,6 +82,7 @@ export interface Car {
   drive_type_ee_name?: string;
   carColorType?: string;
   carColor?: string;
+  major?: string;
 }
 
 export interface CarFilters {
@@ -129,7 +130,42 @@ export interface CarFilters {
   equipment?: string[];
   carColorType?: string;
   carColor?: string;
+  major?: string;
 }
+
+// Vehicle details data function
+const getVehicleDetails = (car: Car) => [
+  {
+    icon: "/img/car/Car.png",
+    label: "Läbisõit:",
+    value: `${car.mileage.toLocaleString()} km`,
+  },
+  {
+    icon: "/img/car/Speedometer.png",
+    label: "Võimsus:",
+    value: car.power,
+  },
+  {
+    icon: "/img/car/gear-box-switch.png",
+    label: "Käigukast:",
+    value: car.transmission,
+  },
+  {
+    icon: "/img/car/calendar.png",
+    label: "Esmaregistreerimine:",
+    value: car.year_value?.toString() + " - " + (car.month.length === 1 ? `0${car.month}` : car.month) || "N/A",
+  },
+  {
+    icon: "/img/car/gas_station.png",
+    label: "Kütus",
+    value: car.fuelType,
+  },
+  {
+    icon: "/img/car/user_profile.png",
+    label: "Omanike arv:",
+    value: car.ownerCount,
+  },
+];
 
 // API functions
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
@@ -307,7 +343,18 @@ export default function HomePage() {
 
   const handleApplyFilters = () => {
     if (Object.keys(filters).length > 0) {
-      loadFilteredCarsWithFilters(filters);
+      // Navigate to search page with filters as URL parameters
+      const params = new URLSearchParams();
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          if (Array.isArray(value)) {
+            value.forEach(v => params.append(`${key}[]`, String(v)));
+          } else {
+            params.append(key, String(value));
+          }
+        }
+      });
+      navigate(`/search?${params.toString()}`);
     } else {
       // If no filters, show all cars
       setFilteredCars(cars);
@@ -331,6 +378,7 @@ export default function HomePage() {
     isFavorite: false,
     discountPrice: `€ ${car.discountPrice?.toLocaleString() || 'N/A'}`,
     discountPercentage: discountPercentage(car),
+    major: car.major || '',
   });
 
   return (
@@ -351,6 +399,7 @@ export default function HomePage() {
                   filters={filters}
                   onFiltersChange={handleFiltersChange}
                   onApplyFilters={handleApplyFilters}
+                  navigateToSearch={true}
                 />
               </div>
               <div className="col-9 w-full pl-4">
@@ -461,13 +510,13 @@ export default function HomePage() {
                                   Vaata
                                 </Button>
                               </div> */}
-                              <div className="grid grid-cols-4 gap-4 mb-4 h-20 p-2">
+                              <div className="grid grid-cols-4 gap-4 h-20 p-2">
                                 <div className="col-span-3 flex flex-col justify-center">
                                   <h3 className="font-semibold text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]">
                                     {displayCar.title}
                                   </h3>
-                                  <p className="font-medium text-[#747474] text-sm tracking-[-0.28px] leading-[21px]">
-                                    {displayCar.details}
+                                  <p className="font-medium text-black text-sm tracking-[-0.28px] leading-[21px]">
+                                    {displayCar.major}
                                   </p>
                                 </div>
                                 <div className="absolute right-6 top-8">
@@ -495,7 +544,7 @@ export default function HomePage() {
                                   </button>
                                 </div>
                               </div>
-                              <div className="grid grid-cols-2 mb-4 h-20">
+                              {/* <div className="grid grid-cols-2 mb-4 h-20">
                                 <div className="flex items-center">
                                   <img
                                     className="w-5 h-5 mr-2"
@@ -513,8 +562,30 @@ export default function HomePage() {
                                     {displayCar.transmission}
                                   </span>
                                 </div>
+                              </div> */}
+                              
+                              <div className="grid grid-cols-2 gap-y-2 mb-8">
+                                {getVehicleDetails(car).map((detail, index) => (
+                                  <div key={index} className="flex items-center w-full h-[50px]">
+                                    <div className="w-[35px] h-[35px] relative flex-shrink-0">
+                                      <img
+                                        className="w-[25px] h-[25px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                                        alt={detail.label}
+                                        src={detail.icon}
+                                      />
+                                    </div>
+                                    <div className="flex flex-col min-w-0 flex-1 justify-center">
+                                      <span className="font-normal text-secondary-500 text-[12px] tracking-[-0.42px] leading-[20px] [font-family:'Poppins',Helvetica] break-all">
+                                        {detail.label}
+                                      </span>
+                                      <span className="font-medium text-secondary-500 text-[12px] tracking-[-0.54px] leading-[20px] [font-family:'Poppins',Helvetica] break-all">
+                                        {detail.value}
+                                      </span>
+                                    </div>
+                                  </div>
+                                ))}
                               </div>
-                              <div className="col-6 h-3 w-full">
+                              <div className="grid grid-cols-1 h-8 pt-2">
                                 {car.discountPrice && (
                                   <>
                                     <div className="relative">
@@ -534,9 +605,9 @@ export default function HomePage() {
                                   </>
                                 )}
                               </div>
-                              <div className="grid grid-cols-1 h-20">
-                                <div className="flex items-center gap-1">
-                                  <div className="mt-2">
+                              <div className="grid grid-cols-1 h-15">
+                                <div className="flex items-start gap-1">
+                                  <div className="mb-4">
                                     <span className="font-semibold text-secondary-500 text-[24px] leading-[normal] [font-family:'Poppins',Helvetica]">
                                       € {car.discountPrice.toLocaleString()}
                                     </span>
@@ -545,18 +616,7 @@ export default function HomePage() {
                                     </p>
                                   </div>
                                 </div>
-                                {/* <div className="flex items-center justify-end">
-                                  <Button
-                                    className="h-10 px-[30px] py-3 bg-[#06d6a0] text-white rounded-[10px]"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      navigate(`/car/${car.id}`);
-                                      window.scrollTo(0, 0);
-                                    }}
-                                  >
-                                    Vaata
-                                  </Button>
-                                </div> */}
+                                
                               </div>
                             </CardContent>
                           </Card>

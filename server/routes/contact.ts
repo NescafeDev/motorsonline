@@ -1,6 +1,6 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import { createContact, updateContact, getContactByUserId, deleteContact } from '../models/contact';
+import { createContact, updateContact, getContactByUserId, deleteContact, createOrUpdateContact } from '../models/contact';
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
@@ -30,10 +30,12 @@ const authenticateToken = (req: any, res: any, next: any) => {
   });
 };
 
-// Create contact
-router.post('/', authenticateToken, async (req: any, res) => {
+// Create or update contact
+router.post('/user', authenticateToken, async (req: any, res) => {
+// router.post('/contacts/user', async (req: any, res) => {
+  console.log('aaa');
   try {
-    console.log('Creating contact with data:', req.body);
+    console.log('Creating or updating contact with data:', req.body);
     console.log('Language field type:', typeof req.body.language, 'Value:', req.body.language);
     console.log('User making request:', req.user);
     
@@ -43,12 +45,12 @@ router.post('/', authenticateToken, async (req: any, res) => {
       user_id: req.user.id
     };
     
-    const contact = await createContact(contactData);
-    console.log('Contact created successfully:', contact);
+    const contact = await createOrUpdateContact(contactData);
+    console.log('Contact created/updated successfully:', contact);
     res.status(201).json(contact);
   } catch (err: any) {
-    console.error('Contact creation error:', err);
-    res.status(400).json({ message: 'Contact creation failed.', error: err.message });
+    console.error('Contact creation/update error:', err);
+    res.status(400).json({ message: 'Contact creation/update failed.', error: err.message });
   }
 });
 
@@ -56,10 +58,11 @@ router.post('/', authenticateToken, async (req: any, res) => {
 router.get('/user', authenticateToken, async (req: any, res) => {
   try {
     const userId = req.user.id;
+    console.log(req.user)
     console.log('Fetching contact for user ID:', userId);
     const contact = await getContactByUserId(userId);
     if (!contact) {
-      return res.status(200).json(null); // Return 200 with null instead of 404
+      return res.status(404).json({ message: 'Contact not found' }); // Return 404 to trigger creation
     }
     res.json(contact);
   } catch (err: any) {
@@ -69,7 +72,7 @@ router.get('/user', authenticateToken, async (req: any, res) => {
 });
 
 // Get contact by user ID (public endpoint for car pages)
-router.get('/user/:userId', async (req, res) => {
+router.get('/public/:userId', async (req, res) => {
   try {
     const userId = parseInt(req.params.userId);
     console.log('Fetching contact for user ID:', userId);
@@ -102,7 +105,7 @@ router.put('/user', authenticateToken, async (req: any, res) => {
 });
 
 // Delete contact
-router.delete('/user', authenticateToken, async (req: any, res) => {
+router.delete('/:userId', authenticateToken, async (req: any, res) => {
   try {
     const userId = req.user.id;
     const success = await deleteContact(userId);

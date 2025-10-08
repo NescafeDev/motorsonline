@@ -14,6 +14,7 @@ interface CarCardProps {
   likes: number;
   vatNote: string;
   className?: string;
+  major?: string;
   onDelete?: () => void;
   onEdit?: () => void;
   onPreview?: () => void;
@@ -133,15 +134,16 @@ export const CarCard: React.FC<CarCardProps> = ({
   views,
   likes,
   vatNote,
-  className = "",
+  className = "bg-gray-50",
+  major,
   onDelete,
   onEdit,
   onPreview,
 }) => {
   return (
-    <div className={`w-100 h-[307px] relative ${className}`}>
+    <div className={`w-100 h-[307px] relative cursor-pointer`} onClick={onPreview ? onPreview : () => {}}>
       {/* Main Card Background */}
-      <div className="w-full h-full bg-[#F6F7F9] rounded-[10px] absolute left-0 top-0"></div>
+      <div className={`w-full h-full ${className} rounded-[10px] absolute left-0 top-0`}></div>
 
       {/* Car Image */}
       <img
@@ -155,13 +157,15 @@ export const CarCard: React.FC<CarCardProps> = ({
         {title}
       </h3>
 
+      {/* Major */}
+      {/* <p className="text-black font-['Poppins'] text-[18px] font-normal leading-[150%] tracking-[-0.54px] absolute left-[370px] top-[95px] w-fit h-[29px]">{major}</p> */}
       {/* Breadcrumb */}
       <div className="flex items-center gap-[9.764px] absolute left-[370px] top-[95px] h-[29px]">
         <span className="text-[#747474] font-['Poppins'] text-[17px] font-normal tracking-[0.342px]">
           {breadcrumb}
         </span>
       </div>
-
+   
       {/* Price Section */}
       <div className="absolute right-[30px] top-[46px] flex flex-col items-end gap-2">
         {price && (
@@ -221,37 +225,44 @@ export const CarCard: React.FC<CarCardProps> = ({
         </div>
       </div>
 
-      {/* Action Buttons */}
-      <div className="absolute right-[30px] top-[230px] flex items-center gap-[21px]">
-        <button 
-          onClick={onPreview}
-          className="flex h-[45px] px-[20px] py-[12px] justify-center items-center gap-[10px] rounded-[10px] border border-[#3B82F6] text-[#3B82F6] hover:bg-[#EBF4FF]"
-        >
-          <Eye className="w-4 h-4" />
-          <span className="text-[#3B82F6] text-center font-['Poppins'] text-[16px] font-normal leading-[150%]">
-            Eelvaade
-          </span>
-        </button>
-        <button 
-          onClick={onEdit}
-          className="flex h-[45px] px-[20px] py-[12px] justify-center items-center gap-[10px] rounded-[10px] border border-[#06D6A0] text-[#06D6A0]"
-        >
-          <Edit className="w-4 h-4" />
-          <span className="text-[#06D6A0] text-center font-['Poppins'] text-[16px] font-normal leading-[150%]">
-          
-            Redigeeri
-          </span>
-        </button>
-        <button 
-          onClick={onDelete}
-          className="flex h-[45px] px-[20px] py-[12px] justify-center items-center gap-[10px] rounded-[10px] border border-[#FF0000]  text-[#FF0000] hover:bg-[#FFE5E5]"
-        >
-          <Trash2 className="w-4 h-4" />
-          <span className="text-[#FF0000] text-center font-['Poppins'] text-[16px] font-normal leading-[150%]">
-            Kustuta
-          </span>
-        </button>
-      </div>
+      {/* Action Buttons - Only show if any callback is provided */}
+      {(onEdit || onDelete || className === "") && (
+        <div className="absolute right-[30px] top-[230px] flex items-center gap-[21px]">
+          {onPreview && (
+            <button 
+              onClick={onPreview}
+              className="flex h-[45px] px-[20px] py-[12px] justify-center items-center gap-[10px] rounded-[10px] border border-[#3B82F6] text-[#3B82F6] hover:bg-[#EBF4FF]"
+            >
+              <Eye className="w-4 h-4" />
+              <span className="text-[#3B82F6] text-center font-['Poppins'] text-[16px] font-normal leading-[150%]">
+                Eelvaade
+              </span>
+            </button>
+          )}
+          {onEdit && (
+            <button 
+              onClick={onEdit}
+              className="flex h-[45px] px-[20px] py-[12px] justify-center items-center gap-[10px] rounded-[10px] border border-[#06D6A0] text-[#06D6A0]"
+            >
+              <Edit className="w-4 h-4" />
+              <span className="text-[#06D6A0] text-center font-['Poppins'] text-[16px] font-normal leading-[150%]">
+                Redigeeri
+              </span>
+            </button>
+          )}
+          {onDelete && (
+            <button 
+              onClick={onDelete}
+              className="flex h-[45px] px-[20px] py-[12px] justify-center items-center gap-[10px] rounded-[10px] border border-[#FF0000]  text-[#FF0000] hover:bg-[#FFE5E5]"
+            >
+              <Trash2 className="w-4 h-4" />
+              <span className="text-[#FF0000] text-center font-['Poppins'] text-[16px] font-normal leading-[150%]">
+                Kustuta
+              </span>
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 };

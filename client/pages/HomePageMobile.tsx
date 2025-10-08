@@ -137,6 +137,39 @@ const apiClient = axios.create({
   },
 });
 
+const vehicleDetails = (car: Car) => [
+  {
+      icon: "/img/car/Car.png",
+      label: "Läbisõit:",
+      value: `${car.mileage.toLocaleString()} km`,
+  },
+  {
+      icon: "/img/car/Speedometer.png",
+      label: "Võimsus:",
+      value: car.power,
+  },
+  {
+      icon: "/img/car/gear-box-switch.png",
+      label: "Käigukast:",
+      value: car.transmission,
+  },
+  {
+      icon: "/img/car/calendar.png",
+      label: "Esmaregistreerimine:",
+      value: car.year_value?.toString() + " - " + (car.month.length === 1 ? `0${car.month}` : car.month) || "N/A",
+  },
+  {
+      icon: "/img/car/gas_station.png",
+      label: "Kütus",
+      value: car.fuelType,
+  },
+  {
+      icon: "/img/car/user_profile.png",
+      label: "Omanike arv:",
+      value: car.ownerCount,
+  },
+];
+
 async function fetchFilteredCars(filters: CarFilters): Promise<Car[]> {
   try {
     const params = new URLSearchParams();
@@ -281,7 +314,18 @@ export default function HomePageMobile() {
   };
   const handleApplyFilters = () => {
     if (Object.keys(filters).length > 0) {
-      loadFilteredCarsWithFilters(filters);
+      // Navigate to search page with filters as URL parameters
+      const params = new URLSearchParams();
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          if (Array.isArray(value)) {
+            value.forEach(v => params.append(`${key}[]`, String(v)));
+          } else {
+            params.append(key, String(value));
+          }
+        }
+      });
+      navigate(`/search?${params.toString()}`);
     } else {
       // If no filters, show all cars
       setFilteredCars(cars);
@@ -465,11 +509,12 @@ export default function HomePageMobile() {
               ref={filterRef}
               className="absolute left-0 mt-2 w-3/4 bg-white rounded-[10px] shadow-lg z-30"
             >
-              <CarListingSection
-                filters={filters}
-                onFiltersChange={handleFiltersChange}
-                onApplyFilters={handleApplyFilters}
-              />
+            <CarListingSection
+              filters={filters}
+              onFiltersChange={handleFiltersChange}
+              onApplyFilters={handleApplyFilters}
+              navigateToSearch={true}
+            />
             </div>
           )}
         </section>

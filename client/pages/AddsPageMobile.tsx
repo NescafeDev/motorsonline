@@ -365,8 +365,14 @@ export default function AddsPageMobile() {
         }
       }
     } catch (error: any) {
-      console.log('Error loading contact data:', error);
-      setContactSaved(false);
+      if (error.response?.status === 404) {
+        // No contact found - this is normal for new users
+        console.log('No existing contact data found for user');
+        setContactSaved(false);
+      } else {
+        console.log('Error loading contact data:', error);
+        setContactSaved(false);
+      }
     }
   };
 
@@ -713,7 +719,7 @@ export default function AddsPageMobile() {
             setContactSaved(true);
           } else {
             // Create new contact
-            await axios.post("/api/contacts", contactFormData, {
+            await axios.post("/api/contacts/user", contactFormData, {
               headers: { Authorization: `Bearer ${token}` },
             });
             alert("Contact information saved successfully!");

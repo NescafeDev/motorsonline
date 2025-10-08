@@ -37,6 +37,8 @@ import UserPageMobile from "./pages/UserPageMobile";
 import AddsPageMobile from "./pages/AddsPageMobile";
 import BlogPostPage from "./pages/BlogPostPage";
 import BlogPostPageMobile from "./pages/BlogPostPageMobile";
+import SearchPage from "./pages/SearchPage";
+import SearchPageMobile from "./pages/SearchPageMobile";
 import { FavoritesTest } from "./components/FavoritesTest";
 
 const queryClient = new QueryClient();
@@ -132,6 +134,13 @@ const App = () => (
                 <MobilePageWrapper
                   desktopComponent={AddsPage}
                   mobileComponent={AddsPageMobile}
+                />
+              }
+            />
+            <Route path="/search" element={
+                <MobilePageWrapper
+                  desktopComponent={SearchPage}
+                  mobileComponent={SearchPageMobile}
                 />
               }
             />

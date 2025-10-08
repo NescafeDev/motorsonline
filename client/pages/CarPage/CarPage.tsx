@@ -49,6 +49,7 @@ interface CarData {
   created_at?: string;
   accessories?: string;
   modelDetail?: string;
+  major?: string;
   // Seller information
   businessType?: string;
   country?: string;
@@ -155,7 +156,7 @@ export default function CarPage() {
 
         // Fetch contact data for this car's owner
         try {
-          const contactResponse = await fetch(`/api/contacts/user/${carData.user_id}`);
+          const contactResponse = await fetch(`/api/contacts/public/${carData.user_id}`);
           if (contactResponse.ok) {
             const contactData = await contactResponse.json();
             setContacts(contactData);
@@ -418,6 +419,7 @@ export default function CarPage() {
                         <h1 className="text-[30px] font-semibold text-secondary-500 tracking-[-1.20px] leading-[60px] [font-family:'Poppins',Helvetica] ">
                           {car.brand_name} {car.model_name} {car.modelDetail}
                         </h1>
+
                         <Button
                           variant="ghost"
                           className="p-0 mt-3"
@@ -431,7 +433,9 @@ export default function CarPage() {
                           />
                         </Button>
                       </div>
-
+                      <span className="text-black text-[20px] tracking-[0.34px] leading-[normal] [font-family:'Poppins',Helvetica] font-medium">
+                        {car.major}
+                      </span>
                       <div className="mt-2">
                         <span className="text-[#747474] text-[12px] tracking-[0.34px] leading-[normal] [font-family:'Poppins',Helvetica] font-medium">
                           Kasutatud autod » {car.brand_name} {car.model_name} » {car.year_value}

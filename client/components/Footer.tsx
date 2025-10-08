@@ -38,13 +38,21 @@ export default function Footer() {
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-[157px] items-start lg:items-center">
             <div className="flex flex-col lg:flex-row gap-4 lg:gap-[157px]">
               <a
-                onClick={() => navigate("/blog")}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate("/blog");
+                  window.scrollTo(0, 0);
+                }}
                 className="text-[#B1B1B1] text-center font-poppins text-lg font-normal leading-[140%] hover:text-white transition-colors cursor-pointer"
               >
                 Blogi
               </a>
               <a
-                onClick={() => navigate("/user")}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate("/user");
+                  window.scrollTo(0, 0);
+                }}
                 className="text-[#B1B1B1] text-center font-poppins text-lg font-normal leading-[140%] hover:text-white transition-colors cursor-pointer"
               >
                 Minu kuulutused
@@ -57,7 +65,11 @@ export default function Footer() {
               </a> */}
               {isAuthenticated && (
                 <a
-                  onClick={() => navigate("/adds")}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate("/adds");
+                    window.scrollTo(0, 0);
+                  }}
                   className="text-[#B1B1B1] text-center font-poppins text-lg font-normal leading-[140%] hover:text-white transition-colors cursor-pointer"
                 >
                   Lisa uus kuulutus

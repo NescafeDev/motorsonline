@@ -240,6 +240,7 @@ export default function AddsPage() {
     inspectionValidityPeriod: "",
     seats: "",
     doors: "",
+    major: "",
   });
 
   const [contactFormData, setContactFormData] = useState({
@@ -362,8 +363,14 @@ export default function AddsPage() {
         }
       }
     } catch (error: any) {
-      console.log('Error loading contact data:', error);
-      setContactSaved(false);
+      if (error.response?.status === 404) {
+        // No contact found - this is normal for new users
+        console.log('No existing contact data found for user');
+        setContactSaved(false);
+      } else {
+        console.log('Error loading contact data:', error);
+        setContactSaved(false);
+      }
     }
   };
 
@@ -411,6 +418,7 @@ export default function AddsPage() {
             ownerCount: car.ownerCount?.toString() || "",
             vatRate: car.vatRate?.toString() || "",
             month: car.month?.toString() || "",
+            major: car.major?.toString() || "",
           };
 
           setFormData((prev) => ({
@@ -511,6 +519,7 @@ export default function AddsPage() {
     });
 
     // Load pending contact data from localStorage if it exists (only for new cars, not editing)
+    // This will be overridden by loadUserContactData() if backend data exists
     if (!carId) {
       const pendingContactData = localStorage.getItem('pendingContactData');
       if (pendingContactData) {
@@ -702,26 +711,26 @@ export default function AddsPage() {
       alert("Please fill in at least one contact field before saving");
       return;
     }
-
     try {
       // Check if contact data already exists for this user
       try {
         const existingContact = await axios.get(`/api/contacts/user`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
+        console.log(existingContact.data)
         if (existingContact.data) {
           // Update existing contact
           await axios.put(`/api/contacts/user`, contactFormData, {
             headers: { Authorization: `Bearer ${token}` },
           });
           alert("Contact information updated successfully!");
+          console.log(existingContact.data)
           setContactSaved(true);
         }
       } catch (error: any) {
-        if (error.response?.status === 404) {
+        if (!error.response?.status || error.response?.status === 404) {
           // Contact doesn't exist, create new one
-          await axios.post("/api/contacts", contactFormData, {
+          await axios.post("/api/contacts/user", contactFormData, {
             headers: { Authorization: `Bearer ${token}` },
           });
           alert("Contact information saved successfully!");
@@ -729,6 +738,7 @@ export default function AddsPage() {
         } else {
           throw error;
         }
+        console.log(error);
       }
     } catch (error: any) {
       console.error('Error saving contact:', error);
@@ -850,10 +860,7 @@ export default function AddsPage() {
           if (contactDataToSave.phone || contactDataToSave.businessType || contactDataToSave.socialNetwork || 
               contactDataToSave.email || contactDataToSave.address || contactDataToSave.website || 
               contactDataToSave.language || contactDataToSave.country) {
-            await axios.post("/api/contacts", {
-              user_id: carResponse.data.id,
-              ...contactDataToSave
-            }, {
+            await axios.post("/api/contacts/user", contactDataToSave, {
               headers: { Authorization: `Bearer ${token}` },
             });
           }
@@ -1214,11 +1221,12 @@ export default function AddsPage() {
                 onChange={(value) => handleInputChange("modelDetail", value)}
               />
               <FormField
-                label="Läbisõit"
-                placeholder="Läbisõit"
-                value={formData.mileage}
-                onChange={(value) => handleInputChange("mileage", value)}
+                label="Oluline varistus"
+                placeholder=""
+                value={formData.major}
+                onChange={(value) => handleInputChange("major", value)}
               />
+              
               <FormField
                 label="Esmane registreerimine"
                 placeholder="Aasta"
@@ -1306,6 +1314,12 @@ export default function AddsPage() {
                     label: "Avariiline",
                   },
                 ]}
+              />
+              <FormField
+                label="Läbisõit"
+                placeholder="Läbisõit"
+                value={formData.mileage}
+                onChange={(value) => handleInputChange("mileage", value)}
               />
             </div>
 
@@ -2025,6 +2039,7 @@ export default function AddsPage() {
                           inspectionValidityPeriod: "",
                           seats: "",
                           doors: "",
+                          major: "",
                         });
                         setContactFormData({
                           phone: "",

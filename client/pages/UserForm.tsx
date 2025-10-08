@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CarCard } from '../components/CarCard';
 import axios from 'axios';
+import { CarCard } from '@/components/CarCard';
 
 interface Car {
   id: number;
@@ -17,6 +17,7 @@ interface Car {
   vatRate?: string;
   favoriteCount?: number;
   views?: number;
+  major?: string;
 }
 
 export default function UserForm() {
@@ -193,6 +194,7 @@ export default function UserForm() {
                 onDelete={() => handleDeleteCar(car.id)}
                 onEdit={() => handleEditCar(car.id)}
                 onPreview={() => navigate(`/car/${car.id}`)}
+                major={car.major || ''}
               />
             ))
           ) : (
