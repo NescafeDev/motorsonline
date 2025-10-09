@@ -78,6 +78,7 @@ interface CarListingSectionProps {
   onFiltersChange: (filters: CarFilters) => void;
   onApplyFilters: () => void;
   navigateToSearch?: boolean; // New prop to control navigation behavior
+  isMobile?: boolean; // New prop to control mobile-specific styling
 }
 
 // API client with same configuration as HomePage
@@ -94,6 +95,7 @@ export const CarListingSection = ({
   onFiltersChange,
   onApplyFilters,
   navigateToSearch = false,
+  isMobile = false,
 }: CarListingSectionProps): JSX.Element => {
   const navigate = useNavigate();
   // Data for drive types - will be fetched from API
@@ -193,7 +195,7 @@ export const CarListingSection = ({
     { id: "gaas (LNG/veeldatud maagaas)", label: "Gaas (LNG/veeldatud maagaas)" },
     { id: "vesinik", label: "Vesinik" },
   ];
-  
+
   // Data for transmission types
   const transmissionTypes = [
     { id: "manuaal", label: "Manuaal" },
@@ -203,36 +205,36 @@ export const CarListingSection = ({
 
   const vehicleType = [
     { id: "vali", label: "Vali" },
-    { id: "sõiduauto", label: "Sõiduauto"},
-    { id: "maastur", label: "Maastur"},
-    { id: "kaubik", label: "Kaubik"},
-    { id: "buss", label: "Buss"},
-    { id: "veoauto", label: "Veoauto"},
-    { id: "haagis", label: "Haagis"},
-    { id: "mototehnika", label: "Mototehnika"},
-    { id: "haagissuvila", label: "Haagissuvila"},
-    { id: "autoelamu", label: "Autoelamu"},
-    { id: "veesõiduk", label: "Veesõiduk"},
-    { id: "ehitustehnika", label: "Ehitustehnika"},
-    { id: "põllumajandustehnika", label: "Põllumajandustehnika"},
-    { id: "metsatehnika", label: "Metsatehnika"},
-    { id: "kommunaaltehnika", label: "Kommunaaltehnika"},
-    { id: "võistlussõiduk", label: "Võistlussõiduk"},
-    { id: "muu", label: "Muu"},
+    { id: "sõiduauto", label: "Sõiduauto" },
+    { id: "maastur", label: "Maastur" },
+    { id: "kaubik", label: "Kaubik" },
+    { id: "buss", label: "Buss" },
+    { id: "veoauto", label: "Veoauto" },
+    { id: "haagis", label: "Haagis" },
+    { id: "mototehnika", label: "Mototehnika" },
+    { id: "haagissuvila", label: "Haagissuvila" },
+    { id: "autoelamu", label: "Autoelamu" },
+    { id: "veesõiduk", label: "Veesõiduk" },
+    { id: "ehitustehnika", label: "Ehitustehnika" },
+    { id: "põllumajandustehnika", label: "Põllumajandustehnika" },
+    { id: "metsatehnika", label: "Metsatehnika" },
+    { id: "kommunaaltehnika", label: "Kommunaaltehnika" },
+    { id: "võistlussõiduk", label: "Võistlussõiduk" },
+    { id: "muu", label: "Muu" },
   ];
 
   const [showAllEquipment, setShowAllEquipment] = useState(false);
 
   const bodyType = [
-    { id: "vali", label: "Vali"},
-    { id: "sedaan", label: "Sedaan"},
-    { id: "luukpara", label: "Luukpära"},
-    { id: "universaal", label: "Universaal"},
-    { id: "mahtuniversaal", label: "Mahtuniversaal"},
-    { id: "kupee", label: "Kupee"},
-    { id: "kabriolett", label: "Kabriolett"},
-    { id: "pikap", label: "Pikap"},
-    { id: "limusiin", label: "Limusiin"},
+    { id: "vali", label: "Vali" },
+    { id: "sedaan", label: "Sedaan" },
+    { id: "luukpara", label: "Luukpära" },
+    { id: "universaal", label: "Universaal" },
+    { id: "mahtuniversaal", label: "Mahtuniversaal" },
+    { id: "kupee", label: "Kupee" },
+    { id: "kabriolett", label: "Kabriolett" },
+    { id: "pikap", label: "Pikap" },
+    { id: "limusiin", label: "Limusiin" },
   ]
 
   // Data for vehicle condition
@@ -303,10 +305,10 @@ export const CarListingSection = ({
 
   // State to control showing all colors or just initial 6
   const [showAllColors, setShowAllColors] = useState(false);
-  
+
   // Get colors to display based on state
   const colorsToShow = showAllColors ? allColors : allColors.slice(0, 6);
-  
+
   // Convert colors to rows for display (2 colors per row)
   const colorRows = [];
   for (let i = 0; i < colorsToShow.length; i += 2) {
@@ -416,7 +418,7 @@ export const CarListingSection = ({
   };
 
   // Helper function to update range filters
-  const updateRangeFilter = (minKey: keyof CarFilters, maxKey: keyof CarFilters, minValue: string | number , maxValue: string | number) => {
+  const updateRangeFilter = (minKey: keyof CarFilters, maxKey: keyof CarFilters, minValue: string | number, maxValue: string | number) => {
     const updates: Partial<CarFilters> = {};
     if (minValue) {
       (updates as any)[minKey] = Number(minValue);
@@ -451,17 +453,45 @@ export const CarListingSection = ({
   };
 
   return (
-    <div className="w-full max-w-3/4" onClick={(e) => e.stopPropagation()}>
-      <Card className="rounded-[10px] h-full flex flex-col">
+    <div className={isMobile ? "w-full max-w-md" : "w-[300px]"} onClick={(e) => e.stopPropagation()}>
+      <Card className="rounded-[10px] h-full flex flex-col w-full">
         <CardContent className="p-5 space-y-4 overflow-y-auto flex-1">
-          <h2 className="font-medium text-xl font-['Poppins',Helvetica]">
-            Filtrid
-          </h2>
+          <div className="flex items-center justify-between">
+            <h2 className="font-medium text-xl font-['Poppins',Helvetica]">
+              Filtrid
+            </h2>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                // Close the filter panel by calling the parent's close function
+                // This will be handled by the parent component
+                const event = new CustomEvent('closeFilters');
+                window.dispatchEvent(event);
+              }}
+              className="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-full transition-colors md:hidden"
+              aria-label="Close filters"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
 
           {/* Sõiduki liik Section - First */}
           <div className="space-y-3">
-            <Select 
-              value={filters.vehicleType || ""} 
+            <Select
+              value={filters.vehicleType || ""}
               onValueChange={(value) => {
                 if (value === "vali") {
                   updateFilter('vehicleType', undefined);
@@ -484,8 +514,8 @@ export const CarListingSection = ({
           </div>
 
           <div className="space-y-3">
-            <Select 
-              value={filters.bodyType || ""} 
+            <Select
+              value={filters.bodyType || ""}
               onValueChange={(value) => {
                 if (value === "vali") {
                   updateFilter('bodyType', undefined);
@@ -509,8 +539,8 @@ export const CarListingSection = ({
 
           {/* Kategooria Section - Second */}
           <div className="space-y-3">
-            <Select 
-              value={filters.category || ""} 
+            <Select
+              value={filters.category || ""}
               onValueChange={(value) => {
                 if (value === "vali") {
                   updateFilter('category', undefined);
@@ -534,8 +564,8 @@ export const CarListingSection = ({
 
           {/* Sõiduki seisukord Section - Third */}
           <div className="space-y-3">
-            <Select 
-              value={filters.technicalData || ""} 
+            <Select
+              value={filters.technicalData || ""}
               onValueChange={(value) => {
                 if (value === "vali") {
                   updateFilter('technicalData', undefined);
@@ -617,7 +647,7 @@ export const CarListingSection = ({
           <Separator className="my-2" />
 
           {/* Drive Type Section */}
-          <Accordion type="single" collapsible defaultValue="drive-type">
+          <Accordion type="single" collapsible>
             <AccordionItem value="drive-type" className="border-none">
               <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica]">
                 Veoskeem
@@ -648,104 +678,115 @@ export const CarListingSection = ({
           <Separator className="my-2" />
 
           {/* Range Input Groups */}
-          {rangeInputGroups.slice(0, 5).map((group) => (
-            <div key={group.id} className="space-y-2">
-              <label className="block font-['Poppins',Helvetica] font-normal text-[#747474] text-base">
-                {group.label}
-              </label>
-              <div className="flex items-center space-x-2">
-                <Input
-                  className="w-[109px] h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]"
-                  placeholder="alates"
-                  value={filters[group.minKey as keyof CarFilters]?.toString() || ''}
-                  onChange={(e) => updateRangeFilter(
-                    group.minKey as keyof CarFilters,
-                    group.maxKey as keyof CarFilters,
-                    e.target.value,
-                    filters[group.maxKey as keyof CarFilters]?.toString() || ''
-                  )}
-                />
-                <span className="font-['Poppins',Helvetica] font-normal text-base">
-                  -
-                </span>
-                <Input
-                  className="w-[109px] h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]"
-                  placeholder="kuni"
-                  value={filters[group.maxKey as keyof CarFilters]?.toString() || ''}
-                  onChange={(e) => updateRangeFilter(
-                    group.minKey as keyof CarFilters,
-                    group.maxKey as keyof CarFilters,
-                    filters[group.minKey as keyof CarFilters]?.toString() || '',
-                    e.target.value
-                  )}
-                />
-              </div>
-            </div>
-          ))}
+          {/* <Accordion type="single" collapsible defaultValue="range-input-groups"> */}
+          <Accordion type="single" collapsible>
+            <AccordionItem value="range-input-groups" className="border-none">
+              <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica]">
+                Võimsus
+              </AccordionTrigger>
+              <AccordionContent>
+                {rangeInputGroups.slice(0, 5).map((group) => (
+                  <div key={group.id} className="space-y-2">
+                    <label className="block font-['Poppins',Helvetica] font-normal text-[#747474] text-base">
+                      {group.label}
+                    </label>
+                    <div className="flex items-center space-x-2">
+                      <Input
+                        className="w-[109px] h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]"
+                        placeholder="alates"
+                        value={filters[group.minKey as keyof CarFilters]?.toString() || ''}
+                        onChange={(e) => updateRangeFilter(
+                          group.minKey as keyof CarFilters,
+                          group.maxKey as keyof CarFilters,
+                          e.target.value,
+                          filters[group.maxKey as keyof CarFilters]?.toString() || ''
+                        )}
+                      />
+                      <span className="font-['Poppins',Helvetica] font-normal text-base">
+                        -
+                      </span>
+                      <Input
+                        className="w-[109px] h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]"
+                        placeholder="kuni"
+                        value={filters[group.maxKey as keyof CarFilters]?.toString() || ''}
+                        onChange={(e) => updateRangeFilter(
+                          group.minKey as keyof CarFilters,
+                          group.maxKey as keyof CarFilters,
+                          filters[group.minKey as keyof CarFilters]?.toString() || '',
+                          e.target.value
+                        )}
+                      />
+                    </div>
+                  </div>
+                ))}
+                <div className="space-y-2 mt-4">
+                  <div className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
+                    <Checkbox
+                      id="kaibemaksuga"
+                      className="w-6 h-6 rounded border-[#ababab]"
+                      checked={filters.with_vat || false}
+                      onCheckedChange={(checked) => handleBooleanFilter('with_vat', checked as boolean)}
+                    />
+                    <label
+                      htmlFor="kaibemaksuga"
+                      className="font-['Poppins',Helvetica] font-normal text-base"
+                    >
+                      Käibemaksuga
+                    </label>
+                  </div>
+                  <div className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
+                    <Checkbox
+                      id="hooldusraamat"
+                      className="w-6 h-6 rounded border-[#ababab]"
+                      checked={filters.service_book || false}
+                      onCheckedChange={(checked) => handleBooleanFilter('service_book', checked as boolean)}
+                    />
+                    <label
+                      htmlFor="hooldusraamat"
+                      className="font-['Poppins',Helvetica] font-normal text-base"
+                    >
+                      Hooldusraamat
+                    </label>
+                  </div>
+                  <div className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
+                    <Checkbox
+                      id="ulevaatus"
+                      className="w-6 h-6 rounded border-[#ababab]"
+                      checked={filters.inspection || false}
+                      onCheckedChange={(checked) => handleBooleanFilter('inspection', checked as boolean)}
+                    />
+                    <label
+                      htmlFor="ulevaatus"
+                      className="font-['Poppins',Helvetica] font-normal text-base"
+                    >
+                      Ülevaatus
+                    </label>
+                  </div>
+                  <div className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
+                    <Checkbox
+                      id="avariiline"
+                      className="w-6 h-6 rounded border-[#ababab]"
+                      checked={filters.accident_free || false}
+                      onCheckedChange={(checked) => handleBooleanFilter('accident_free', checked as boolean)}
+                    />
+                    <label
+                      htmlFor="avariiline"
+                      className="font-['Poppins',Helvetica] font-normal text-base"
+                    >
+                      Avariiline
+                    </label>
+                  </div>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
 
-          <div className="space-y-2">
-            <div className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
-              <Checkbox
-                id="kaibemaksuga"
-                className="w-6 h-6 rounded border-[#ababab]"
-                checked={filters.with_vat || false}
-                onCheckedChange={(checked) => handleBooleanFilter('with_vat', checked as boolean)}
-              />
-              <label
-                htmlFor="kaibemaksuga"
-                className="font-['Poppins',Helvetica] font-normal text-base"
-              >
-                Käibemaksuga
-              </label>
-            </div>
-            <div className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
-              <Checkbox
-                id="hooldusraamat"
-                className="w-6 h-6 rounded border-[#ababab]"
-                checked={filters.service_book || false}
-                onCheckedChange={(checked) => handleBooleanFilter('service_book', checked as boolean)}
-              />
-              <label
-                htmlFor="hooldusraamat"
-                className="font-['Poppins',Helvetica] font-normal text-base"
-              >
-                Hooldusraamat
-              </label>
-            </div>
-            <div className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
-              <Checkbox
-                id="ulevaatus"
-                className="w-6 h-6 rounded border-[#ababab]"
-                checked={filters.inspection || false}
-                onCheckedChange={(checked) => handleBooleanFilter('inspection', checked as boolean)}
-              />
-              <label
-                htmlFor="ulevaatus"
-                className="font-['Poppins',Helvetica] font-normal text-base"
-              >
-                Ülevaatus
-              </label>
-            </div>
-            <div className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
-              <Checkbox
-                id="avariiline"
-                className="w-6 h-6 rounded border-[#ababab]"
-                checked={filters.accident_free || false}
-                onCheckedChange={(checked) => handleBooleanFilter('accident_free', checked as boolean)}
-              />
-              <label
-                htmlFor="avariiline"
-                className="font-['Poppins',Helvetica] font-normal text-base"
-              >
-                Avariiline
-              </label>
-            </div>
-          </div>
+
 
           <Separator className="my-2" />
 
           {/* Fuel Type Section */}
-          <Accordion type="single" collapsible defaultValue="fuel-type">
+          <Accordion type="single" collapsible>
             <AccordionItem value="fuel-type" className="border-none">
               <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica]">
                 Kütuse tüüp
@@ -773,7 +814,7 @@ export const CarListingSection = ({
             </AccordionItem>
           </Accordion>
 
-
+          <Separator className="my-2" />
           {/* Technical Specifications */}
           {/* {rangeInputGroups.slice(2, 5).map((group) => (
             <div key={group.id} className="space-y-2">
@@ -812,7 +853,7 @@ export const CarListingSection = ({
 
 
           {/* Transmission Type Section */}
-          <Accordion type="single" collapsible defaultValue="transmission">
+          <Accordion type="single" collapsible>
             <AccordionItem value="transmission" className="border-none">
               <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica]">
                 Käigukasti tüüp
@@ -843,7 +884,7 @@ export const CarListingSection = ({
           <Separator className="my-2" />
 
           {/* Technical Indicators */}
-          <Accordion type="single" collapsible defaultValue="technical">
+          <Accordion type="single" collapsible>
             <AccordionItem value="technical" className="border-none">
               <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica]">
                 Tehnilised näitajad
@@ -892,7 +933,7 @@ export const CarListingSection = ({
           <Separator className="my-2" />
 
           {/* Color Section */}
-          <Accordion type="single" collapsible defaultValue="color">
+          <Accordion type="single" collapsible>
             <AccordionItem value="color" className="border-none">
               <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica]">
                 Värv
@@ -941,7 +982,7 @@ export const CarListingSection = ({
                   >
                     {showAllColors ? '- Näita vähem' : '+ Vaata rohkem'}
                   </Button>
-                  
+
                   {/* Metallikvärv checkbox */}
                   <div className="flex items-center space-x-2 pt-2">
                     <Checkbox
@@ -965,7 +1006,7 @@ export const CarListingSection = ({
           <Separator className="my-2" />
 
           {/* Additional Info Section */}
-          <Accordion type="single" collapsible defaultValue="additional-info">
+          <Accordion type="single" collapsible>
             <AccordionItem value="additional-info" className="border-none">
               <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica]">
                 Lisainfo
@@ -1047,7 +1088,7 @@ export const CarListingSection = ({
           <Separator className="my-2" />
 
           {/* Equipment Section */}
-          <Accordion type="single" collapsible defaultValue="equipment">
+          <Accordion type="single" collapsible>
             <AccordionItem value="equipment" className="border-none">
               <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica]">
                 Lisavarustus
@@ -1100,7 +1141,7 @@ export const CarListingSection = ({
           <Separator className="my-2" />
 
           {/* Apply Filters Button */}
-          <div className="space-y-2">
+          <div className="space-y-2 sticky">
             <Button
               // onClick={() => {
               // //   if (navigateToSearch) {

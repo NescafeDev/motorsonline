@@ -316,7 +316,7 @@ export default function SearchPage() {
             <div className="w-full bg-[#f6f7f9] relative">
                 {/* Header Section */}
                 <div className="bg-white border-b border-gray-200">
-                    <div className="max-w-[1240px] mx-auto px-6 py-4">
+                    {/* <div className="max-w-[1240px] mx-auto px-6 py-4"> */}
                         {/* <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold text-gray-900">Otsing</h1>
               <Button
@@ -327,11 +327,11 @@ export default function SearchPage() {
                 Tagasi avalehele
               </Button>
             </div> */}
-                    </div>
+                    {/* </div> */}
                 </div>
 
                 {/* Main Search Section */}
-                <div className="max-w-[1240px] mx-auto relative mt-10 mb-2">
+                <div className="max-w-[1240px] mx-auto relative mt-6 mb-2">
                     <div className="flex">
                         <div className="flex w-full">
                             <div className="col-3">
@@ -395,7 +395,7 @@ export default function SearchPage() {
                                     ) : (
                                         <div className="text-center py-8">
                                             <span className="text-[#747474] font-['Poppins'] text-[18px]">
-                                                Sul pole veel ühtegi kuulutust
+                                                {/* Sul pole veel ühtegi kuulutust */}
                                             </span>
                                         </div>
                                     )}

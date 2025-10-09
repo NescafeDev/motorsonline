@@ -263,7 +263,10 @@ export default function SearchPageMobile() {
                                target.closest('[role="combobox"]') ||
                                target.closest('[role="listbox"]');
         
-        if (!isSelectContent) {
+        // Check if the click is on the filter button itself
+        const isFilterButton = target.closest('[data-filter-button]');
+        
+        if (!isSelectContent && !isFilterButton) {
           setFilterOpen(false);
         }
       }
@@ -282,6 +285,14 @@ export default function SearchPageMobile() {
     loadInitialData();
   }, [isAuthenticated, user, loadInitialData]);
 
+  useEffect(() => {
+    const handleCloseFilters = () => {
+      setFilterOpen(false);
+    };
+    
+    window.addEventListener('closeFilters', handleCloseFilters);
+    return () => window.removeEventListener('closeFilters', handleCloseFilters);
+  }, []);
   // Close filter when clicking outside
   // useEffect(() => {
   //   const handleClickOutside = (event: MouseEvent) => {
@@ -404,7 +415,7 @@ export default function SearchPageMobile() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 overflow-hidden">
+    <div className="min-h-screen bg-gray-50 overflow-hidden max-w-md">
       <Header />
 
       <main className="pb-20">
@@ -413,32 +424,23 @@ export default function SearchPageMobile() {
         </div>
 
         {/* Search Bar */}
-        <section className="px-3">
+        <section className="">
           <div className="flex items-center gap-2 mb-2 mt-5">
-            <div className="bg-white p-3 rounded-md shadow-sm cursor-pointer z-20" onClick={() => setFilterOpen((v) => !v)}>
-              <span className="text-black font-medium">Filtrid</span>
-            </div>
-            <div className="bg-white p-3 rounded-md shadow-sm cursor-pointer z-20 w-full">
-              {/* <Search className="w-4 h-4 text-black" /> */}
-              <input
-                type="text"
-                placeholder="Otsing"
-                value={searchTerm}
-                onChange={(e) => handleSearch(e.target.value)}
-                className="text-motors-gray placeholder:text-motors-gray pl-1 outline-none"
-              />
+            <div className="bg-white p-3 rounded-md shadow-sm cursor-pointer z-20 w-full text-center" data-filter-button onClick={() => setFilterOpen((v) => !v)}>
+              <span className="text-black font-['Poppins',Helvetica] font-medium text-[16px] tracking-[1.2px]">Filtrid</span>
             </div>
           </div>
           {filterOpen && (
             <div
               ref={filterRef}
-              className="absolute left-0 w-3/4 bg-white rounded-[10px] shadow-lg z-30 max-h-[80vh] overflow-y-auto"
+              className="absolute left-1 right-1 max-w-md bg-white rounded-[10px] shadow-lg z-30 max-h-[80vh]"
             >
             <CarListingSection
               filters={filters}
               onFiltersChange={handleFiltersChange}
               onApplyFilters={handleApplyFilters}
               navigateToSearch={true}
+              isMobile={true}
             />
             </div>
           )}

@@ -262,7 +262,10 @@ export default function HomePageMobile() {
                                target.closest('[role="combobox"]') ||
                                target.closest('[role="listbox"]');
         
-        if (!isSelectContent) {
+        // Check if the click is on the filter button itself
+        const isFilterButton = target.closest('[data-filter-button]');
+        
+        if (!isSelectContent && !isFilterButton) {
           setFilterOpen(false);
         }
       }
@@ -270,6 +273,16 @@ export default function HomePageMobile() {
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
   }, [filterOpen]);
+
+  // Listen for custom close filters event
+  useEffect(() => {
+    const handleCloseFilters = () => {
+      setFilterOpen(false);
+    };
+    
+    window.addEventListener('closeFilters', handleCloseFilters);
+    return () => window.removeEventListener('closeFilters', handleCloseFilters);
+  }, []);
 
   const loadCars = useCallback(async () => {
     console.log('Loading cars');
@@ -413,7 +426,7 @@ export default function HomePageMobile() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white max-w-md">
       <Header />
 
       {/* Main Content */}
@@ -438,7 +451,7 @@ export default function HomePageMobile() {
         </section>
 
         {/* Car Hero Image */}
-        <section className="px-5">
+        {/* <section className="px-5">
           <div className="w-full h-[374px] bg-gray-200 overflow-hidden">
             <img
               src="/img/mobile/hero.png"
@@ -446,7 +459,7 @@ export default function HomePageMobile() {
               className="w-full h-full object-cover"
             />
           </div>
-        </section>
+        </section> */}
 
         {/* Call to Action Section */}
         <section className="bg-[#F6F7F9] py-5 px-5">
@@ -494,39 +507,30 @@ export default function HomePageMobile() {
           )}
         </section> */}
 
-        <section className="px-5">
+        <section className="px-5 relative z-40">
           <div className="flex items-center gap-2">
-            <div className="bg-white p-3 rounded-md shadow-sm cursor-pointer z-20" onClick={() => setFilterOpen((v) => !v)}>
-              <span className="text-black font-medium">Filtrid</span>
-            </div>
-            <div className="flex-1 items-center py-3 w-full pl-[10px] bg-white border rounded-md ">
-              {/* <Search className="w-4 h-4 text-black" /> */}
-              <input
-                type="text"
-                placeholder="Otsing"
-                value={searchTerm}
-                onChange={(e) => handleSearch(e.target.value)}
-                className="text-motors-gray placeholder:text-motors-gray pl-1 outline-none"
-              />
+            <div className="bg-white p-3 rounded-md shadow-sm cursor-pointer z-20 w-full text-center" data-filter-button onClick={() => setFilterOpen((v) => !v)}>
+              <span className="text-black font-['Poppins',Helvetica] font-medium text-[16px] tracking-[1.2px]">Filtrid</span>
             </div>
           </div>
           {filterOpen && (
             <div
               ref={filterRef}
-              className="absolute left-0 mt-2 w-3/4 bg-white rounded-[10px] shadow-lg z-30"
+              className="left-0 mt-2 w-full bg-white rounded-[10px] shadow-lg z-30 overscroll-none"
             >
             <CarListingSection
               filters={filters}
               onFiltersChange={handleFiltersChange}
               onApplyFilters={handleApplyFilters}
               navigateToSearch={true}
+              isMobile={true}
             />
             </div>
           )}
         </section>
 
         {/* Car Listings */}
-        <section className="px-6 py-6">
+        <section className={`px-6 py-6 ${filterOpen ? "blur-sm transition-all duration-300" : "transition-all duration-300"}`}>
           {/* Loading State */}
           {loading && (
             <div className="flex justify-center items-center h-64">
@@ -541,7 +545,7 @@ export default function HomePageMobile() {
                 {filteredCars.map((car) => {
                   const displayCar = formatCarForDisplay(car);
                   return (
-                    <div className={filterOpen ? "blur-sm transition-all duration-300" : "transition-all duration-300"} key={car.id}>
+                    <div key={car.id}>
                       <CarCard
                         {...displayCar}
                       />
@@ -579,7 +583,7 @@ export default function HomePageMobile() {
         </section>
 
         {/* Blog Section */}
-        <section className="px-5 py-12">
+        <section className={`px-5 py-12 ${filterOpen ? "blur-sm transition-all duration-300" : "transition-all duration-300"}`}>
           <div className="mb-12 px-6 max-w-7xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold text-black mb-6">
               Blog
