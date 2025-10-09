@@ -220,7 +220,7 @@ export const CarCard: React.FC<CarCardProps> = ({
       </p> */}
 
       {/* Car Information Section */}
-      <div className="absolute left-[370px] top-[220px] w-[400px] grid grid-cols-3 gap-x-[30px] gap-y-[8px]">
+      <div className="absolute left-[370px] top-[190px] w-[400px] grid grid-cols-3 gap-x-[30px] gap-y-[8px]">
         {power && (
           <div className="flex items-center gap-[8px]">
             <img
