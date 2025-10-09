@@ -415,7 +415,7 @@ export default function SearchPageMobile() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 overflow-hidden max-w-md">
+    <div className="min-h-screen bg-gray-50 overflow-hidden w-full">
       <Header />
 
       <main className="pb-20">
@@ -433,7 +433,7 @@ export default function SearchPageMobile() {
           {filterOpen && (
             <div
               ref={filterRef}
-              className="absolute left-1 right-1 max-w-md bg-white rounded-[10px] shadow-lg z-30 max-h-[80vh]"
+              className="absolute left-0 right-0 max-w-md bg-white rounded-[10px] shadow-lg z-30 max-h-[80vh]"
             >
             <CarListingSection
               filters={filters}
