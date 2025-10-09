@@ -1221,7 +1221,7 @@ export default function AddsPage() {
                 onChange={(value) => handleInputChange("modelDetail", value)}
               />
               <FormField
-                label="Oluline varistus"
+                label="Populaarne varustus (kuulutuse pealkirjas)"
                 placeholder=""
                 value={formData.major}
                 onChange={(value) => handleInputChange("major", value)}
