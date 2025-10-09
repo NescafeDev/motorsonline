@@ -374,12 +374,21 @@ export default function SearchPage() {
                                                 price={`€ ${car.price?.toLocaleString() || '0'}`}
                                                 originalPrice={car.discountPrice ? `€ ${car.discountPrice.toLocaleString()}` : undefined}
                                                 discount={car.discountPrice ? `${Math.round(((car.price - car.discountPrice) / car.price) * 100)}%` : undefined}
-                                                dateEnd="Kuni 25. juunini 2025"
-                                                views={car.views || 0}
-                                                likes={car.favoriteCount || 0}
+                                                dateEnd=""
+                                                views={0}
+                                                likes={0}
                                                 vatNote={getVatDisplayText(car)}
                                                 major={car.major || ''}
+                                                hideBottomIcons={true}
+                                                power={car.power}
+                                                month={car.month}
+                                                year={car.year_value}
+                                                mileage={car.mileage}
+                                                transmission={car.transmission}
+                                                fuelType={car.fuelType}
+                                                ownerCount={car.ownerCount}
                                                 onPreview={() => navigate(`/car/${car.id}`)}
+                                                onEdit={() => navigate(`/car/${car.id}/edit`)}
                                                 className="bg-white"
                                             />
                                         ))

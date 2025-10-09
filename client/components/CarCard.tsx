@@ -15,6 +15,14 @@ interface CarCardProps {
   vatNote: string;
   className?: string;
   major?: string;
+  hideBottomIcons?: boolean;
+  power?: string;
+  month?: string;
+  year?: number;
+  mileage?: number;
+  transmission?: string;
+  fuelType?: string;
+  ownerCount?: string;
   onDelete?: () => void;
   onEdit?: () => void;
   onPreview?: () => void;
@@ -131,11 +139,19 @@ export const CarCard: React.FC<CarCardProps> = ({
   originalPrice,
   discount,
   dateEnd,
-  views,
-  likes,
+  views = "",
+  likes = "",
   vatNote,
   className = "bg-gray-50",
   major,
+  hideBottomIcons = false,
+  power,
+  month,
+  year,
+  mileage,
+  transmission,
+  fuelType,
+  ownerCount,
   onDelete,
   onEdit,
   onPreview,
@@ -199,39 +215,105 @@ export const CarCard: React.FC<CarCardProps> = ({
       </div>
 
       {/* Description */}
-      <p className="w-[830px] text-[#1A202C] font-['Poppins'] text-[18px] font-normal leading-[150%] tracking-[-0.54px] absolute left-[370px] top-[156px] h-[54px] overflow-hidden">
+      {/* <p className="w-[830px] text-[#1A202C] font-['Poppins'] text-[18px] font-normal leading-[150%] tracking-[-0.54px] absolute left-[370px] top-[156px] h-[54px] overflow-hidden">
         {description}
-      </p>
+      </p> */}
 
-      {/* Bottom Section */}
-      <div className="absolute left-[370px] top-[237px] flex items-center gap-[10px]">
-        {/* Date */}
-        <div className="flex items-center gap-[10px]">
-          <CalendarIcon />
-          <span className="text-[#1A202C] font-['Poppins'] text-[18px] font-normal leading-[150%] tracking-[-0.54px]">
-            {dateEnd}
-          </span>
-        </div>
-
-        {/* Views */}
-        <div className="flex items-center gap-[10px] ml-[25px]">
-          <EyeIcon />
-          <span className="text-[#1A202C] font-['Poppins'] text-[18px] font-normal leading-[150%] tracking-[-0.54px]">
-            {views}
-          </span>
-        </div>
-
-        {/* Likes */}
-        <div className="flex items-center gap-[10px] ml-[10px]">
-          <HeartIcon />
-          <span className="text-[#1A202C] font-['Poppins'] text-[18px] font-normal leading-[150%] tracking-[-0.54px]">
-            {likes}
-          </span>
-        </div>
+      {/* Car Information Section */}
+      <div className="absolute left-[370px] top-[220px] w-[400px] grid grid-cols-3 gap-x-[30px] gap-y-[8px]">
+        {power && (
+          <div className="flex items-center gap-[8px]">
+            <img
+              className="w-5 h-5"
+              src="/img/car/Speedometer.png"
+              alt="Võimsus"
+            />
+            <span className="text-[#1A202C] font-['Poppins'] text-[14px] font-medium">{power}</span>
+          </div>
+        )}
+        {year && month && (
+          <div className="flex items-center gap-[8px]">
+            <img
+              className="w-5 h-5"
+              src="/img/car/calendar.png"
+              alt="Esmaregistreerimine"
+            />
+            <span className="text-[#1A202C] font-['Poppins'] text-[14px] font-medium">{year} - {month.length === 1 ? `0${month}` : month}</span>
+          </div>
+        )}
+        {mileage && (
+          <div className="flex items-center gap-[8px]">
+            <img
+              className="w-5 h-5"
+              src="/img/car/Car.png"
+              alt="Läbisõit"
+            />
+            <span className="text-[#1A202C] font-['Poppins'] text-[14px] font-medium">{mileage.toLocaleString()} km</span>
+          </div>
+        )}
+        {transmission && (
+          <div className="flex items-center gap-[8px]">
+            <img
+              className="w-5 h-5"
+              src="/img/car/gear-box-switch.png"
+              alt="Käigukast"
+            />
+            <span className="text-[#1A202C] font-['Poppins'] text-[14px] font-medium">{transmission}</span>
+          </div>
+        )}
+        {fuelType && (
+          <div className="flex items-center gap-[8px]">
+            <img
+              className="w-5 h-5"
+              src="/img/car/gas_station.png"
+              alt="Kütus"
+            />
+            <span className="text-[#1A202C] font-['Poppins'] text-[14px] font-medium">{fuelType}</span>
+          </div>
+        )}
+        {ownerCount && (
+          <div className="flex items-center gap-[8px]">
+            <img
+              className="w-5 h-5"
+              src="/img/car/user_profile.png"
+              alt="Omanike arv"
+            />
+            <span className="text-[#1A202C] font-['Poppins'] text-[14px] font-medium">{ownerCount}</span>
+          </div>
+        )}
       </div>
 
+      {/* Bottom Section */}
+      {!hideBottomIcons && (
+        <div className="absolute left-[370px] top-[237px] flex items-center gap-[10px]">
+          {/* Date */}
+          <div className="flex items-center gap-[10px]">
+            <CalendarIcon />
+            <span className="text-[#1A202C] font-['Poppins'] text-[18px] font-normal leading-[150%] tracking-[-0.54px]">
+              {dateEnd}
+            </span>
+          </div>
+
+          {/* Views */}
+          <div className="flex items-center gap-[10px] ml-[25px]">
+            <EyeIcon />
+            <span className="text-[#1A202C] font-['Poppins'] text-[18px] font-normal leading-[150%] tracking-[-0.54px]">
+              {views}
+            </span>
+          </div>
+
+          {/* Likes */}
+          <div className="flex items-center gap-[10px] ml-[10px]">
+            <HeartIcon />
+            <span className="text-[#1A202C] font-['Poppins'] text-[18px] font-normal leading-[150%] tracking-[-0.54px]">
+              {likes}
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Action Buttons - Only show if any callback is provided */}
-      {(onEdit || onDelete || className === "") && (
+      {(onEdit || onDelete || className === "") && !hideBottomIcons && (
         <div className="absolute right-[30px] top-[230px] flex items-center gap-[21px]">
           {onPreview && (
             <button 
