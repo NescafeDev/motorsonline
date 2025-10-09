@@ -93,7 +93,7 @@ export const CarListingSection = ({
   filters,
   onFiltersChange,
   onApplyFilters,
-  navigateToSearch = false
+  navigateToSearch = false,
 }: CarListingSectionProps): JSX.Element => {
   const navigate = useNavigate();
   // Data for drive types - will be fetched from API
@@ -451,9 +451,9 @@ export const CarListingSection = ({
   };
 
   return (
-    <div className="w-full max-w-[292px]" onClick={(e) => e.stopPropagation()}>
-      <Card className="rounded-[10px]">
-        <CardContent className="p-5 space-y-4">
+    <div className="w-full max-w-3/4" onClick={(e) => e.stopPropagation()}>
+      <Card className="rounded-[10px] h-full flex flex-col">
+        <CardContent className="p-5 space-y-4 overflow-y-auto flex-1">
           <h2 className="font-medium text-xl font-['Poppins',Helvetica]">
             Filtrid
           </h2>

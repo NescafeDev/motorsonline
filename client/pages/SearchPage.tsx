@@ -343,7 +343,7 @@ export default function SearchPage() {
                                 />
                             </div>
                             <div className="col-9 w-full pl-4 bg-gray">
-                                <div className="mb-8">
+                                <div className="mb-3">
                                     <div className="mx-auto px-4 w-full bg-white rounded-md p-3 flex items-center">
                                         <SearchIcon className="w-4 h-4 mr-2 text-[#747474]" />
                                         <Input
@@ -356,7 +356,7 @@ export default function SearchPage() {
                                 </div>
 
                                 {/* Loading State */}
-                                <div className="flex flex-col w-full h-full gap-[37px]">
+                                <div className="flex flex-col w-full h-full gap-5">
                                     {loading ? (
                                         <div className="text-center py-8">
                                             <span className="text-[#747474] font-['Poppins'] text-[18px]">

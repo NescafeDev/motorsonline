@@ -5,7 +5,6 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { Input } from "../components/ui/input";
-import { CarListingSection } from "./sections";
 import PageContainer from "../components/PageContainer";
 import axios from "axios";
 import { useFavorites } from "../hooks/useFavorites";
@@ -13,7 +12,8 @@ import { useAuth } from "../contexts/AuthContext";
 import { Separator } from "@/components/ui/separator";
 import Header from "../components/mobile/Header";
 import Footer from "../components/mobile/Footer";
-import { CarCard } from '@/components/CarCard';
+import { CarCard } from "../components/mobile/CarCard";
+import { CarListingSection } from "./sections/CarListingSection/CarListingSection";
 
 // Car-related types (imported from HomePage)
 export interface Car {
@@ -201,72 +201,119 @@ export default function SearchPageMobile() {
   };
 
   // Load initial cars and apply filters from URL params
-  useEffect(() => {
-    const loadInitialData = async () => {
-      try {
-        setLoading(true);
-        
-        // First load all cars
-        const allCars = await fetchAllApprovedCars();
-        setCars(allCars);
-        
-        // Parse URL filters
-        const urlFilters: any = {};
-        searchParams.forEach((value, key) => {
-          if (key.includes('_min') || key.includes('_max')) {
-            urlFilters[key] = Number(value);
-          } else if (key.includes('_id') || key === 'seats' || key === 'doors') {
-            urlFilters[key] = Number(value);
-          } else if (key === 'with_vat' || key === 'service_book' || key === 'inspection' || 
-                     key === 'accident_free' || key === 'exchange_possible' || key === 'with_warranty') {
-            urlFilters[key] = value === 'true';
-          } else if (key.includes('[]')) {
-            const arrayKey = key.replace('[]', '');
-            if (!urlFilters[arrayKey]) {
-              urlFilters[arrayKey] = [];
-            }
-            urlFilters[arrayKey].push(value);
-          } else {
-            urlFilters[key] = value;
-          }
-        });
-        
-        setFilters(urlFilters);
-        
-        // If there are filters, apply them; otherwise show all cars
-        if (Object.keys(urlFilters).length > 0) {
-          const filtered = await fetchFilteredCars(urlFilters);
-          setFilteredCars(filtered);
-          setFiltersApplied(true);
-        } else {
-          setFilteredCars(allCars);
-          setFiltersApplied(false);
-        }
-      } catch (error) {
-        console.error('Failed to load initial data:', error);
-        setCars([]);
-        setFilteredCars([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const loadInitialData = useCallback(async () => {
+    try {
+      setLoading(true);
+      
+      // First load all cars
+      const allCars = await fetchAllApprovedCars();
+      setCars(allCars);
+      setFilteredCars(allCars);
+      setFiltersApplied(false);
+      // Parse URL filters
+      // const urlFilters: any = {};
+      // searchParams.forEach((value, key) => {
+      //   if (key.includes('_min') || key.includes('_max')) {
+      //     urlFilters[key] = Number(value);
+      //   } else if (key.includes('_id') || key === 'seats' || key === 'doors') {
+      //     urlFilters[key] = Number(value);
+      //   } else if (key === 'with_vat' || key === 'service_book' || key === 'inspection' || 
+      //              key === 'accident_free' || key === 'exchange_possible' || key === 'with_warranty') {
+      //     urlFilters[key] = value === 'true';
+      //   } else if (key.includes('[]')) {
+      //     const arrayKey = key.replace('[]', '');
+      //     if (!urlFilters[arrayKey]) {
+      //       urlFilters[arrayKey] = [];
+      //     }
+      //     urlFilters[arrayKey].push(value);
+      //   } else {
+      //     urlFilters[key] = value;
+      //   }
+      // });
+      
+      // setFilters(urlFilters);
+      
+      // // If there are filters, apply them; otherwise show all cars
+      // if (Object.keys(urlFilters).length > 0) {
+      //   const filtered = await fetchFilteredCars(urlFilters);
+      //   setFilteredCars(filtered);
+      //   setFiltersApplied(true);
+      // } else {
+      //   setFilteredCars(allCars);
+      //   setFiltersApplied(false);
+      // }
+    } catch (error) {
+      console.error('Failed to load initial data:', error);
+      setCars([]);
+      setFilteredCars([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
+  useEffect(() => {
+    if (!filterOpen) return;
+    function handleClick(e: MouseEvent) {
+      if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
+        // Check if the click is on a select dropdown or combobox
+        const target = e.target as Element;
+        const isSelectContent = target.closest('[data-radix-select-content]') || 
+                               target.closest('[data-radix-combobox-content]') ||
+                               target.closest('[data-radix-accordion-content]') ||
+                               target.closest('[role="combobox"]') ||
+                               target.closest('[role="listbox"]');
+        
+        if (!isSelectContent) {
+          setFilterOpen(false);
+        }
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [filterOpen]);
+
+  useEffect(() => {
+    console.log('Initial load cars effect triggered');
     loadInitialData();
-  }, [searchParams]);
+  }, [loadInitialData]);
+
+  useEffect(() => {
+    console.log('Auth state changed, isAuthenticated:', isAuthenticated, 'user:', user);
+    loadInitialData();
+  }, [isAuthenticated, user, loadInitialData]);
 
   // Close filter when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (filterRef.current && !filterRef.current.contains(event.target as Node)) {
-        setFilterOpen(false);
-      }
-    };
+  // useEffect(() => {
+  //   const handleClickOutside = (event: MouseEvent) => {
+  //     if (filterRef.current && !filterRef.current.contains(event.target as Node)) {
+  //       setFilterOpen(false);
+  //     }
+  //   };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+  //   document.addEventListener('mousedown', handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   };
+  // }, []);
+  
+  useEffect(() => {
+    if (filtersApplied) {
+      // If filters are applied, use the filtered results
+      return;
+    }
+
+    // Otherwise, show all cars or search results
+    if (searchTerm.trim() === "") {
+      setFilteredCars(cars);
+    } else {
+      const filtered = cars.filter(car =>
+        car.brand_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        car.model_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        car.modelDetail?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredCars(filtered);
+    }
+  }, [cars, searchTerm, filtersApplied]);
 
   const loadFilteredCarsWithFilters = async (filterParams: CarFilters) => {
     try {
@@ -283,33 +330,60 @@ export default function SearchPageMobile() {
 
   const handleFiltersChange = (newFilters: CarFilters) => {
     setFilters(newFilters);
-    const params = new URLSearchParams();
-    Object.entries(newFilters).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== '') {
-        if (Array.isArray(value)) {
-          value.forEach(v => params.append(`${key}[]`, String(v)));
-        } else {
-          params.append(key, String(value));
-        }
+    // If filters are cleared, reset the applied state
+    if (Object.keys(newFilters).length === 0) {
+      setFiltersApplied(false);
+      // If there's a search term, apply search; otherwise show all cars
+      if (searchTerm.trim() !== '') {
+        handleSearch(searchTerm);
+      } else {
+        setFilteredCars(cars);
       }
-    });
-    navigate(`/search?${params.toString()}`, { replace: true });
+    } else {
+      // Automatically apply filters when they change
+      loadFilteredCarsWithFilters(newFilters);
+    }
   };
 
   const handleApplyFilters = () => {
     if (Object.keys(filters).length > 0) {
-      loadFilteredCarsWithFilters(filters);
+      // Navigate to search page with filters as URL parameters
+      const params = new URLSearchParams();
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          if (Array.isArray(value)) {
+            value.forEach(v => params.append(`${key}[]`, String(v)));
+          } else {
+            params.append(key, String(value));
+          }
+        }
+      });
+      navigate(`/search?${params.toString()}`);
     } else {
+      // If no filters, show all cars
       setFilteredCars(cars);
       setFiltersApplied(false);
     }
-    setFilterOpen(false);
   };
-
   const handleSearch = (term: string) => {
     setSearchTerm(term);
     setFiltersApplied(false);
+    
   };
+
+  // Helper function to apply filters to a single car
+  // const applyFiltersToCar = (car: Car, filterParams: CarFilters): boolean => {
+  //   // This is a simplified filter implementation
+  //   // You can expand this based on your specific filter requirements
+  //   if (filterParams.brand_id && car.brand_id !== filterParams.brand_id) return false;
+  //   if (filterParams.model_id && car.model_id !== filterParams.model_id) return false;
+  //   if (filterParams.price_min && car.price < filterParams.price_min) return false;
+  //   if (filterParams.price_max && car.price > filterParams.price_max) return false;
+  //   if (filterParams.year_min && car.year_value && car.year_value < filterParams.year_min) return false;
+  //   if (filterParams.year_max && car.year_value && car.year_value > filterParams.year_max) return false;
+    
+  //   return true;
+  // };
 
   // Format car data for display
   const formatCarForDisplay = (car: Car) => ({
@@ -324,10 +398,13 @@ export default function SearchPageMobile() {
     transmission: car.transmission || 'N/A',
     image: car.image_1 || "img/Rectangle 34624924.png",
     isFavorite: isFavorite(car.id),
+    power: car.power || 'N/A',
+    ownerCount: car.ownerCount || 'N/A',
+    month: car.month || 'N/A',
   });
 
   return (
-    <div className="min-h-screen bg-white ">
+    <div className="min-h-screen bg-gray-50 overflow-hidden">
       <Header />
 
       <main className="pb-20">
@@ -336,8 +413,8 @@ export default function SearchPageMobile() {
         </div>
 
         {/* Search Bar */}
-        <section className="px-5">
-          <div className="flex items-center gap-2 mb-5 mt-5">
+        <section className="px-3">
+          <div className="flex items-center gap-2 mb-2 mt-5">
             <div className="bg-white p-3 rounded-md shadow-sm cursor-pointer z-20" onClick={() => setFilterOpen((v) => !v)}>
               <span className="text-black font-medium">Filtrid</span>
             </div>
@@ -355,7 +432,7 @@ export default function SearchPageMobile() {
           {filterOpen && (
             <div
               ref={filterRef}
-              className="absolute left-0 mt-2 w-3/4 bg-white rounded-[10px] shadow-lg z-30"
+              className="absolute left-0 w-3/4 bg-white rounded-[10px] shadow-lg z-30 max-h-[80vh] overflow-y-auto"
             >
             <CarListingSection
               filters={filters}
@@ -381,94 +458,11 @@ export default function SearchPageMobile() {
               {filteredCars.map((car) => {
                 const displayCar = formatCarForDisplay(car);
                 return (
-                  <Card
-                    key={car.id}
-                    className="rounded-[10px] overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
-                    onClick={() => {
-                      navigate(`/car/${car.id}`);
-                      window.scrollTo(0, 0);
-                    }}
-                  >
-                    <img
-                      className="w-full h-[189px] object-cover"
-                      alt="Car"
-                      src={displayCar.image}
+                  <div key={car.id}>
+                    <CarCard
+                      {...displayCar}
                     />
-                    <CardContent className="p-4">
-                      <div className="flex justify-between items-start mb-2">
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]">
-                            {displayCar.title}
-                          </h3>
-                          <p className="font-medium text-[#747474] text-sm tracking-[-0.28px] leading-[21px]">
-                            {displayCar.year}, {displayCar.mileage}
-                          </p>
-                        </div>
-                        <button
-                          className="w-6 h-6 cursor-pointer"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (!isAuthenticated) {
-                              alert('Please log in to save favorites');
-                              return;
-                            }
-                            toggleFavorite(car.id);
-                          }}
-                        >
-                          <img
-                            className="w-6 h-6"
-                            alt="Favorite"
-                            src={
-                              isFavorite(car.id)
-                                ? "/img/vuesax-bold-heart.svg"
-                                : "/img/vuesax-linear-heart.svg"
-                            }
-                          />
-                        </button>
-                      </div>
-
-                      <div className="flex items-center gap-5 mb-4">
-                        <div className="flex items-center gap-2">
-                          <img
-                            className="w-5 h-5"
-                            alt="Fuel type"
-                            src="/img/vuesax-bold-gas-station.svg"
-                          />
-                          <span className="text-[#747474] text-sm tracking-[-0.28px] leading-[21px]">
-                            {displayCar.fuel}
-                          </span>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                          <img className="w-6 h-6" alt="Transmission" src="/img/car/bevel.svg" />
-                          <span className="text-[#747474] text-sm tracking-[-0.28px] leading-[21px]">
-                            {displayCar.transmission}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <p className="font-semibold text-secondary-500 text-xl">
-                            {displayCar.discountPrice}
-                          </p>
-                          <p className="text-[#747474] text-xs">
-                            {displayCar.vatNote}
-                          </p>
-                        </div>
-                        <Button
-                          className="h-10 px-[30px] py-3 bg-[#06d6a0] text-white rounded-[10px]"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(`/car/${car.id}`);
-                            window.scrollTo(0, 0);
-                          }}
-                        >
-                          Vaata
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
+                  </div>
                 );
               })}
             </div>

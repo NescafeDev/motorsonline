@@ -36,20 +36,20 @@ router.get('/count/:carId', async (req: express.Request, res: express.Response) 
 });
 
 // Get view counts for multiple cars (public endpoint - no authentication required)
-router.post('/counts', async (req: express.Request, res: express.Response) => {
-  try {
-    const { carIds } = req.body;
+// router.post('/counts', async (req: express.Request, res: express.Response) => {
+//   try {
+//     const { carIds } = req.body;
     
-    if (!Array.isArray(carIds)) {
-      return res.status(400).json({ error: 'carIds must be an array' });
-    }
+//     if (!Array.isArray(carIds)) {
+//       return res.status(400).json({ error: 'carIds must be an array' });
+//     }
     
-    const viewCounts = await getViewCountsForCars(carIds);
-    res.json({ viewCounts });
-  } catch (error) {
-    console.error('Error getting view counts:', error);
-    res.status(500).json({ error: 'Failed to get view counts' });
-  }
-});
+//     const viewCounts = await getViewCountsForCars(carIds);
+//     res.json({ viewCounts });
+//   } catch (error) {
+//     console.error('Error getting view counts:', error);
+//     res.status(500).json({ error: 'Failed to get view counts' });
+//   }
+// });
 
 export default router; 

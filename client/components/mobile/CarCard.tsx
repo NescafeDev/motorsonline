@@ -16,6 +16,10 @@ interface CarCardProps {
   transmission: string;
   image: string;
   isFavorite?: boolean;
+  major?: string;
+  power?: string;
+  ownerCount?: string;
+  month?: string;
 }
 
 export function CarCard({
@@ -30,6 +34,10 @@ export function CarCard({
   transmission,
   image,
   isFavorite = false,
+  major,
+  power,
+  ownerCount,
+  month,
 }: CarCardProps) {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
@@ -56,7 +64,7 @@ export function CarCard({
               {title}
             </h3>
             <p className="text-sm text-motors-gray font-medium leading-[21px] tracking-[-0.28px]">
-              {year}, {mileage}
+              {major}
             </p>
           </div>
           <div className="justify-self-end">
@@ -84,21 +92,119 @@ export function CarCard({
             </button>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-2 h-20 p-2">
-          <div className="flex items-center">
-            <img
-              className="w-5 h-5 mr-2"
-              alt="Fuel type"
-              src="/img/vuesax-bold-gas-station.svg"
-            />
-            <span className="text-motors-gray tracking-[-0.32px]">{fuel}</span>
+        <div className="grid grid-cols-2 gap-2 p-2">
+          {/* Mileage */}
+          <div className="flex items-center bg-white rounded-lg p-2">
+            <div className="w-8 h-8 relative flex-shrink-0">
+              <img
+                className="w-6 h-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                alt="Mileage"
+                src="/img/car/Car.png"
+              />
+            </div>
+            <div className="flex flex-col min-w-0 flex-1 ml-2">
+              <span className="font-normal text-secondary-500 text-xs tracking-[-0.2px] leading-[16px] break-words">
+                Läbisõit:
+              </span>
+              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
+                {mileage}
+              </span>
+            </div>
           </div>
 
-          <div className="flex items-center">
-            <img className="w-6 h-6 ml-2" alt="Google logo" src="/img/car/bevel.svg" />
-            <span className="text-motors-gray tracking-[-0.32px]">
-              {transmission}
-            </span>
+          {/* Power */}
+          <div className="flex items-center bg-white rounded-lg p-2">
+            <div className="w-8 h-8 relative flex-shrink-0">
+              <img
+                className="w-6 h-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                alt="Power"
+                src="/img/car/Speedometer.png"
+              />
+            </div>
+            <div className="flex flex-col min-w-0 flex-1 ml-2">
+              <span className="font-normal text-secondary-500 text-xs tracking-[-0.2px] leading-[16px] break-words">
+                Võimsus:
+              </span>
+              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
+                {power || 'N/A'}
+              </span>
+            </div>
+          </div>
+
+          {/* Transmission */}
+          <div className="flex items-center bg-white rounded-lg p-2">
+            <div className="w-8 h-8 relative flex-shrink-0">
+              <img
+                className="w-6 h-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                alt="Transmission"
+                src="/img/car/gear-box-switch.png"
+              />
+            </div>
+            <div className="flex flex-col min-w-0 flex-1 ml-2">
+              <span className="font-normal text-secondary-500 text-xs tracking-[-0.2px] leading-[16px] break-words">
+                Käigukast:
+              </span>
+              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
+                {transmission}
+              </span>
+            </div>
+          </div>
+
+          {/* First Registration */}
+          <div className="flex items-center bg-white rounded-lg p-2">
+            <div className="w-8 h-8 relative flex-shrink-0">
+              <img
+                className="w-6 h-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                alt="First Registration"
+                src="/img/car/calendar.png"
+              />
+            </div>
+            <div className="flex flex-col min-w-0 flex-1 ml-2">
+              <span className="font-normal text-secondary-500 text-xs tracking-[-0.2px] leading-[16px] break-words">
+                Esmaregistreerimine:
+              </span>
+              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
+                {year} - {month ? (month.length === 1 ? `0${month}` : month) : 'N/A'}
+              </span>
+            </div>
+          </div>
+
+          {/* Fuel */}
+          <div className="flex items-center bg-white rounded-lg p-2">
+            <div className="w-8 h-8 relative flex-shrink-0">
+              <img
+                className="w-6 h-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                alt="Fuel type"
+                src="/img/car/gas_station.png"
+              />
+            </div>
+            <div className="flex flex-col min-w-0 flex-1 ml-2">
+              <span className="font-normal text-secondary-500 text-xs tracking-[-0.2px] leading-[16px] break-words">
+                Kütus
+              </span>
+              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
+                {fuel}
+              </span>
+            </div>
+          </div>
+
+          {/* Owner Count */}
+          <div className="flex items-center bg-white rounded-lg p-2">
+            <div className="w-8 h-8 relative flex-shrink-0">
+              <img
+                className="w-6 h-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                alt="Owner Count"
+                src="/img/car/user_profile.png"
+              />
+            </div>
+            <div className="flex flex-col min-w-0 flex-1 ml-2">
+              <span className="font-normal text-secondary-500 text-xs tracking-[-0.2px] leading-[16px] break-words">
+                Omanike arv:
+              </span>
+              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
+                {ownerCount || 'N/A'}
+              </span>
+            </div>
           </div>
         </div>
         <div className="grid grid-cols-2 h-2 mx-2 justify-center">

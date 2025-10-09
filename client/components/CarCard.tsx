@@ -153,18 +153,23 @@ export const CarCard: React.FC<CarCardProps> = ({
       />
 
       {/* Car Title */}
-      <h3 className="text-[#1A202C] font-['Poppins'] text-[30px] font-bold leading-[150%] tracking-[-0.9px] absolute left-[370px] top-[40px] w-fit h-[45px]">
+      <h3 className="text-[#1A202C] font-['Poppins'] text-[30px] font-bold leading-[150%] tracking-[-0.9px] absolute left-[370px] top-[30px] w-fit h-[45px]">
         {title}
       </h3>
+      
 
       {/* Major */}
-      {/* <p className="text-black font-['Poppins'] text-[18px] font-normal leading-[150%] tracking-[-0.54px] absolute left-[370px] top-[95px] w-fit h-[29px]">{major}</p> */}
+
+      <div className="absolute left-[370px] top-[75px] w-fit h-[29px]">
+        {major}
+      </div>
       {/* Breadcrumb */}
-      <div className="flex items-center gap-[9.764px] absolute left-[370px] top-[95px] h-[29px]">
+      <div className="flex items-center gap-[9.764px] absolute left-[370px] top-[100px] h-[29px]">
         <span className="text-[#747474] font-['Poppins'] text-[17px] font-normal tracking-[0.342px]">
           {breadcrumb}
         </span>
       </div>
+      
    
       {/* Price Section */}
       <div className="absolute right-[30px] top-[46px] flex flex-col items-end gap-2">

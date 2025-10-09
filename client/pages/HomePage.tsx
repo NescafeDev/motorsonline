@@ -391,7 +391,7 @@ export default function HomePage() {
         <FreeListingBanner />
 
         {/* Main Car Listing Section with Filter */}
-        <div className="max-w-[1240px] mx-auto relative mt-10 mb-10">
+        <div className="max-w-[1240px] mx-auto relative mt-10 mb-3">
           <div className="flex">
             <div className="flex w-full">
               <div className="col-3">

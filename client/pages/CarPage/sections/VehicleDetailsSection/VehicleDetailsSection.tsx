@@ -96,12 +96,10 @@ interface VehicleDetailsSectionProps {
 
 // Helper function to get VAT display text (matching HomePage)
 const getVatDisplayText = (car: Car): string => {
-  if (car.vatRefundable === 'yes') {
-    return 'KM tagastatav';
-  } else if (car.vatRefundable === 'no') {
-    return 'KM ei ole tagastatav';
+  if (car.vatRefundable === 'no' || car.vatRefundable === 'ei') {
+    return 'KM 0% (käibemaksu ei lisandu)';
   }
-  return '';
+  return 'Hind sisaldab käibemaksu ' + car.vatRate + '%';
 };
 
 export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionProps): JSX.Element => {

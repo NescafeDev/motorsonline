@@ -21,6 +21,7 @@ interface Car {
   vatRate?: string;
   favoriteCount?: number;
   views?: number;
+  major?: string;
 }
 
 export default function UserPageMobile() {
@@ -201,6 +202,7 @@ export default function UserPageMobile() {
                 vatNote={getVatDisplayText(car)}
                 onDelete={() => handleDeleteCar(car.id)}
                 onEdit={() => handleEditCar(car.id)}
+                major={car.major}
               />
             ))
           ) : (

@@ -15,6 +15,7 @@ interface UserCarCardProps {
   views: number;
   likes: number;
   vatNote: string;
+  major: string;
   onDelete?: () => void;
   onEdit?: () => void;
 }
@@ -32,6 +33,7 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
   views,
   likes,
   vatNote,
+  major,
   onDelete,
   onEdit,
 }) => {
@@ -49,6 +51,7 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
           alt={title}
           className="w-full h-[247px] object-cover"
         />
+
         {/* Discount Badge */}
         {discount && (
           <div className="absolute top-3 right-3 bg-red-500 text-white px-2 py-1 rounded-full text-sm font-medium">
@@ -56,7 +59,7 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
           </div>
         )}
       </div>
-
+      
       {/* Content Section */}
       <div className="">
         {/* Title and Breadcrumb */}
@@ -64,10 +67,14 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
           <h3 className="text-lg font-semibold text-motors-dark mb-1 leading-[27px] tracking-[-0.54px]">
             {title}
           </h3>
+          <div className="text-sm text-motors-gray leading-[21px] tracking-[-0.42px]">
+            {major}
+          </div>
           <p className="text-sm text-motors-gray leading-[21px] tracking-[-0.42px]">
             {breadcrumb}
           </p>
         </div>
+        
 
         {/* Description */}
         {/* <p className="text-sm text-motors-gray leading-[21px] tracking-[-0.42px] mb-4 line-clamp-2">

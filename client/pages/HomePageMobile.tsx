@@ -77,6 +77,7 @@ export interface Car {
   drive_type_ee_name?: string;
   carColorType?: string;
   carColor?: string;
+  major?: string;
 }
 
 export interface CarFilters {
@@ -124,6 +125,7 @@ export interface CarFilters {
   equipment?: string[];
   carColorType?: string;
   carColor?: string;
+  major?: string;
 }
 
 // API functions
@@ -364,6 +366,10 @@ export default function HomePageMobile() {
     transmission: car.transmission || 'N/A',
     image: car.image_1 || "img/Rectangle 34624924.png",
     isFavorite: isFavorite(car.id),
+    power: car.power || 'N/A',
+    ownerCount: car.ownerCount || 'N/A',
+    month: car.month || 'N/A',
+    major: car.major,
   });
 
 

@@ -60,6 +60,7 @@ interface CarData {
   description?: string;
   created_at?: string;
   modelDetail?: string;
+  major?: string;
   // Seller information
   businessType?: string;
   country?: string;
@@ -121,7 +122,7 @@ export default function CarPageMobile() {
 
         // Fetch contact data for this car's owner
         try {
-          const contactResponse = await fetch(`/api/contacts/user/${carData.user_id}`);
+          const contactResponse = await fetch(`/api/contacts/public/${carData.user_id}`);
           if (contactResponse.ok) {
             const contactData = await contactResponse.json();
             console.log('ContactData:', contactData);
@@ -307,11 +308,16 @@ export default function CarPageMobile() {
               </h1>
               <Heart
                 className={`w-6 h-6 transition-colors duration-200 cursor-pointer ${isFavorite(car.id)
-                    ? "text-red-500 fill-red-500"
-                    : "text-gray-400 hover:text-red-400"
+                  ? "text-red-500 fill-red-500"
+                  : "text-gray-400 hover:text-red-400"
                   }`}
                 onClick={handleHeartClick}
               />
+            </div>
+            <div className="flex items-center gap-2">
+              <h3 className="text-[#747474] text-[14px] font-medium tracking-[0.28px]">
+                {car.major}
+              </h3>
             </div>
             <p className="text-[#747474] text-[14px] font-medium tracking-[0.28px] mb-6">
               Kasutatud autod » {car.brand_name} {car.model_name} » {car.year_value}

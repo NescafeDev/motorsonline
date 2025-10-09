@@ -250,6 +250,7 @@ export default function AddsPageMobile() {
     inspectionValidityPeriod: "",
     seats: "",
     doors: "",
+    major: ""
   });
 
   const [contactFormData, setContactFormData] = useState({
@@ -703,32 +704,34 @@ export default function AddsPageMobile() {
     }
 
     try {
-        // Always save/update user contact data (not car-specific)
-        try {
-          // Check if contact data already exists for this user
-          const existingContact = await axios.get(`/api/contacts/user`, {
+      // Check if contact data already exists for this user
+      try {
+        const existingContact = await axios.get(`/api/contacts/user`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log(existingContact.data)
+        if (existingContact.data) {
+          // Update existing contact
+          await axios.put(`/api/contacts/user`, contactFormData, {
             headers: { Authorization: `Bearer ${token}` },
           });
-
-          if (existingContact.data) {
-            // Update existing contact
-            await axios.put(`/api/contacts/user`, contactFormData, {
-              headers: { Authorization: `Bearer ${token}` },
-            });
-            alert("Contact information updated successfully!");
-            setContactSaved(true);
-          } else {
-            // Create new contact
-            await axios.post("/api/contacts/user", contactFormData, {
-              headers: { Authorization: `Bearer ${token}` },
-            });
-            alert("Contact information saved successfully!");
-            setContactSaved(true);
-          }
-        } catch (error: any) {
-          console.error('Error saving contact:', error);
+          alert("Contact information updated successfully!");
+          console.log(existingContact.data)
+          setContactSaved(true);
+        }
+      } catch (error: any) {
+        if (!error.response?.status || error.response?.status === 404) {
+          // Contact doesn't exist, create new one
+          await axios.post("/api/contacts/user", contactFormData, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          alert("Contact information saved successfully!");
+          setContactSaved(true);
+        } else {
           throw error;
         }
+        console.log(error);
+      }
     } catch (error: any) {
       console.error('Error saving contact:', error);
       alert("Failed to save contact information");
@@ -1181,6 +1184,12 @@ export default function AddsPageMobile() {
                 placeholder="näide: Long 4Matic"
                 value={formData.modelDetail}
                 onChange={(value) => handleInputChange("modelDetail", value)}
+              />
+              <FormField
+                label="Oluline varistus"
+                placeholder=""
+                value={formData.major}
+                onChange={(value) => handleInputChange("major", value)}
               />
               <FormField
                 label="Läbisõit"
@@ -1976,6 +1985,7 @@ export default function AddsPageMobile() {
                           inspectionValidityPeriod: "",
                           seats: "",
                           doors: "",
+                          major: "",
                         });
                         setContactFormData({
                           phone: "",
