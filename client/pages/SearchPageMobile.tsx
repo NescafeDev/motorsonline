@@ -420,11 +420,10 @@ export default function SearchPageMobile() {
 
       <main className="pb-20">
         {/* Header Section */}
-        <div className="bg-white border-b border-gray-200 px-5 py-4">
-        </div>
+        
 
         {/* Search Bar */}
-        <section className="">
+        <section className="px-2">
           <div className="flex items-center gap-2 mb-2 mt-5">
             <div className="bg-white p-3 rounded-md shadow-sm cursor-pointer z-20 w-full text-center" data-filter-button onClick={() => setFilterOpen((v) => !v)}>
               <span className="text-black font-['Poppins',Helvetica] font-medium text-[16px] tracking-[1.2px]">Filtrid</span>
