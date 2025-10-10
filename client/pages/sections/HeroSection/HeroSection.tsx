@@ -28,7 +28,7 @@ export const HeroSection = (): JSX.Element => {
           <img
             className="w-[100%] h-[100%]"
             alt="Car hero image"
-            src="/img/sven-d-a4S6KUuLeoM-unsplash.png"
+            src="/img/photo_2025-10-10_19-35-59.jpg"
           />
         </div>
       </div>

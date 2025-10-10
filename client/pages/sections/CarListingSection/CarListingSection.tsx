@@ -455,7 +455,7 @@ export const CarListingSection = ({
   return (
     <div className={isMobile ? "w-full max-w-md" : "w-[300px]"} onClick={(e) => e.stopPropagation()}>
       <Card className="rounded-[10px] h-full flex flex-col w-full">
-        <CardContent className="p-5 space-y-4 overflow-y-auto flex-1">
+        <CardContent className="p-5 space-y-4 flex-1">
           <div className="flex items-center justify-between">
             <h2 className="font-medium text-xl font-['Poppins',Helvetica]">
               Filtrid
@@ -781,8 +781,6 @@ export const CarListingSection = ({
             </AccordionItem>
           </Accordion>
 
-
-
           <Separator className="my-2" />
 
           {/* Fuel Type Section */}
@@ -815,42 +813,6 @@ export const CarListingSection = ({
           </Accordion>
 
           <Separator className="my-2" />
-          {/* Technical Specifications */}
-          {/* {rangeInputGroups.slice(2, 5).map((group) => (
-            <div key={group.id} className="space-y-2">
-              <label className="block font-['Poppins',Helvetica] font-normal text-[#747474] text-base">
-                {group.label}
-              </label>
-              <div className="flex items-center space-x-2">
-                <Input
-                  className="w-[109px] h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]"
-                  placeholder="alates"
-                  value={filters[group.minKey as keyof CarFilters]?.toString() || ''}
-                  onChange={(e) => updateRangeFilter(
-                    group.minKey as keyof CarFilters,
-                    group.maxKey as keyof CarFilters,
-                    e.target.value,
-                    filters[group.maxKey as keyof CarFilters]?.toString() || ''
-                  )}
-                />
-                <span className="font-['Poppins',Helvetica] font-normal text-base">
-                  -
-                </span>
-                <Input
-                  className="w-[109px] h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]"
-                  placeholder="kuni"
-                  value={filters[group.maxKey as keyof CarFilters]?.toString() || ''}
-                  onChange={(e) => updateRangeFilter(
-                    group.minKey as keyof CarFilters,
-                    group.maxKey as keyof CarFilters,
-                    filters[group.minKey as keyof CarFilters]?.toString() || '',
-                    e.target.value
-                  )}
-                />
-              </div>
-            </div>
-          ))} */}
-
 
           {/* Transmission Type Section */}
           <Accordion type="single" collapsible>
@@ -1141,26 +1103,8 @@ export const CarListingSection = ({
           <Separator className="my-2" />
 
           {/* Apply Filters Button */}
-          <div className="space-y-2 sticky">
+          <div className="space-y-2 sticky bottom-0 bg-white">
             <Button
-              // onClick={() => {
-              // //   if (navigateToSearch) {
-              // //     // Navigate to search page with filters as URL parameters
-              // //     const params = new URLSearchParams();
-              // //     Object.entries(filters).forEach(([key, value]) => {
-              // //       if (value !== undefined && value !== null && value !== '') {
-              // //         if (Array.isArray(value)) {
-              // //           value.forEach(v => params.append(`${key}[]`, String(v)));
-              // //         } else {
-              // //           params.append(key, String(value));
-              // //         }
-              // //       }
-              // //     });
-              //     navigate(`/search?${params.toString()}`);
-              // //   } else {
-              // //     onApplyFilters();
-              // //   }
-              // }}
               onClick={(e) => {
                 e.stopPropagation();
                 navigate("/search");

@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { Search, SearchIcon } from "lucide-react";
 import Header from "@/components/mobile/Header";
 import { CarCard } from "@/components/mobile/CarCard";
 import { BlogCard } from "@/components/mobile/BlogCard";
@@ -433,20 +433,8 @@ export default function HomePageMobile() {
       <main className="bg-[#F6F7F9]">
         {/* Hero Section */}
         <section className="bg-motors-light px-2 py-10 lg:py-16">
-          <div className="text-center mb-12 max-w-4xl mx-auto px-[20px]">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-6 leading-normal px-4">
-              MotorsOnline – Leia oma järgmine auto siit!
-            </h1>
-            <p className="font-normal text-[30px] mb-6 tracking-[-0.12px] italic">Drive your dream!</p>
-            <p className="text-motors-dark leading-[150%] tracking-[-0.48px] mb-8 max-w-md mx-auto px-4">
-            Motorsonline on sõidukite müügi- ja ostukeskkond, kus põhirõhk on lihtsusel ja selgusel. Motorsonlines on sõiduki müümine või ostmine mugav, sest kogu tähelepanu on suunatud ainult vajalikule. See on koht, kus tehingud saavad toimuda kiirelt ja arusaadavalt
-            </p>
-            <button 
-              onClick={() => navigate("/register")}
-              className="px-[30px] py-[15px] bg-[#06d6a0] rounded-[10px] text-white"
-            >
-            Registreeru
-            </button>
+          <div className="text-center mb-1 max-w-4xl mx-auto px-[20px]">
+            <p className="font-semibold text-[30px] tracking-[-0.12px]">Drive your dream!</p>
           </div>
         </section>
 
@@ -464,9 +452,8 @@ export default function HomePageMobile() {
         {/* Call to Action Section */}
         <section className="bg-[#F6F7F9] py-5 px-5">
           <div className="bg-white px-3 py-6 rounded-lg max-w-md">
-            <p className="text-motors-dark leading-[150%] tracking-[-0.48px] mb-6">
-              Kuulutuste avaldamine on tasuta. Kasutage võimalust, et leida oma
-              sõidukile uus omanik!
+            <p className="text-motors-dark leading-[150%] tracking-[-0.48px] mb-6 text-center">
+              Müü & osta tasuta, nüüd ja alati.
             </p>
             <button className="w-full border text-motors-green py-4 px-6 rounded-[10px] font-normal text-base leading-[150%] border-[#06d6a0] text-[#06d6a0]">
               Lisa kuulutus tasuta
@@ -509,8 +496,9 @@ export default function HomePageMobile() {
 
         <section className="px-5 relative z-40">
           <div className="flex items-center gap-2">
-            <div className="bg-white p-3 rounded-md shadow-sm cursor-pointer z-20 w-full text-center" data-filter-button onClick={() => setFilterOpen((v) => !v)}>
-              <span className="text-black font-['Poppins',Helvetica] font-medium text-[16px] tracking-[1.2px]">Filtrid</span>
+            <div className="bg-white p-3 rounded-md shadow-sm cursor-pointer z-20 w-full text-center flex items-center justify-center" data-filter-button onClick={() => setFilterOpen((v) => !v)}>
+              <SearchIcon className="w-4 h-4 mr-1 text-black" />
+              <span className="text-black font-['Poppins',Helvetica] font-medium text-[16px] tracking-[0.2px]">Filtrid</span>
             </div>
           </div>
           {filterOpen && (
