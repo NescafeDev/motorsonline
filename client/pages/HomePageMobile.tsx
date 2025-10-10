@@ -196,7 +196,7 @@ async function fetchFilteredCars(filters: CarFilters): Promise<Car[]> {
 
 async function fetchAllApprovedCars(): Promise<Car[]> {
   try {
-    const response = await apiClient.get('/api/cars/public/approved');
+    const response = await apiClient.get(`/api/cars/public/filtered`);
     return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
     console.error('Error fetching all cars:', error);
