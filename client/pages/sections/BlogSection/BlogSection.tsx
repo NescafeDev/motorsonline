@@ -59,7 +59,7 @@ export const BlogSection = (): JSX.Element => {
             >
               <div className="relative h-[189px]">
                 <img
-                  onClick={() => navigate('/blog')}
+                  onClick={() => navigate('/blog/1')}
                   className="w-full h-full object-cover cursor-pointer"
                   alt="Blog post thumbnail"
                   src={post.image}
@@ -76,11 +76,11 @@ export const BlogSection = (): JSX.Element => {
                   <p className="font-['Poppins',Helvetica] font-normal text-black text-sm leading-normal">
                     {post.description}
                   </p>
-                  <div className="pt-6 flex items-center cursor-pointer" onClick={() => navigate('/blog')}>
-                    <span className="font-['Poppins',Helvetica] font-medium text-[#06d6a0] text-sm leading-[21px]">
+                  <div className="pt-6 flex items-center cursor-pointer" onClick={() => navigate('/blog/1')}>
+                    <button className="font-['Poppins',Helvetica] font-medium text-[#06d6a0] text-sm leading-[21px]">
                       Loe postitust
-                    </span>
-                    <ArrowRightIcon className="w-6 h-6 ml-3 text-[#06d6a0]" />
+                    </button>
+                    <ArrowRightIcon className="w-6 h-6 ml-3 text-[#06d6a0]" onClick={() => navigate('/blog/1')}/>
                   </div>
                 </div>
               </CardContent>

@@ -9,7 +9,63 @@ import { useEffect, useState } from "react";
 export default function BlogPostPageMobile() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const categories = ["Vaata kõiki", "Kategooria", "Kategooria", "Kategooria"];
   const [blog, setBlog] = useState<any>(null);
+
+  const blogPosts = [
+    {
+      image:
+        "https://cdn.builder.io/api/v1/image/assets/TEMP/affbcd99d59bab2d47bfc87453dd4cc6d4f56b3c?width=780",
+      category: "Kategooria",
+      title: "Lorem Ipsum",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
+    },
+    {
+      image:
+        "/img/photo_2025-10-11_00-06-02.jpg",
+      category: "Kategooria",
+      title: "Lorem Ipsum",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
+    }
+  ];
+
+  const latestPosts = [
+    {
+      image:
+        "https://cdn.builder.io/api/v1/image/assets/TEMP/13571f7cf56492a68d841712fe14488da6cd8f64?width=780",
+      category: "Kategooria",
+      title: "Lorem Ipsum",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
+    },
+    {
+      image:
+        "https://cdn.builder.io/api/v1/image/assets/TEMP/0b141dad3a9c503c16e8fc83435b95a888e062f2?width=780",
+      category: "Kategooria",
+      title: "Lorem Ipsum",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
+    },
+    {
+      image:
+        "https://cdn.builder.io/api/v1/image/assets/TEMP/77e05888f12ec156877dc4372bc19d14b8203763?width=780",
+      category: "Kategooria",
+      title: "Lorem Ipsum",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
+    },
+    {
+      image:
+        "https://cdn.builder.io/api/v1/image/assets/TEMP/34fb12acf718f6417f23e5cb7f52aacd86e78213?width=780",
+      category: "Kategooria",
+      title: "Lorem Ipsum",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
+    },
+  ];
+
   useEffect(() => {
     if (!id) return;
     fetch(`/api/blogs/${id}`)
@@ -23,98 +79,43 @@ export default function BlogPostPageMobile() {
       <Header />
 
       {/* Breadcrumb */}
-      <div
-        className="flex items-center gap-2 px-5 py-2"
-        onClick={() => navigate("/blog")}
-      >
-        <ChevronLeft size={16} className="text-black" />
-        <span className="text-black text-base font-normal">
-          Kõik postitused
-        </span>
-      </div>
 
       {/* Category Tag */}
-      <div className="px-5 py-4">
-        <div className="inline-flex items-center gap-4 mb-4">
-          <div className="flex items-center px-2 py-1 bg-brand-light rounded-lg">
-            <span className="text-black text-base font-medium">{blog.category}</span>
-          </div>
-        </div>
-      </div>
-
+      
       {/* Main Article */}
-      <main className="px-5">
-        {/* Article Title */}
-        <h1 className="text-black text-[28px] font-semibold leading-[130%] mb-6 max-w-[390px]">
-          {blog.title}
-        </h1>
+      <main className="px-5 py-5 max-w-md mx-auto lg:max-w-4xl">
+        {/* Categories Section */}
+        <section className="mb-12 px-3">
+          <h2 className="text-black font-normal text-lg leading-7 mb-6">
+            Blogi kategooriad
+          </h2>
+          <CategoryTabs categories={categories} />
+        </section>
 
-        {/* Hero Image */}
-        <div className="mb-6">
-          <img
-            src={blog.title_image}
-            alt="Blog post hero image"
-            className="w-full h-[468px] object-cover rounded-lg"
-          />
-        </div>
-
-        {/* Article Meta */}
-        <div className="flex gap-20 mb-8">
-          <div className="flex flex-col gap-2">
-            <span className="text-black text-base font-normal">Kirjutanud</span>
-            <span className="text-black text-base font-medium">
-              {blog.author}
-            </span>
+        {/* Blog Posts Grid */}
+        <section className="mb-20 px-3">
+          <div className="grid gap-8 lg:grid-cols-2 xl:grid-cols-3">
+            {blogPosts.map((post, index) => (
+              <BlogCard key={index} {...post} />
+            ))}
           </div>
-          <div className="flex flex-col gap-2">
-            <span className="text-black text-base font-normal">Avaldatud</span>
-            <span className="text-black text-base font-medium">
-              {new Date(blog.published).toLocaleDateString()}
-            </span>
-          </div>
-        </div>
-
-        {/* Article Content */}
-        <article className="space-y-8 pb-16">
-          {/* Introduction Section */}
-          <section>
-            <h2 className="text-black text-[26px] font-semibold leading-[150%] mb-4">
-              Sissejuhatus
-            </h2>
-            <div className="text-black text-base font-normal leading-[150%] mb-4" dangerouslySetInnerHTML={{ __html: blog.introduction }} />
-
-          </section>
-
-          {/* Article Image */}
-          <figure className="mb-8">
-            <img
-              src={blog.intro_image}
-              alt="Article content image"
-              className="w-full h-[372px] object-cover rounded-lg"
-            />
-            <figcaption className="flex items-start gap-2 mt-3">
-              <div className="w-0.5 h-5 bg-black"></div>
-              <span className="text-black text-sm font-normal leading-[150%]">
-                Pildiallkiri tuleb siia
-              </span>
-            </figcaption>
-          </figure>
-
-          {blog.intro_detail && (
-              <div className="text-black text-base font-normal leading-[150%] mb-8" dangerouslySetInnerHTML={{ __html: blog.intro_detail }} />
-            )}
-          {/* Summary Section */}
-          <section>
-            <h2 className="text-black text-[26px] font-semibold leading-[150%] mb-4 pt-6">
-              Kokkuvõte
-            </h2>
-            <div className="space-y-4">
-              <div className="text-black text-base font-normal leading-[150%]" dangerouslySetInnerHTML={{ __html: blog.summary }} />
-            </div>
-          </section>
-        </article>
+        </section>
       </main>
 
+      {/* Newsletter Signup */}
+      <NewsletterSignup />
+
+      {/* Latest Posts Section */}
+      <section className="px-5 py-12 max-w-md mx-auto lg:max-w-4xl">
+        <h2 className="text-black font-semibold text-2xl leading-normal mb-8 px-3">
+          Viimased postitused
+        </h2>
+        <div className="grid gap-8 lg:grid-cols-2 xl:grid-cols-3 px-3">
+          {latestPosts.map((post, index) => (
+            <BlogCard key={index} {...post} />
+          ))}
+        </div>
+      </section>
       {/* Footer */}
       <Footer />
     </div>
