@@ -141,34 +141,34 @@ const apiClient = axios.create({
 
 const vehicleDetails = (car: Car) => [
   {
-      icon: "/img/car/Car.png",
-      label: "Läbisõit:",
-      value: `${car.mileage.toLocaleString()} km`,
+    icon: "/img/car/Car.png",
+    label: "Läbisõit:",
+    value: `${car.mileage.toLocaleString()} km`,
   },
   {
-      icon: "/img/car/Speedometer.png",
-      label: "Võimsus:",
-      value: car.power,
+    icon: "/img/car/Speedometer.png",
+    label: "Võimsus:",
+    value: car.power,
   },
   {
-      icon: "/img/car/gear-box-switch.png",
-      label: "Käigukast:",
-      value: car.transmission,
+    icon: "/img/car/gear-box-switch.png",
+    label: "Käigukast:",
+    value: car.transmission,
   },
   {
-      icon: "/img/car/calendar.png",
-      label: "Esmaregistreerimine:",
-      value: car.year_value?.toString() + " - " + (car.month.length === 1 ? `0${car.month}` : car.month) || "N/A",
+    icon: "/img/car/calendar.png",
+    label: "Esmaregistreerimine:",
+    value: car.year_value?.toString() + " - " + (car.month.length === 1 ? `0${car.month}` : car.month) || "N/A",
   },
   {
-      icon: "/img/car/gas_station.png",
-      label: "Kütus",
-      value: car.fuelType,
+    icon: "/img/car/gas_station.png",
+    label: "Kütus",
+    value: car.fuelType,
   },
   {
-      icon: "/img/car/user_profile.png",
-      label: "Omanike arv:",
-      value: car.ownerCount,
+    icon: "/img/car/user_profile.png",
+    label: "Omanike arv:",
+    value: car.ownerCount,
   },
 ];
 
@@ -256,15 +256,15 @@ export default function HomePageMobile() {
       if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
         // Check if the click is on a select dropdown or combobox
         const target = e.target as Element;
-        const isSelectContent = target.closest('[data-radix-select-content]') || 
-                               target.closest('[data-radix-combobox-content]') ||
-                               target.closest('[data-radix-accordion-content]') ||
-                               target.closest('[role="combobox"]') ||
-                               target.closest('[role="listbox"]');
-        
+        const isSelectContent = target.closest('[data-radix-select-content]') ||
+          target.closest('[data-radix-combobox-content]') ||
+          target.closest('[data-radix-accordion-content]') ||
+          target.closest('[role="combobox"]') ||
+          target.closest('[role="listbox"]');
+
         // Check if the click is on the filter button itself
         const isFilterButton = target.closest('[data-filter-button]');
-        
+
         if (!isSelectContent && !isFilterButton) {
           setFilterOpen(false);
         }
@@ -279,7 +279,7 @@ export default function HomePageMobile() {
     const handleCloseFilters = () => {
       setFilterOpen(false);
     };
-    
+
     window.addEventListener('closeFilters', handleCloseFilters);
     return () => window.removeEventListener('closeFilters', handleCloseFilters);
   }, []);
@@ -432,9 +432,13 @@ export default function HomePageMobile() {
       {/* Main Content */}
       <main className="bg-[#F6F7F9]">
         {/* Hero Section */}
-        <section className="bg-motors-light px-2 py-10 lg:py-16">
-          <div className="text-center mb-1 max-w-4xl mx-auto px-[20px]">
-            <p className="font-semibold text-[30px] tracking-[-0.12px]">Drive your dream!</p>
+        <section className="bg-motors-light">
+          <div className="h-auto flex justify-center p-5">
+            <img
+              className="h-[100%] mt-5 rounded-xl object-contain"
+              alt="Car hero image"
+              src="/img/photo_2025-10-10_21-42-16.png"
+            />
           </div>
         </section>
 
@@ -506,13 +510,13 @@ export default function HomePageMobile() {
               ref={filterRef}
               className="left-0 mt-2 w-full bg-white rounded-[10px] shadow-lg z-30 overscroll-none"
             >
-            <CarListingSection
-              filters={filters}
-              onFiltersChange={handleFiltersChange}
-              onApplyFilters={handleApplyFilters}
-              navigateToSearch={true}
-              isMobile={true}
-            />
+              <CarListingSection
+                filters={filters}
+                onFiltersChange={handleFiltersChange}
+                onApplyFilters={handleApplyFilters}
+                navigateToSearch={true}
+                isMobile={true}
+              />
             </div>
           )}
         </section>
