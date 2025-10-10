@@ -10,7 +10,7 @@ export const HeroSection = (): JSX.Element => {
           <img
             className="h-[100%] object-cover mt-10 rounded-xl "
             alt="Car hero image"
-            src="/img/photo_2025-10-10_22-14-36.jpg"
+            src="/img/photo_2025-10-10_22-33-26.jpg"
           />
       </div>
     </section>
