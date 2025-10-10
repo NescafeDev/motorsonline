@@ -8,7 +8,7 @@ export const HeroSection = (): JSX.Element => {
     <section className="">
         <div className="w-full h-auto flex justify-center">
           <img
-            className="h-[100%] object-cover mt-10 rounded-xl"
+            className="h-[100%] object-cover mt-10 rounded-xl "
             alt="Car hero image"
             src="/img/photo_2025-10-10_21-42-06.png"
           />
