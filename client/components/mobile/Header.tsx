@@ -220,7 +220,7 @@ export default function Header() {
                     setMenuOpen(false);
                     navigate("/");
                   }}
-                  className="w-full border border-brand-primary text-brand-primary rounded-lg py-3 font-medium bg-white whitespace-nowrap truncate"
+                  className="w-full border border-brand-primary text-brand-primary rounded-lg py-3 mb-12 font-medium bg-white whitespace-nowrap truncate"
                 >
                   Logi välja
                 </button>
@@ -241,7 +241,7 @@ export default function Header() {
                       navigate("/register");
                       setMenuOpen(false);
                     }}
-                    className="w-full bg-brand-primary text-white rounded-lg py-3 font-medium whitespace-nowrap truncate"
+                    className="w-full bg-brand-primary text-white rounded-lg py-3 font-medium whitespace-nowrap truncate mb-12"
                   >
                     Registreeru
                   </button>
