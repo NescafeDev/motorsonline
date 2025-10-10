@@ -682,7 +682,7 @@ export const CarListingSection = ({
           <Accordion type="single" collapsible>
             <AccordionItem value="range-input-groups" className="border-none">
               <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica]">
-                Võimsus
+                Hind & üldandmed
               </AccordionTrigger>
               <AccordionContent>
                 {rangeInputGroups.slice(0, 5).map((group) => (

@@ -437,7 +437,7 @@ export default function HomePageMobile() {
             <img
               className="h-[100%] mt-5 rounded-xl object-contain"
               alt="Car hero image"
-              src="/img/photo_2025-10-10_21-42-16.png"
+              src="/img/photo_2025-10-10_22-13-16.jpg"
             />
           </div>
         </section>
