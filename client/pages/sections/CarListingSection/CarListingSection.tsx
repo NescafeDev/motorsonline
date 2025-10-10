@@ -1103,7 +1103,7 @@ export const CarListingSection = ({
           <Separator className="my-2" />
 
           {/* Apply Filters Button */}
-          <div className="space-y-2 sticky bottom-0 bg-white">
+          <div className={`space-y-2 ${isMobile ? 'sticky bottom-0 bg-white ' : ''}`}>
             <Button
               onClick={(e) => {
                 e.stopPropagation();
