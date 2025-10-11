@@ -11,6 +11,7 @@ import axios from "axios";
 import { useFavorites } from "../hooks/useFavorites";
 import { useAuth } from "../contexts/AuthContext";
 import { Separator } from "@/components/ui/separator";
+import { useI18n } from "@/contexts/I18nContext";
 import { CarCard } from '@/components/CarCard';
 // Car-related types (imported from HomePage)
 export interface Car {
@@ -175,6 +176,7 @@ async function fetchFilteredCars(filters: CarFilters): Promise<Car[]> {
 
 export default function SearchPage() {
     const navigate = useNavigate();
+    const { t } = useI18n();
     const [searchParams] = useSearchParams();
     const { isAuthenticated, user } = useAuth();
     const { isFavorite, toggleFavorite } = useFavorites();
@@ -189,10 +191,10 @@ export default function SearchPage() {
         if (!car) return '';
 
         if (car.vatRefundable === 'no' || car.vatRefundable === 'ei') {
-            return 'KM 0% (käibemaksu ei lisandu)';
+            return t('vatInfo.vat0NoVatAdded');
         }
 
-        return 'Hind sisaldab käibemaksu ' + car.vatRate + '%';
+        return t('vatInfo.priceIncludesVatWithRate') + ' ' + car.vatRate + '%';
     };
 
     const discountPercentage = (car: Car) => {
@@ -348,7 +350,7 @@ export default function SearchPage() {
                                         <SearchIcon className="w-4 h-4 mr-2 text-[#747474]" />
                                         <Input
                                             className="border-none shadow-none focus-visible:ring-0 text-[#747474]"
-                                            placeholder="Otsing"
+                                            placeholder={t('search.placeholder')}
                                             value={searchTerm}
                                             onChange={(e) => handleSearch(e.target.value)}
                                         />
@@ -360,7 +362,7 @@ export default function SearchPage() {
                                     {loading ? (
                                         <div className="text-center py-8">
                                             <span className="text-[#747474] font-['Poppins'] text-[18px]">
-                                                Laetakse...
+                                            {t('common.loading')}
                                             </span>
                                         </div>
                                     ) : filteredCars.length > 0 ? (

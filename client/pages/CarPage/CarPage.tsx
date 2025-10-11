@@ -14,6 +14,7 @@ import { useParams } from "react-router-dom";
 import { useFavorites } from "../../hooks/useFavorites";
 import { useAuth } from "../../contexts/AuthContext";
 import { useViews } from "../../hooks/useViews";
+import { useI18n } from "@/contexts/I18nContext";
 
 interface CarData {
   id: number;
@@ -61,6 +62,7 @@ interface CarData {
 }
 
 export default function CarPage() {
+  const { t } = useI18n();
 
   // Gallery images
   const galleryImages = [
@@ -76,12 +78,12 @@ export default function CarPage() {
 
     // If there's no VAT rate or it's empty/null, show "Hind ei sisalda käibemaksu"
     if (car.vatRefundable === 'no' || car.vatRefundable === 'ei') {
-      return 'KM 0% (käibemaksu ei lisandu)';
+      return t('vatInfo.vat0NoVatAdded');
     }
 
     // If VAT rate is 24, show "Hind sisaldab käibemaksu 24%"
     // if (car.vatRate === '24') {
-    return 'Hind sisaldab käibemaksu ' + car.vatRate + '%';
+    return t('vatInfo.priceIncludesVatWithRate') + ' ' + car.vatRate + '%';
     // }
 
     // For any other VAT rate, show the specific rate
@@ -252,46 +254,46 @@ export default function CarPage() {
   const vehicleDetails = [
     {
       icon: "/img/car/Car.png",
-      label: "Läbisõit:",
+      label: t('carSpecs.mileage') + ':',
       value: `${car.mileage.toLocaleString()} km`,
     },
     {
       icon: "/img/car/Speedometer.png",
-      label: "Võimsus:",
+      label: t('carSpecs.power') + ':',
       value: car.power,
     },
     {
       icon: "/img/car/gear-box-switch.png",
-      label: "Käigukast:",
+      label: t('carSpecs.transmission') + ':',
       value: car.transmission,
     },
     {
       icon: "/img/car/calendar.png",
-      label: "Esmaregistreerimine:",
+      label: t('carSpecs.firstRegistration') + ':',
       value: car.year_value?.toString() + " - " + (car.month.length === 1 ? `0${car.month}` : car.month) || "N/A",
     },
     {
       icon: "/img/car/gas_station.png",
-      label: "Kütus",
+      label: t('carSpecs.fuel'),
       value: car.fuelType,
     },
     {
       icon: "/img/car/user_profile.png",
-      label: "Omanike arv:",
+      label: t('carSpecs.ownerCount') + ':',
       value: car.ownerCount,
     },
   ];
 
   // Technical specifications data
   const technicalSpecs = [
-    { label: "Tehnilised andmed", value: car.technicalData },
-    { label: "Töömaht:", value: car.displacement },
-    { label: "Kategooria:", value: car.category },
-    { label: "Võimsus:", value: car.power },
-    { label: "Sõiduki number:", value: car.plateNumber },
-    { label: "Veoskeem:", value: car.drive_type_ee_name },
-    { label: "Läbisõit:", value: `${car.mileage.toLocaleString()} km` },
-    { label: "Kütuse tüüp:", value: car.fuelType },
+    { label: t('formLabels.technicalSpecs'), value: car.technicalData },
+    { label: t('formLabels.displacement') + ':', value: car.displacement },
+    { label: t('formLabels.categoryDesignation') + ':', value: car.category },
+    { label: t('carSpecs.power') + ':', value: car.power },
+    { label: t('formLabels.vehicleNumber') + ':', value: car.plateNumber },
+    { label: t('formLabels.driveType') + ':', value: car.drive_type_ee_name },
+    { label: t('carSpecs.mileage') + ':', value: `${car.mileage.toLocaleString()} km` },
+    { label: t('formLabels.fuelType') + ':', value: car.fuelType },
   ];
 
   // Equipment features data - parse from equipment string
@@ -331,7 +333,7 @@ export default function CarPage() {
                 <Card className="w-full mt-10 bg-[#f6f7f9] rounded-[10px] border-none">
                   <CardContent className="p-5">
                     <h2 className="font-semibold text-secondary-500 text-xl tracking-[-0.60px] leading-[30px] [font-family:'Poppins',Helvetica] mb-6">
-                      Tehnilised andmed
+                      {t('formLabels.technicalSpecs')}
                     </h2>
 
                     <div className="grid grid-cols-2 gap-4">
@@ -355,7 +357,7 @@ export default function CarPage() {
                         variant="outline"
                         className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2.5"
                       >
-                        Näita rohkem
+                        {t('formLabels.showMore')}
                         <ChevronDownIcon className="w-4 h-4" />
                       </Button>
                     </div>
@@ -367,7 +369,7 @@ export default function CarPage() {
                   <Card className="w-full mt-10 bg-[#f6f7f9] rounded-[10px] border-none">
                     <CardContent className="p-5">
                       <h2 className="font-semibold text-secondary-500 text-xl tracking-[-0.60px] leading-[30px] [font-family:'Poppins',Helvetica] mb-6">
-                        Kõrgema väärtusega lisvarustus
+                        {t('formLabels.additionalFeatures')}
                       </h2>
 
                       <div className="grid grid-cols-2 gap-4">
@@ -391,7 +393,7 @@ export default function CarPage() {
                           variant="outline"
                           className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2.5"
                         >
-                          Näita rohkem
+                          {t('formLabels.showMore')}
                           <ChevronDownIcon className="w-4 h-4" />
                         </Button>
                       </div>
@@ -443,7 +445,7 @@ export default function CarPage() {
                       </div>
 
                       <h2 className="mt-10 font-semibold text-secondary-500 text-[16px] tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica]">
-                        Tehnilised andmed
+                        {t('formLabels.technicalSpecs')}
                       </h2>
 
                       <div className="grid grid-cols-2 gap-y-3 gap-x-1 mt-6">
@@ -511,7 +513,7 @@ export default function CarPage() {
                                 }}
                                 className="bg-[#06d6a0] text-white rounded-[10px] px-[30px] py-[15px]"
                               >
-                                Saada e-mail
+                                {t('formLabels.sendEmail')}
                               </Button>
 
                             </a>

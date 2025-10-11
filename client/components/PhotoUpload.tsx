@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { useI18n } from "@/contexts/I18nContext";
 import { X, Upload, Camera, GripVertical } from "lucide-react";
 
 interface PhotoUploadProps {
@@ -26,6 +27,7 @@ export default function PhotoUpload({
   showMore = false,
   onToggleShowMore
 }: PhotoUploadProps) {
+  const { t } = useI18n();
   const [dragOver, setDragOver] = useState<number | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
@@ -145,7 +147,7 @@ export default function PhotoUpload({
           return (
             <div key={idx} className="flex flex-col items-center">
               <label className="block mb-2 text-center text-sm font-medium text-gray-700">
-                {idx === 0 ? '+Lisa foto (põhipilt)' : `Lisa foto ${idx + 1}`}
+                {idx === 0 ? t('photo.addMain') : `${t('photo.add')} ${idx + 1}`}
               </label>
               
               <div 
@@ -239,7 +241,7 @@ export default function PhotoUpload({
             onClick={onToggleShowMore}
             className="flex items-center gap-2 px-6 py-3 border border-motorsoline-primary text-motorsoline-primary rounded-lg hover:bg-motorsoline-primary hover:text-white transition-colors"
           >
-            <span>{showMore ? 'Näita vähem' : `Näita rohkem (${maxPhotos - initialVisibleCount} veel)`}</span>
+            <span>{showMore ? t('uiActions.showLess') : `${t('uiActions.viewMore')} (${maxPhotos - initialVisibleCount})`}</span>
             <svg
               width="16"
               height="16"

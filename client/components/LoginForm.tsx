@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useAuth } from "@/contexts/AuthContext";
+import { useI18n } from "@/contexts/I18nContext";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ export default function LoginForm() {
   const [error, setError] = useState("");
 
   const { login, googleLogin } = useAuth();
+  const { t } = useI18n();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +36,7 @@ export default function LoginForm() {
       navigate("/");
     } catch (err) {
       console.error(err);
-      setError("Võrgu viga. Palun proovige hiljem uuesti.");
+      setError(t('auth.networkErrorTryLater'));
     } finally {
       setLoading(false);
     }

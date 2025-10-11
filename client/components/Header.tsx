@@ -1,11 +1,19 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { LanguageDropdown } from "@/components/LanguageDropdown";
+import { useI18n } from "@/contexts/I18nContext";
 
 export default function Header() {
   const navigate = useNavigate();
   const [user, setUser] = useState<{ name: string } | null>(null);
   const { logout } = useAuth();
+  const { currentLanguage, t } = useI18n();
+
+  // Use currentLanguage from I18nContext
+  const currentLang = currentLanguage;
+  
+  // Debug logging
 
   useEffect(() => {
     const stored = localStorage.getItem("user");
@@ -25,7 +33,12 @@ export default function Header() {
     // localStorage.removeItem("token");
     logout();
     setUser(null);
-    navigate("/");
+    navigate(`/${currentLang}`);
+  };
+
+  const handleLanguageChange = (language: any) => {
+    // Language change is now handled by the LanguageDropdown component
+    console.log('Language changed to:', language);
   };
 
   return (
@@ -34,7 +47,7 @@ export default function Header() {
         {/* Logo */}
         <div className="flex-shrink-0">
           <svg
-            onClick={() => navigate("/")}
+            onClick={() => navigate(`/${currentLang}`)}
             className="h-7 w-auto" // 28px height, auto width
             viewBox="0 0 251 28"
             fill="none"
@@ -66,23 +79,27 @@ export default function Header() {
           <nav className="hidden xl:flex items-center gap-8 2xl:gap-12">
             <div className="flex items-center gap-6 2xl:gap-8">
               <a
-                onClick={() => navigate("/blog")}
+                onClick={() => {
+                  navigate(`/${currentLang}/blog`);
+                }}
                 className="inline-block text-black text-center font-poppins text-base font-normal leading-none whitespace-nowrap hover:text-brand-primary transition-colors cursor-pointer"
               >
-                Blogi
+                {t('header.blog')}
               </a>
               <a
-                onClick={() => navigate("/user")}
+                onClick={() => {
+                  navigate(`/${currentLang}/user`);
+                }}
                 className="inline-block text-black text-center font-poppins text-base font-normal leading-none whitespace-nowrap hover:text-brand-primary transition-colors cursor-pointer"
               >
-                Minu kuulutused
+                {t('header.myListings')}
               </a>
               {user && (
                 <a
-                  onClick={() => navigate("/adds")}
+                  onClick={() => navigate(`/${currentLang}/adds`)}
                   className="inline-block text-black text-center font-poppins text-base font-normal leading-none whitespace-nowrap hover:text-brand-primary transition-colors cursor-pointer"
                 >
-                  Lisa uus kuulutus
+                  {t('header.addListing')}
                 </a>
               )}
             </div>
@@ -92,16 +109,10 @@ export default function Header() {
           <div className="flex items-center gap-4 lg:gap-6 xl:gap-8">
             {/* Language Selector */}
             <div className="hidden sm:flex items-center gap-4 lg:gap-6">
-              <div className="flex items-center gap-2 lg:gap-3">
-                <button className="flex h-[45px] px-3 lg:px-4 justify-center items-center gap-2 rounded-[10px] border border-brand-primary hover:bg-brand-primary hover:text-white transition-colors group">
-                  <span className="text-brand-primary text-center font-poppins text-sm lg:text-base font-normal leading-none whitespace-nowrap group-hover:text-white">
-                    EE
-                  </span>
-                </button>
-              </div>
-              <span className="text-black text-center font-poppins text-sm lg:text-base font-normal leading-none whitespace-nowrap uppercase">
-                EN
-              </span>
+              <LanguageDropdown 
+                onLanguageChange={handleLanguageChange}
+                className="h-[45px] border-brand-primary"
+              />
             </div>
 
             {/* Auth Buttons/User Info */}
@@ -115,25 +126,25 @@ export default function Header() {
                     onClick={handleLogout}
                     className="flex h-[45px] px-3 lg:px-5 justify-center items-center gap-2 rounded-[10px] border border-brand-primary hover:bg-brand-primary hover:text-white transition-colors"
                   >
-                    Logi välja
+                    {t('header.logout')}
                   </button>
                 </>
               ) : (
                 <>
                   <button
-                    onClick={() => navigate("/login")}
+                    onClick={() => navigate(`/${currentLang}/login`)}
                     className="hidden sm:flex h-[45px] px-3 lg:px-5 justify-center items-center gap-2 rounded-[10px] border border-brand-primary hover:bg-brand-primary hover:text-white transition-colors group"
                   >
                     <span className="text-brand-primary text-center font-poppins text-xs lg:text-sm font-normal leading-none whitespace-nowrap group-hover:text-white">
-                      Logi sisse
+                      {t('header.login')}
                     </span>
                   </button>
                   <button
-                    onClick={() => navigate("/register")}
+                    onClick={() => navigate(`/${currentLang}/register`)}
                     className="flex h-[45px] px-3 lg:px-5 justify-center items-center gap-2 rounded-[10px] bg-brand-primary hover:bg-opacity-90 transition-all text-white"
                   >
                     <span className="text-white text-center font-poppins text-xs lg:text-sm font-normal leading-none whitespace-nowrap">
-                      Registreeru
+                      {t('header.register')}
                     </span>
                   </button>
                 </>

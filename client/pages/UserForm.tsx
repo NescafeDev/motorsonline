@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { CarCard } from '@/components/CarCard';
+import { useI18n } from '@/contexts/I18nContext';
 
 interface Car {
   id: number;
@@ -22,6 +23,7 @@ interface Car {
 
 export default function UserForm() {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [userCars, setUserCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -29,17 +31,17 @@ export default function UserForm() {
   const getVatDisplayText = (car: Car) => {
     if (!car) return '';
     console.log('Vat Refundable:', car.vatRefundable);
-    
+
     // If there's no VAT rate or it's empty/null, show "Hind ei sisalda käibemaksu"
     if (car.vatRefundable === "no" || car.vatRefundable === 'ei') {
-      return 'KM 0% (käibemaksu ei lisandu)';
+      return t('vatInfo.vat0NoVatAdded');
     }
-    
+
     // If VAT rate is 24, show "Hind sisaldab käibemaksu 24%"
     // if (car.vatRate === '24') {
-      return 'Hind sisaldab käibemaksu ' + car.vatRate + '%';
+    return t('vatInfo.priceIncludesVatWithRate') + ' ' + car.vatRate + '%';
     // }
-    
+
     // For any other VAT rate, show the specific rate
     // return `Hind sisaldab käibemaksu ${car.vatRate}%`;
   };
@@ -77,20 +79,20 @@ export default function UserForm() {
                 fetch(`/api/favorites/count/${car.id}`),
                 fetch(`/api/views/count/${car.id}`)
               ]);
-              
+
               let favoriteCount = 0;
               let viewCount = car.views || 0;
-              
+
               if (favoriteResponse.ok) {
                 const favoriteData = await favoriteResponse.json();
                 favoriteCount = favoriteData.favoriteCount;
               }
-              
+
               if (viewResponse.ok) {
                 const viewData = await viewResponse.json();
                 viewCount = viewData.viewCount;
               }
-              
+
               return { ...car, favoriteCount, views: viewCount };
             } catch (error) {
               console.error(`Error fetching counts for car ${car.id}:`, error);
@@ -173,7 +175,7 @@ export default function UserForm() {
           {loading ? (
             <div className="text-center py-8">
               <span className="text-[#747474] font-['Poppins'] text-[18px]">
-                Laetakse...
+                {t('common.loading')}
               </span>
             </div>
           ) : userCars.length > 0 ? (

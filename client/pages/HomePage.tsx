@@ -16,6 +16,7 @@ import axios from "axios";
 import { useFavorites } from "../hooks/useFavorites";
 import { useAuth } from "../contexts/AuthContext";
 import { Separator } from "@/components/ui/separator";
+import { useI18n } from "@/contexts/I18nContext";
 
 // Car-related types
 export interface Car {
@@ -134,30 +135,30 @@ export interface CarFilters {
 }
 
 // Vehicle details data function
-const getVehicleDetails = (car: Car) => [
+const getVehicleDetails = (car: Car, t: any) => [
   {
     icon: "/img/car/Car.png",
-    label: "Läbisõit:",
+    label: `${t('carSpecs.mileage')}:`,
     value: `${car.mileage.toLocaleString()} km`,
   },
   {
     icon: "/img/car/Speedometer.png",
-    label: "Võimsus:",
+    label: `${t('carSpecs.power')}:`,
     value: car.power,
   },
   {
     icon: "/img/car/gear-box-switch.png",
-    label: "Käigukast:",
+    label: `${t('carSpecs.transmission')}:`,
     value: car.transmission,
   },
   {
     icon: "/img/car/calendar.png",
-    label: "Esmaregistreerimine:",
+    label: `${t('carSpecs.firstRegistration')}:`,
     value: car.year_value?.toString() + " - " + (car.month.length === 1 ? `0${car.month}` : car.month) || "N/A",
   },
   {
     icon: "/img/car/gas_station.png",
-    label: "Kütus",
+    label: t('carSpecs.fuel'),
     value: car.fuelType,
   },
   {
@@ -166,7 +167,6 @@ const getVehicleDetails = (car: Car) => [
     value: car.ownerCount,
   },
 ];
-
 // API functions
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
@@ -224,6 +224,7 @@ export default function HomePage() {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
   const { isFavorite, toggleFavorite } = useFavorites();
+  const { t } = useI18n();
   const [cars, setCars] = useState<Car[]>([]);
   const [filteredCars, setFilteredCars] = useState<Car[]>([]);
   const [filters, setFilters] = useState<CarFilters>({});
@@ -235,12 +236,12 @@ export default function HomePage() {
 
     // If there's no VAT rate or it's empty/null, show "Hind ei sisalda käibemaksu"
     if (car.vatRefundable === 'no' || car.vatRefundable === 'ei') {
-      return 'KM 0% (käibemaksu ei lisandu)';
+      return t('vatInfo.vat0NoVatAdded');
     }
 
     // If VAT rate is 24, show "Hind sisaldab käibemaksu 24%"
     // if (car.vatRate === '24') {
-    return 'Hind sisaldab käibemaksu ' + car.vatRate + '%';
+    return t('vatInfo.priceIncludesVat') + ' ' + car.vatRate + '%';
     // }
 
     // For any other VAT rate, show the specific rate
@@ -251,17 +252,41 @@ export default function HomePage() {
   const discountPercentage = (car: Car) => {
     return Math.round(((car.price - car.discountPrice) / car.price) * 100);
   };
-  // Load initial cars
-  useEffect(() => {
-    console.log('Initial load cars effect triggered');
-    loadCars();
+
+  const loadCars = useCallback(async () => {
+    console.log('Loading cars...');
+    try {
+      setLoading(true);
+      const allCars = await fetchAllApprovedCars();
+      
+      // Check for duplicates and log them
+      const uniqueCars = allCars.filter((car, index, self) => 
+        index === self.findIndex(c => c.id === car.id)
+      );
+      
+      if (uniqueCars.length !== allCars.length) {
+        console.warn(`Found ${allCars.length - uniqueCars.length} duplicate cars in API response`);
+      }
+      
+      console.log(`Loaded ${uniqueCars.length} unique cars`);
+      setCars(uniqueCars);
+      setFilteredCars(uniqueCars);
+      setFiltersApplied(false);
+    } catch (error) {
+      console.error('Failed to load cars:', error);
+      // Set empty arrays to prevent undefined errors
+      setCars([]);
+      setFilteredCars([]);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  // Reload cars when authentication state changes (login/logout)
+  // Load initial cars and reload when authentication state changes
   useEffect(() => {
-    console.log('Auth state changed, isAuthenticated:', isAuthenticated, 'user:', user);
+    console.log('Loading cars - isAuthenticated:', isAuthenticated, 'user:', user);
     loadCars();
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, user, loadCars]);
 
   // Update filtered cars when cars change or search term changes
   useEffect(() => {
@@ -282,25 +307,6 @@ export default function HomePage() {
       setFilteredCars(filtered);
     }
   }, [cars, searchTerm, filtersApplied]);
-
-  const loadCars = useCallback(async () => {
-    console.log('Loading car');
-    try {
-      setLoading(true);
-      const allCars = await fetchAllApprovedCars();
-
-      setCars(allCars);
-      setFilteredCars(allCars);
-      setFiltersApplied(false);
-    } catch (error) {
-      console.error('Failed to load cars:', error);
-      // Set empty arrays to prevent undefined errors
-      setCars([]);
-      setFilteredCars([]);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
 
   const loadFilteredCars = async () => {
     try {
@@ -408,7 +414,7 @@ export default function HomePage() {
                     <SearchIcon className="w-4 h-4 mr-2 text-[#747474]" />
                     <Input
                       className="border-none shadow-none focus-visible:ring-0 text-[#747474]"
-                      placeholder="Otsing"
+                      placeholder={t('common.search')}
                       value={searchTerm}
                       onChange={(e) => handleSearch(e.target.value)}
                     />
@@ -418,7 +424,7 @@ export default function HomePage() {
                 {/* Loading State */}
                 {loading && (
                   <div className="flex justify-center items-center h-64">
-                    <div className="text-lg text-gray-500">Laetakse...</div>
+                    <div className="text-lg text-gray-500">{t('common.loading')}</div>
                   </div>
                 )}
 
@@ -565,7 +571,7 @@ export default function HomePage() {
                               </div> */}
                               
                               <div className="grid grid-cols-2 gap-y-2 mb-8">
-                                {getVehicleDetails(car).map((detail, index) => (
+                                {getVehicleDetails(car, t).map((detail, index) => (
                                   <div key={index} className="flex items-center w-full h-[50px]">
                                     <div className="w-[35px] h-[35px] relative flex-shrink-0">
                                       <img
@@ -630,13 +636,13 @@ export default function HomePage() {
                         <div className="text-center">
                           <div className="text-lg text-gray-500 mb-2">
                             {cars.length === 0
-                              ? "Andmebaasis pole autosid"
-                              : "Autosid ei leitud valitud filtritega"
+                              ? t('uiActions.noCarsInDatabase')
+                              : t('uiActions.noCarsFoundWithFilters')
                             }
                           </div>
                           {cars.length === 0 && (
                             <div className="text-sm text-gray-400">
-                              Kontrollige, kas andmebaas on seadistatud ja migratsioon on käivitatud
+                              {t('uiActions.checkDatabaseSetup')}
                             </div>
                           )}
                         </div>
@@ -648,7 +654,7 @@ export default function HomePage() {
                         variant="outline"
                         className="h-11 px-5 py-0 border-[#06d6a0] text-[#06d6a0] rounded-[10px]"
                       >
-                        Näita rohkem autosid
+                        {t('uiActions.showMoreCars')}
                       </Button>
                     </div>
                   </>

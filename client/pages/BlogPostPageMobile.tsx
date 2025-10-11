@@ -6,101 +6,151 @@ import Header from "@/components/mobile/Header";
 import { ChevronLeft, Menu } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useI18n } from "@/contexts/I18nContext";
+
+interface Blog {
+  id: number;
+  category: string;
+  title: string;
+  title_image: string;
+  intro_image: string;
+  introduction: string;
+  intro_detail: string;
+  summary: string;
+}
+
 export default function BlogPostPageMobile() {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const { id } = useParams();
-  const categories = ["Vaata kõiki", "Kategooria", "Kategooria", "Kategooria"];
-  const [blog, setBlog] = useState<any>(null);
-
-  const blogPosts = [
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/affbcd99d59bab2d47bfc87453dd4cc6d4f56b3c?width=780",
-      category: "Kategooria",
-      title: "Lorem Ipsum",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
-    },
-    {
-      image:
-        "/img/photo_2025-10-11_00-06-02.jpg",
-      category: "Kategooria",
-      title: "Lorem Ipsum",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
-    }
-  ];
-
-  const latestPosts = [
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/13571f7cf56492a68d841712fe14488da6cd8f64?width=780",
-      category: "Kategooria",
-      title: "Lorem Ipsum",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
-    },
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/0b141dad3a9c503c16e8fc83435b95a888e062f2?width=780",
-      category: "Kategooria",
-      title: "Lorem Ipsum",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
-    },
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/77e05888f12ec156877dc4372bc19d14b8203763?width=780",
-      category: "Kategooria",
-      title: "Lorem Ipsum",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
-    },
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/34fb12acf718f6417f23e5cb7f52aacd86e78213?width=780",
-      category: "Kategooria",
-      title: "Lorem Ipsum",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
-    },
-  ];
+  const [blog, setBlog] = useState<Blog | null>(null);
+  const [allBlogs, setAllBlogs] = useState<Blog[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!id) return;
-    fetch(`/api/blogs/${id}`)
-      .then(res => res.json())
-      .then(setBlog);
+    const fetchData = async () => {
+      try {
+        // Fetch specific blog
+        if (id) {
+          const blogResponse = await fetch(`/api/blogs/${id}`);
+          const blogData = await blogResponse.json();
+          setBlog(blogData);
+        }
+        
+        // Fetch all blogs for recent posts
+        const blogsResponse = await fetch('/api/blogs');
+        const blogsData = await blogsResponse.json();
+        setAllBlogs(blogsData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, [id]);
-  if (!blog) return <div>Laadimine...</div>;
+
+  // Get unique categories for tabs
+  const categories = [t('uiActions.viewAll'), ...Array.from(new Set(allBlogs.map(blog => blog.category)))];
+
+  // Convert blogs to BlogCard format for recent posts
+  const recentPosts = allBlogs
+    .filter(b => b.id !== blog?.id) // Exclude current blog
+    .slice(0, 4) // Show only 4 recent posts
+    .map(blog => ({
+      id: blog.id,
+      image: blog.title_image || 'https://cdn.builder.io/api/v1/image/assets/TEMP/affbcd99d59bab2d47bfc87453dd4cc6d4f56b3c?width=780',
+      category: blog.category,
+      title: blog.title,
+      description: blog.introduction?.replace(/<[^>]*>/g, '').substring(0, 100) + '...' || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    }));
+
   return (
     <div className="min-h-screen bg-white font-poppins">
       {/* Header */}
       <Header />
 
-      {/* Breadcrumb */}
-
-      {/* Category Tag */}
-      
       {/* Main Article */}
-      <main className="px-5 py-5 max-w-md mx-auto lg:max-w-4xl">
+      {loading ? (
+        <div className="flex justify-center items-center py-12">
+          <p className="text-black text-4xl">{t('common.loading')}</p>
+        </div>
+      ) : (
+        <main className="px-5 py-5 max-w-md mx-auto lg:max-w-4xl">
         {/* Categories Section */}
-        <section className="mb-12 px-3">
+        <section className="mb-8 px-3">
           <h2 className="text-black font-normal text-lg leading-7 mb-6">
             Blogi kategooriad
           </h2>
-          <CategoryTabs categories={categories} />
-        </section>
-
-        {/* Blog Posts Grid */}
-        <section className="mb-20 px-3">
-          <div className="grid gap-8 lg:grid-cols-2 xl:grid-cols-3">
-            {blogPosts.map((post, index) => (
-              <BlogCard key={index} {...post} />
-            ))}
+          <div className="bg-gray-100 rounded-[10px] p-4">
+            <span className="text-black text-lg font-semibold">
+              {blog.category}
+            </span>
           </div>
         </section>
+
+        {/* Blog Content */}
+        <section className="mb-8 px-3">
+          {/* Featured Post */}
+          <article className="bg-gray-100 rounded-[10px] overflow-hidden mb-6">
+            <img
+              src={blog.title_image || 'https://cdn.builder.io/api/v1/image/assets/TEMP/affbcd99d59bab2d47bfc87453dd4cc6d4f56b3c?width=780'}
+              alt={blog.title}
+              className="w-full h-[300px] object-cover"
+            />
+            <div className="p-5 space-y-4">
+              <div className="inline-block bg-gray-100 px-2 py-1 rounded-[10px]">
+                <span className="text-black text-sm font-medium">
+                  {blog.category}
+                </span>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-black text-2xl font-bold leading-[1.3]">
+                  {blog.title}
+                </h3>
+                <h3 className="text-black text-lg font-bold leading-[1.3]">
+                  Sissejuhatus
+                </h3>
+                <div 
+                  className="text-black text-base font-normal leading-[1.5] prose prose-base max-w-none"
+                  dangerouslySetInnerHTML={{ __html: blog.introduction }}
+                />
+              </div>
+            </div>
+          </article>
+
+          {/* Intro Detail Section */}
+          <article className="bg-gray-100 rounded-[10px] overflow-hidden mb-6">
+            <img
+              src={blog.intro_image || 'https://cdn.builder.io/api/v1/image/assets/TEMP/affbcd99d59bab2d47bfc87453dd4cc6d4f56b3c?width=780'}
+              alt={blog.title}
+              className="w-full h-[300px] object-cover"
+            />
+            <div className="p-5 space-y-4">
+              <h3 className="text-black text-lg font-bold leading-[1.3]">
+                Sissejuhatuse detailid
+              </h3>
+              <div 
+                className="text-black text-base font-thin leading-[1.5] prose prose-base max-w-none"
+                dangerouslySetInnerHTML={{ __html: blog.intro_detail }}
+              />
+            </div>
+          </article>
+
+          {/* Summary Section */}
+          <article className="bg-gray-100 rounded-[10px] p-5">
+            <h3 className="text-black text-lg font-bold leading-[1.3]">
+              {t('uiActions.summary')}
+            </h3>
+            <div 
+              className="text-black text-base font-normal leading-[1.5] prose prose-base max-w-none"
+              dangerouslySetInnerHTML={{ __html: blog.summary }}
+            />
+          </article>
+        </section>
       </main>
+      )}
 
       {/* Newsletter Signup */}
       <NewsletterSignup />
@@ -110,11 +160,22 @@ export default function BlogPostPageMobile() {
         <h2 className="text-black font-semibold text-2xl leading-normal mb-8 px-3">
           Viimased postitused
         </h2>
-        <div className="grid gap-8 lg:grid-cols-2 xl:grid-cols-3 px-3">
-          {latestPosts.map((post, index) => (
-            <BlogCard key={index} {...post} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="flex justify-center items-center py-12">
+            <p className="text-black text-4xl">{t('common.loading')}</p>
+          </div>
+        ) : (
+          <div className="grid gap-8 lg:grid-cols-2 xl:grid-cols-3 px-3">
+            {recentPosts.map((post, index) => (
+              <BlogCard key={post.id || index} {...post} />
+            ))}
+            {recentPosts.length === 0 && !loading && (
+              <div className="col-span-full text-center py-12">
+                <p className="text-gray-500">{t('uiActions.noOtherPostsFound')}</p>
+              </div>
+            )}
+          </div>
+        )}
       </section>
       {/* Footer */}
       <Footer />

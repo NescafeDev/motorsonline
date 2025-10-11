@@ -1,9 +1,14 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useI18n } from "@/contexts/I18nContext";
 
 export default function Footer() {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
+  const { currentLanguage , t } = useI18n();
+
+  // Use currentLanguage from I18nContext
+  const currentLang = currentLanguage;
 
   return (
     <footer className="w-full bg-brand-dark">
@@ -13,7 +18,7 @@ export default function Footer() {
           {/* Logo */}
           <div className="flex-shrink-0">
             <svg
-              onClick={() => navigate("/")}
+              onClick={() => navigate(`/${currentLang}`)}
               width="251"
               height="28"
               viewBox="0 0 251 28"
@@ -40,22 +45,22 @@ export default function Footer() {
               <a
                 onClick={(e) => {
                   e.stopPropagation();
-                  navigate("/blog");
+                  navigate(`/${currentLang}/blog`);
                   window.scrollTo(0, 0);
                 }}
                 className="text-[#B1B1B1] text-center font-poppins text-lg font-normal leading-[140%] hover:text-white transition-colors cursor-pointer"
               >
-                Blogi
+                {t('footer.blog')}
               </a>
               <a
                 onClick={(e) => {
                   e.stopPropagation();
-                  navigate("/user");
+                  navigate(`/${currentLang}/user`);
                   window.scrollTo(0, 0);
                 }}
                 className="text-[#B1B1B1] text-center font-poppins text-lg font-normal leading-[140%] hover:text-white transition-colors cursor-pointer"
               >
-                Minu kuulutused
+                {t('footer.myListings')}
               </a>
               {/* <a
                 onClick={() => navigate("/adds")}
@@ -67,12 +72,12 @@ export default function Footer() {
                 <a
                   onClick={(e) => {
                     e.stopPropagation();
-                    navigate("/adds");
+                    navigate(`/${currentLang}/adds`);
                     window.scrollTo(0, 0);
                   }}
                   className="text-[#B1B1B1] text-center font-poppins text-lg font-normal leading-[140%] hover:text-white transition-colors cursor-pointer"
                 >
-                  Lisa uus kuulutus
+                  {t('footer.addListing')}
                 </a>
               )}
             </div>

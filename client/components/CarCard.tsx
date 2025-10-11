@@ -1,5 +1,6 @@
 import { Edit , Trash2, Eye } from "lucide-react";
 import React from "react";
+import { useI18n } from "@/contexts/I18nContext";
 
 interface CarCardProps {
   title: string;
@@ -156,6 +157,7 @@ export const CarCard: React.FC<CarCardProps> = ({
   onEdit,
   onPreview,
 }) => {
+  const { t } = useI18n();
   return (
     <div className={`w-100 h-[307px] relative cursor-pointer`} onClick={onPreview ? onPreview : () => {}}>
       {/* Main Card Background */}
@@ -226,7 +228,7 @@ export const CarCard: React.FC<CarCardProps> = ({
             <img
               className="w-5 h-5"
               src="/img/car/Speedometer.png"
-              alt="Võimsus"
+              alt={t('carSpecs.power')}
             />
             <span className="text-[#1A202C] font-['Poppins'] text-[14px] font-medium">{power}</span>
           </div>
@@ -236,7 +238,7 @@ export const CarCard: React.FC<CarCardProps> = ({
             <img
               className="w-5 h-5"
               src="/img/car/calendar.png"
-              alt="Esmaregistreerimine"
+              alt={t('carSpecs.firstRegistration')}
             />
             <span className="text-[#1A202C] font-['Poppins'] text-[14px] font-medium">{year} - {month.length === 1 ? `0${month}` : month}</span>
           </div>
@@ -246,7 +248,7 @@ export const CarCard: React.FC<CarCardProps> = ({
             <img
               className="w-5 h-5"
               src="/img/car/Car.png"
-              alt="Läbisõit"
+              alt={t('carSpecs.mileage')}
             />
             <span className="text-[#1A202C] font-['Poppins'] text-[14px] font-medium">{mileage.toLocaleString()} km</span>
           </div>
@@ -256,7 +258,7 @@ export const CarCard: React.FC<CarCardProps> = ({
             <img
               className="w-5 h-5"
               src="/img/car/gear-box-switch.png"
-              alt="Käigukast"
+              alt={t('carSpecs.transmission')}
             />
             <span className="text-[#1A202C] font-['Poppins'] text-[14px] font-medium">{transmission}</span>
           </div>
@@ -266,7 +268,7 @@ export const CarCard: React.FC<CarCardProps> = ({
             <img
               className="w-5 h-5"
               src="/img/car/gas_station.png"
-              alt="Kütus"
+              alt={t('carSpecs.fuel')}
             />
             <span className="text-[#1A202C] font-['Poppins'] text-[14px] font-medium">{fuelType}</span>
           </div>

@@ -2,16 +2,17 @@ import React from "react";
 import { Button } from "../../../components/ui/button";
 import { Card } from "../../../components/ui/card";
 import { useNavigate } from "react-router-dom";
+import { useI18n } from "@/contexts/I18nContext";
 
 export const FreeListingBanner = (): JSX.Element => {
   const navigate = useNavigate();
+  const { t } = useI18n();
 
   return (
     <section className="max-w-[1240px] mx-auto mt-10">
       <Card className="w-full h-[127px] bg-white rounded-[10px] flex items-center justify-between px-[67px]">
         <p className="font-normal text-secondary-500 text-xl tracking-[-0.60px] leading-[30px]">
-          Kuulutuste avaldamine on tasuta. Kasutage võimalust, et leida
-          oma sõidukile uus omanik!
+          {t('uiActions.publishingListingsFree')}
         </p>
         <Button
           variant="outline"
@@ -25,7 +26,7 @@ export const FreeListingBanner = (): JSX.Element => {
             }
           }}
         >
-          Lisa kuulutus tasuta
+          {t('uiActions.addListingFree')}
         </Button>
       </Card>
     </section>

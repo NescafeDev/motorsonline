@@ -1,17 +1,78 @@
 import { ArrowRight } from "lucide-react";
 import PageContainer from "../components/PageContainer";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react'
+import axios from "axios";
+import { Card, CardContent } from "../components/ui/card";
+import { ArrowRightIcon } from "lucide-react";
+import { useI18n } from "@/contexts/I18nContext";
+
+interface Blog {
+  id: number;
+  category: string;
+  title: string;
+  title_image: string;
+  intro_image: string;
+  introduction: string;
+  intro_detail: string;
+  summary: string;
+}
+
+export interface BlogPost {
+  title_image?: string;
+  category: string;
+  title: string;
+  introduction: string;
+  id?: number;
+  intro_image?: string;
+  intro_detail?: string;
+  summary?: string;
+  loading?: boolean;
+}
 
 export default function BlogPage() {
   const navigate = useNavigate();
+  const { t } = useI18n();
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await fetch('/api/blogs');
+        const data = await response.json();
+        setBlogs(data);
+      } catch (error) {
+        console.error('Error fetching blogs:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
+  // Convert blogs to BlogPost format for display
+  const blogPosts: BlogPost[] = blogs.map(blog => ({
+    category: blog.category,
+    title: blog.title,
+    introduction: blog.introduction,
+    title_image: blog.title_image,
+    id: blog.id,
+    intro_image: blog.intro_image,
+    intro_detail: blog.intro_detail,
+    summary: blog.summary,
+    loading: loading,
+  }));
+
   return (
     <PageContainer className="font-poppins">
       {/* Hero Section */}
       <section className="relative w-full h-[696px] overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/2256f5dfb72d1770637f2f4590612ed3d96be898?width=2880"
-            alt="Cars background"
+            src={'https://cdn.builder.io/api/v1/image/assets/TEMP/2256f5dfb72d1770637f2f4590612ed3d96be898?width=2880'}
+            alt="Featured post"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/40"></div>
@@ -40,118 +101,74 @@ export default function BlogPage() {
               </h2>
               <div className="space-y-0">
                 <div className="bg-motor-gray-bg rounded-[10px] p-4">
-                  <span className="text-black text-lg font-semibold">
-                    Vaata kõiki
-                  </span>
+                    {blogs.map((blog) => (
+                      <div className="w-full text-left p-2 text-black text-lg font-normal hover:bg-motor-gray-bg rounded-[10px] transition-colors">
+                        {blog.category}
+                      </div>
+                    ))}
                 </div>
-                <button className="w-full text-left p-4 text-black text-lg font-normal hover:bg-motor-gray-bg rounded-[10px] transition-colors">
-                  Kategooria
-                </button>
-                <button className="w-full text-left p-4 text-black text-lg font-normal hover:bg-motor-gray-bg rounded-[10px] transition-colors">
-                  Kategooria
-                </button>
-                <button className="w-full text-left p-4 text-black text-lg font-normal hover:bg-motor-gray-bg rounded-[10px] transition-colors">
-                  Kategooria
-                </button>
-                <button className="w-full text-left p-4 text-black text-lg font-normal hover:bg-motor-gray-bg rounded-[10px] transition-colors">
-                  Kategooria
-                </button>
               </div>
             </div>
           </aside>
 
           {/* Blog Posts Grid */}
           <main className="flex-1">
-            {/* Featured Post */}
-            <article className="bg-motor-gray-bg rounded-[10px] overflow-hidden mb-8 cursor-pointer" onClick={() => navigate('/blog/1')}>
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/fd3caedfc27d707d15d02140d75fd74c1ac2a64a?width=1880"
-                alt="Featured post"
-                className="w-full h-[450px] object-cover"
-              />
-              <div className="p-5 space-y-4">
-                <div className="inline-block bg-motor-gray-bg px-2 py-1 rounded-[10px]">
-                  <span className="text-black text-sm font-medium">
-                    Kategooria
-                  </span>
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-black text-[30px] font-bold leading-[1.3]">
-                    Lorem Ipsum dolor sit amet
-                  </h3>
-                  <p className="text-black text-lg font-normal leading-[1.5]">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Suspendisse varius enim in eros.
-                  </p>
-                </div>
-                <div className="flex items-center gap-3 text-[#06d6a0]" onClick={() => navigate('/blog')}>
-                  <button className="text-base font-medium">Loe postitust</button>
-                  <ArrowRight className="w-6 h-6" onClick={() => navigate('/blog/1')}/>
-                </div>
+            {loading ? (
+              <div className="flex justify-center items-center py-12">
+                <p className="text-black text-4xl">{t('common.loading')}</p>
               </div>
-            </article>
-
-            {/* Blog Posts Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {[1, 2, 3, 4, 5, 6].map((index) => (
-                <article
-                  key={index}
-                  className="bg-motor-gray-bg rounded-[10px] overflow-hidden cursor-pointer"
-                  onClick={() => navigate('/blog/1')}
-                >
-                  <img
-                    src={`https://cdn.builder.io/api/v1/image/assets/TEMP/${
-                      index === 1
-                        ? "9fb5b2f9e39fa1801c33623ce63f5443d2c071e2"
-                        : index === 2
-                          ? "68fddc852df610d4f162284a69ab99469c3c3ef1"
-                          : index === 3
-                            ? "b55da65308c2d2109135de3accbd5f36274dfa76"
-                            : index === 4
-                              ? "c0825400530a0b3d95db43a03d7b5bda2c70242a"
-                              : index === 5
-                                ? "d3897280c3aa08d5ab38bfe510ea94c3efd29d58"
-                                : "e5b7437b3e649708fcbacf5bef89178355e781a4"
-                    }?width=920`}
-                    alt={`Blog post ${index}`}
-                    className="w-full h-[300px] object-cover"
-                  />
-                  <div className="p-5 space-y-4">
-                    <div className="inline-block px-2 py-1 rounded-[10px]">
-                      <span className="text-black text-sm font-medium">
-                        Kategooria
-                      </span>
+            ) : (
+              <div className="space-y-8">
+                {/* All Blog Posts - Show all blogs */}
+                {blogs.map((blog, index) => (
+                  <article
+                    key={blog.id}
+                    className="bg-motor-gray-bg rounded-[10px] overflow-hidden mb-8 cursor-pointer"
+                    onClick={() => navigate(`/blog/${blog.id}`)}
+                  >
+                    <img
+                      src={blog.title_image || 'https://cdn.builder.io/api/v1/image/assets/TEMP/2256f5dfb72d1770637f2f4590612ed3d96be898?width=2880'}
+                      alt={blog.title}
+                      className="w-full h-[450px] object-cover"
+                    />
+                    <div className="p-5 space-y-4">
+                      <div className="inline-block bg-motor-gray-bg px-2 py-1 rounded-[10px]">
+                        <span className="text-black text-sm font-medium">
+                          {blog.category}
+                        </span>
+                      </div>
+                      <div className="space-y-2">
+                        <h3 className="text-black text-[30px] font-bold leading-[1.3]">
+                          {blog.title}
+                        </h3>
+                        <div 
+                          className="text-black text-lg font-normal leading-[1.5]"
+                          dangerouslySetInnerHTML={{ 
+                            __html: blog.introduction?.replace(/<[^>]*>/g, '').substring(0, 150) + '...' || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                          }}
+                        />
+                      </div>
+                      <div className="flex items-center gap-3 text-[#06d6a0]">
+                        <button className="text-base font-medium">{t('blog.readMore')}</button>
+                        <ArrowRight className="w-6 h-6" />
+                      </div>
                     </div>
-                    <div className="space-y-2">
-                      <h3 className="text-black text-lg font-semibold leading-[1.3]">
-                        Lorem Ipsum dolor sit amet
-                      </h3>
-                      <p className="text-black text-lg font-normal leading-[1.5]">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Suspendisse varius enim in eros.
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-3 text-motor-green" onClick={() => navigate('/blog/1')}>
-                      <button className="text-base font-medium text-[#06d6a0]">
-                        Loe postitust
-                      </button>
-                      <ArrowRight className="w-6 h-6 text-[#06d6a0]" onClick={() => navigate('/blog/1')}/>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
+                  </article>
+                ))}
+                {/* All Blog Posts Grid */}
+              </div>
+            )}
           </main>
         </div>
       </section>
 
       {/* Newsletter Section */}
-      <section className="w-full bg-motor-gray-bg py-16 mb-20 bg-gray-50">
+      <section className="w-full bg-motor-gray-bg py-[100px] mb-20 bg-gray-50">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-[100px]">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
             <div className="flex-1 max-w-[456px]">
               <h2 className="text-black text-[46px] font-semibold leading-tight mb-6">
-                Liitu meie blogiga
+                {t('uiActions.joinOurBlog')}
               </h2>
               <p className="text-motor-dark-text text-lg font-normal leading-[1.5]">
                 Lorem ipsum dolor sit amet consectetur. Sollicitudin interdum
@@ -166,12 +183,11 @@ export default function BlogPage() {
                   className="flex-1 h-[54px] px-3 border border-brand-primary rounded-[10px] bg-white text-motor-medium-text text-base placeholder:text-motor-medium-text focus:outline-none focus:ring-2 focus:ring-motor-green"
                 />
                   <button className="px-8 py-3 bg-brand-primary rounded-[10px] text-white text-base font-normal hover:bg-brand-600 transition-colors">
-                    Telli
+                    {t('blog.subscribe')}
                   </button>
               </div>
               <p className="text-black text-xs font-normal leading-[1.5]">
-                Klikkides "Registreeru", kinnitate, et nõustute meie
-                tingimustega.
+                {t('uiActions.clickingRegisterConfirm')} tingimustega.
               </p>
             </div>
           </div>
@@ -192,49 +208,56 @@ export default function BlogPage() {
           </div>
 
           {/* Recent Posts Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[1, 2, 3, 4].map((index) => (
-              <article
-                key={index}
-                className="bg-motor-gray-bg rounded-[10px] overflow-hidden cursor-pointer"
-                onClick={() => navigate('/blog/1')}
-              >
-                <img
-                  src={`https://cdn.builder.io/api/v1/image/assets/TEMP/${
-                    index === 1
-                      ? "e134938a1609d8279af17796741e1cd0ca85863d"
-                      : index === 2
-                        ? "9ceed5be43b832dd5a5516f04f664c85ad9211d1"
-                        : index === 3
-                          ? "0a7aed5977339e33afe1db516cf61caf89d777f5"
-                          : "c0a3377cda0da3f58a15eb97e9e17154b1770934"
-                  }?width=596`}
-                  alt={`Recent post ${index}`}
-                  className="w-full h-[189px] object-cover"
-                />
-                <div className="p-5 space-y-4">
-                  <div className="inline-block">
-                    <span className="text-black text-xs font-medium">
-                      Kategooria
-                    </span>
-                  </div>
-                  <div className="space-y-3">
-                    <h3 className="text-black text-lg font-semibold leading-[1.4]">
-                      Lorem Ipsum
-                    </h3>
-                    <p className="text-black text-sm font-normal leading-tight">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Lorem varius enim in eros.
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-3 text-motor-green" onClick={() => navigate('/blog/1')}>
-                    <button className="text-sm font-medium text-[#06d6a0]">Loe postitust</button>
-                    <ArrowRight className="w-6 h-6 text-[#06d6a0]" onClick={() => navigate('/blog/1')}/>
-                  </div>
-                </div>
-              </article>
-            ))}
+          {loading ? (
+          <div className="flex justify-center items-center py-12">
+            <p className="text-gray-500">{t('common.loading')}</p>
           </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[16px]">
+            {blogPosts.map((post, index) => (
+              <Card
+                key={post.id || index}
+                className="bg-[#f6f7f9] rounded-[10px] overflow-hidden border-none"
+              >
+                <div className="relative h-[189px]">
+                  <img
+                    onClick={() => navigate(`/blog/${post.id}`)}
+                    className="w-full h-full object-cover cursor-pointer"
+                    alt="Blog post thumbnail"
+                    src={post.title_image || 'https://via.placeholder.com/300x189?text=No+Image'}
+                  />
+                </div>
+                <CardContent className="p-5">
+                  <div className="space-y-3">
+                    <p className="font-['Poppins',Helvetica] font-medium text-black text-xs leading-[18px]">
+                      {post.category || 'Kategooria'}
+                    </p>
+                    <h3 className="font-['Poppins',Helvetica] font-semibold text-black text-lg leading-[25.2px]">
+                      {post.title || 'Lorem Ipsum'}
+                    </h3>
+                    <div 
+                      className="font-['Poppins',Helvetica] font-normal text-black text-sm leading-normal"
+                      dangerouslySetInnerHTML={{ 
+                        __html: post.introduction?.replace(/<[^>]*>/g, '').substring(0, 100) + '...' || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                      }}
+                    />
+                    <div className="pt-6 flex items-center cursor-pointer" onClick={() => navigate(`/blog/${post.id}`)}>
+                      <button className="font-['Poppins',Helvetica] font-medium text-[#06d6a0] text-sm leading-[21px]">
+                        {t('blog.readMore')}
+                      </button>
+                      <ArrowRightIcon className="w-6 h-6 ml-3 text-[#06d6a0]" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+            {blogPosts.length === 0 && !loading && (
+              <div className="col-span-full text-center py-12">
+                <p className="text-gray-500">{t('uiActions.noBlogPostsFound')}</p>
+              </div>
+            )}
+          </div>
+        )}
         </div>
       </section>
     </PageContainer>

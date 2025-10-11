@@ -5,103 +5,56 @@ import { NewsletterSignup } from "@/components/mobile/NewsletterSignup";
 import Footer from "@/components/mobile/Footer";
 import Header from "@/components/mobile/Header";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { useI18n } from "@/contexts/I18nContext";
+
+interface Blog {
+  id: number;
+  category: string;
+  title: string;
+  title_image: string;
+  intro_image: string;
+  introduction: string;
+  intro_detail: string;
+  summary: string;
+}
+
 export default function BlogPageMobile() {
   const navigate = useNavigate();
-  const categories = ["Vaata kõiki", "Kategooria", "Kategooria", "Kategooria"];
+  const { t } = useI18n();
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const blogPosts = [
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/affbcd99d59bab2d47bfc87453dd4cc6d4f56b3c?width=780",
-      category: "Kategooria",
-      title: "Lorem Ipsum",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
-    },
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/aab23df3a666925b0b0710841df323425fc18b2b?width=780",
-      category: "Kategooria",
-      title: "Lorem Ipsum",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
-    },
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/7ffec4824159fb77b8348e5f0f0ebd0b219bfc81?width=780",
-      category: "Kategooria",
-      title: "Lorem Ipsum",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
-    },
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/5584be967b379005f363421759868b7c013069c1?width=780",
-      category: "Kategooria",
-      title: "Lorem Ipsum",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
-    },
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/7d18a6d16bc6b87129964ba78305dc5ab4321e1a?width=780",
-      category: "Kategooria",
-      title: "Lorem Ipsum",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
-    },
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/230b827688f474ff811a44562a2b94452e3bc55b?width=780",
-      category: "Kategooria",
-      title: "Lorem Ipsum",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
-    },
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/a6dba82ec391a166b3fc87e1e19fe083f163f1cb?width=780",
-      category: "Kategooria",
-      title: "Lorem Ipsum",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
-    },
-  ];
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await fetch('/api/blogs');
+        const data = await response.json();
+        setBlogs(data);
+      } catch (error) {
+        console.error('Error fetching blogs:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const latestPosts = [
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/13571f7cf56492a68d841712fe14488da6cd8f64?width=780",
-      category: "Kategooria",
-      title: "Lorem Ipsum",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
-    },
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/0b141dad3a9c503c16e8fc83435b95a888e062f2?width=780",
-      category: "Kategooria",
-      title: "Lorem Ipsum",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
-    },
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/77e05888f12ec156877dc4372bc19d14b8203763?width=780",
-      category: "Kategooria",
-      title: "Lorem Ipsum",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
-    },
-    {
-      image:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/34fb12acf718f6417f23e5cb7f52aacd86e78213?width=780",
-      category: "Kategooria",
-      title: "Lorem Ipsum",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
-    },
-  ];
+    fetchBlogs();
+  }, []);
+
+  // Convert blogs to BlogCard format
+  const blogPosts = blogs.map(blog => ({
+    id: blog.id,
+    image: blog.title_image || 'https://cdn.builder.io/api/v1/image/assets/TEMP/affbcd99d59bab2d47bfc87453dd4cc6d4f56b3c?width=780',
+    category: blog.category,
+    title: blog.title,
+    description: blog.introduction?.replace(/<[^>]*>/g, '').substring(0, 100) + '...' || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+  }));
+
+  // Get unique categories for tabs
+  const categories = [t('uiActions.viewAll'), ...Array.from(new Set(blogs.map(blog => blog.category)))];
+
+  // Latest posts (same as blogPosts for now, but you can modify this logic)
+  const latestPosts = blogPosts;
 
   return (
     <div className="min-h-screen bg-white">
@@ -134,16 +87,27 @@ export default function BlogPageMobile() {
           <h2 className="text-black font-normal text-lg leading-7 mb-6">
             Blogi kategooriad
           </h2>
-          <CategoryTabs categories={categories} />
+          {/* <CategoryTabs categories={categories} /> */}
         </section>
 
         {/* Blog Posts Grid */}
         <section className="mb-20 px-3">
-          <div className="grid gap-8 lg:grid-cols-2 xl:grid-cols-3">
-            {blogPosts.map((post, index) => (
-              <BlogCard key={index} {...post} />
-            ))}
-          </div>
+          {loading ? (
+            <div className="flex justify-center items-center py-12">
+              <p className="text-black text-4xl">{t('common.loading')}</p>
+            </div>
+          ) : (
+            <div className="grid gap-8 lg:grid-cols-2 xl:grid-cols-3">
+              {blogPosts.map((post, index) => (
+                <BlogCard key={post.id || index} {...post} />
+              ))}
+              {blogPosts.length === 0 && !loading && (
+                <div className="col-span-full text-center py-12">
+                  <p className="text-gray-500">{t('uiActions.noBlogPostsFound')}</p>
+                </div>
+              )}
+            </div>
+          )}
         </section>
       </main>
 
@@ -155,11 +119,22 @@ export default function BlogPageMobile() {
         <h2 className="text-black font-semibold text-2xl leading-normal mb-8 px-3">
           Viimased postitused
         </h2>
-        <div className="grid gap-8 lg:grid-cols-2 xl:grid-cols-3 px-3">
-          {latestPosts.map((post, index) => (
-            <BlogCard key={index} {...post} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="flex justify-center items-center py-12">
+            <p className="text-black text-4xl">{t('common.loading')}</p>
+          </div>
+        ) : (
+          <div className="grid gap-8 lg:grid-cols-2 xl:grid-cols-3 px-3">
+            {latestPosts.map((post, index) => (
+              <BlogCard key={post.id || index} {...post} />
+            ))}
+            {latestPosts.length === 0 && !loading && (
+              <div className="col-span-full text-center py-12">
+                <p className="text-gray-500">Blogisid ei leitud.</p>
+              </div>
+            )}
+          </div>
+        )}
       </section>
 
       {/* Footer */}

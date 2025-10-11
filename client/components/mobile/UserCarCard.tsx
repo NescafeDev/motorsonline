@@ -1,6 +1,6 @@
 import React from "react";
 import { Eye, Heart, Edit, Trash2, } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface UserCarCardProps {
   id: number;
@@ -38,9 +38,10 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
   onEdit,
 }) => {
   const navigate = useNavigate();
+  const { lang } = useParams<{ lang: string }>();
 
   const handleViewCar = () => {
-    navigate(`/car/${id}`);
+    navigate(`/${lang || 'ee'}/car/${id}`);
   };
   return (
     <div className="bg-white rounded-[13px] overflow-hidden shadow-sm w-full max-w-md mx-auto">

@@ -6,9 +6,11 @@ import { Checkbox } from "../../../../components/ui/checkbox";
 import { Input } from "../../../../components/ui/input";
 import { Separator } from "../../../../components/ui/separator";
 import { useGoogleLogin } from "@react-oauth/google";
+import { useI18n } from "@/contexts/I18nContext";
 
 export const RegistrationFormSectionMobile = (): JSX.Element => {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [form, setForm] = useState({
     fullname: "",
     email: "",
@@ -57,7 +59,7 @@ export const RegistrationFormSectionMobile = (): JSX.Element => {
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.message || "Sisselogimine ebaõnnestus.");
+        setError(data.message || t('auth.loginFailed'));
       } else {
         localStorage.setItem("user", JSON.stringify(data.user));
         localStorage.setItem("token", data.token);
@@ -72,7 +74,7 @@ export const RegistrationFormSectionMobile = (): JSX.Element => {
     e.preventDefault();
     setError("");
     if (!form.fullname || !form.email || !form.password || !form.confirmPassword) {
-      setError("Kõik väljad on kohustuslikud.");
+      setError(t('auth.allFieldsRequired'));
       return;
     }
     if (form.password !== form.confirmPassword) {
@@ -80,7 +82,7 @@ export const RegistrationFormSectionMobile = (): JSX.Element => {
       return;
     }
     if (!form.terms) {
-      setError("Peate nõustuma tingimustega.");
+      setError(t('auth.mustAgreeToTerms'));
       return;
     }
     setLoading(true);
@@ -97,12 +99,12 @@ export const RegistrationFormSectionMobile = (): JSX.Element => {
       });
       if (!res.ok) {
         const data = await res.json();
-        setError(data.message || "Registreerimine ebaõnnestus.");
+        setError(data.message || t('auth.registrationFailed'));
       } else {
         navigate("/login");
       }
     } catch (err) {
-      setError("Võrgu viga. Palun proovige hiljem uuesti.");
+      setError(t('auth.networkErrorTryLater'));
     } finally {
       setLoading(false);
     }
@@ -112,24 +114,24 @@ export const RegistrationFormSectionMobile = (): JSX.Element => {
   const formFields = [
     {
       id: "fullname",
-      label: "Täisnimi",
-      placeholder: "Sisesta täisnimi",
+      label: t('formLabels.fullName'),
+      placeholder: t('formLabels.enterFullName'),
     },
     {
       id: "email",
-      label: "E-posti aadress",
-      placeholder: "Sisesta e-post",
+      label: t('auth.email'),
+      placeholder: t('auth.email'),
     },
     {
       id: "password",
-      label: "Parool",
-      placeholder: "Sisesta parool",
+      label: t('auth.password'),
+      placeholder: t('auth.password'),
       type: "password",
     },
     {
       id: "confirmPassword",
-      label: "Korda parooli",
-      placeholder: "Sisesta parool",
+      label: t('auth.confirmPassword'),
+      placeholder: t('auth.password'),
       type: "password",
     },
   ];

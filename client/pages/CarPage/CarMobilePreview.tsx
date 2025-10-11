@@ -8,6 +8,7 @@ import { SpecificationsSection } from "./sections/SpecificationsSection";
 import CarGallery from "../../components/mobile/CarGallery";
 import { ImageGallerySection } from "./sections/ImageGallerySection";
 import { useAuth } from "../../contexts/AuthContext";
+import { useI18n } from "../../contexts/I18nContext";
 
 interface CarMobilePreviewProps {
     formData: any;
@@ -22,6 +23,7 @@ interface CarMobilePreviewProps {
 
 export default function CarMobilePreview({ formData, contactFormData, checkboxes, brands, models, years, driveTypes, carImages }: CarMobilePreviewProps) {
     const { user } = useAuth();
+    const { t } = useI18n();
     
     // Function to get VAT display text
     const getVatDisplayText = (car: any) => {
@@ -102,17 +104,17 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
     const vehicleDetails = [
         {
             icon: "/img/car/Car.png",
-            label: "Läbisõit:",
+            label: t('carSpecs.mileage') + ":",
             value: `${car.mileage.toLocaleString()} km`,
         },
         {
             icon: "/img/car/Speedometer.png",
-            label: "Võimsus:",
+            label: t('carSpecs.power') + ":",
             value: car.power,
         },
         {
             icon: "/img/car/gear-box-switch.png",
-            label: "Käigukast:",
+            label: t('carSpecs.transmission') + ":",
             value: car.transmission,
         },
         {
@@ -122,7 +124,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
         },
         {
             icon: "/img/car/gas_station.png",
-            label: "Kütus",
+            label: t('carSpecs.fuel'),
             value: car.fuelType,
         },
         {
@@ -135,18 +137,18 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
     // Technical specifications data
     const technicalSpecs = [
         { label: "Tehnilised andmed", value: car.technicalData },
-        { label: "Töömaht:", value: car.displacement },
-        { label: "Kategooria:", value: car.category },
-        { label: "Võimsus:", value: car.power },
-        { label: "Sõiduki number:", value: car.plateNumber },
-        { label: "Veoskeem:", value: car.drive_type_ee_name },
-        { label: "Läbisõit:", value: `${car.mileage.toLocaleString()} km` },
-        { label: "Kütuse tüüp:", value: car.fuelType },
+        { label: t('formLabels.displacement') + ":", value: car.displacement },
+        { label: t('formLabels.categoryDesignation') + ":", value: car.category },
+        { label: t('carSpecs.power') + ":", value: car.power },
+        { label: t('formLabels.vehicleNumber'), value: car.plateNumber },
+        { label: t('formLabels.driveType') + ":", value: car.drive_type_ee_name },
+        { label: t('carSpecs.mileage') + ":", value: `${car.mileage.toLocaleString()} km` },
+        { label: t('formLabels.fuelType') + ":", value: car.fuelType },
     ];
 
     // Equipment features data - parse from equipment string
     const accessoriesOptions = [
-        { key: 'kokkupõrgetennetavpidurisüsteem', label: 'Kokkupõrget Ennetav Pidurisüsteem' },
+        { key: 'kokkupõrgetennetavpidurisüsteem', label: t('carFeatures.collisionPreventionBrakingSystem') },
         { key: 'pimenurgahoiatus', label: 'Pimenurga Hoiatus' },
         { key: 'sõidurajahoidmiseabisüsteem', label: 'Sõiduraja Hoidmise Abisüsteem' },
         { key: 'sõidurajavahetamiseabisüsteem', label: 'Sõidurajavahetamise Abisüsteem' },
@@ -328,7 +330,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                                 <Button
                                     className="bg-[#06d6a0] text-white rounded-[10px] px-6 py-3 text-sm"
                                 >
-                                    Saada e-mail
+                                    {t('formLabels.sendEmail')}
                                 </Button>
 
                             </div>
@@ -340,7 +342,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                 <Card className="bg-[#f6f7f9] rounded-[10px] border-none">
                     <CardContent className="p-4">
                         <h2 className="font-semibold text-secondary-500 text-lg tracking-[-0.4px] leading-[24px] mb-4">
-                            Tehnilised andmed
+                            {t('formLabels.technicalSpecs')}
                         </h2>
 
                         <div className="space-y-3">
@@ -364,7 +366,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                                 variant="outline"
                                 className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2 px-4 py-2"
                             >
-                                Näita rohkem
+                                {t('formLabels.showMore')}
                                 <ChevronDownIcon className="w-4 h-4" />
                             </Button>
                         </div>
@@ -376,7 +378,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                     <Card className="w-full mt-10 bg-[#f6f7f9] rounded-[10px] border-none">
                         <CardContent className="p-5">
                             <h2 className="font-semibold text-secondary-500 text-xl tracking-[-0.60px] leading-[30px] [font-family:'Poppins',Helvetica] mb-6">
-                                Kõrgema väärtusega lisvarustus
+                                {t('formLabels.additionalFeatures')}
                             </h2>
 
                             <div className="grid grid-cols-1 gap-4">
@@ -400,7 +402,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                                     variant="outline"
                                     className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2.5"
                                 >
-                                    Näita rohkem
+                                    {t('formLabels.showMore')}
                                     <ChevronDownIcon className="w-4 h-4" />
                                 </Button>
                             </div>
@@ -413,7 +415,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                 {/* Seller information - using the same component as CarPage.tsx */}
                 <SpecificationsSection
                     sellerData={{
-                        title: "Müüja andmed",
+                        title: t('formLabels.seller'),
                         company: contactFormData.businessType || "ELKE Mustamäe",
                         address: contactFormData.address || "Tallinn, Mustamäe tee 22",
                         phone: contactFormData.phone || "+372 8888 8888",

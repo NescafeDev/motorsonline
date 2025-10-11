@@ -18,7 +18,8 @@ import {
   FuelIcon,
 } from "@/components/mobile/CarIcons";
 import { ImageGallerySection } from "./sections/ImageGallerySection/ImageGallerySection";
-import { useParams } from "react-router-dom";
+import { useI18n } from "@/contexts/I18nContext";
+import { Form, useParams } from "react-router-dom";
 import { useFavorites } from "../../hooks/useFavorites";
 import { useAuth } from "../../contexts/AuthContext";
 import { useViews } from "../../hooks/useViews";
@@ -71,6 +72,7 @@ interface CarData {
 }
 
 export default function CarPageMobile() {
+  const { t } = useI18n();
   const { id } = useParams();
   const [car, setCar] = useState<any>(null);
   const [contacts, setContacts] = useState<any>(null);
@@ -84,7 +86,7 @@ export default function CarPageMobile() {
 
     // If there's no VAT rate or it's empty/null, show "Hind ei sisalda käibemaksu"
     if (!car.vatRate || car.vatRate === '' || car.vatRate === 'null' || car.vatRefundable === 'ei' || car.vatRefundable === 'no') {
-      return 'KM 0% (käibemaksu ei lisandu)';
+      return t('vatInfo.vat0NoVatAdded');
     }
     // If VAT rate is 24, show "Hind sisaldab käibemaksu 24%"
     // if (car.vatRate === '24') {
@@ -217,32 +219,32 @@ export default function CarPageMobile() {
   const vehicleDetails = [
     {
       icon: "/img/car/Car.png",
-      label: "Läbisõit:",
+      label: t('carSpecs.mileage') + ':',
       value: `${car.mileage.toLocaleString()} km`,
     },
     {
       icon: "/img/car/Speedometer.png",
-      label: "Võimsus:",
+      label: t('carSpecs.power') + ':',
       value: car.power,
     },
     {
       icon: "/img/car/gear-box-switch.png",
-      label: "Käigukast:",
+      label: t('carSpecs.transmission') + ':',
       value: car.transmission,
     },
     {
       icon: "/img/car/calendar.png",
-      label: "Esmaregistreerimine:",
+      label: t('carSpecs.firstRegistration') + ':',
       value: car.year_value?.toString() || "N/A",
     },
     {
       icon: "/img/car/gas_station.png",
-      label: "Kütus",
+      label: t('carSpecs.fuel'),
       value: car.fuelType,
     },
     {
       icon: "/img/car/user_profile.png",
-      label: "Omanike arv:",
+      label: t('carSpecs.ownerCount') + ':',
       value: car.ownerCount,
     },
   ];
@@ -269,16 +271,16 @@ export default function CarPageMobile() {
   const equipmentDisplayMap: { [key: string]: string } = {
     'abs': 'ABS',
     'adaptiveHeadlights': 'Adaptiivne kurvituli',
-    'alarmSystem': 'Häiresüsteem',
+    'alarmSystem': t('carFeatures.alarmSystem'),
     'ambientLighting': 'Ambiente valgustus',
     'appleCarplay': 'Apple CarPlay',
-    'armrest': 'Käetugi',
-    'hillStartAssist': 'Käivitusabi mäkketõusul',
+    'armrest': t('carFeatures.armrest'),
+    'hillStartAssist': t('carFeatures.hillStartAssist'),
     'automaticHighBeams': 'Pimestamisvaba kaugtuli',
     'bluetooth': 'Bluetooth',
     'boardComputer': 'Bordcomputer (pardaarvuti)',
-    'cdPlayer': 'CD-mängija',
-    'electricWindows': 'Elektrilised aknatõstukid'
+    'cdPlayer': t('carFeatures.cdPlayer'),
+    'electricWindows': t('carFeatures.electricWindows')
   };
 
 
@@ -324,33 +326,33 @@ export default function CarPageMobile() {
             </p>
 
             <h2 className="text-[#1A202C] text-[16px] font-semibold leading-[150%] tracking-[-0.48px] mb-6">
-              Tehnilised andmed
+              {t('formLabels.technicalSpecs')}
             </h2>
 
             {/* Specs grid */}
             <div className="grid grid-cols-2 gap-x-[20px] gap-y-[20px]">
               <SpecCard
                 icon={<CarIcon />}
-                label="Läbisõit:"
+                label={t('carSpecs.mileage') + ':'}
                 value={`${car.mileage.toLocaleString()} km`}
               />
               <SpecCard
                 icon={<SpeedometerIcon />}
-                label="Võimsus:"
+                label={t('carSpecs.power') + ':'}
                 value={car.power}
               />
               <SpecCard
                 icon={<GearboxIcon />}
-                label="Käigukast:"
+                label={t('carSpecs.transmission') + ':'}
                 value={car.transmission}
               />
               <SpecCard
                 icon={<CalendarIcon />}
-                label="Esmaregistreerimine:"
+                label={t('carSpecs.firstRegistration') + ':'}
                 value={car.year_value?.toString() || "N/A"}
               />
-              <SpecCard icon={<FuelIcon />} label="Kütus:" value={car.fuelType} />
-              <SpecCard icon={<UserIcon />} label="Omanike arv:" value={car.ownerCount} />
+              <SpecCard icon={<FuelIcon />} label={t('carSpecs.fuel') + ':'} value={car.fuelType} />
+              <SpecCard icon={<UserIcon />} label={t('carSpecs.ownerCount') + ':'} value={car.ownerCount} />
             </div>
           </div>
         </div>
@@ -388,7 +390,7 @@ export default function CarPageMobile() {
             <Button
               className="bg-[#06d6a0] text-white rounded-[10px] px-8 py-3 text-sm "
             >
-              Saada e-mail
+              {t('formLabels.sendEmail')}
             </Button>
           </div>
         </div>
@@ -399,7 +401,7 @@ export default function CarPageMobile() {
             <div className="space-y-3">
               <div className="bg-white rounded-[10px] p-3 flex justify-between">
                 <span className="text-[#1A202C] text-sm font-medium">
-                  Tehnilised andmed
+                  {t('formLabels.technicalSpecs')}
                 </span>
                 <span className="text-[#1A202C] text-sm font-normal">
                   {car.technicalData}
@@ -407,7 +409,7 @@ export default function CarPageMobile() {
               </div>
               <div className="bg-white rounded-[10px] p-3 flex justify-between">
                 <span className="text-[#1A202C] text-sm font-medium">
-                  Kategooria:
+                  {t('formLabels.categoryDesignation')}:
                 </span>
                 <span className="text-[#1A202C] text-sm font-normal">
                   {car.category}
@@ -415,7 +417,7 @@ export default function CarPageMobile() {
               </div>
               <div className="bg-white rounded-[10px] p-3 flex justify-between">
                 <span className="text-[#1A202C] text-sm font-medium">
-                  Sõiduki number:
+                  {t('formLabels.vehicleNumber')}:
                 </span>
                 <span className="text-[#1A202C] text-sm font-normal">
                   {car.plateNumber}
@@ -423,7 +425,7 @@ export default function CarPageMobile() {
               </div>
               <div className="bg-white rounded-[10px] p-3 flex justify-between">
                 <span className="text-[#1A202C] text-sm font-medium">
-                  Läbisõit:
+                  {t('carSpecs.mileage') + ':'}
                 </span>
                 <span className="text-[#1A202C] text-sm font-normal">
                   {car.mileage.toLocaleString()} km
@@ -431,7 +433,7 @@ export default function CarPageMobile() {
               </div>
               <div className="bg-white rounded-[10px] p-3 flex justify-between">
                 <span className="text-[#1A202C] text-sm font-medium">
-                  Töömaht:
+                  {t('formLabels.displacement') + ':'}
                 </span>
                 <span className="text-[#1A202C] text-sm font-normal">
                   {car.displacement} cm³
@@ -439,7 +441,7 @@ export default function CarPageMobile() {
               </div>
               <div className="bg-white rounded-[10px] p-3 flex justify-between">
                 <span className="text-[#1A202C] text-sm font-medium">
-                  Võimsus:
+                  {t('carSpecs.power') + ':'}
                 </span>
                 <span className="text-[#1A202C] text-sm font-normal">
                   {car.power}
@@ -447,7 +449,7 @@ export default function CarPageMobile() {
               </div>
               <div className="bg-white rounded-[10px] p-3 flex justify-between">
                 <span className="text-[#1A202C] text-sm font-medium">
-                  Veoskeem:
+                  {t('formLabels.driveType') + ':'}
                 </span>
                 <span className="text-[#1A202C] text-sm font-normal">
                   {car.drive_type_ee_name}
@@ -455,7 +457,7 @@ export default function CarPageMobile() {
               </div>
               <div className="bg-white rounded-[10px] p-3 flex justify-between">
                 <span className="text-[#1A202C] text-sm font-medium">
-                  Kütuse tüüp:
+                  {t('formLabels.fuelType') + ':'}
                 </span>
                 <span className="text-[#1A202C] text-sm font-normal">
                   {car.fuelType}

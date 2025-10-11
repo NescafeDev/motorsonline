@@ -4,6 +4,7 @@ import Footer from "@/components/mobile/Footer";
 import { useNavigate } from 'react-router-dom';
 import { UserCarCard } from '../components/mobile/UserCarCard';
 import { useState, useEffect } from "react";
+import { useI18n } from "@/contexts/I18nContext";
 import axios from 'axios';
 
 
@@ -26,6 +27,7 @@ interface Car {
 
 export default function UserPageMobile() {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [userCars, setUserCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -36,12 +38,12 @@ export default function UserPageMobile() {
     
     // If there's no VAT rate or it's empty/null, show "Hind ei sisalda käibemaksu"
     if (car.vatRefundable === "no" || car.vatRefundable === 'ei') {
-      return 'KM 0% (käibemaksu ei lisandu)';
+      return t('vatInfo.vat0NoVatAdded');
     }
     
     // If VAT rate is 24, show "Hind sisaldab käibemaksu 24%"
     // if (car.vatRate === '24') {
-      return 'Hind sisaldab käibemaksu ' + car.vatRate + '%';
+      return t('vatInfo.priceIncludesVatWithRate') + ' ' + car.vatRate + '%';
     // }
     
     // For any other VAT rate, show the specific rate
@@ -181,7 +183,7 @@ export default function UserPageMobile() {
           {loading ? (
             <div className="text-center py-8">
               <span className="text-[#747474] font-['Poppins'] text-[18px]">
-                Laetakse...
+                {t('common.loading')}...
               </span>
             </div>
           ) : userCars.length > 0 ? (

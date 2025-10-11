@@ -10,6 +10,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useFavorites } from "../hooks/useFavorites";
 import { useAuth } from "../contexts/AuthContext";
+import { useI18n } from "@/contexts/I18nContext";
 
 // Car-related types
 export interface Car {
@@ -139,35 +140,35 @@ const apiClient = axios.create({
   },
 });
 
-const vehicleDetails = (car: Car) => [
+const vehicleDetails = (car: Car, t: any) => [
   {
     icon: "/img/car/Car.png",
-    label: "Läbisõit:",
+    label: `${t('carSpecs.mileage')}:`,
     value: `${car.mileage.toLocaleString()} km`,
   },
   {
     icon: "/img/car/Speedometer.png",
-    label: "Võimsus:",
+    label: `${t('carSpecs.power')}:`,
     value: car.power,
   },
   {
     icon: "/img/car/gear-box-switch.png",
-    label: "Käigukast:",
+    label: `${t('carSpecs.transmission')}:`,
     value: car.transmission,
   },
   {
     icon: "/img/car/calendar.png",
-    label: "Esmaregistreerimine:",
+    label: `${t('carSpecs.firstRegistration')}:`,
     value: car.year_value?.toString() + " - " + (car.month.length === 1 ? `0${car.month}` : car.month) || "N/A",
   },
   {
     icon: "/img/car/gas_station.png",
-    label: "Kütus",
+    label: t('carSpecs.fuel'),
     value: car.fuelType,
   },
   {
     icon: "/img/car/user_profile.png",
-    label: "Omanike arv:",
+    label: `${t('carSpecs.ownerCount')}:`,
     value: car.ownerCount,
   },
 ];
@@ -208,6 +209,7 @@ export default function HomePageMobile() {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
   const { isFavorite, toggleFavorite } = useFavorites();
+  const { t } = useI18n();
   const [filterOpen, setFilterOpen] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
   const [cars, setCars] = useState<Car[]>([]);
@@ -217,17 +219,40 @@ export default function HomePageMobile() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filtersApplied, setFiltersApplied] = useState(false);
 
-  // Load initial cars
-  useEffect(() => {
-    console.log('Initial load cars effect triggered');
-    loadCars();
+  const loadCars = useCallback(async () => {
+    console.log('Loading cars...');
+    try {
+      setLoading(true);
+      const allCars = await fetchAllApprovedCars();
+      
+      // Check for duplicates and log them
+      const uniqueCars = allCars.filter((car, index, self) => 
+        index === self.findIndex(c => c.id === car.id)
+      );
+      
+      if (uniqueCars.length !== allCars.length) {
+        console.warn(`Found ${allCars.length - uniqueCars.length} duplicate cars in API response`);
+      }
+      
+      console.log(`Loaded ${uniqueCars.length} unique cars`);
+      setCars(uniqueCars);
+      setFilteredCars(uniqueCars);
+      setFiltersApplied(false);
+    } catch (error) {
+      console.error('Failed to load cars:', error);
+      // Set empty arrays to prevent undefined errors
+      setCars([]);
+      setFilteredCars([]);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  // Reload cars when authentication state changes (login/logout)
+  // Load initial cars and reload when authentication state changes
   useEffect(() => {
-    console.log('Auth state changed, isAuthenticated:', isAuthenticated, 'user:', user);
+    console.log('Loading cars - isAuthenticated:', isAuthenticated, 'user:', user);
     loadCars();
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, user, loadCars]);
 
   // Update filtered cars when cars change or search term changes
   useEffect(() => {
@@ -282,25 +307,6 @@ export default function HomePageMobile() {
 
     window.addEventListener('closeFilters', handleCloseFilters);
     return () => window.removeEventListener('closeFilters', handleCloseFilters);
-  }, []);
-
-  const loadCars = useCallback(async () => {
-    console.log('Loading cars');
-    try {
-      setLoading(true);
-      const allCars = await fetchAllApprovedCars();
-
-      setCars(allCars);
-      setFilteredCars(allCars);
-      setFiltersApplied(false);
-    } catch (error) {
-      console.error('Failed to load cars:', error);
-      // Set empty arrays to prevent undefined errors
-      setCars([]);
-      setFilteredCars([]);
-    } finally {
-      setLoading(false);
-    }
   }, []);
 
   const loadFilteredCarsWithFilters = async (filterParams: CarFilters) => {
@@ -359,11 +365,11 @@ export default function HomePageMobile() {
 
     // If there's no VAT rate or it's empty/null, show "Hind ei sisalda käibemaksu"
     if (!car.vatRate || car.vatRate === '' || car.vatRate === 'null' || car.vatRefundable === 'ei' || car.vatRefundable === 'no') {
-      return 'KM 0% (käibemaksu ei lisandu)';
+      return t('vatInfo.vat0NoVatAdded');
     }
 
     // For any other VAT rate, show the specific rate
-    return `Hind sisaldab käibemaksu ${car.vatRate}%`;
+    return `${t('vatInfo.priceIncludesVat')} ${car.vatRate}%`;
   };
 
   // Format car data for display
@@ -386,44 +392,35 @@ export default function HomePageMobile() {
   });
 
 
-  const blogPosts = [
-    {
-      id: 1,
-      title: "Lorem Ipsum",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
-      category: "Kategooria",
-      image:
-        "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=390&h=247&fit=crop&crop=center",
-    },
-    {
-      id: 2,
-      title: "Lorem Ipsum",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
-      category: "Kategooria",
-      image:
-        "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=390&h=247&fit=crop&crop=center",
-    },
-    {
-      id: 3,
-      title: "Lorem Ipsum",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
-      category: "Kategooria",
-      image:
-        "https://images.unsplash.com/photo-1514316454349-750a7fd3da3a?w=390&h=247&fit=crop&crop=center",
-    },
-    {
-      id: 4,
-      title: "Lorem Ipsum",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem varius enim in eros.",
-      category: "Kategooria",
-      image:
-        "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=390&h=247&fit=crop&crop=center",
-    },
-  ];
+  // Blog state
+  const [blogs, setBlogs] = useState<any[]>([]);
+  const [blogsLoading, setBlogsLoading] = useState(true);
+
+  // Fetch blogs
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await fetch('/api/blogs');
+        const data = await response.json();
+        setBlogs(data);
+      } catch (error) {
+        console.error('Error fetching blogs:', error);
+      } finally {
+        setBlogsLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
+  // Convert blogs to BlogCard format
+  const blogPosts = blogs.map(blog => ({
+    id: blog.id,
+    title: blog.title,
+    description: blog.introduction?.replace(/<[^>]*>/g, '').substring(0, 100) + '...' || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    category: blog.category,
+    image: blog.title_image || 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=390&h=247&fit=crop&crop=center',
+  }));
 
   return (
     <div className="min-h-screen bg-white max-w-md">
@@ -457,10 +454,10 @@ export default function HomePageMobile() {
         <section className="bg-[#F6F7F9] py-5 px-5">
           <div className="bg-white px-3 py-6 rounded-lg max-w-md">
             <p className="text-motors-dark leading-[150%] tracking-[-0.48px] mb-6 text-center">
-              Müü & osta tasuta, nüüd ja alati.
+              {t('uiActions.sellBuyFree')}
             </p>
             <button className="w-full border text-motors-green py-4 px-6 rounded-[10px] font-normal text-base leading-[150%] border-[#06d6a0] text-[#06d6a0]">
-              Lisa kuulutus tasuta
+              {t('uiActions.addListingFree')}
             </button>
           </div>
         </section>
@@ -502,7 +499,7 @@ export default function HomePageMobile() {
           <div className="flex items-center gap-2">
             <div className="bg-white p-3 rounded-md shadow-sm cursor-pointer z-20 w-full text-center flex items-center justify-center" data-filter-button onClick={() => setFilterOpen((v) => !v)}>
               <SearchIcon className="w-4 h-4 mr-1 text-black" />
-              <span className="text-black font-['Poppins',Helvetica] font-medium text-[16px] tracking-[0.2px]">Filtrid</span>
+              <span className="text-black font-['Poppins',Helvetica] font-medium text-[16px] tracking-[0.2px]">{t('search.filters')}</span>
             </div>
           </div>
           {filterOpen && (
@@ -526,7 +523,7 @@ export default function HomePageMobile() {
           {/* Loading State */}
           {loading && (
             <div className="flex justify-center items-center h-64">
-              <div className="text-lg text-gray-500">Laetakse...</div>
+              <div className="text-lg text-gray-500">{t('common.loading')}</div>
             </div>
           )}
 
@@ -552,13 +549,13 @@ export default function HomePageMobile() {
                   <div className="text-center">
                     <div className="text-lg text-gray-500 mb-2">
                       {cars.length === 0
-                        ? "Andmebaasis pole autosid"
-                        : "Autosid ei leitud valitud filtritega"
+                        ? t('uiActions.noCarsInDatabase')
+                        : t('uiActions.noCarsFoundWithFilters')
                       }
                     </div>
                     {cars.length === 0 && (
                       <div className="text-sm text-gray-400">
-                        Kontrollige, kas andmebaas on seadistatud ja migratsioon on käivitatud
+                        {t('uiActions.checkDatabaseSetup')}
                       </div>
                     )}
                   </div>
@@ -567,7 +564,7 @@ export default function HomePageMobile() {
 
               <div className="pt-6 max-w-md mx-auto">
                 <button className="w-full border text-motors-green py-4 px-6 rounded-[10px] font-normal text-base leading-[150%] border-[#06d6a0] text-[#06d6a0]">
-                  Näita rohkem autosid
+                  {t('uiActions.showMoreCars')}
                 </button>
               </div>
             </>
@@ -578,7 +575,7 @@ export default function HomePageMobile() {
         <section className={`px-5 py-12 ${filterOpen ? "blur-sm transition-all duration-300" : "transition-all duration-300"}`}>
           <div className="mb-12 px-6 max-w-7xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold text-black mb-6">
-              Blog
+              {t('footer.blog')}
             </h2>
             <p className="text-motors-dark leading-[150%] tracking-[-0.48px] max-w-md">
               Lorem ipsum dolor sit amet consectetur. Quisque erat imperdiet
@@ -586,11 +583,22 @@ export default function HomePageMobile() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            {blogPosts.map((post) => (
-              <BlogCard key={post.id} {...post} />
-            ))}
-          </div>
+          {blogsLoading ? (
+            <div className="flex justify-center items-center py-12">
+              <div className="text-lg text-gray-500">{t('common.loading')}</div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+              {blogPosts.map((post) => (
+                <BlogCard key={post.id} {...post} />
+              ))}
+              {blogPosts.length === 0 && !blogsLoading && (
+                <div className="col-span-full text-center py-12">
+                  <div className="text-lg text-gray-500">{t('uiActions.noBlogPostsFound')}</div>
+                </div>
+              )}
+            </div>
+          )}
         </section>
       </main>
 

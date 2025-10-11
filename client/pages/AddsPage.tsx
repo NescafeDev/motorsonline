@@ -17,6 +17,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { boolean } from "zod/v4";
 import { CountryCodes } from "react-flags-select/build/types";
+import { useI18n } from "@/contexts/I18nContext";
 import {
   Dialog,
   DialogContent,
@@ -44,117 +45,116 @@ const ChevronDownIcon = ({ className = "" }: { className?: string }) => (
     />
   </svg>
 );
-
-const techCheckOptions = [
-  { key: 'technicalInspection', label: 'Teostatud tehniline kontroll' },
-  { key: 'technicalMaintenance', label: 'Teostatud tehniline hooldus' },
-  { key: 'serviceBook', label: 'Hooldusraamat' },
-  { key: 'hideVin', label: 'Peida VIN-kood' },
+const techCheckOptions=( t: any ) => [
+  { key: 'technicalInspection', label: t('formLabels.inspection') },
+  { key: 'technicalMaintenance', label: t('formLabels.technicalMaintenance') },
+  { key: 'serviceBook', label: t('formLabels.serviceBook') },
+  { key: 'hideVin', label: t('formLabels.hideVin') },
 ];
-const accessoriesOptions = [
-  { key: 'kokkupõrgetennetavpidurisüsteem', label: 'Kokkupõrget Ennetav Pidurisüsteem' },
-  { key: 'pimenurgahoiatus', label: 'Pimenurga Hoiatus' },
-  { key: 'sõidurajahoidmiseabisüsteem', label: 'Sõiduraja Hoidmise Abisüsteem' },
-  { key: 'sõidurajavahetamiseabisüsteem', label: 'Sõidurajavahetamise Abisüsteem' },
-  { key: 'adaptiivnepüsikiirusehoidja', label: 'Adaptiivne Püsikiirusehoidja' },
-  { key: 'liiklusmärkidetuvastusjakuvamine', label: 'Liiklusmärkide Tuvastus ja Kuvamine' },
-  { key: 'parkimisandurideesjataga', label: 'Parkimisandurid Ees ja Taga' },
-  { key: 'parkimiskaamera', label: 'Parkimiskaamera' },
-  { key: 'parkimiskaamera360', label: 'Parkimiskaamera 360°' },
-  { key: 'kaugtuledeümberlülitamiseassistent', label: 'Kaugtulede ümberlülitamise Assistent' },
-  { key: 'LEDesituled', label: 'LED Esituled' },
-  { key: 'Xenonesituled', label: 'Xenon Esituled' },
-  { key: 'lasersituled', label: 'Laser Esituled' },
-  { key: 'elektriliseoojendusegaesiklaas', label: 'Elektrilise Soojendusega Esiklaas' },
-  { key: 'kliimaseade', label: 'Kliimaseade' },
-  { key: 'salongieelsoojendus', label: 'Salongi Eelsoojendus' },
-  { key: 'mootorieelsoojendus', label: 'Mootori Eelsoojendus' },
-  { key: 'salongilisaoojendus', label: 'Salongi Lisasoojendus' },
-  { key: 'istmesoojendused', label: 'Istmesoojendused' },
-  { key: 'elektriliseltreguleeritavadIstmed', label: 'Elektriliselt Reguleeritavad Istmed' },
-  { key: 'comfortistmed', label: 'Comfort Istmed' },
-  { key: 'sportistmed', label: 'Sport Istmed' },
-  { key: 'nahkpolster', label: 'Nahkpolster' },
-  { key: 'poolnahkpolster', label: 'Poolnahkpolster' },
-  { key: 'tagaistmeseljatugiallaklapitav', label: 'Tagaistme Seljatugi Allaklapitav' },
-  { key: 'eraldikliimaseadetagaistmetele', label: 'Eraldi Kliimaseade Tagaistmetele' },
-  { key: 'võtmetavamine', label: 'Võtmeta Avamine' },
-  { key: 'võtmetaäivitus', label: 'Võtmeta Käivitus' },
-  { key: 'pakiruumiavaminejasulgeminelektriliselt', label: 'Pakiruumi Avamine ja Sulgemine Elektriliselt' },
-  { key: 'soojendusegarool', label: 'Soojendusega Rool' },
-  { key: 'ventileeritavadstmed', label: 'Ventileeritavad Istmed' },
-  { key: 'massaažifunktsioonigaiistmed', label: 'Massaažifunktsiooniga Istmed' },
-  { key: 'infokuvamineesiklaasile', label: 'Info Kuvamine Esiklaasile' },
+const accessoriesOptions = ( t: any ) => [
+  { key: 'kokkupõrgetennetavpidurisüsteem', label: t('carFeatures.collisionPreventionBrakingSystem') },
+  { key: 'pimenurgahoiatus', label: t('carFeatures.blindSpotWarning') },
+  { key: 'sõidurajahoidmiseabisüsteem', label: t('carFeatures.laneKeepingAssistSystem') },
+  { key: 'sõidurajavahetamiseabisüsteem', label: t('carFeatures.laneChangeAssistSystem') },
+  { key: 'adaptiivnepüsikiirusehoidja', label: t('carFeatures.adaptiveCruiseControl') },
+  { key: 'liiklusmärkidetuvastusjakuvamine', label: t('carFeatures.trafficSignRecognition') },
+  { key: 'parkimisandurideesjataga', label: t('carFeatures.parkingSensorsFrontRear') },
+  { key: 'parkimiskaamera', label: t('carFeatures.parkingCamera') },
+  { key: 'parkimiskaamera360', label: t('carFeatures.parkingCamera360') },
+  { key: 'kaugtuledeümberlülitamiseassistent', label: t('carFeatures.highBeamAssist') },
+  { key: 'LEDesituled', label: t('carFeatures.ledHeadlights') },
+  { key: 'Xenonesituled', label: t('carFeatures.xenonHeadlights') },
+  { key: 'lasersituled', label: t('carFeatures.laserHeadlights') },
+  { key: 'elektriliseoojendusegaesiklaas', label: t('carFeatures.heatedWindscreen') },
+  { key: 'kliimaseade', label: t('carFeatures.airConditioning') },
+  { key: 'salongieelsoojendus', label: t('carFeatures.cabinPreheater') },
+  { key: 'mootorieelsoojendus', label: t('carFeatures.enginePreheater') },
+  { key: 'salongilisaoojendus', label: t('carFeatures.additionalCabinHeater') },
+  { key: 'istmesoojendused', label: t('carFeatures.seatHeating') },
+  { key: 'elektriliseltreguleeritavadIstmed', label: t('carFeatures.electricSeats') },
+  { key: 'comfortistmed', label: t('carFeatures.comfortSeats') },
+  { key: 'sportistmed', label: t('carFeatures.sportSeats') },
+  { key: 'nahkpolster', label: t('carFeatures.leatherUpholstery') },
+  { key: 'poolnahkpolster', label: t('carFeatures.semiLeatherUpholstery') },
+  { key: 'tagaistmeseljatugiallaklapitav', label: t('carFeatures.rearSeatBackFoldable') },
+  { key: 'eraldikliimaseadetagaistmetele', label: t('carFeatures.rearSeatIndependentClimate') },
+  { key: 'võtmetavamine', label: t('carFeatures.keylessEntry') },
+  { key: 'võtmetaäivitus', label: t('carFeatures.keylessStart') },
+  { key: 'pakiruumiavaminejasulgeminelektriliselt', label: t('carFeatures.powerTailgate') },
+  { key: 'soojendusegarool', label: t('carFeatures.heatedSteeringWheel') },
+  { key: 'ventileeritavadstmed', label: t('carFeatures.ventilatedSeats') },
+  { key: 'massaažifunktsioonigaiistmed', label: t('carFeatures.massageSeats') },
+  { key: 'infokuvamineesiklaasile', label: t('carFeatures.headUpDisplay') },
   { key: 'panoraamkatusklaasist', label: 'Panoraamkatus (klaasist)' },
   { key: 'katuseluuk', label: 'Katuseluuk' },
-  { key: 'usteservosulgurid', label: 'Uste Servosulgurid' },
-  { key: 'topeltklaasid', label: 'Topeltklaasid' },
-  { key: 'rulookardinadustel', label: 'Rulookardinad Ustel' },
-  { key: 'integreeritudVäravapult', label: 'Integreeritud Väravapult' },
+  { key: 'usteservosulgurid', label: t('carFeatures.softCloseDoors') },
+  { key: 'topeltklaasid', label: t('carFeatures.doubleGlazing') },
+  { key: 'rulookardinadustel', label: t('carFeatures.doorSunblinds') },
+  { key: 'integreeritudVäravapult', label: t('carFeatures.integratedGarageRemote') },
   { key: 'AppleCarPlay', label: 'Apple CarPlay' },
   { key: 'AndroidAuto', label: 'Android Auto' },
-  { key: 'stereo', label: 'Stereo' },
-  { key: 'õhkvedrustus', label: 'Õhkvedrustus' },
-  { key: 'reguleeritavvedrustus', label: 'Reguleeritav Vedrustus' },
-  { key: '4-rattapööramine', label: '4-ratta Pööramine' },
-  { key: 'veokonks', label: 'Veokonks' },
-  { key: 'elektrilisedliuguksed', label: 'Elektrilised Liuguksed' },
-  { key: 'öiseNägemiseassistent', label: 'Öise Nägemise Assistent' },
-  { key: 'valgustuspakett', label: 'Valgustuspakett' },
-  { key: 'suverehvid', label: 'Suverehvid' },
-  { key: 'talverehvid', label: 'Talverehvid' },
-  { key: 'valuveljed', label: 'Valuveljed' },
+  { key: 'stereo', label: t('carFeatures.stereo') },
+  { key: 'õhkvedrustus', label: t('carFeatures.airSuspension') },
+  { key: 'reguleeritavvedrustus', label: t('carFeatures.adjustableSuspension') },
+  { key: '4-rattapööramine', label: t('carFeatures.fourWheelSteering') },
+  { key: 'veokonks', label: t('carFeatures.towHook') },
+  { key: 'elektrilisedliuguksed', label: t('carFeatures.powerSlidingDoors') },
+  { key: 'öiseNägemiseassistent', label: t('carFeatures.nightVisionAssistant') },
+  { key: 'valgustuspakett', label: t('carFeatures.lightingPackage') },
+  { key: 'suverehvid', label: t('carFeatures.summerTires') },
+  { key: 'talverehvid', label: t('carFeatures.winterTires') },
+  { key: 'valuveljed', label: t('carFeatures.alloyWheels') },
 ];
 
-const carColorOptions = [
-  { value: "beež", label: "Beež" },
-  { value: "helebeež", label: "Hele beež" },
-  { value: "hall", label: "Hall" },
-  { value: "helehall", label: "Hele hall" },
-  { value: "hellkollane", label: "Hele kollane" },
-  { value: "helelilla", label: "Hele Lilla" },
-  { value: "heleanž", label: "Heleanž" },
-  { value: "helepruun", label: "Hele Pruun" },
-  { value: "helepunane", label: "Hele Punane" },
-  { value: "heleroheline", label: "Pruun" },
-  { value: "helesinine", label: "Hele Sinine" },
-  { value: "hõbedane", label: "Hõbedane" },
-  { value: "kollane", label: "Kollane" },
-  { value: "kuldne", label: "Kuldne" },
-  { value: "lilla", label: "Lilla" },
-  { value: "heleoranž", label: "Hele Oranž" },
-  { value: "must", label: "Must" },
-  { value: "oranž", label: "Oranž" },
-  { value: "pruun", label: "Pruun" },
-  { value: "punane", label: "Punane" },
-  { value: "roheline", label: "Roheline" },
-  { value: "roosa", label: "Roosa" },
-  { value: "sinine", label: "Sinine" },
-  { value: "tumebeež", label: "Tume Beež" },
-  { value: "tumehall", label: "Tume Hall" },
-  { value: "tumekollane", label: "Tume Kollane" },
-  { value: "tumelilla", label: "Tume Lilla" },
-  { value: "tumeoranž", label: "Tume Oranž" },
-  { value: "tumerpruun", label: "Tumer Pruun" },
-  { value: "tumepunane", label: "Tume Punane" },
-  { value: "tumeroheline", label: "Tume Roheline" },
-  { value: "tumesinine", label: "Tume Sinine" },
-  { value: "valge", label: "Valge" },
+const carColorOptions = ( t: any ) => [
+  { value: "beež", label: t('colors.beige') },
+  { value: "helebeež", label: t('colors.lightBeige') },
+  { value: "hall", label: t('colors.grey') },
+  { value: "helehall", label: t('colors.lightGrey') },
+  { value: "hellkollane", label: t('colors.lightYellow') },
+  { value: "helelilla", label: t('colors.lightPurple') },
+  { value: "heleanž", label: t('colors.lightOrange') },
+  { value: "helepruun", label: t('colors.lightBrown') },
+  { value: "helepunane", label: t('colors.lightRed') },
+  { value: "heleroheline", label: t('colors.brown') },
+  { value: "helesinine", label: t('colors.lightBlue') },
+  { value: "hõbedane", label: t('colors.silver') },
+  { value: "kollane", label: t('colors.yellow') },
+  { value: "kuldne", label: t('colors.golden') },
+  { value: "lilla", label: t('colors.purple') },
+  { value: "heleoranž", label: t('colors.lightOrange') },
+  { value: "must", label: t('colors.black') },
+  { value: "oranž", label: t('colors.orange') },
+  { value: "pruun", label: t('colors.brown') },
+  { value: "punane", label: t('colors.red') },
+  { value: "roheline", label: t('colors.green') },
+  { value: "roosa", label: t('colors.pink') },
+  { value: "sinine", label: t('colors.blue') },
+  { value: "tumebeež", label: t('colors.darkBeige') },
+  { value: "tumehall", label: t('colors.darkGrey') },
+  { value: "tumekollane", label: t('colors.darkYellow') },
+  { value: "tumelilla", label: t('colors.darkPurple') },
+  { value: "tumeoranž", label: t('colors.darkOrange') },
+  { value: "tumerpruun", label: t('colors.darkBrown') },
+  { value: "tumepunane", label: t('colors.darkRed') },
+  { value: "tumeroheline", label: t('colors.darkGreen') },
+  { value: "tumesinine", label: t('colors.darkBlue') },
+  { value: "valge", label: t('colors.white') },
 ];
 
-const salonColorOptions = [
-  { value: "must", label: "Must" },
-  { value: "hall", label: "Hall" },
-  { value: "beež", label: "Beež" },
-  { value: "pruun", label: "Pruun" },
-  { value: "punane", label: "Punane" },
-  { value: "sinine", label: "Sinine" },
-  { value: "roheline", label: "Roheline" },
-  { value: "kollane", label: "Kollane" },
-  { value: "lilla", label: "Lilla" },
-  { value: "oranž", label: "Oranž" },
-  { value: "valge", label: "Valge" },
-  { value: "muu", label: "Muu" },
+const salonColorOptions = ( t: any ) => [
+  { value: "must", label: t('colors.black') },
+  { value: "hall", label: t('colors.grey') },
+  { value: "beež", label: t('colors.beige') },
+  { value: "pruun", label: t('colors.brown') },
+  { value: "punane", label: t('colors.red') },
+  { value: "sinine", label: t('colors.blue') },
+  { value: "roheline", label: t('colors.green') },
+  { value: "kollane", label: t('colors.yellow') },
+  { value: "lilla", label: t('colors.purple') },
+  { value: "oranž", label: t('colors.orange') },
+  { value: "valge", label: t('colors.white') },
+  { value: "muu", label: t('vehicleTypes.other') },
 ];
 
 const inspectionValidityOptions = [
@@ -204,6 +204,8 @@ const inspectionValidityOptions = [
 export default function AddsPage() {
   const options = useMemo(() => countryList().getData(), []);
   const { user } = useAuth();
+  const { t } = useI18n();
+
   const [formData, setFormData] = useState({
     brand_id: "",
     model_id: "",
@@ -436,7 +438,7 @@ export default function AddsPage() {
             const arr = Array.isArray(car.tech_check) ? car.tech_check : car.tech_check.split(',');
             setCheckTechboxes((prev) => {
               const obj: any = {};
-              techCheckOptions.forEach(opt => {
+              techCheckOptions(t).forEach(opt => {
                 obj[opt.key] = arr.includes(opt.key);
               });
               return obj;
@@ -446,7 +448,7 @@ export default function AddsPage() {
             const arr = Array.isArray(car.accessories) ? car.accessories : car.accessories.split(',');
             setCheckboxes((prev) => {
               const obj: any = {};
-              accessoriesOptions.forEach(opt => {
+              accessoriesOptions(t).forEach(opt => {
                 obj[opt.key] = arr.includes(opt.key);
               });
               return obj;
@@ -494,24 +496,24 @@ export default function AddsPage() {
           // If car not found, redirect to user page
           navigate('/user');
         }
-        } else {
-          // Check for editing car data in localStorage (fallback for old approach)
-          const editingCarData = localStorage.getItem('editingCar');
-          if (editingCarData) {
-            try {
-              const car = JSON.parse(editingCarData);
-              handleEditCar(car);
-              // Clear the localStorage after loading the data
-              localStorage.removeItem('editingCar');
-            } catch (error) {
-              console.error('Error parsing editing car data:', error);
-              localStorage.removeItem('editingCar');
-            }
-          } else {
-            // For new cars, load user's existing contact data
-            await loadUserContactData();
+      } else {
+        // Check for editing car data in localStorage (fallback for old approach)
+        const editingCarData = localStorage.getItem('editingCar');
+        if (editingCarData) {
+          try {
+            const car = JSON.parse(editingCarData);
+            handleEditCar(car);
+            // Clear the localStorage after loading the data
+            localStorage.removeItem('editingCar');
+          } catch (error) {
+            console.error('Error parsing editing car data:', error);
+            localStorage.removeItem('editingCar');
           }
+        } else {
+          // For new cars, load user's existing contact data
+          await loadUserContactData();
         }
+      }
     };
 
     initializeData().finally(() => {
@@ -698,14 +700,14 @@ export default function AddsPage() {
     }
 
     // Check if we have any contact data to save
-    const hasContactData = contactFormData.phone || 
-                           contactFormData.businessType || 
-                           contactFormData.socialNetwork || 
-                           contactFormData.email || 
-                           contactFormData.address || 
-                           contactFormData.website || 
-                           contactFormData.language?.length > 0 || 
-                           contactFormData.country;
+    const hasContactData = contactFormData.phone ||
+      contactFormData.businessType ||
+      contactFormData.socialNetwork ||
+      contactFormData.email ||
+      contactFormData.address ||
+      contactFormData.website ||
+      contactFormData.language?.length > 0 ||
+      contactFormData.country;
 
     if (!hasContactData) {
       alert("Please fill in at least one contact field before saving");
@@ -833,37 +835,37 @@ export default function AddsPage() {
         await axios.put(`/api/cars/${editingCar.id}`, formDataObj, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        } else {
-          console.log('Form Data:', formDataObj);
-          console.log('Contact Form Data:', contactFormData);
-          
-          // Send car data first
-          const carResponse = await axios.post("/api/cars", formDataObj, {
+      } else {
+        console.log('Form Data:', formDataObj);
+        console.log('Contact Form Data:', contactFormData);
+
+        // Send car data first
+        const carResponse = await axios.post("/api/cars", formDataObj, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        // Check for pending contact data in localStorage
+        const pendingContactData = localStorage.getItem('pendingContactData');
+        let contactDataToSave = contactFormData;
+
+        if (pendingContactData) {
+          try {
+            contactDataToSave = JSON.parse(pendingContactData);
+            // Clear the pending data from localStorage
+            // localStorage.removeItem('pendingContactData');
+          } catch (error) {
+            console.error('Error parsing pending contact data:', error);
+          }
+        }
+
+        // Send contact data separately if it exists
+        if (contactDataToSave.phone || contactDataToSave.businessType || contactDataToSave.socialNetwork ||
+          contactDataToSave.email || contactDataToSave.address || contactDataToSave.website ||
+          contactDataToSave.language || contactDataToSave.country) {
+          await axios.post("/api/contacts/user", contactDataToSave, {
             headers: { Authorization: `Bearer ${token}` },
           });
-          
-          // Check for pending contact data in localStorage
-          const pendingContactData = localStorage.getItem('pendingContactData');
-          let contactDataToSave = contactFormData;
-          
-          if (pendingContactData) {
-            try {
-              contactDataToSave = JSON.parse(pendingContactData);
-              // Clear the pending data from localStorage
-              // localStorage.removeItem('pendingContactData');
-            } catch (error) {
-              console.error('Error parsing pending contact data:', error);
-            }
-          }
-          
-          // Send contact data separately if it exists
-          if (contactDataToSave.phone || contactDataToSave.businessType || contactDataToSave.socialNetwork || 
-              contactDataToSave.email || contactDataToSave.address || contactDataToSave.website || 
-              contactDataToSave.language || contactDataToSave.country) {
-            await axios.post("/api/contacts/user", contactDataToSave, {
-              headers: { Authorization: `Bearer ${token}` },
-            });
-          }
+        }
       }
       setEditingCar(null);
       setCarImages(Array(40).fill(null));
@@ -908,7 +910,7 @@ export default function AddsPage() {
 
     // Separate contact fields from car data
     const { phone, businessType, socialNetwork, email, address, website, language, country, ...carData } = car;
-    
+
     setFormData((prev) => ({
       ...prev,
       ...carData,
@@ -993,7 +995,7 @@ export default function AddsPage() {
         setContactSaved(false); // No existing contact data
       }
     };
-    
+
     loadContactData();
   };
   const handleDeleteCar = async (id: number) => {
@@ -1034,7 +1036,7 @@ export default function AddsPage() {
         <div className="max-w-[1440px] mx-auto px-6 lg:px-[100px] py-16">
           <div className="text-center">
             <h1 className="text-motorsoline-text text-3xl font-semibold mb-8">
-              Laetakse...
+              {t('common.loading')}
             </h1>
           </div>
         </div>
@@ -1045,7 +1047,7 @@ export default function AddsPage() {
     <PageContainer>
       <div className="max-w-[1440px] mx-auto px-6 lg:px-[100px] py-16">
         <h1 className="text-motorsoline-text text-3xl font-semibold mb-8">
-          {editingCar ? 'Redigeeri kuulutus' : 'Loo kuulutus'}
+          {editingCar ? t('listing.editListingTitle') : t('listing.createListing')}
         </h1>
         <div className="space-y-6">
           {/* Photo Upload Section */}
@@ -1056,7 +1058,7 @@ export default function AddsPage() {
               onReorder={handleImageReorder}
               previews={
                 editingCar
-                  ? Array.from({ length: 40 }, (_, i) => editingCar[`image_${i + 1 }`])
+                  ? Array.from({ length: 40 }, (_, i) => editingCar[`image_${i + 1}`])
                   : []
               }
               maxPhotos={40}
@@ -1069,167 +1071,167 @@ export default function AddsPage() {
           <FormSection title="Mudelidetailid">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <FormField
-                label="Valige sõiduki liik"
-                placeholder="Vali sõiduki liik"
+                label={t('modelDetails.title')}
+                placeholder={t('model.title')}
                 isSelect
                 value={formData.vehicleType}
                 onChange={(value) => handleInputChange("vehicleType", value)}
                 options={[
                   {
                     value: "",
-                    label: "Vali",
+                    label: t('common.select'),
                   },
                   {
                     value: "sõiduauto",
-                    label: "Sõiduauto",
+                    label: t('vehicleTypes.passengerCar'),
                   },
                   {
                     value: "maastur",
-                    label: "Maastur",
+                    label: t('vehicleTypes.suv'),
                   },
                   {
                     value: "kaubik",
-                    label: "Kaubik",
+                    label: t('vehicleTypes.van'),
                   },
                   {
                     value: "buss",
-                    label: "Buss",
+                    label: t('vehicleTypes.bus'),
                   },
                   {
                     value: "veoauto",
-                    label: "Veoauto",
+                    label: t('vehicleTypes.truck'),
                   },
                   {
                     value: "haagis",
-                    label: "Haagis",
+                    label: t('vehicleTypes.trailer'),
                   },
                   {
                     value: "mototehnika",
-                    label: "Mototehnika",
+                    label: t('vehicleTypes.motorcycle'),
                   },
                   {
                     value: "haagissuvila",
-                    label: "Haagissuvila",
+                    label: t('vehicleTypes.caravan'),
                   },
                   {
                     value: "autoelamu",
-                    label: "Autoelamu",
+                    label: t('vehicleTypes.motorhome'),
                   },
                   {
                     value: "veesõiduk",
-                    label: "Veesõiduk",
+                    label: t('vehicleTypes.watercraft'),
                   },
                   {
                     value: "ehitustehnika",
-                    label: "Ehitustehnika",
+                    label: t('vehicleTypes.constructionMachinery'),
                   },
                   {
                     value: "põllumajandustehnika",
-                    label: "Põllumajandustehnika",
+                    label: t('vehicleTypes.agriculturalMachinery'),
                   },
                   {
                     value: "metsatehnika",
-                    label: "Metsatehnika",
+                    label: t('vehicleTypes.forestryMachinery'),
                   },
                   {
                     value: "kommunaaltehnika",
-                    label: "Kommunaaltehnika",
+                    label: t('vehicleTypes.utilityMachinery'),
                   },
                   {
                     value: "võistlussõiduk",
-                    label: "Võistlussõiduk",
+                    label: t('vehicleTypes.competitionVehicle'),
                   },
                   {
                     value: "muu",
-                    label: "Muu",
+                    label: t('vehicleTypes.other'),
                   },
                 ]}
               />
               <FormField
-                label="Keretüüp"
-                placeholder="Keretüüp"
+                label={t('formLabels.bodyType')}
+                placeholder={t('formLabels.bodyType')}
                 isSelect
                 value={formData.bodyType}
                 onChange={(value) => handleInputChange("bodyType", value)}
                 options={[
                   {
                     value: "",
-                    label: "Vali",
+                    label: t('common.select'),
                   },
                   {
                     value: "sedaan",
-                    label: "sedaan",
+                    label: t('bodyTypes.sedan'),
                   },
                   {
                     value: "luukpara",
-                    label: "luukpara",
+                    label: t('bodyTypes.hatchback'),
                   },
                   {
                     value: "universaal",
-                    label: "universaal",
+                    label: t('bodyTypes.wagon'),
                   },
                   {
                     value: "mahtuniversaal",
-                    label: "mahtuniversaal",
+                    label: t('bodyTypes.mpv'),
                   },
                   {
                     value: "kupee",
-                    label: "kupee",
+                    label: t('bodyTypes.coupe'),
                   },
                   {
                     value: "kabriolett",
-                    label: "kabriolett",
+                    label: t('bodyTypes.convertible'),
                   },
                   {
                     value: "pikap",
-                    label: "pikap",
+                    label: t('bodyTypes.pickup'),
                   },
                   {
                     value: "limusiin",
-                    label: "limusiin",
+                    label: t('bodyTypes.limousine'),
                   },
                 ]}
               />
               <FormField
-                label="Vali mark"
-                placeholder="Vali mark"
+                label={t('formLabels.brand')}
+                placeholder={t('common.select')}
                 isSelect
                 value={formData.brand_id}
                 onChange={(value) => handleInputChange("brand_id", value)}
                 options={[
-                  { value: "", label: "Vali" },
+                  { value: "", label: t('common.select') },
                   ...brands.map((b) => ({ value: b.id, label: b.name }))
                 ]}
               />
               <FormField
-                label="Mudel"
-                placeholder="Mudel"
+                label={t('formLabels.model')}
+                placeholder={t('formLabels.model')}
                 isSelect
                 value={formData.model_id}
                 onChange={(value) => handleInputChange("model_id", value)}
                 options={[
-                  { value: "", label: "Vali" },
+                  { value: "", label: t('common.select') },
                   ...models.map((m) => ({ value: m.id, label: m.name }))
                 ]}
                 className={formData.brand_id}
                 disabled={modelLoading}
               />
               <FormField
-                label="Muu mudel või täpsustus"
-                placeholder="näide: Long 4Matic"
+                label={t('formLabels.otherModelOrSpecification')}
+                placeholder={t('formLabels.exampleLong4Matic')}
                 value={formData.modelDetail}
                 onChange={(value) => handleInputChange("modelDetail", value)}
               />
               <FormField
-                label="Populaarne varustus (kuulutuse pealkirjas)"
+                label={t('formLabels.higherValueEquipment')}
                 placeholder=""
                 value={formData.major}
                 onChange={(value) => handleInputChange("major", value)}
               />
-              
+
               <FormField
-                label="Esmane registreerimine"
-                placeholder="Aasta"
+                label={t('formLabels.firstRegistration')}
+                placeholder={t('formLabels.year')}
                 isSelect
                 value={formData.year_id}
                 onChange={(value) => handleInputChange("year_id", value)}
@@ -1241,7 +1243,7 @@ export default function AddsPage() {
               <FormField
                 label=""
                 className="space-y-3 mt-7"
-                placeholder="Kuu"
+                placeholder={t('formLabels.month')}
                 isSelect
                 value={formData.month}
                 onChange={(value) => handleInputChange("month", value)}
@@ -1262,7 +1264,7 @@ export default function AddsPage() {
                 ]}
               />
               <FormField
-                label="Omanike arv"
+                label={t('formLabels.ownerCountLabel')}
                 placeholder="1"
                 isSelect
                 value={formData.ownerCount}
@@ -1270,7 +1272,7 @@ export default function AddsPage() {
                 options={[
                   {
                     value: "",
-                    label: "Vali",
+                    label: t('common.select'),
                   },
                   {
                     value: "1",
@@ -1291,33 +1293,33 @@ export default function AddsPage() {
                 ]}
               />
               <FormField
-                label="Sõiduki seisukord"
-                placeholder="Kasutatud, avariiline ..."
+                label={t('formLabels.vehicleCondition')}
+                placeholder={t('formLabels.vehicleCondition')}
                 value={formData.technicalData}
                 isSelect
                 onChange={(value) => handleInputChange("technicalData", value)}
                 options={[
                   {
                     value: "",
-                    label: "Vali",
+                    label: t('common.select'),
                   },
                   {
                     value: "uus",
-                    label: "Uus",
+                    label: t('vehicleCondition.new'),
                   },
                   {
                     value: "kasutatud",
-                    label: "Kasutatud",
+                    label: t('vehicleCondition.used'),
                   },
                   {
                     value: "avariiline",
-                    label: "Avariiline",
+                    label: t('vehicleCondition.damaged'),
                   },
                 ]}
               />
               <FormField
-                label="Läbisõit"
-                placeholder="Läbisõit"
+                label={t('formLabels.mileage')}
+                placeholder={t('formLabels.mileage')}
                 value={formData.mileage}
                 onChange={(value) => handleInputChange("mileage", value)}
               />
@@ -1328,127 +1330,127 @@ export default function AddsPage() {
           <FormSection title="" className="mt-0">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <FormField
-                label="Kütuse tüüp"
-                placeholder="Vali Kütuse tüüp"
+                label={t('formLabels.fuelType')}
+                placeholder={t('formLabels.chooseFuelType')}
                 isSelect
                 value={formData.fuelType}
                 onChange={(value) => handleInputChange("fuelType", value)}
                 options={[
                   {
                     value: "",
-                    label: "Vali",
+                    label: t('common.select'),
                   },
                   {
                     value: "bensiin",
-                    label: "Bensiin",
+                    label: t('fuelTypes.gasoline'),
                   },
                   {
                     value: "diisel",
-                    label: "Diisel",
+                    label: t('fuelTypes.diesel'),
                   },
                   {
                     value: "elekter",
-                    label: "Elekter",
+                    label: t('fuelTypes.electric'),
                   },
                   {
                     value: "bensiin + gaas (LPG/Vedelgaas)",
-                    label: "Bensiin + Gaas (LPG/Vedelgaas)",
+                    label: t('fuelTypes.gasolineLPG'),
                   },
                   {
                     value: "bensiin + gaas (LNG/veeldatud maagaas)",
-                    label: "Bensiin + Gaas (LNG/Veeldatud maagaas)",
+                    label: t('fuelTypes.gasolineLNG'),
                   },
                   {
                     value: "bensiin + gaas (CNG/surugaas)",
-                    label: "Bensiin + Gaas (CNG/Surugaas)",
+                    label: t('fuelTypes.gasolineCNG'),
                   },
                   {
                     value: "diisel + gaas (LNG/veeldatud maagaas)",
-                    label: "Diisel + Gaas (LNG/Veeldatud maagaas)",
+                    label: t('fuelTypes.dieselLNG'),
                   },
                   {
                     value: "gaas (LPG/vedelgaas)",
-                    label: "Gaas (LPG/Vedelgaas)",
+                    label: t('fuelTypes.gasLPG'),
                   },
                   {
                     value: "gaas (CNG/surugaas)",
-                    label: "Gaas (CNG/Surugaas)",
+                    label: t('fuelTypes.gasCNG'),
                   },
                   {
                     value: "gaas (LNG/veeldatud maagaas)",
-                    label: "Gaas (LNG/Veeldatud maagaas)",
+                    label: t('fuelTypes.gasLNG'),
                   },
                   {
                     value: "hübriid (ensiin / elekter)",
-                    label: "Hübriid (Bensiin / Elekter)",
+                    label: t('fuelTypes.hybridGasolineElectric'),
                   },
                   {
                     value: "hübriid (diisel / elekter)",
-                    label: "Hübriid (Diisel / Elekter)",
+                    label: t('fuelTypes.hybridDieselElectric'),
                   },
                   {
                     value: "pistikhübriid (bensiin / elekter)",
-                    label: "Pistikhübriid (Bensiin / Elekter)",
+                    label: t('fuelTypes.plugInHybridGasolineElectric'),
                   },
                   {
                     value: "pistikhübriid (diisel / elekter)",
-                    label: "Pistikhübriid (Diisel / Elekter)",
+                    label: t('fuelTypes.plugInHybridDieselElectric'),
                   },
                   {
                     value: "vesinik",
-                    label: "Vesinik",
+                    label: t('fuelTypes.hydrogen'),
                   },
                 ]}
               />
               <div>
                 <FormField
-                  label="Käigukasti tüüp"
-                  placeholder="Automaat"
+                  label={t('formLabels.transmissionType')}
+                  placeholder={t('formLabels.transmissionType')}
                   isSelect
                   value={formData.transmission}
                   onChange={(value) => handleInputChange("transmission", value)}
                   options={[
                     {
                       value: "",
-                      label: "Vali",
+                      label: t('common.select'),
                     },
                     {
                       value: "manuaal",
-                      label: "Manuaal",
+                      label: t('transmissionTypes.manual'),
                     },
                     {
                       value: "automaat",
-                      label: "Automaat",
+                      label: t('transmissionTypes.automatic'),
                     },
                     {
                       value: "pool automaat",
-                      label: "Pool automaat",
+                      label: t('transmissionTypes.semiAutomatic'),
                     },
                   ]}
                 />
               </div>
               <FormField
-                label="Veoskeem:"
-                placeholder="Vali veoskeem"
+                label={t('formLabels.driveType')}
+                placeholder={t('formLabels.driveType')}
                 isSelect
                 value={formData.drive_type_id}
                 onChange={(value) => handleInputChange("drive_type_id", value)}
                 options={[
                   {
                     value: "",
-                    label: "Vali",
+                    label: t('common.select'),
                   },
                   {
                     value: "13",
-                    label: "Esivedu",
+                    label: t('driveTypes.frontWheel'),
                   },
                   {
                     value: "14",
-                    label: "Tagavedu",
+                    label: t('driveTypes.rearWheel'),
                   },
                   {
                     value: "15",
-                    label: "Nelikvedu",
+                    label: t('driveTypes.allWheel'),
                   },
                 ]}
               />
@@ -1493,40 +1495,40 @@ export default function AddsPage() {
               </div>
               </div> */}
               <FormField
-                label="Võimsus (Kw)"
+                label={t('formLabels.powerKw2')}
                 placeholder="0"
                 value={formData.power}
                 onChange={(value) => handleInputChange("power", value)}
               />
               <FormField
-                label="Töömaht (cm³)"
+                label={t('formLabels.displacement')}
                 placeholder="0"
                 value={formData.displacement}
                 onChange={(value) => handleInputChange("displacement", value)}
               />
               <FormField
-                label="Istekoht"
+                label={t('formLabels.seats')}
                 placeholder="0"
                 value={formData.seats}
                 onChange={(value) => handleInputChange("seats", value)}
               />
               <FormField
-                label="Uksed"
+                label={t('formLabels.doors')}
                 placeholder="0"
                 value={formData.doors}
                 onChange={(value) => handleInputChange("doors", value)}
               />
               <div className="space-y-3">
                 <FormField
-                  label="Kategooria tähis"
-                  placeholder="Vali Kategooria tähis"
+                  label={t('formLabels.categoryDesignation')}
+                  placeholder={t('formLabels.chooseCategoryDesignation')}
                   isSelect
                   value={formData.category}
                   onChange={(value) => handleInputChange("category", value)}
                   options={[
                     {
                       value: "",
-                      label: "Vali",
+                      label: t('common.select'),
                     },
                     {
                       value: "M1",
@@ -1603,12 +1605,12 @@ export default function AddsPage() {
                     <p className="text-sm text-blue-800">
                       {(() => {
                         const descriptions: { [key: string]: string } = {
-                          "M1": "Sõiduautod, kuni 8 istekohta peale juhi",
-                          "M2": "Bussid/väikebussid, üle 8 istekoha, täismass ≤ 5 t",
-                          "M3": "Suured bussid, üle 8 istekoha, täismass > 5 t",
-                          "N1": "Kaubikud, täismass ≤ 3,5 t",
-                          "N2": "Veoautod, täismass 3,5–12 t",
-                          "N3": "Raskeveokid, täismass > 12 t",
+                          "M1": t('vehicleCategories.m1'),
+                          "M2": t('vehicleCategories.m2'),
+                          "M3": t('vehicleCategories.m3'),
+                          "N1": t('vehicleCategories.n1'),
+                          "N2": t('vehicleCategories.n2'),
+                          "N3": t('vehicleCategories.n3'),
                           "L1e": "Kergetsiklid (≤ 50 cm³ ja ≤ 45 km/h)",
                           "L2e": "Kolmerattalised kergetsiklid",
                           "L3e": "Mootorrattad",
@@ -1628,56 +1630,56 @@ export default function AddsPage() {
                 )}
               </div>
               <FormField
-                label="Sõiduki värv"
-                placeholder="Vali sõiduki värv"
+                label={t('formLabels.vehicleColor')}
+                placeholder={t('formLabels.chooseVehicleColor')}
                 isSelect
                 value={formData.carColor}
                 onChange={(value) => handleInputChange("carColor", value)}
                 options={[
-                  { value: "", label: "Vali" },
-                  ...carColorOptions
+                  { value: "", label: t('common.select') },
+                  ...carColorOptions(t)
                 ]}
               />
               <FormField
-                label="Värvi tüüp"
-                placeholder="Vali värvi tüüp"
+                label={t('formLabels.colorType')}
+                placeholder={t('formLabels.chooseColorType')}
                 isSelect
                 value={formData.carColorType}
                 onChange={(value) => handleInputChange("carColorType", value)}
                 options={[
-                  { value: "", label: "Vali" },
-                  { value: "tavaline", label: "Tavaline" },
-                  { value: "metallik", label: "Metallik" },
+                  { value: "", label: t('common.select') },
+                  { value: "tavaline", label: t('colors.normal') },
+                  { value: "metallik", label: t('colors.metallic') },
                 ]}
               />
               <FormField
-                label="Salongi värv"
-                placeholder="Vali salongi värv"
+                label={t('formLabels.interiorColor')}
+                placeholder={t('formLabels.chooseInteriorColor')}
                 isSelect
                 value={formData.salonColor}
                 onChange={(value) => handleInputChange("salonColor", value)}
                 options={[
-                  { value: "", label: "Vali" },
-                  ...salonColorOptions
+                  { value: "", label: t('common.select') },
+                  ...salonColorOptions(t)
                 ]}
               />
               <div className="space-y-2">
                 <FormField
-                  label="Hind"
+                  label={t('search.price')}
                   placeholder="€"
                   value={formData.price}
                   onChange={(value) => handleInputChange("price", value)}
                 />
               </div>
               <FormField
-                label="Soodushind"
+                label={t('formLabels.discountPrice')}
                 placeholder="€"
                 value={formData.discountPrice}
                 onChange={(value) => handleInputChange("discountPrice", value)}
               />
 
               <FormField
-                label="Käibemaksu tagastatavus"
+                label={t('formLabels.vatRefundability')}
                 placeholder="Yes"
                 isSelect
                 value={formData.vatRefundable}
@@ -1685,7 +1687,7 @@ export default function AddsPage() {
                 options={[
                   {
                     value: "",
-                    label: "Vali",
+                    label: t('common.select'),
                   },
                   {
                     value: "jah",
@@ -1698,7 +1700,7 @@ export default function AddsPage() {
                 ]}
               />
               <FormField
-                label="Käibemaksumäär"
+                label={t('formLabels.vatRate')}
                 placeholder=""
                 type="number"
                 value={formData.vatRate}
@@ -1710,14 +1712,14 @@ export default function AddsPage() {
               />
               <div className="space-y-3 mt-3">
                 <FormField
-                  label="Garantii"
-                  placeholder="Kehtib kuni"
+                  label={t('formLabels.warranty')}
+                  placeholder={t('formLabels.validUntil')}
                   value={formData.warranty}
                   onChange={(value) => handleInputChange("warranty", value)}
                 />
                 <FormField
-                  label="VIN-kood"
-                  placeholder="WDC000000000000"
+                  label={t('formLabels.vinCode')}
+                  placeholder={t('formLabels.vinCodePlaceholder')}
                   value={formData.vinCode}
                   onChange={(value) => handleInputChange("vinCode", value)}
                 />
@@ -1725,7 +1727,7 @@ export default function AddsPage() {
               <div className="ml-2 space-y-3 pt-1 mt-3">
                 <div className="flex items-center gap-2">
                   <CheckboxField
-                    label="Ülevaatus kehtib"
+                    label={t('formLabels.inspectionValid')}
                     checked={checktechboxes.inspectionValid}
                     onChange={(checked) =>
                       handleCheckTechboxChange("inspectionValid", checked)
@@ -1776,8 +1778,8 @@ export default function AddsPage() {
               </div>
               <div className="mt-0">
                 <FormField
-                  label="Sõiduki number:"
-                  placeholder="AA00000"
+                  label={t('formLabels.vehicleNumber')}
+                  placeholder={t('formLabels.plateNumberPlaceholder')}
                   value={formData.plateNumber}
                   onChange={(value) => handleInputChange("plateNumber", value)}
                 />
@@ -1785,10 +1787,10 @@ export default function AddsPage() {
             </div>
           </FormSection>
           {/* Equipment Section */}
-          <FormSection title="Kõrgema väärtusega lisavarustus">
+          <FormSection title={t('formLabels.higherValueEquipment')}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* First 12 checkboxes - always visible */}
-              {accessoriesOptions.slice(0, 12).map((option) => (
+              {accessoriesOptions(t).slice(0, 12).map((option) => (
                 <div key={option.key} className="flex items-center gap-2">
                   <CheckboxField
                     label={option.label}
@@ -1801,7 +1803,7 @@ export default function AddsPage() {
               {/* Additional 41 checkboxes - shown when expanded */}
               {showMoreEquipment && (
                 <>
-                  {accessoriesOptions.slice(12).map((option) => (
+                  {accessoriesOptions(t).slice(12).map((option) => (
                     <div key={option.key} className="flex items-center gap-2">
                       <CheckboxField
                         label={option.label}
@@ -1811,7 +1813,7 @@ export default function AddsPage() {
                       {option.key === 'stereo' && (
                         <input
                           type="text"
-                          placeholder="Näide: Burmeister"
+                          placeholder={t('formLabels.exampleBurmeister')}
                           value={formData.stereo}
                           onChange={(e) => handleInputChange("stereo", e.target.value)}
                           className="flex-1 ml-5 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -1821,7 +1823,7 @@ export default function AddsPage() {
                       {option.key === 'valuveljed' && (
                         <input
                           type="text"
-                          placeholder="Mõõt"
+                          placeholder={t('formLabels.measurement')}
                           value={formData.valuveljed}
                           onChange={(e) => handleInputChange("valuveljed", e.target.value)}
                           className="flex-1 ml-5 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -1839,7 +1841,7 @@ export default function AddsPage() {
                 onClick={() => setShowMoreEquipment(!showMoreEquipment)}
                 className="flex items-center gap-2 px-5 py-3 border border-[#06d6a0] text-[#06d6a0] rounded-lg text-motorsoline-primary hover:bg-motorsoline-primary hover:text-white transition-colors"
               >
-                <span>{showMoreEquipment ? "Näita vähem" : "Näita rohkem"}</span>
+                <span>{showMoreEquipment ? t('formLabels.showLess') : t('formLabels.showMore')}</span>
                 <ChevronDownIcon className={`transition-transform ${showMoreEquipment ? 'rotate-180' : ''}`} />
               </button>
             </div>
@@ -1847,8 +1849,8 @@ export default function AddsPage() {
           {/* Equipment Section */}
           <FormSection title="">
             <TextAreaField
-              label="Varustus:"
-              placeholder="Lisage varustus:"
+              label={t('car.features')}
+              placeholder={t('car.features')}
               value={formData.equipment}
               onChange={(value) => handleInputChange("equipment", value)}
             />
@@ -1857,64 +1859,64 @@ export default function AddsPage() {
           {/* Description Section */}
           <FormSection title="">
             <TextAreaField
-              label="Sõiduki kirjeldus müüja poolt"
-              placeholder="Lisage kirjeldus"
+              label={t('formLabels.vehicleDescriptionBySeller')}
+              placeholder={t('formLabels.vehicleDescriptionBySeller')}
               value={formData.description}
               onChange={(value) => handleInputChange("description", value)}
             />
           </FormSection>
 
           {/* Contact Section */}
-          <FormSection title="Kontaktid">
+          <FormSection title={t('common.contact')}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="flex gap-4">
                 <div className="w-full">
                   <label className="block text-motorsoline-text text-lg font-medium mb-3">
-                    Vali riik
+                    {t('formLabels.country')}
                   </label>
                   <ReactFlagsSelect
                     selected={contactFormData.country}
                     onSelect={(value) => handleContactInputChange("country", value)}
-                    placeholder="Vali riik"
+                    placeholder={t('formLabels.country')}
                     searchable={true}
                     className="w-full"
                   />
                 </div>
               </div>
               <FormField
-                label="Telefoninumber"
+                label={t('formLabels.phoneNumber')}
                 placeholder="+372 1234 567"
                 value={contactFormData.phone}
                 onChange={(value) => handleContactInputChange("phone", value)}
               />
               <FormField
-                label="Sotsiaalvõrgustik"
-                placeholder="www.youtube.com/Näide"
+                label={t('formLabels.socialNetwork')}
+                placeholder={t('formLabels.exampleYoutube')}
                 value={contactFormData.socialNetwork}
                 onChange={(value) => handleContactInputChange("socialNetwork", value)}
               />
               <FormField
-                label={user?.userType === "company" ? "Ettevõte" : "Eraisik"}
-                placeholder={user?.userType === "company" ? "Sisesta ettevõte" : "Sisesta eraisik"}
+                label={user?.userType === "company" ? t('formLabels.company') : t('formLabels.individual')}
+                placeholder={user?.userType === "company" ? t('formLabels.enterCompany') : t('formLabels.enterIndividual')}
                 value={contactFormData.businessType}
                 onChange={(value) => handleContactInputChange("businessType", value)}
               />
               <FormField
-                label="E-post"
-                placeholder="Näide@elke.ee"
+                label={t('auth.email')}
+                placeholder={t('formLabels.exampleEmail')}
                 type="email"
                 value={contactFormData.email}
                 onChange={(value) => handleContactInputChange("email", value)}
               />
               <FormField
-                label="Aadress"
-                placeholder="Aadress"
+                label={t('formLabels.address')}
+                placeholder={t('formLabels.address')}
                 value={contactFormData.address}
                 onChange={(value) => handleContactInputChange("address", value)}
               />
               <FormField
-                label="Koduleht"
-                placeholder="Koduleht"
+                label={t('formLabels.website')}
+                placeholder={t('formLabels.website')}
                 value={contactFormData.website}
                 onChange={(value) => handleContactInputChange("website", value)}
               />
@@ -1926,7 +1928,7 @@ export default function AddsPage() {
               /> */}
               <div className="w-full mt-0">
                 <label className="block text-motorsoline-text text-lg font-medium mb-3">
-                  Suhtluskeel
+                  {t('formLabels.communicationLanguage')}
                 </label>
                 {/* <ReactLanguageSelect
                     className="w-full rounded-lg bg-white text-lg"
@@ -1938,7 +1940,7 @@ export default function AddsPage() {
                 <MultiLanguageSelect
                   selected={contactFormData.language}
                   onSelect={handleLanguageChange}
-                  placeholder="Valige keeled"
+                  placeholder={t('language.select')}
                   searchable={true}
                   className="w-[530px]"
                 />
@@ -1947,17 +1949,16 @@ export default function AddsPage() {
 
             <div className="mt-6 flex gap-4 items-center">
               <button className="flex items-center px-8 py-4 border border-brand-primary rounded-lg text-brand-primary hover:bg-motorsoline-primary hover:text-white transition-colors">
-                + Lisa sotsiaalvõrgustik
+                + {t('formLabels.socialNetwork')}
               </button>
-              <button 
+              <button
                 onClick={handleSaveContact}
-                className={`flex items-center px-4 py-4 rounded-lg text-white transition-colors ${
-                  contactSaved 
-                    ? 'bg-green-500 hover:bg-green-600' 
+                className={`flex items-center px-4 py-4 rounded-lg text-white transition-colors ${contactSaved
+                    ? 'bg-green-500 hover:bg-green-600'
                     : 'bg-brand-primary hover:bg-motorsoline-primary'
-                }`}
+                  }`}
               >
-                {contactSaved ? '✓ Kontaktid salvestatud' : (editingCar ? 'Salvesta kontaktid' : 'Salvesta kontaktid')}
+                {contactSaved ? '✓ ' + t('common.success') : t('formLabels.saveContacts')}
               </button>
               {/* {contactSaved && (
                 <span className="text-green-600 text-sm font-medium">
@@ -1972,14 +1973,14 @@ export default function AddsPage() {
                 Lähtesta kontakt
               </button> */}
             </div>
-            
+
           </FormSection>
 
           {/* Additional Info Section */}
           <FormSection title="">
             <TextAreaField
-              label="Lisainfo"
-              placeholder="Lisage lisainfo"
+              label={t('car.description')}
+              placeholder={t('car.description')}
               value={formData.additionalInfo}
               onChange={(value) => handleInputChange("additionalInfo", value)}
             />
@@ -1996,7 +1997,7 @@ export default function AddsPage() {
                       onClick={handleCarSubmit}
                       disabled={carLoading}
                     >
-                      {carLoading ? "Salvestatakse..." : "Salvesta muudatused"}
+                      {carLoading ? t('common.saving') : t('common.saveChanges')}
                     </button>
                     <button
                       type="button"
@@ -2057,7 +2058,7 @@ export default function AddsPage() {
                         navigate("/user");
                       }}
                     >
-                      Tühista
+                      {t('common.cancel')}
                     </button>
                   </>
                 ) : (
@@ -2066,7 +2067,7 @@ export default function AddsPage() {
                     className="bg-brand-primary text-white px-4 py-2 rounded font-semibold hover:bg-blue-600 transition-colors"
                     onClick={() => setIsModalOpen(true)}
                   >
-                    Eelvaade
+                    {t('common.preview')}
                   </button>
                 )}
               </div>
@@ -2078,7 +2079,7 @@ export default function AddsPage() {
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
           <DialogContent className="max-w-[100vw] max-h-[100vh] w-screen h-screen p-0 m-0 rounded-none flex flex-col">
             <DialogHeader className="px-6 py-4 border-b flex-shrink-0">
-              <DialogTitle>Eelvaade</DialogTitle>
+              <DialogTitle>{t('common.preview')}</DialogTitle>
               <DialogDescription>
                 Auto eelvaade - näete, kuidas teie kuulutus välja näeb
               </DialogDescription>
@@ -2098,7 +2099,7 @@ export default function AddsPage() {
               ) : (
                 <div className="p-6 text-center">
                   <p className="text-gray-500">
-                    Salvestage auto andmed enne eelvaate vaatamist
+                    {t('car.saveDataBeforePreview')}
                   </p>
                 </div>
               )}
@@ -2110,7 +2111,7 @@ export default function AddsPage() {
                   className="bg-gray-300 text-gray-700 px-4 py-2 rounded font-semibold hover:bg-gray-400 transition-colors"
                   onClick={() => setIsModalOpen(false)}
                 >
-                  Sulge
+                  {t('common.close')}
                 </button>
                 <button
                   type="button"
@@ -2118,7 +2119,7 @@ export default function AddsPage() {
                   disabled={carLoading}
                   onClick={handleCarSubmit}
                 >
-                  {carLoading ? "Salvestatakse..." : (editingCar ? "Salvesta muudatused" : "Lisa kuulutus")}
+                  {carLoading ? t('common.saving') : (editingCar ? t('common.saveChanges') : t('common.addListing'))}
                 </button>
               </div>
             </DialogFooter>

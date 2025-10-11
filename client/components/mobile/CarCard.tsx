@@ -1,5 +1,5 @@
 import { Heart, Fuel } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useFavorites } from "../../hooks/useFavorites";
 import { useAuth } from "../../contexts/AuthContext";
 import { Separator } from "@/components/ui/separator";
@@ -40,13 +40,14 @@ export function CarCard({
   month,
 }: CarCardProps) {
   const navigate = useNavigate();
+  const { lang } = useParams<{ lang: string }>();
   const { isAuthenticated } = useAuth();
   const { isFavorite: isFav, toggleFavorite } = useFavorites();
 
   return (
     <div className="bg-white rounded-[13px] overflow-hidden shadow-sm w-full max-w-md mx-auto"
       onClick={() => {
-        navigate(`/car/${id}`);
+        navigate(`/${lang || 'ee'}/car/${id}`);
         window.scrollTo(0, 0);
       }}>
       <div className="relative">

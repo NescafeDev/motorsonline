@@ -5,6 +5,7 @@ import { Button } from "../../../../components/ui/button";
 import { Card, CardContent } from "../../../../components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import axios from "axios";
+import { useI18n } from "@/contexts/I18nContext";
 
 // Car interface (matching HomePage structure)
 export interface Car {
@@ -95,15 +96,19 @@ interface VehicleDetailsSectionProps {
 }
 
 // Helper function to get VAT display text (matching HomePage)
-const getVatDisplayText = (car: Car): string => {
-  if (car.vatRefundable === 'no' || car.vatRefundable === 'ei') {
-    return 'KM 0% (käibemaksu ei lisandu)';
-  }
-  return 'Hind sisaldab käibemaksu ' + car.vatRate + '%';
+const useVatText = () => {
+  const { t } = useI18n();
+  return (car: Car): string => {
+    if (car.vatRefundable === 'no' || car.vatRefundable === 'ei') {
+      return t('vatInfo.vat0NoVatAdded');
+    }
+    return t('vatInfo.priceIncludesVatWithRate') + ' ' + car.vatRate + '%';
+  };
 };
 
 export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionProps): JSX.Element => {
   const navigate = useNavigate();
+  const getVatDisplayText = useVatText();
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

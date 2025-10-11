@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useI18n } from "@/contexts/I18nContext";
 import {
   Accordion,
   AccordionContent,
@@ -98,6 +99,8 @@ export const CarListingSection = ({
   isMobile = false,
 }: CarListingSectionProps): JSX.Element => {
   const navigate = useNavigate();
+  const { t, currentLanguage } = useI18n();
+  const currentLang = currentLanguage;
   // Data for drive types - will be fetched from API
   const [driveTypes, setDriveTypes] = useState<{ id: number; name: string; ee_name: string }[]>([]);
 
@@ -179,33 +182,33 @@ export const CarListingSection = ({
 
   // Data for fuel types
   const fuelTypes = [
-    { id: "bensiin", label: "Bensiin" },
-    { id: "diisel", label: "Diisel" },
-    { id: "elekter", label: "Elekter" },
-    { id: "hübriid (bensiin/elekter)", label: "Hübriid (bensiin/elekter)" },
-    { id: "hübriid (diisel/elekter)", label: "Hübriid (diisel/elekter)" },
-    { id: "pistikhübriid (bensiin/elekter)", label: "Pistikhübriid (bensiin/elekter)" },
-    { id: "pistikhübriid (diisel/elekter)", label: "Pistikhübriid (diisel/elekter)" },
-    { id: "bensiin + gaas (LPG/vedelgaas)", label: "Bensiin + Gaas (LPG/vedelgaas)" },
-    { id: "bensiin + gaas (CNG/surugaas)", label: "Bensiin + Gaas (CNG/surugaas)" },
-    { id: "bensiin + gaas (LNG/veeldatud maagaas)", label: "Bensiin + Gaas (LNG/veeldatud maagaas)" },
-    { id: "diisel + gaas (LNG/veeldatud maagaas)", label: "Diisel + Gaas (LNG/veeldatud maagaas)" },
-    { id: "gaas (LPG/vedelgaas)", label: "Gaas (LPG/vedelgaas)" },
-    { id: "gaas (CNG/surugaas)", label: "Gaas (CNG/surugaas)" },
-    { id: "gaas (LNG/veeldatud maagaas)", label: "Gaas (LNG/veeldatud maagaas)" },
-    { id: "vesinik", label: "Vesinik" },
+    { id: "bensiin", label: t('fuelTypes.gasoline') },
+    { id: "diisel", label: t('fuelTypes.diesel') },
+    { id: "elekter", label: t('fuelTypes.electric') },
+    { id: "hübriid (bensiin/elekter)", label: t('fuelTypes.hybridGasolineElectric') },
+    { id: "hübriid (diisel/elekter)", label: t('fuelTypes.hybridDieselElectric') },
+    { id: "pistikhübriid (bensiin/elekter)", label: t('fuelTypes.plugInHybridGasolineElectric') },
+    { id: "pistikhübriid (diisel/elekter)", label: t('fuelTypes.plugInHybridDieselElectric') },
+    { id: "bensiin + gaas (LPG/vedelgaas)", label: t('fuelTypes.gasolineLPG') },
+    { id: "bensiin + gaas (CNG/surugaas)", label: t('fuelTypes.gasolineCNG') },
+    { id: "bensiin + gaas (LNG/veeldatud maagaas)", label: t('fuelTypes.gasolineLNG') },
+    { id: "diisel + gaas (LNG/veeldatud maagaas)", label: t('fuelTypes.dieselLNG') },
+    { id: "gaas (LPG/vedelgaas)", label: t('fuelTypes.gasLPG') },
+    { id: "gaas (CNG/surugaas)", label: t('fuelTypes.gasCNG') },
+    { id: "gaas (LNG/veeldatud maagaas)", label: t('fuelTypes.gasLNG') },
+    { id: "vesinik", label: t('fuelTypes.hydrogen') },
   ];
 
   // Data for transmission types
   const transmissionTypes = [
-    { id: "manuaal", label: "Manuaal" },
-    { id: "automaat", label: "Automaat" },
-    { id: "pool automaat", label: "Pool automaat" },
+    { id: "manuaal", label: t('transmissionTypes.manual') },
+    { id: "automaat", label: t('transmissionTypes.automatic') },
+    { id: "pool automaat", label: t('transmissionTypes.semiAutomatic') },
   ];
 
   const vehicleType = [
     { id: "vali", label: "Vali" },
-    { id: "sõiduauto", label: "Sõiduauto" },
+    { id: "sõiduauto", label: t('vehicleTypes.passengerCar') },
     { id: "maastur", label: "Maastur" },
     { id: "kaubik", label: "Kaubik" },
     { id: "buss", label: "Buss" },
@@ -214,12 +217,12 @@ export const CarListingSection = ({
     { id: "mototehnika", label: "Mototehnika" },
     { id: "haagissuvila", label: "Haagissuvila" },
     { id: "autoelamu", label: "Autoelamu" },
-    { id: "veesõiduk", label: "Veesõiduk" },
+    { id: "veesõiduk", label: t('vehicleTypes.watercraft') },
     { id: "ehitustehnika", label: "Ehitustehnika" },
-    { id: "põllumajandustehnika", label: "Põllumajandustehnika" },
+    { id: "põllumajandustehnika", label: t('vehicleTypes.agriculturalMachinery') },
     { id: "metsatehnika", label: "Metsatehnika" },
     { id: "kommunaaltehnika", label: "Kommunaaltehnika" },
-    { id: "võistlussõiduk", label: "Võistlussõiduk" },
+    { id: "võistlussõiduk", label: t('vehicleTypes.competitionVehicle') },
     { id: "muu", label: "Muu" },
   ];
 
@@ -228,7 +231,7 @@ export const CarListingSection = ({
   const bodyType = [
     { id: "vali", label: "Vali" },
     { id: "sedaan", label: "Sedaan" },
-    { id: "luukpara", label: "Luukpära" },
+    { id: "luukpara", label: t('vehicleTypes.hatchback') },
     { id: "universaal", label: "Universaal" },
     { id: "mahtuniversaal", label: "Mahtuniversaal" },
     { id: "kupee", label: "Kupee" },
@@ -268,34 +271,34 @@ export const CarListingSection = ({
 
   // Data for colors - expanded array with 48 colors
   const allColors = [
-    { id: "beež", label: "Beež", color: "bg-yellow-100" },
+    { id: "beež", label: t('colors.beige'), color: "bg-yellow-100" },
     { id: "hall", label: "Hall", color: "bg-gray-500" },
-    { id: "helebeež", label: "Hele beež", color: "bg-yellow-50" },
+    { id: "helebeež", label: t('colors.lightBeige'), color: "bg-yellow-50" },
     { id: "helehall", label: "Hele hall", color: "bg-gray-300" },
     { id: "hellkollane", label: "Hele kollane", color: "bg-yellow-200" },
     { id: "helelilla", label: "Hele Lilla", color: "bg-purple-200" },
-    { id: "heleanž", label: "Heleanž", color: "bg-orange-200" },
+    { id: "heleanž", label: t('colors.lightOrange'), color: "bg-orange-200" },
     { id: "helepruun", label: "Hele Pruun", color: "bg-amber-200" },
     { id: "helepunane", label: "Hele Punane", color: "bg-red-200" },
     { id: "heleroheline", label: "Hele Roheline", color: "bg-green-200" },
     { id: "helesinine", label: "Hele Sinine", color: "bg-blue-200" },
-    { id: "hõbedane", label: "Hõbedane", color: "bg-gray-200" },
+    { id: "hõbedane", label: t('colors.silver'), color: "bg-gray-200" },
     { id: "kollane", label: "Kollane", color: "bg-yellow-400" },
     { id: "kuldne", label: "Kuldne", color: "bg-yellow-500" },
     { id: "lilla", label: "Lilla", color: "bg-purple-500" },
-    { id: "heleoranž", label: "Hele Oranž", color: "bg-orange-200" },
+    { id: "heleoranž", label: t('colors.lightOrange'), color: "bg-orange-200" },
     { id: "must", label: "Must", color: "bg-black" },
-    { id: "oranž", label: "Oranž", color: "bg-orange-500" },
+    { id: "oranž", label: t('colors.orange'), color: "bg-orange-500" },
     { id: "pruun", label: "Pruun", color: "bg-amber-700" },
     { id: "punane", label: "Punane", color: "bg-red-500" },
     { id: "roheline", label: "Roheline", color: "bg-green-500" },
     { id: "roosa", label: "Roosa", color: "bg-pink-400" },
     { id: "sinine", label: "Sinine", color: "bg-blue-500" },
-    { id: "tumebeež", label: "Tume Beež", color: "bg-yellow-600", },
+    { id: "tumebeež", label: t('colors.darkBeige'), color: "bg-yellow-600", },
     { id: "tumehall", label: "Tume Hall", color: "bg-gray-700" },
     { id: "tumekollane", label: "Tume Kollane", color: "bg-yellow-600" },
     { id: "tumelilla", label: "Tume Lilla", color: "bg-purple-700" },
-    { id: "tumeoranž", label: "Tume Oranž", color: "bg-orange-600" },
+    { id: "tumeoranž", label: t('colors.darkOrange'), color: "bg-orange-600" },
     { id: "tumerpruun", label: "Tume Pruun", color: "bg-amber-800" },
     { id: "tumerpunane", label: "Tume Punane", color: "bg-red-700" },
     { id: "tumeroheline", label: "Tume Oheline", color: "bg-green-700" },
@@ -317,22 +320,22 @@ export const CarListingSection = ({
 
   // Data for additional info
   const additionalInfo = [
-    { id: "vahetuse-voimalus", label: "Vahetuse võimalus", filterKey: "exchange_possible" },
+    { id: "vahetuse-voimalus", label: t('common.exchangepossible'), filterKey: "exchange_possible" },
     { id: "garantiiga", label: "Garantiiga", filterKey: "with_warranty" },
   ];
 
   // Data for equipment
   const accessoriesOptions = [
-    { key: 'kokkupõrgetennetavpidurisüsteem', label: 'Kokkupõrget Ennetav Pidurisüsteem' },
+    { key: 'kokkupõrgetennetavpidurisüsteem', label: t('carFeatures.collisionPreventionBrakingSystem') },
     { key: 'pimenurgahoiatus', label: 'Pimenurga Hoiatus' },
-    { key: 'sõidurajahoidmiseabisüsteem', label: 'Sõiduraja Hoidmise Abisüsteem' },
-    { key: 'sõidurajavahetamiseabisüsteem', label: 'Sõidurajavahetamise Abisüsteem' },
-    { key: 'adaptiivnepüsikiirusehoidja', label: 'Adaptiivne Püsikiirusehoidja' },
-    { key: 'liiklusmärkidetuvastusjakuvamine', label: 'Liiklusmärkide Tuvastus ja Kuvamine' },
+    { key: 'sõidurajahoidmiseabisüsteem', label: t('carFeatures.laneKeepingAssistSystem') },
+    { key: 'sõidurajavahetamiseabisüsteem', label: t('carFeatures.laneChangeAssistSystem') },
+    { key: 'adaptiivnepüsikiirusehoidja', label: t('carFeatures.adaptiveCruiseControl') },
+    { key: 'liiklusmärkidetuvastusjakuvamine', label: t('carFeatures.trafficSignRecognition') },
     { key: 'parkimisandurideesjataga', label: 'Parkimisandurid Ees ja Taga' },
     { key: 'parkimiskaamera', label: 'Parkimiskaamera' },
     { key: 'parkimiskaamera360', label: 'Parkimiskaamera 360°' },
-    { key: 'kaugtuledeümberlülitamiseassistent', label: 'Kaugtulede ümberlülitamise Assistent' },
+    { key: 'kaugtuledeümberlülitamiseassistent', label: t('carFeatures.highBeamAssist') },
     { key: 'LEDesituled', label: 'LED Esituled' },
     { key: 'Xenonesituled', label: 'Xenon Esituled' },
     { key: 'lasersituled', label: 'Laser Esituled' },
@@ -349,28 +352,28 @@ export const CarListingSection = ({
     { key: 'poolnahkpolster', label: 'Poolnahkpolster' },
     { key: 'tagaistmeseljatugiallaklapitav', label: 'Tagaistme Seljatugi Allaklapitav' },
     { key: 'eraldikliimaseadetagaistmetele', label: 'Eraldi Kliimaseade Tagaistmetele' },
-    { key: 'võtmetavamine', label: 'Võtmeta Avamine' },
-    { key: 'võtmetaäivitus', label: 'Võtmeta Käivitus' },
+    { key: 'võtmetavamine', label: t('carFeatures.keylessEntry') },
+    { key: 'võtmetaäivitus', label: t('carFeatures.keylessStart') },
     { key: 'pakiruumiavaminejasulgeminelektriliselt', label: 'Pakiruumi Avamine ja Sulgemine Elektriliselt' },
     { key: 'soojendusegarool', label: 'Soojendusega Rool' },
     { key: 'ventileeritavadstmed', label: 'Ventileeritavad Istmed' },
-    { key: 'massaažifunktsioonigaiistmed', label: 'Massaažifunktsiooniga Istmed' },
+    { key: 'massaažifunktsioonigaiistmed', label: t('carFeatures.massageSeats') },
     { key: 'infokuvamineesiklaasile', label: 'Info Kuvamine Esiklaasile' },
     { key: 'panoraamkatusklaasist', label: 'Panoraamkatus (klaasist)' },
     { key: 'katuseluuk', label: 'Katuseluuk' },
     { key: 'usteservosulgurid', label: 'Uste Servosulgurid' },
     { key: 'topeltklaasid', label: 'Topeltklaasid' },
     { key: 'rulookardinadustel', label: 'Rulookardinad Ustel' },
-    { key: 'integreeritudVäravapult', label: 'Integreeritud Väravapult' },
+    { key: 'integreeritudVäravapult', label: t('carFeatures.integratedGarageRemote') },
     { key: 'AppleCarPlay', label: 'Apple CarPlay' },
     { key: 'AndroidAuto', label: 'Android Auto' },
     { key: 'stereo', label: 'Stereo' },
-    { key: 'õhkvedrustus', label: 'Õhkvedrustus' },
+    { key: 'õhkvedrustus', label: t('carFeatures.airSuspension') },
     { key: 'reguleeritavvedrustus', label: 'Reguleeritav Vedrustus' },
-    { key: '4-rattapööramine', label: '4-ratta Pööramine' },
+    { key: '4-rattapööramine', label: t('carFeatures.fourWheelSteering') },
     { key: 'veokonks', label: 'Veokonks' },
     { key: 'elektrilisedliuguksed', label: 'Elektrilised Liuguksed' },
-    { key: 'öiseNägemiseassistent', label: 'Öise Nägemise Assistent' },
+    { key: 'öiseNägemiseassistent', label: t('carFeatures.nightVisionAssistant') },
     { key: 'valgustuspakett', label: 'Valgustuspakett' },
     { key: 'suverehvid', label: 'Suverehvid' },
     { key: 'talverehvid', label: 'Talverehvid' },
@@ -383,12 +386,12 @@ export const CarListingSection = ({
     { id: "doors", label: "Uste arv", minKey: "doors_min", maxKey: "doors_max" },
     { id: "price", label: "Hind", minKey: "price_min", maxKey: "price_max" },
     { id: "year", label: "Aasta", minKey: "year_min", maxKey: "year_max" },
-    { id: "mileage", label: "Läbisõit (km)", minKey: "mileage_min", maxKey: "mileage_max" },
-    { id: "power", label: "Võimsus (kw)", minKey: "power_min", maxKey: "power_max" },
+    { id: "mileage", label: t('carSpecs.mileage') + " (km)", minKey: "mileage_min", maxKey: "mileage_max" },
+    { id: "power", label: t('carSpecs.power') + " (kw)", minKey: "power_min", maxKey: "power_max" },
     { id: "engine", label: "Mootorimaht (cm3)", minKey: "engine_min", maxKey: "engine_max" },
-    { id: "fuel-city", label: "Kütusekulu linnas (100km)", minKey: "fuel_city_min", maxKey: "fuel_city_max" },
-    { id: "fuel-highway", label: "Kütusekulu maanteel (100km)", minKey: "fuel_highway_min", maxKey: "fuel_highway_max" },
-    { id: "fuel-average", label: "Kütusekulu keskmine (100km)", minKey: "fuel_average_min", maxKey: "fuel_average_max" },
+    { id: "fuel-city", label: t('carSpecs.fuelCity') + " (100km)", minKey: "fuel_city_min", maxKey: "fuel_city_max" },
+    { id: "fuel-highway", label: t('carSpecs.fuelHighway') + " (100km)", minKey: "fuel_highway_min", maxKey: "fuel_highway_max" },
+    { id: "fuel-average", label: t('carSpecs.fuelAverage') + " (100km)", minKey: "fuel_average_min", maxKey: "fuel_average_max" },
     { id: "co2", label: "CO2 (100km)", minKey: "co2_min", maxKey: "co2_max" },
   ];
 
@@ -458,7 +461,7 @@ export const CarListingSection = ({
         <CardContent className="p-5 space-y-4 flex-1">
           <div className="flex items-center justify-between">
             <h2 className="font-medium text-xl font-['Poppins',Helvetica]">
-              Filtrid
+              {t('search.filters')}
             </h2>
             <button
               onClick={(e) => {
@@ -501,7 +504,7 @@ export const CarListingSection = ({
               }}
             >
               <SelectTrigger className="w-full h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]">
-                <SelectValue placeholder="Sõiduki liik" />
+                <SelectValue placeholder={t('formLabels.vehicleType')} />
               </SelectTrigger>
               <SelectContent>
                 {vehicleType.map((type) => (
@@ -525,7 +528,7 @@ export const CarListingSection = ({
               }}
             >
               <SelectTrigger className="w-full h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]">
-                <SelectValue placeholder="Keretüüp" />
+                <SelectValue placeholder={t('formLabels.bodyType')} />
               </SelectTrigger>
               <SelectContent>
                 {bodyType.map((type) => (
@@ -575,7 +578,7 @@ export const CarListingSection = ({
               }}
             >
               <SelectTrigger className="w-full h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]">
-                <SelectValue placeholder="Sõiduki seisukord" />
+                <SelectValue placeholder={t('formLabels.vehicleCondition')} />
               </SelectTrigger>
               <SelectContent>
                 {technicalData.map((condition) => (
@@ -592,7 +595,7 @@ export const CarListingSection = ({
           <div className="space-y-3">
             {brandsLoading ? (
               <div className="h-[43px] bg-[#f6f7f9] flex items-center justify-center text-[#747474]">
-                Laetakse marke...
+                {t('common.loading')}
               </div>
             ) : (
               <Combobox
@@ -602,13 +605,13 @@ export const CarListingSection = ({
                 onValueChange={handleBrandChange}
                 placeholder="Mark"
                 searchPlaceholder="Otsi marki..."
-                emptyMessage="Marki ei leitud"
+                emptyMessage={t('uiActions.brandNotFound')}
               />
             )}
 
             {modelsLoading ? (
               <div className="h-[43px] bg-[#f6f7f9] flex items-center justify-center text-[#747474]">
-                Laetakse mudelid...
+                {t('common.loading')}
               </div>
             ) : (
               <Combobox
@@ -624,7 +627,7 @@ export const CarListingSection = ({
                 }}
                 placeholder="Mudelid"
                 searchPlaceholder="Otsi mudelit..."
-                emptyMessage="Mudelit ei leitud"
+                emptyMessage={t('uiActions.modelNotFound')}
                 disabled={filters.brand_id === undefined || filters.brand_id === null}
               />
             )}
@@ -650,7 +653,7 @@ export const CarListingSection = ({
           <Accordion type="single" collapsible>
             <AccordionItem value="drive-type" className="border-none">
               <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica]">
-                Veoskeem
+                {t('formLabels.driveType')}
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-2">
@@ -682,7 +685,7 @@ export const CarListingSection = ({
           <Accordion type="single" collapsible>
             <AccordionItem value="range-input-groups" className="border-none">
               <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica]">
-                Hind & üldandmed
+                {t('formLabels.priceAndGeneralInfo')}
               </AccordionTrigger>
               <AccordionContent>
                 {rangeInputGroups.slice(0, 5).map((group) => (
@@ -731,7 +734,7 @@ export const CarListingSection = ({
                       htmlFor="kaibemaksuga"
                       className="font-['Poppins',Helvetica] font-normal text-base"
                     >
-                      Käibemaksuga
+                      {t('formLabels.withVAT')}
                     </label>
                   </div>
                   <div className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
@@ -745,7 +748,7 @@ export const CarListingSection = ({
                       htmlFor="hooldusraamat"
                       className="font-['Poppins',Helvetica] font-normal text-base"
                     >
-                      Hooldusraamat
+                      {t('formLabels.serviceBook')}
                     </label>
                   </div>
                   <div className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
@@ -759,7 +762,7 @@ export const CarListingSection = ({
                       htmlFor="ulevaatus"
                       className="font-['Poppins',Helvetica] font-normal text-base"
                     >
-                      Ülevaatus
+                      {t('formLabels.inspection')}
                     </label>
                   </div>
                   <div className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
@@ -773,7 +776,7 @@ export const CarListingSection = ({
                       htmlFor="avariiline"
                       className="font-['Poppins',Helvetica] font-normal text-base"
                     >
-                      Avariiline
+                      {t('formLabels.accidentFree')}
                     </label>
                   </div>
                 </div>
@@ -787,7 +790,7 @@ export const CarListingSection = ({
           <Accordion type="single" collapsible>
             <AccordionItem value="fuel-type" className="border-none">
               <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica]">
-                Kütuse tüüp
+                {t('formLabels.fuelType')}
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-2">
@@ -818,7 +821,7 @@ export const CarListingSection = ({
           <Accordion type="single" collapsible>
             <AccordionItem value="transmission" className="border-none">
               <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica]">
-                Käigukasti tüüp
+                {t('formLabels.transmissionType')}
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-2">
@@ -849,7 +852,7 @@ export const CarListingSection = ({
           <Accordion type="single" collapsible>
             <AccordionItem value="technical" className="border-none">
               <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica]">
-                Tehnilised näitajad
+                {t('formLabels.technicalSpecs')}
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-4">
@@ -898,7 +901,7 @@ export const CarListingSection = ({
           <Accordion type="single" collapsible>
             <AccordionItem value="color" className="border-none">
               <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica]">
-                Värv
+                {t('formLabels.color')}
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-4">
@@ -942,7 +945,7 @@ export const CarListingSection = ({
                     onClick={() => setShowAllColors(!showAllColors)}
                     className="w-full h-[42px] rounded-[10px] border-[#06d6a0] text-[#06d6a0] font-['Poppins',Helvetica] font-medium"
                   >
-                    {showAllColors ? '- Näita vähem' : '+ Vaata rohkem'}
+                    {showAllColors ? `- ${t('uiActions.showLess')}` : `+ ${t('uiActions.viewMore')}`}
                   </Button>
 
                   {/* Metallikvärv checkbox */}
@@ -957,7 +960,7 @@ export const CarListingSection = ({
                       htmlFor="metallikvärv"
                       className="font-['Poppins',Helvetica] font-normal text-base"
                     >
-                      Metallikvärv
+                      {t('colors.metallicColor')}
                     </label>
                   </div>
                 </div>
@@ -981,7 +984,7 @@ export const CarListingSection = ({
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Eesti">Eesti</SelectItem>
-                      <SelectItem value="Läti">Läti</SelectItem>
+                      <SelectItem value="Läti">{t('formLabels.latvia')}</SelectItem>
                       <SelectItem value="Leedu">Leedu</SelectItem>
                       <SelectItem value="Soome">Soome</SelectItem>
                     </SelectContent>
@@ -993,7 +996,7 @@ export const CarListingSection = ({
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Eesti">Eesti</SelectItem>
-                      <SelectItem value="Läti">Läti</SelectItem>
+                      <SelectItem value="Läti">{t('formLabels.latvia')}</SelectItem>
                       <SelectItem value="Leedu">Leedu</SelectItem>
                       <SelectItem value="Soome">Soome</SelectItem>
                     </SelectContent>
@@ -1013,11 +1016,11 @@ export const CarListingSection = ({
 
                   <Select value={filters.seller_type} onValueChange={(value) => updateFilter('seller_type', value)}>
                     <SelectTrigger className="w-full h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]">
-                      <SelectValue placeholder="Müüja" />
+                      <SelectValue placeholder={t('formLabels.seller')} />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="era">Era</SelectItem>
-                      <SelectItem value="äri">Äri</SelectItem>
+                      <SelectItem value="äri">{t('formLabels.business')}</SelectItem>
                     </SelectContent>
                   </Select>
 
@@ -1093,7 +1096,7 @@ export const CarListingSection = ({
                     onClick={() => setShowAllEquipment(!showAllEquipment)}
                     className="w-full h-[42px] rounded-[10px] border-[#06d6a0] text-[#06d6a0] font-['Poppins',Helvetica] font-medium"
                   >
-                    {showAllEquipment ? '- Näita vähem' : '+ Vaata rohkem'}
+                    {showAllEquipment ? `- ${t('uiActions.showLess')}` : `+ ${t('uiActions.viewMore')}`}
                   </Button>
                 </div>
               </AccordionContent>
@@ -1107,19 +1110,19 @@ export const CarListingSection = ({
             <Button
               onClick={(e) => {
                 e.stopPropagation();
-                navigate("/search");
+                navigate(`/${currentLang}/search`);
                 window.scrollTo(0, 0);
               }}
               className="w-full h-[43px] bg-[#06d6a0] text-white font-['Poppins',Helvetica] font-medium rounded-[10px]"
             >
-              Rakenda filtrid
+              {t('search.applyFilters')}
             </Button>
             <Button
               variant="outline"
               onClick={() => onFiltersChange({})}
               className="w-full h-[43px] border-[#06d6a0] text-[#06d6a0] font-['Poppins',Helvetica] font-medium rounded-[10px]"
             >
-              Tühjenda filtrid
+              {t('search.clearFilters')}
             </Button>
           </div>
         </CardContent>

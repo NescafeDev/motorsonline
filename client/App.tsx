@@ -7,9 +7,12 @@ import { createRoot } from "react-dom/client";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useParams, Navigate } from "react-router-dom";
 import { MobilePageWrapper } from "./components/MobilePageWrapper";
 import { AuthProvider } from "./contexts/AuthContext";
+import { LanguageWrapper } from "./components/LanguageWrapper";
+import { I18nProvider } from "./contexts/I18nContext";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 
 // Desktop Pages
 import LoginPage from "./pages/LoginPage";
@@ -44,119 +47,137 @@ import { FavoritesTest } from "./components/FavoritesTest";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <div style={{ margin: "0 auto", display: "flex", flexDirection: "column", alignItems: "center", minHeight: "100vh", backgroundColor:"#F6F7F9"}}>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <AuthProvider>
-          <BrowserRouter>
+  <ErrorBoundary>
+    <div style={{ margin: "0 auto", display: "flex", flexDirection: "column", alignItems: "center", minHeight: "100vh", backgroundColor:"#F6F7F9"}}>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <AuthProvider>
+            <BrowserRouter>
           <Routes>
-            <Route
-              path="/"
-              element={
-                <MobilePageWrapper
-                  desktopComponent={HomePage}
-                  mobileComponent={HomePageMobile}
-                />
-              }
-            />
-            <Route
-              path="/login"
-              element={
-                <MobilePageWrapper
-                  desktopComponent={LoginPage}
-                  mobileComponent={LoginPageMobile}
-                />
-              }
-            />
-            <Route
-              path="/register"
-              element={
-                <MobilePageWrapper
-                  desktopComponent={RegistrationPage}
-                  mobileComponent={RegistrationPageMobile}
-                />
-              }
-            />
-            <Route
-              path="/car/:id"
-              element={
-                <MobilePageWrapper
-                  desktopComponent={CarPage}
-                  mobileComponent={CarPageMobile}
-                />
-              }
-            />
-            <Route
-              path="/blog"
-              element={
-                <MobilePageWrapper
-                  desktopComponent={BlogPage}
-                  mobileComponent={BlogPageMobile}
-                />
-              }
-            />
-            <Route
-              path="/blog/:id"
-              element={
-                <MobilePageWrapper
-                  desktopComponent={BlogPostPage}
-                  mobileComponent={BlogPostPageMobile}
-                />
-              }
-            />
-            <Route path="/password-reset" element={<PasswordResetPage />} />
-            <Route
-              path="/forgot-password"
-              element={
-                <MobilePageWrapper
-                  desktopComponent={ForgotPasswordPage}
-                  mobileComponent={ForgotPasswordPageMobile}
-                />
-              }
-            />
-            <Route path="/user" element={
-                <MobilePageWrapper
-                  desktopComponent={UserPage}
-                  mobileComponent={UserPageMobile}
-                />
-              }
-            />
-            <Route path="/adds" element={
-                <MobilePageWrapper
-                  desktopComponent={AddsPage}
-                  mobileComponent={AddsPageMobile}
-                />
-              }
-            />
-            <Route path="/update/:id" element={
-                <MobilePageWrapper
-                  desktopComponent={AddsPage}
-                  mobileComponent={AddsPageMobile}
-                />
-              }
-            />
-            <Route path="/search" element={
-                <MobilePageWrapper
-                  desktopComponent={SearchPage}
-                  mobileComponent={SearchPageMobile}
-                />
-              }
-            />
-            <Route path="/favorites-test" element={<FavoritesTest />} />
-            {/* Admin Panel Routes */}
+            {/* Redirect root to default language */}
+            <Route path="/" element={<Navigate to="/en" />} />
+            
+            {/* Admin Panel Routes - Outside language wrapper */}
             <Route path="/admin" element={<AdminLoginPage />} />
             <Route path="/admin/blog" element={<AdminBlogPanel />} />
             <Route path="/admin/adds" element={<AdminAddsPage />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
+            
+            {/* Language-based routes */}
+            <Route path="/:lang/*" element={
+              <I18nProvider>
+                <LanguageWrapper>
+                <Routes>
+                  <Route
+                    path="/"
+                    element={
+                      <MobilePageWrapper
+                        desktopComponent={HomePage}
+                        mobileComponent={HomePageMobile}
+                      />
+                    }
+                  />
+                  <Route
+                    path="login"
+                    element={
+                      <MobilePageWrapper
+                        desktopComponent={LoginPage}
+                        mobileComponent={LoginPageMobile}
+                      />
+                    }
+                  />
+                  <Route
+                    path="register"
+                    element={
+                      <MobilePageWrapper
+                        desktopComponent={RegistrationPage}
+                        mobileComponent={RegistrationPageMobile}
+                      />
+                    }
+                  />
+                  <Route
+                    path="car/:id"
+                    element={
+                      <MobilePageWrapper
+                        desktopComponent={CarPage}
+                        mobileComponent={CarPageMobile}
+                      />
+                    }
+                  />
+                  <Route
+                    path="blog"
+                    element={
+                      <MobilePageWrapper
+                        desktopComponent={BlogPage}
+                        mobileComponent={BlogPageMobile}
+                      />
+                    }
+                  />
+                  <Route
+                    path="blog/:id"
+                    element={
+                      <MobilePageWrapper
+                        desktopComponent={BlogPostPage}
+                        mobileComponent={BlogPostPageMobile}
+                      />
+                    }
+                  />
+                  <Route path="password-reset" element={<PasswordResetPage />} />
+                  <Route
+                    path="forgot-password"
+                    element={
+                      <MobilePageWrapper
+                        desktopComponent={ForgotPasswordPage}
+                        mobileComponent={ForgotPasswordPageMobile}
+                      />
+                    }
+                  />
+                  <Route path="user" element={
+                      <MobilePageWrapper
+                        desktopComponent={UserPage}
+                        mobileComponent={UserPageMobile}
+                      />
+                    }
+                  />
+                  <Route path="adds" element={
+                      <MobilePageWrapper
+                        desktopComponent={AddsPage}
+                        mobileComponent={AddsPageMobile}
+                      />
+                    }
+                  />
+                  <Route path="update/:id" element={
+                      <MobilePageWrapper
+                        desktopComponent={AddsPage}
+                        mobileComponent={AddsPageMobile}
+                      />
+                    }
+                  />
+                  <Route path="search" element={
+                      <MobilePageWrapper
+                        desktopComponent={SearchPage}
+                        mobileComponent={SearchPageMobile}
+                      />
+                    }
+                  />
+                  <Route path="favorites-test" element={<FavoritesTest />} />
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </LanguageWrapper>
+              </I18nProvider>
+            } />
+            
+            {/* Fallback for invalid routes */}
+            <Route path="*" element={<Navigate to="/ee" replace />} />
           </Routes>
-        </BrowserRouter>
-        </AuthProvider>
-      </TooltipProvider>
-    </QueryClientProvider>
-  </div>
+            </BrowserRouter>
+          </AuthProvider>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </div>
+  </ErrorBoundary>
 );
 
 createRoot(document.getElementById("root")!).render(

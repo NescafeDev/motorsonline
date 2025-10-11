@@ -4,6 +4,7 @@ import dynamic from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import AdminNavbar from '../../components/admin/AdminNavbar';
 import AdminSidebar from '../../components/admin/AdminSidebar';
+import { useI18n } from "@/contexts/I18nContext";
 
 interface Blog {
   id: number;
@@ -34,6 +35,7 @@ const ReactQuill = dynamic;
 
 export default function AdminBlogPanel() {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [editing, setEditing] = useState<Blog | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -133,7 +135,7 @@ export default function AdminBlogPanel() {
         fetchBlogs();
       }
     } catch {
-      setError("Võrgu viga. Palun proovige hiljem uuesti.");
+      setError(t('auth.networkErrorTryLater'));
     } finally {
       setLoading(false);
     }

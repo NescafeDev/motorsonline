@@ -14,6 +14,7 @@ import Header from "../components/mobile/Header";
 import Footer from "../components/mobile/Footer";
 import { CarCard } from "../components/mobile/CarCard";
 import { CarListingSection } from "./sections/CarListingSection/CarListingSection";
+import { useI18n } from "@/contexts/I18nContext";
 
 // Car-related types (imported from HomePage)
 export interface Car {
@@ -173,6 +174,8 @@ async function fetchFilteredCars(filters: CarFilters): Promise<Car[]> {
 }
 
 export default function SearchPageMobile() {
+  const { t, currentLanguage } = useI18n();
+  const currentLang = currentLanguage;
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { isAuthenticated, user } = useAuth();
@@ -190,10 +193,10 @@ export default function SearchPageMobile() {
     if (!car) return '';
 
     if (!car.vatRate || car.vatRate === '' || car.vatRate === 'null' || car.vatRefundable === 'ei' || car.vatRefundable === 'no') {
-      return 'KM 0% (käibemaksu ei lisandu)';
+      return t('vatInfo.vat0NoVatAdded');
     }
 
-    return `Hind sisaldab käibemaksu ${car.vatRate}%`;
+    return `${t('vatInfo.priceIncludesVatWithRate')} ${car.vatRate}%`;
   };
 
   const discountPercentage = (car: Car) => {
@@ -369,7 +372,7 @@ export default function SearchPageMobile() {
           }
         }
       });
-      navigate(`/search?${params.toString()}`);
+      navigate(`/${currentLang}/search?${params.toString()}`);
     } else {
       // If no filters, show all cars
       setFilteredCars(cars);
@@ -451,7 +454,7 @@ export default function SearchPageMobile() {
         {/* Loading State */}
         {loading && (
           <div className="flex justify-center items-center h-64">
-            <div className="text-lg text-gray-500">Laetakse...</div>
+            <div className="text-lg text-gray-500">{t('common.loading')}</div>
           </div>
         )}
 

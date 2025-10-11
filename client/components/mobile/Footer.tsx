@@ -1,9 +1,13 @@
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext"
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useI18n } from "@/contexts/I18nContext";
 
 export default function Footer() {
   const navigate = useNavigate();
-  const { isAuthenticated , user } = useAuth()
+  const { isAuthenticated, user } = useAuth();
+  const { currentLanguage, t } = useI18n();
+  // Use currentLanguage from I18nContext
+  const currentLang = currentLanguage;
 
 
   return (
@@ -32,14 +36,14 @@ export default function Footer() {
 
         <div className="flex md:flex-row justify-between grid-cols-3 gap-4 md:gap-0">
           <div className="space-y-1" >
-            <p className="text-[#B1B1B1] text-center" onClick={() => navigate("/blog")}>Blogi</p>
+            <p className="text-[#B1B1B1] text-center" onClick={() => navigate(`/${currentLang}/blog`)}>{t('footer.blog')}</p>
           </div>
           <div className="space-y-1" >
-            <p className="text-[#B1B1B1] text-center" onClick={() => navigate("/user")}>Minu kuulutused</p>
+            <p className="text-[#B1B1B1] text-center" onClick={() => navigate(`/${currentLang}/user`)}>{t('footer.myListings')}</p>
           </div>
           <div className="space-y-1">
             {isAuthenticated && (
-              <p className="text-[#B1B1B1] text-center"onClick={() => navigate("/adds")}>Lisa uus kuulutus</p>
+              <p className="text-[#B1B1B1] text-center"onClick={() => navigate(`/${currentLang}/adds`)}>{t('footer.addListing')}</p>
             )}
           </div>
         </div>
@@ -53,10 +57,10 @@ export default function Footer() {
             </p>
             <div className="text-left md:text-right space-y-1">
               <p className="text-[#6D6D6D] text-sm tracking-[-0.28px]">
-                Privacy & Policy
+                private policy
               </p>
               <p className="text-[#6D6D6D] text-sm tracking-[-0.28px]">
-                Terms & Condition
+                terms and conditions
               </p>
             </div>
           </div>

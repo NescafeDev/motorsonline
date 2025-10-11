@@ -1,5 +1,6 @@
 import { ChevronDownIcon, Contact, HeartIcon } from "lucide-react";
 import React, { useRef, useEffect, useState } from "react";
+import { useI18n } from "@/contexts/I18nContext";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
@@ -23,6 +24,7 @@ interface CarPreviewProps {
 }
 
 export default function CarPreview({ formData, contactFormData, checkboxes, brands, models, years, driveTypes, carImages }: CarPreviewProps) {
+  const { t } = useI18n();
   const sidebarRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const [sidebarTop, setSidebarTop] = useState(0);
@@ -34,11 +36,11 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
 
     // If there's no VAT rate or it's empty/null, show "Hind ei sisalda käibemaksu"
     if (car.vatRefundable === 'no' || car.vatRefundable === 'ei') {
-      return 'KM 0% (käibemaksu ei lisandu)';
+      return t('vatInfo.vat0NoVatAdded');
     }
 
     // If VAT rate is 24, show "Hind sisaldab käibemaksu 24%"
-    return 'Hind sisaldab käibemaksu ' + car.vatRate + '%';
+    return t('vatInfo.priceIncludesVatWithRate') + ' ' + car.vatRate + '%';
     
 
   };
@@ -140,98 +142,98 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
   const vehicleDetails = [
     {
       icon: "/img/car/Car.png",
-      label: "Läbisõit:",
+      label: t('carSpecs.mileage') + ':',
       value: `${car.mileage.toLocaleString()} km`,
     },
     {
       icon: "/img/car/Speedometer.png",
-      label: "Võimsus:",
+      label: t('carSpecs.power') + ':',
       value: car.power,
     },
     {
       icon: "/img/car/gear-box-switch.png",
-      label: "Käigukast:",
+      label: t('carSpecs.transmission') + ':',
       value: car.transmission,
     },
     {
       icon: "/img/car/calendar.png",
-      label: "Esmaregistreerimine:",
+      label: t('formLabels.firstRegistration') + ':',
       value: car.year_value?.toString() + " - " + (car.month.length === 1 ? `0${car.month}` : car.month) || "N/A",
     },
     {
       icon: "/img/car/gas_station.png",
-      label: "Kütus",
+      label: t('carSpecs.fuel'),
       value: car.fuelType,
     },
     {
       icon: "/img/car/user_profile.png",
-      label: "Omanike arv:",
+      label: t('carSpecs.ownerCount') + ':',
       value: car.ownerCount,
     },
   ];
 
   // Technical specifications data
   const technicalSpecs = [
-    { label: "Tehnilised andmed", value: car.technicalData },
-    { label: "Töömaht:", value: car.displacement },
-    { label: "Kategooria:", value: car.category },
-    { label: "Võimsus:", value: car.power },
-    { label: "Sõiduki number:", value: car.plateNumber },
-    { label: "Veoskeem:", value: car.drive_type_ee_name },
-    { label: "Läbisõit:", value: `${car.mileage.toLocaleString()} km` },
-    { label: "Kütuse tüüp:", value: car.fuelType },
+    { label: t('formLabels.technicalSpecs'), value: car.technicalData },
+    { label: t('formLabels.displacement') + ':', value: car.displacement },
+    { label: t('formLabels.categoryDesignation') + ':', value: car.category },
+    { label: t('carSpecs.power') + ':', value: car.power },
+    { label: t('formLabels.vehicleNumber'), value: car.plateNumber },
+    { label: t('formLabels.driveType') + ':', value: car.drive_type_ee_name },
+    { label: t('carSpecs.mileage') + ':', value: `${car.mileage.toLocaleString()} km` },
+    { label: t('formLabels.fuelType') + ':', value: car.fuelType },
   ];
 
   // Equipment features data - get from checkboxes
   const accessoriesOptions = [
-    { key: 'kokkupõrgetennetavpidurisüsteem', label: 'Kokkupõrget Ennetav Pidurisüsteem' },
+    { key: 'kokkupõrgetennetavpidurisüsteem', label: t('carFeatures.collisionPreventionBrakingSystem') },
     { key: 'pimenurgahoiatus', label: 'Pimenurga Hoiatus' },
-    { key: 'sõidurajahoidmiseabisüsteem', label: 'Sõiduraja Hoidmise Abisüsteem' },
-    { key: 'sõidurajavahetamiseabisüsteem', label: 'Sõidurajavahetamise Abisüsteem' },
-    { key: 'adaptiivnepüsikiirusehoidja', label: 'Adaptiivne Püsikiirusehoidja' },
-    { key: 'liiklusmärkidetuvastusjakuvamine', label: 'Liiklusmärkide Tuvastus ja Kuvamine' },
-    { key: 'parkimisandurideesjataga', label: 'Parkimisandurid Ees ja Taga' },
-    { key: 'parkimiskaamera', label: 'Parkimiskaamera' },
-    { key: 'parkimiskaamera360', label: 'Parkimiskaamera 360°' },
-    { key: 'kaugtuledeümberlülitamiseassistent', label: 'Kaugtulede ümberlülitamise Assistent' },
-    { key: 'LEDesituled', label: 'LED Esituled' },
-    { key: 'Xenonesituled', label: 'Xenon Esituled' },
-    { key: 'lasersituled', label: 'Laser Esituled' },
-    { key: 'elektriliseoojendusegaesiklaas', label: 'Elektrilise Soojendusega Esiklaas' },
-    { key: 'kliimaseade', label: 'Kliimaseade' },
-    { key: 'salongieelsoojendus', label: 'SalongiEelsoojendus' },
-    { key: 'mootorieelsoojendus', label: 'MootoriEelsoojendus' },
-    { key: 'salongilisaoojendus', label: 'Salongi Lisasoojendus' },
-    { key: 'istmesoojendused', label: 'Istmesoojendused' },
-    { key: 'elektriliseltreguleeritavadIstmed', label: 'Elektriliselt Reguleeritavad Istmed' },
-    { key: 'comfortistmed', label: 'Comfort Istmed' },
-    { key: 'sportistmed', label: 'Sport Istmed' },
-    { key: 'nahkpolster', label: 'Nahkpolster' },
-    { key: 'poolnahkpolster', label: 'Poolnahkpolster' },
-    { key: 'tagaistmeseljatugiallaklapitav', label: 'Tagaistme Seljatugi Allaklapitav' },
-    { key: 'eraldikliimaseadetagaistmetele', label: 'Eraldi Kliimaseade Tagaistmetele' },
-    { key: 'võtmetavamine', label: 'Võtmeta Avamine' },
-    { key: 'võtmetaäivitus', label: 'Võtmeta Käivitus' },
-    { key: 'pakiruumiavaminejasulgeminelektriliselt', label: 'Pakiruumi Avamine ja Sulgemine Elektriliselt' },
-    { key: 'soojendusegarool', label: 'Soojendusega Rool' },
-    { key: 'ventileeritavadstmed', label: 'Ventileeritavad Istmed' },
+    { key: 'sõidurajahoidmiseabisüsteem', label: t('carFeatures.laneKeepingAssistSystem') },
+    { key: 'sõidurajavahetamiseabisüsteem', label: t('carFeatures.laneChangeAssistSystem') },
+    { key: 'adaptiivnepüsikiirusehoidja', label: t('carFeatures.adaptiveCruiseControl') },
+    { key: 'liiklusmärkidetuvastusjakuvamine', label: t('carFeatures.trafficSignRecognition') },
+    { key: 'parkimisandurideesjataga', label: t('carFeatures.parkingSensorsFrontRear') },
+    { key: 'parkimiskaamera', label: t('carFeatures.parkingCamera') },
+    { key: 'parkimiskaamera360', label: t('carFeatures.parkingCamera360') },
+    { key: 'kaugtuledeümberlülitamiseassistent', label: t('carFeatures.highBeamAssist') },
+    { key: 'LEDesituled', label: t('carFeatures.ledHeadlights') },
+    { key: 'Xenonesituled', label: t('carFeatures.xenonHeadlights') },
+    { key: 'lasersituled', label: t('carFeatures.laserHeadlights') },
+    { key: 'elektriliseoojendusegaesiklaas', label: t('carFeatures.heatedWindscreen') },
+    { key: 'kliimaseade', label: t('carFeatures.airConditioning') },
+    { key: 'salongieelsoojendus', label: t('carFeatures.cabinPreheater') },
+    { key: 'mootorieelsoojendus', label: t('carFeatures.enginePreheater') },
+    { key: 'salongilisaoojendus', label: t('carFeatures.additionalCabinHeater') },
+    { key: 'istmesoojendused', label: t('carFeatures.seatHeating') },
+    { key: 'elektriliseltreguleeritavadIstmed', label: t('carFeatures.electricSeats') },
+    { key: 'comfortistmed', label: t('carFeatures.comfortSeats') },
+    { key: 'sportistmed', label: t('carFeatures.sportSeats') },
+    { key: 'nahkpolster', label: t('carFeatures.leatherUpholstery') },
+    { key: 'poolnahkpolster', label: t('carFeatures.semiLeatherUpholstery') },
+    { key: 'tagaistmeseljatugiallaklapitav', label: t('carFeatures.rearSeatBackFoldable') },
+    { key: 'eraldikliimaseadetagaistmetele', label: t('carFeatures.rearSeatIndependentClimate') },
+    { key: 'võtmetavamine', label: t('carFeatures.keylessEntry') },
+    { key: 'võtmetaäivitus', label: t('carFeatures.keylessStart') },
+    { key: 'pakiruumiavaminejasulgeminelektriliselt', label: t('carFeatures.powerTailgate') },
+    { key: 'soojendusegarool', label: t('carFeatures.heatedSteeringWheel') },
+    { key: 'ventileeritavadstmed', label: t('carFeatures.ventilatedSeats') },
     { key: 'massaažifunktsioonigaiistmed', label: 'Massaažifunktsiooniga Istmed' },
-    { key: 'infokuvamineesiklaasile', label: 'Info Kuvamine Esiklaasile' },
+    { key: 'infokuvamineesiklaasile', label: t('carFeatures.headUpDisplay') },
     { key: 'panoraamkatusklaasist', label: 'Panoraamkatus (klaasist)' },
     { key: 'katuseluuk', label: 'Katuseluuk' },
-    { key: 'usteservosulgurid', label: 'Uste Servosulgurid' },
-    { key: 'topeltklaasid', label: 'Topeltklaasid' },
-    { key: 'rulookardinadustel', label: 'Rulookardinad Ustel' },
+    { key: 'usteservosulgurid', label: t('carFeatures.softCloseDoors') },
+    { key: 'topeltklaasid', label: t('carFeatures.doubleGlazing') },
+    { key: 'rulookardinadustel', label: t('carFeatures.doorSunblinds') },
     { key: 'integreeritudVäravapult', label: 'Integreeritud Väravapult' },
     { key: 'AppleCarPlay', label: 'Apple CarPlay' },
     { key: 'AndroidAuto', label: 'Android Auto' },
-    { key: 'stereo', label: 'Stereo' },
-    { key: 'õhkvedrustus', label: 'Õhkvedrustus' },
-    { key: 'reguleeritavvedrustus', label: 'Reguleeritav Vedrustus' },
-    { key: '4-rattapööramine', label: '4-ratta Pööramine' },
-    { key: 'veokonks', label: 'Veokonks' },
-    { key: 'elektrilisedliuguksed', label: 'Elektrilised Liuguksed' },
-    { key: 'öiseNägemiseassistent', label: 'Öise Nägemise Assistent' },
+    { key: 'stereo', label: t('carFeatures.stereo') },
+    { key: 'õhkvedrustus', label: t('carFeatures.airSuspension') },
+    { key: 'reguleeritavvedrustus', label: t('carFeatures.adjustableSuspension') },
+    { key: '4-rattapööramine', label: t('carFeatures.fourWheelSteering') },
+    { key: 'veokonks', label: t('carFeatures.towHook') },
+    { key: 'elektrilisedliuguksed', label: t('carFeatures.powerSlidingDoors') },
+    { key: 'öiseNägemiseassistent', label: t('carFeatures.nightVisionAssistant') },
     { key: 'valgustuspakett', label: 'Valgustuspakett' },
     { key: 'suverehvid', label: 'Suverehvid' },
     { key: 'talverehvid', label: 'Talverehvid' },
@@ -459,7 +461,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
         {/* Now, OUTSIDE the grid, render the next sections */}
         <SpecificationsSection
           sellerData={{
-            title: "Müüja andmed",
+            title: t('formLabels.seller'),
             company: contactFormData.businessType || "ELKE Mustamäe",
             country: contactFormData.country || "EE",
             address: contactFormData.address || "Tallinn, Mustamäe tee 22",
