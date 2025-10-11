@@ -129,13 +129,16 @@
     "noPosts": "Blogi postitusi ei leitud",
     "loadingPosts": "Laadimine blogi postitusi...",
     "latestPosts": "Viimased postitused",
-    "description": "Lorem ipsum dolor sit amet consectetur. Quisque erat imperdiet egestas pretium. Nibh convallis id nulla non diam.",
+    "description": "Hoia end kursis viimaste autotööstuse uudiste, ekspertarvamuste ja kasulike nõuannetega autostajatele ja entusiastidele.",
     "thumbnailAlt": "Blogi postituse pisipilt",
     "fallbackTitle": "Lorem Ipsum",
     "fallbackDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     "categories": "Blogi kategooriad",
     "stayUpdated": "MotorsBlogi – Hoia end kursis viimaste auto- ja mootoriuudistega",
-    "enterEmail": "sisesta oma e-post"
+    "enterEmail": "sisesta oma e-post",
+    "subscribe": "Telli",
+    "newsletterDescription": "Telli meie uudiskiri ja saa viimased autouudised, ülevaated ja eksklusiivsed sisud otse oma postkasti.",
+    "newsletterTerms": "Klikkides \"Registreeru\", kinnitate, et nõustute meie tingimustega."
   },
   "search": {
     "placeholder": "Otsi autosid...",
@@ -165,6 +168,7 @@
   },
   "language": {
     "select": "Vali keel",
+    "selectLanguages": "Valige keeled",
     "current": "Praegune keel",
     "change": "Muuda keelt"
   },
@@ -425,7 +429,13 @@
     "doors": "Uksed",
     "popularEquipment": "Populaarne varustus (kuulutuse pealkirjas)",
     "year": "Aasta",
-    "registeredCountry": "Registreeritud riik"
+    "registeredCountry": "Registreeritud riik",
+    "equipment": "Varustus",
+    "contacts": "Kontakt",
+    "chooseCountry": "Riik",
+    "email": "E-post",
+    "contactsSaved": "Kontaktid salvestatud",
+    "addSocialNetwork": "Sotsiaalvõrgustik"
   },
   "photo": {
     "addMain": "+Lisa foto (põhipilt)",

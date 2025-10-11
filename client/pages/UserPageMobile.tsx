@@ -165,7 +165,7 @@ export default function UserPageMobile() {
       <main className="mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Title */}
         <h1 className="text-[26px] font-semibold leading-[150%] tracking-[-0.78px] text-motorsonline-dark mb-10">
-          Minu kuulutused
+          {t('listing.myListings')}
         </h1>
 
         {/* Add Listing Button */}
@@ -174,7 +174,7 @@ export default function UserPageMobile() {
           className="flex px-[30px] py-[15px] justify-center items-center gap-[10px] rounded-[10px] bg-[#06D6A0] mb-5"
         >
           <span className="text-white font-['Poppins'] text-[16px] font-normal leading-[150%]">
-            + Lisa kuulutus
+            + {t('common.addListing')}
           </span>
         </button>
 
@@ -210,7 +210,7 @@ export default function UserPageMobile() {
           ) : (
             <div className="text-center py-8">
               <span className="text-[#747474] font-['Poppins'] text-[18px]">
-                Sul pole veel ühtegi kuulutust
+                {t('listing.noListings')}
               </span>
             </div>
           )}
@@ -218,7 +218,7 @@ export default function UserPageMobile() {
 
         {/* Results Counter */}
         <p className="text-base leading-[150%] tracking-[-0.48px] text-motorsonline-gray mt-10">
-          {true ? 'Laetakse...' : `Kuvatakse ${userCars.length} teavitust ${userCars.length}-st`}
+          {loading ? t('common.loading') : t('notifications.showing', { current: userCars.length.toString(), total: userCars.length.toString() })}
         </p>
       </main>
 

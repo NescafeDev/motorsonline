@@ -76,11 +76,10 @@ export default function BlogPageMobile() {
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 px-5 py-20 lg:py-32 mx-aut0 h-full flex flex-col justify-center">
           <h1 className="text-white font-semibold text-2xl lg:text-4xl xl:text-5xl leading-normal text-center mb-8">
-            MotorsBlogi – Hoia end kursis viimaste auto- ja mootoriuudistega
+            {t('blog.stayUpdated')}
           </h1>
           <p className="text-white text-base lg:text-lg leading-6 tracking-tight text-center max-w-lg mx-auto">
-            Lorem ipsum dolor sit amet consectetur. Quisque erat imperdiet
-            egestas pretium. Nibh convallis id nulla non diam.
+            {t('blog.description')}
           </p>
         </div>
       </section>
@@ -90,7 +89,7 @@ export default function BlogPageMobile() {
         {/* Categories Section */}
         <section className="mb-12 px-3">
           <h2 className="text-black font-normal text-lg leading-7 mb-6">
-            Blogi kategooriad
+            {t('blog.categories')}
           </h2>
           {/* <CategoryTabs categories={categories} /> */}
         </section>
@@ -122,7 +121,7 @@ export default function BlogPageMobile() {
       {/* Latest Posts Section */}
       <section className="px-5 py-12 mx-auto lg:max-w-4xl">
         <h2 className="text-black font-semibold text-2xl leading-normal mb-8 px-3">
-          Viimased postitused
+          {t('blog.latestPosts')}
         </h2>
         {loading ? (
           <div className="flex justify-center items-center py-12">

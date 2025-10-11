@@ -129,13 +129,16 @@
     "noPosts": "Статьи не найдены",
     "loadingPosts": "Загрузка статей...",
     "latestPosts": "Последние статьи",
-    "description": "Lorem ipsum dolor sit amet consectetur. Quisque erat imperdiet egestas pretium. Nibh convallis id nulla non diam.",
+    "description": "Будьте в курсе последних новостей автомобильной индустрии, экспертных обзоров и полезных советов для покупателей и энтузиастов.",
     "thumbnailAlt": "Миниатюра статьи блога",
     "fallbackTitle": "Lorem Ipsum",
     "fallbackDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     "categories": "Категории блога",
     "stayUpdated": "MotorsBlog – Будьте в курсе последних новостей об автомобилях и моторах",
-    "enterEmail": "введите свой email"
+    "enterEmail": "введите свой email",
+    "subscribe": "Подписаться",
+    "newsletterDescription": "Подпишитесь на нашу рассылку и получайте последние автомобильные новости, обзоры и эксклюзивный контент прямо на вашу почту.",
+    "newsletterTerms": "Нажимая «Подписаться», вы подтверждаете, что согласны с нашими условиями."
   },
   "search": {
     "placeholder": "Поиск автомобилей...",
@@ -165,6 +168,7 @@
   },
   "language": {
     "select": "Выберите язык",
+    "selectLanguages": "Выберите языки",
     "current": "Текущий язык",
     "change": "Изменить язык"
   },
@@ -439,7 +443,13 @@
     "doors": "Двери",
     "popularEquipment": "Популярное оборудование (в заголовке объявления)",
     "year": "Год",
-    "registeredCountry": "Регистрирующая страна"
+    "registeredCountry": "Регистрирующая страна",
+    "equipment": "Оборудование",
+    "contacts": "Контакт",
+    "chooseCountry": "Страна",
+    "email": "Электронная почта",
+    "contactsSaved": "Контакты сохранены",
+    "addSocialNetwork": "Социальная сеть"
   },
   "photo": {
     "addMain": "+ Добавить основное фото",

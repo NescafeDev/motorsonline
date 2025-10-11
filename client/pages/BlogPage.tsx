@@ -85,11 +85,10 @@ export default function BlogPage() {
         <div className="relative z-10 max-w-[1440px] mx-auto px-6 lg:px-[100px] h-full flex items-center justify-center">
           <div className="text-center max-w-[877px]">
             <h1 className="text-white text-[46px] font-semibold leading-tight mb-6">
-              MotorsBlogi – Hoia end kursis viimaste auto- ja mootoriuudistega
+              {t('blog.stayUpdated')}
             </h1>
             <p className="text-white text-lg font-normal leading-[1.5] max-w-[624px] mx-auto">
-              Lorem ipsum dolor sit amet consectetur. Quisque erat imperdiet
-              egestas pretium. Nibh convallis id nulla non diam.
+              {t('blog.description')}
             </p>
           </div>
         </div>
@@ -102,7 +101,7 @@ export default function BlogPage() {
           <aside className="w-full lg:w-[240px] flex-shrink-0">
             <div className="space-y-6">
               <h2 className="text-black text-xl font-medium">
-                Blogi kategooriad
+                {t('blog.categories')}
               </h2>
               <div className="space-y-0">
                 <div className="bg-motor-gray-bg rounded-[10px] p-4">
@@ -176,15 +175,14 @@ export default function BlogPage() {
                 {t('uiActions.joinOurBlog')}
               </h2>
               <p className="text-motor-dark-text text-lg font-normal leading-[1.5]">
-                Lorem ipsum dolor sit amet consectetur. Sollicitudin interdum
-                scelerisque mattis semper diam turpis a.
+                {t('blog.newsletterDescription')}
               </p>
             </div>
             <div className="w-full lg:w-[480px] space-y-4">
               <div className="flex gap-4">
                 <input
                   type="email"
-                  placeholder="Sisesta oma e-post"
+                  placeholder={t('blog.enterEmail')}
                   className="flex-1 h-[54px] px-3 border border-brand-primary rounded-[10px] bg-white text-motor-medium-text text-base placeholder:text-motor-medium-text focus:outline-none focus:ring-2 focus:ring-motor-green"
                 />
                   <button className="px-8 py-3 bg-brand-primary rounded-[10px] text-white text-base font-normal hover:bg-brand-600 transition-colors">
@@ -192,7 +190,7 @@ export default function BlogPage() {
                   </button>
               </div>
               <p className="text-black text-xs font-normal leading-[1.5]">
-                {t('uiActions.clickingRegisterConfirm')} tingimustega.
+                {t('blog.newsletterTerms')}
               </p>
             </div>
           </div>
@@ -204,11 +202,10 @@ export default function BlogPage() {
         <div className="space-y-12">
           <div className="space-y-6">
             <h2 className="text-black text-[46px] font-semibold leading-tight">
-              Viimased postitused
+              {t('blog.latestPosts')}
             </h2>
             <p className="text-motor-dark-text text-lg font-normal leading-[1.5] max-w-[578px]">
-              Lorem ipsum dolor sit amet consectetur. Quisque erat imperdiet
-              egestas pretium. Nibh convallis id nulla non diam.
+              {t('blog.description')}
             </p>
           </div>
 

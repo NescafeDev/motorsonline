@@ -86,7 +86,7 @@ export default function BlogPostPageMobile() {
         {/* Categories Section */}
         <section className="mb-8 px-3">
           <h2 className="text-black font-normal text-lg leading-7 mb-6">
-            Blogi kategooriad
+            {t('blog.categories')}
           </h2>
           <div className="bg-gray-100 rounded-[10px] p-4">
             <span className="text-black text-lg font-semibold">
@@ -163,7 +163,7 @@ export default function BlogPostPageMobile() {
       {/* Latest Posts Section */}
       <section className="px-5 py-12 mx-auto lg:max-w-4xl">
         <h2 className="text-black font-semibold text-2xl leading-normal mb-8 px-3">
-          Viimased postitused
+          {t('blog.latestPosts')}
         </h2>
         {loading ? (
           <div className="flex justify-center items-center py-12">

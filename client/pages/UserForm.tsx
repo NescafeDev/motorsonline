@@ -158,14 +158,14 @@ export default function UserForm() {
         {/* Page Header */}
         <div className="flex justify-between items-center mb-[93px]">
           <h1 className="text-[#1A202C] font-['Poppins'] text-[30px] font-bold leading-[150%] tracking-[-0.9px]">
-            Minu kuulutused
+            {t('listing.myListings')}
           </h1>
           <button
             onClick={() => navigate(`/${currentLanguage}/adds`)}
             className="flex px-[30px] py-[15px] justify-center items-center gap-[10px] rounded-[10px] bg-[#06D6A0]"
           >
             <span className="text-white font-['Poppins'] text-[16px] font-normal leading-[150%]">
-              + Lisa kuulutus
+              + {t('common.addListing')}
             </span>
           </button>
         </div>
@@ -202,7 +202,7 @@ export default function UserForm() {
           ) : (
             <div className="text-center py-8">
               <span className="text-[#747474] font-['Poppins'] text-[18px]">
-                Sul pole veel ühtegi kuulutust
+                {t('listing.noListings')}
               </span>
             </div>
           )}
@@ -211,7 +211,7 @@ export default function UserForm() {
         {/* Results Counter */}
         <div className="mt-[74px]">
           <span className="text-[#747474] font-['Poppins'] text-[18px] font-normal leading-[150%] tracking-[-0.54px]">
-            {loading ? 'Laetakse...' : `Kuvatakse ${userCars.length} teavitust ${userCars.length}-st`}
+            {loading ? t('common.loading') : t('notifications.showing', { current: userCars.length.toString(), total: userCars.length.toString() })}
           </span>
         </div>
       </div>

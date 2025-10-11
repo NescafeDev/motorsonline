@@ -984,7 +984,7 @@ export default function AddsPageMobile() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white w-full">
         <Header />
         <main className="max-w-sm mx-auto px-4 py-4">
           <div className="text-center">
@@ -1188,7 +1188,7 @@ export default function AddsPageMobile() {
                 onChange={(value) => handleInputChange("modelDetail", value)}
               />
               <FormField
-                label={t('formLabels.popularEquipment')}
+                label={t('formLabels.higherValueEquipment')}
                 placeholder=""
                 value={formData.major}
                 onChange={(value) => handleInputChange("major", value)}
@@ -1234,7 +1234,7 @@ export default function AddsPageMobile() {
                 ]}
               />
               <FormField
-                label="Omanike arv"
+                label={t('formLabels.ownerCountLabel')}
                 placeholder="1"
                 isSelect
                 value={formData.ownerCount}
@@ -1391,7 +1391,7 @@ export default function AddsPageMobile() {
                 ]}
               />
               <FormField
-                label={t('formLabels.driveType') + ':'}
+                label={t('formLabels.driveType')}
                 placeholder={t('formLabels.driveType')}
                 isSelect
                 value={formData.drive_type_id}
@@ -1428,13 +1428,13 @@ export default function AddsPageMobile() {
                 onChange={(value) => handleInputChange("displacement", value)}
               />
               <FormField
-                label="Istekoht"
+                label={t('formLabels.seats')}
                 placeholder="0"
                 value={formData.seats}
                 onChange={(value) => handleInputChange("seats", value)}
               />
               <FormField
-                label="Uksed"
+                label={t('formLabels.doors')}
                 placeholder="0"
                 value={formData.doors}
                 onChange={(value) => handleInputChange("doors", value)}
@@ -1584,7 +1584,7 @@ export default function AddsPageMobile() {
               />
               <div className="space-y-2">
                 <FormField
-                  label="Hind"
+                  label={t('search.price')}
                   placeholder="€"
                   value={formData.price}
                   onChange={(value) => handleInputChange("price", value)}
@@ -1616,14 +1616,14 @@ export default function AddsPageMobile() {
                 })()} */}
               </div>
               <FormField
-                label="Soodushind"
+                label={t('formLabels.discountPrice')}
                 placeholder="€"
                 value={formData.discountPrice}
                 onChange={(value) => handleInputChange("discountPrice", value)}
               />
 
               <FormField
-                label="Käibemaksu tagastatavus"
+                label={t('formLabels.vatRefundability')}
                 placeholder="Yes"
                 isSelect
                 value={formData.vatRefundable}
@@ -1644,7 +1644,7 @@ export default function AddsPageMobile() {
                 ]}
               />
               <FormField
-                label="Käibemaksumäär"
+                label={t('formLabels.vatRate')}
                 placeholder="Sisesta protsent 0-30"
                 type="number"
                 value={formData.vatRate}
@@ -1655,7 +1655,7 @@ export default function AddsPageMobile() {
                 suffix="%"
               />
               <FormField
-                label="Garantii"
+                label={t('formLabels.warranty')}
                 placeholder="Kehtib kuni"
                 value={formData.warranty}
                 onChange={(value) => handleInputChange("warranty", value)}
@@ -1680,7 +1680,7 @@ export default function AddsPageMobile() {
                 <div className="my-auto space-y-3">
                   <div className="flex items-center gap-2">
                     <CheckboxField
-                      label={t('inspection.inspectionValidity')}
+                      label={t('inspection.valid')}
                       checked={checktechboxes.inspectionValid}
                       onChange={(checked) =>
                         handleCheckTechboxChange("inspectionValid", checked)
@@ -1733,7 +1733,7 @@ export default function AddsPageMobile() {
           </FormSection>
 
           {/* Equipment Section */}
-          <FormSection title={t('formLabels.additionalFeatures')}>
+          <FormSection title={t('formLabels.higherValueEquipment')}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* First 12 checkboxes - always visible */}
               {accessoriesOptions(t).slice(0, 12).map((option) => (
@@ -1759,7 +1759,7 @@ export default function AddsPageMobile() {
                       {option.key === 'stereo' && (
                         <input
                           type="text"
-                          placeholder="Näide: Burmeister"
+                          placeholder={t('formLabels.exampleBurmeister')}
                           value={formData.stereo}
                           onChange={(e) => handleInputChange("stereo", e.target.value)}
                           disabled={!checkboxes['stereo' as keyof typeof checkboxes]}
@@ -1769,7 +1769,7 @@ export default function AddsPageMobile() {
                       {option.key === 'valuveljed' && (
                         <input
                           type="text"
-                          placeholder="Mõõt"
+                          placeholder={t('formLabels.measurement')}
                           value={formData.valuveljed}
                           onChange={(e) => handleInputChange("valuveljed", e.target.value)}
                           disabled={!checkboxes['valuveljed' as keyof typeof checkboxes]}
@@ -1796,8 +1796,8 @@ export default function AddsPageMobile() {
           {/* Description Section */}
           <FormSection title="">
             <TextAreaField
-              label={t('formLabels.vehicleDescription')}
-              placeholder="Lisage kirjeldus"
+              label={t('formLabels.vehicleDescriptionBySeller')}
+              placeholder={t('formLabels.vehicleDescriptionBySeller')}
               value={formData.description}
               onChange={(value) => handleInputChange("description", value)}
             />
@@ -1807,7 +1807,7 @@ export default function AddsPageMobile() {
           <FormSection title="">
             <TextAreaField
               label={t('formLabels.equipment')}
-              placeholder="Lisage varustus:"
+              placeholder={t('formLabels.equipment')}
               value={formData.equipment}
               onChange={(value) => handleInputChange("equipment", value)}
             />
@@ -1831,7 +1831,7 @@ export default function AddsPageMobile() {
                   <ReactFlagsSelect
                     selected={contactFormData.country}
                     onSelect={(value) => handleContactInputChange("country", value)}
-                    placeholder="Vali riik"
+                    placeholder={t('formLabels.country')}
                     searchable={true}
                     className="w-full"
                   />
@@ -1864,13 +1864,13 @@ export default function AddsPageMobile() {
               />
               <FormField
                 label={t('formLabels.address')}
-                placeholder="Aadress"
+                placeholder={t('formLabels.address')}
                 value={contactFormData.address}
                 onChange={(value) => handleContactInputChange("address", value)}
               />
               <FormField
                 label={t('formLabels.website')}
-                placeholder="Koduleht"
+                placeholder={t('formLabels.website')}
                 value={contactFormData.website}
                 onChange={(value) => handleContactInputChange("website", value)}
               />
@@ -1882,7 +1882,7 @@ export default function AddsPageMobile() {
                   <MultiLanguageSelect
                     selected={contactFormData.language}
                     onSelect={handleLanguageChange}
-                    placeholder="Valige keeled"
+                    placeholder={t('language.selectLanguages')}
                     searchable={true}
                     className="w-full"
                   />
@@ -1926,8 +1926,8 @@ export default function AddsPageMobile() {
           {/* Additional Info Section */}
           <FormSection title="">
             <TextAreaField
-              label={t('formLabels.additionalInfo')}
-              placeholder="Lisage lisainfo"
+              label={t('car.description')}
+              placeholder={t('car.description')}
               value={formData.additionalInfo}
               onChange={(value) => handleInputChange("additionalInfo", value)}
             />

@@ -1747,28 +1747,28 @@ export default function AddsPage() {
                   </div>
                 </div>
                 <CheckboxField
-                  label="Teostatud tehniline kontroll"
+                  label={t('inspection.technicalInspectionPerformed')}
                   checked={checktechboxes.technicalInspection}
                   onChange={(checked) =>
                     handleCheckTechboxChange("technicalInspection", checked)
                   }
                 />
                 <CheckboxField
-                  label="Teostatud tehniline hooldus"
+                  label={t('formLabels.technicalMaintenance')}
                   checked={checktechboxes.technicalMaintenance}
                   onChange={(checked) =>
                     handleCheckTechboxChange("technicalMaintenance", checked)
                   }
                 />
                 <CheckboxField
-                  label="Hooldusraamat"
+                  label={t('formLabels.serviceBook')}
                   checked={checktechboxes.serviceBook}
                   onChange={(checked) =>
                     handleCheckTechboxChange("serviceBook", checked)
                   }
                 />
                 <CheckboxField
-                  label="Peida VIN kood"
+                  label={t('formLabels.hideVin')}
                   checked={checktechboxes.hideVin}
                   onChange={(checked) =>
                     handleCheckTechboxChange("hideVin", checked)
@@ -1940,7 +1940,7 @@ export default function AddsPage() {
                 <MultiLanguageSelect
                   selected={contactFormData.language}
                   onSelect={handleLanguageChange}
-                  placeholder={t('language.select')}
+                  placeholder={t('language.selectLanguages')}
                   searchable={true}
                   className="w-[530px]"
                 />

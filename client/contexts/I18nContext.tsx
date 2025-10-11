@@ -35,9 +35,6 @@ interface I18nProviderProps {
 export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
   const { lang } = useParams<{ lang: string }>();
   const location = useLocation();
-  const [currentLanguage, setCurrentLanguageState] = useState<SupportedLanguage>(DEFAULT_LANGUAGE);
-  const [isLoading, setIsLoading] = useState(true);
-  const [translations, setTranslations] = useState<Record<string, any>>({});
 
   // Get current language from URL or localStorage
   const getCurrentLanguage = (): SupportedLanguage => {
@@ -74,6 +71,16 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
     console.log('getCurrentLanguage - Using DEFAULT_LANGUAGE:', DEFAULT_LANGUAGE);
     return DEFAULT_LANGUAGE;
   };
+
+  // Initialize state with language from URL
+  const [currentLanguage, setCurrentLanguageState] = useState<SupportedLanguage>(() => {
+    // Initialize with the current language from URL on first render
+    const initialLang = getCurrentLanguage();
+    console.log('Initial language on mount:', initialLang);
+    return initialLang;
+  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [translations, setTranslations] = useState<Record<string, any>>({});
 
   // Load translations for the current language
   const loadTranslations = async (language: SupportedLanguage) => {

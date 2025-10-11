@@ -578,8 +578,7 @@ export default function HomePageMobile() {
               {t('footer.blog')}
             </h2>
             <p className="text-motors-dark leading-[150%] tracking-[-0.48px] max-w-md">
-              Lorem ipsum dolor sit amet consectetur. Quisque erat imperdiet
-              egestas pretium. Nibh convallis id nulla non diam.
+              {t('blog.description')}
             </p>
           </div>
 
