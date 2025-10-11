@@ -27,6 +27,11 @@ export default function BlogPostPageMobile() {
   const [allBlogs, setAllBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Scroll to top when page loads or id changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {

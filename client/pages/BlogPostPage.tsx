@@ -11,6 +11,12 @@ export default function BlogPostPage() {
   const { t } = useI18n();
   const { id } = useParams();
   const [blog, setBlog] = useState<BlogPost>(null);
+  
+  // Scroll to top when page loads or id changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
+  
   useEffect(() => {
     if (!id) return;
     fetch(`/api/blogs/${id}`)
