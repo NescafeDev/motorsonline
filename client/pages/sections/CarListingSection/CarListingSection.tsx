@@ -21,6 +21,7 @@ import {
 import { Separator } from "../../../components/ui/separator";
 import { Combobox } from "../../../components/ui/combobox";
 import axios from "axios";
+import { Car } from "lucide-react";
 
 // Import CarFilters from HomePage
 export interface CarFilters {
@@ -974,13 +975,13 @@ export const CarListingSection = ({
           <Accordion type="single" collapsible>
             <AccordionItem value="additional-info" className="border-none">
               <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica]">
-                Lisainfo
+                {t('car.description')}
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-3">
                   <Select value={filters.country} onValueChange={(value) => updateFilter('country', value)}>
                     <SelectTrigger className="w-full h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]">
-                      <SelectValue placeholder="Riik" />
+                      <SelectValue placeholder={t('formLabels.country')} />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Eesti">Eesti</SelectItem>
@@ -992,7 +993,7 @@ export const CarListingSection = ({
 
                   <Select value={filters.registered_country} onValueChange={(value) => updateFilter('registered_country', value)}>
                     <SelectTrigger className="w-full h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]">
-                      <SelectValue placeholder="Arvel riigis" />
+                      <SelectValue placeholder={t('formLabels.registeredCountry')} />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Eesti">Eesti</SelectItem>
@@ -1056,7 +1057,7 @@ export const CarListingSection = ({
           <Accordion type="single" collapsible>
             <AccordionItem value="equipment" className="border-none">
               <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica]">
-                Lisavarustus
+                {t('car.features')}
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-2">
