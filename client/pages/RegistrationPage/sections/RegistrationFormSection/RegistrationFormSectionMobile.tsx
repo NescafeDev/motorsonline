@@ -10,7 +10,7 @@ import { useI18n } from "@/contexts/I18nContext";
 
 export const RegistrationFormSectionMobile = (): JSX.Element => {
   const navigate = useNavigate();
-  const { t } = useI18n();
+  const { t , currentLanguage } = useI18n();
   const [form, setForm] = useState({
     fullname: "",
     email: "",
@@ -63,7 +63,7 @@ export const RegistrationFormSectionMobile = (): JSX.Element => {
       } else {
         localStorage.setItem("user", JSON.stringify(data.user));
         localStorage.setItem("token", data.token);
-        navigate("/");
+        navigate(`/${currentLanguage}`);
       }
     },
     onError: () => console.error("Login Failed"),
@@ -101,7 +101,7 @@ export const RegistrationFormSectionMobile = (): JSX.Element => {
         const data = await res.json();
         setError(data.message || t('auth.registrationFailed'));
       } else {
-        navigate("/login");
+        navigate(`/${currentLanguage}/login`);
       }
     } catch (err) {
       setError(t('auth.networkErrorTryLater'));

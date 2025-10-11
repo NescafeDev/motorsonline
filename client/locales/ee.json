@@ -24,7 +24,8 @@
     "addListing": "Lisa kuulutus",
     "saving": "Salvestamine...",
     "deleteListing": "Kustuta kuulutus",
-    "exchangepossible": "Vahetuse võimalus"
+    "exchangepossible": "Vahetuse võimalus",
+    "or": "või"
   },
   "navigation": {
     "home": "Avaleht",
@@ -59,7 +60,10 @@
     "register": "Registreeru",
     "logout": "Logi välja",
     "email": "E-post",
+    "emailAddress": "E-posti aadress",
+    "emailPlaceholder": "Sisesta e-post",
     "password": "Parool",
+    "passwordPlaceholder": "Sisesta parool",
     "confirmPassword": "Kinnita parool",
     "firstName": "Eesnimi",
     "lastName": "Perekonnanimi",
@@ -77,7 +81,21 @@
     "networkErrorTryLater": "Võrgu viga. Palun proovige hiljem uuesti.",
     "allFieldsRequired": "Kõik väljad on kohustuslikud.",
     "mustAgreeToTerms": "Peate nõustuma tingimustega.",
-    "registrationFailed": "Registreerimine ebaõnnestus."
+    "registrationFailed": "Registreerimine ebaõnnestus.",
+    "loggingIn": "Sisselogimine...",
+    "loginWithApple": "Logi sisse Apple'i kaudu",
+    "loginWithGoogle": "Logi sisse Google'i kaudu",
+    "welcomeBack": "Tere tulemast tagasi!",
+    "chooseIdealCar": "Vali oma ideaalne auto koos meiega",
+    "createAccount": "Loo oma kasutajakonto!",
+    "selectUserType": "Vali kasutaja",
+    "privateUser": "Eraisik",
+    "companyUser": "Ettevõte",
+    "agreeToTerms": "Olen lugenud ja nõustun kasutustingimuste ja privaatsuspoliitikaga.",
+    "registering": "Registreerin...",
+    "registerWithApple": "Registreeru Apple'i kaudu",
+    "registerWithGoogle": "Registreeru Google'i kaudu",
+    "passwordsDoNotMatchError": "Paroolid ei kattu."
   },
   "car": {
     "title": "Auto",

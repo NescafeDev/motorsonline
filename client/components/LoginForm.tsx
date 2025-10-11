@@ -12,7 +12,7 @@ export default function LoginForm() {
   const [error, setError] = useState("");
 
   const { login, googleLogin } = useAuth();
-  const { t } = useI18n();
+  const { t , currentLanguage } = useI18n();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,7 +33,7 @@ export default function LoginForm() {
       //   navigate("/");
       // }
       await login(email, password);
-      navigate("/");
+      navigate(`/${currentLanguage}`);
     } catch (err) {
       console.error(err);
       setError(t('auth.networkErrorTryLater'));
@@ -56,7 +56,7 @@ export default function LoginForm() {
 
       await googleLogin(profile.given_name + " " + profile.family_name, profile.email);
 
-      navigate("/");
+      navigate(`/${currentLanguage}`);
     },
     onError: () => console.error("Login Failed"),
     flow: "implicit"
@@ -66,17 +66,17 @@ export default function LoginForm() {
     <form className="w-full max-w-[540px]" onSubmit={handleSubmit}>
       {/* Title */}
       <h1 className="text-brand-text font-poppins text-[30px] font-semibold leading-[150%] tracking-[-0.9px] mb-[60px]">
-        Tere tulemast tagasi!
+        {t('auth.welcomeBack')}
       </h1>
 
       {/* Email Field */}
       <div className="mb-[20px]">
         <label className="block text-black font-poppins text-lg font-medium mb-[10px]">
-          E-posti aadress
+          {t('auth.emailAddress')}
         </label>
         <input
           type="email"
-          placeholder="Sisesta e-post"
+          placeholder={t('auth.emailPlaceholder')}
           className="w-full h-[57px] px-5 rounded-[10px] border border-brand-gray-border bg-white font-poppins text-base placeholder:text-brand-gray focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
           value={email}
           onChange={e => setEmail(e.target.value)}
@@ -87,11 +87,11 @@ export default function LoginForm() {
       {/* Password Field */}
       <div className="mb-[53px]">
         <label className="block text-black font-poppins text-lg font-medium mb-[10px]">
-          Parool
+          {t('auth.password')}
         </label>
         <input
           type="password"
-          placeholder="Sisesta parool"
+          placeholder={t('auth.passwordPlaceholder')}
           className="w-full h-[57px] px-5 rounded-[10px] border border-brand-gray-border bg-white font-poppins text-base placeholder:text-brand-gray focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
           value={password}
           onChange={e => setPassword(e.target.value)}
@@ -105,10 +105,10 @@ export default function LoginForm() {
       {/* Forgot Password Link */}
       <a
         href="#"
-        onClick={() => navigate('/password-reset')}
+        onClick={() => navigate(`/${currentLanguage}/password-reset`)}
         className="block text-black font-poppins text-lg font-normal underline mb-[57px] hover:text-brand-primary transition-colors"
       >
-        Unustasid parooli?
+        {t('auth.forgotPassword')}
       </a>
 
       {/* Login Button */}
@@ -117,13 +117,13 @@ export default function LoginForm() {
         className="w-full h-[54px] flex justify-center items-center gap-[10px] rounded-[10px] bg-brand-primary text-white font-poppins text-base font-normal leading-[150%] mb-[36px] hover:bg-opacity-90 transition-all"
         disabled={loading}
       >
-        {loading ? "Sisselogimine..." : "Logi sisse"}
+        {loading ? t('auth.loggingIn') : t('auth.login')}
       </button>
 
       {/* Divider */}
       <div className="flex items-center gap-[20px] mb-[30px]">
         <div className="flex-1 h-px bg-brand-gray-light"></div>
-        <span className="text-black font-poppins text-lg font-normal">või</span>
+        <span className="text-black font-poppins text-lg font-normal">{t('common.or')}</span>
         <div className="flex-1 h-px bg-brand-gray-light"></div>
       </div>
 
@@ -137,7 +137,7 @@ export default function LoginForm() {
             src="/img/apple.svg"
           />
           <span className="text-[#3F3F46] text-center font-poppins text-lg font-normal leading-5">
-            Logi sisse Apple'i kaudu
+            {t('auth.loginWithApple')}
           </span>
         </button>
 
@@ -148,7 +148,7 @@ export default function LoginForm() {
           className="w-full h-[57px] flex justify-center items-center gap-2 rounded-[10px] border-2 border-brand-gray-border hover:bg-gray-50 transition-colors">
           <img className="w-6 h-6" alt="Google logo" src="/img/google.svg" />
           <span className="text-[#3F3F46] text-center font-poppins text-lg font-normal leading-5">
-            Logi sisse Google'i kaudu
+            {t('auth.loginWithGoogle')}
           </span>
         </button>
       </div>

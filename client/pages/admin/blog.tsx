@@ -35,7 +35,7 @@ const ReactQuill = dynamic;
 
 export default function AdminBlogPanel() {
   const navigate = useNavigate();
-  const { t } = useI18n();
+  const { t , currentLanguage } = useI18n();
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [editing, setEditing] = useState<Blog | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -49,18 +49,18 @@ export default function AdminBlogPanel() {
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (!user) {
-      navigate("/admin");
+      navigate(`/${currentLanguage}/admin`);
       return;
     }
     try {
       const parsed = JSON.parse(user);
       if (!parsed.admin) {
-        navigate("/admin");
+        navigate(`/${currentLanguage}/admin`);
         return;
       }
       setAdmin(parsed);
     } catch {
-      navigate("/admin");
+      navigate(`/${currentLanguage}/admin`);
       return;
     }
     fetchBlogs();
@@ -70,7 +70,7 @@ export default function AdminBlogPanel() {
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    navigate("/admin");
+    navigate(`/${currentLanguage}/admin`);
   };
 
   const fetchBlogs = async () => {
@@ -105,6 +105,7 @@ export default function AdminBlogPanel() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    console.log("handleSubmit");
     e.preventDefault();
     setError("");
     setLoading(true);

@@ -176,7 +176,7 @@ async function fetchFilteredCars(filters: CarFilters): Promise<Car[]> {
 
 export default function SearchPage() {
     const navigate = useNavigate();
-    const { t } = useI18n();
+    const { t , currentLanguage } = useI18n();
     const [searchParams] = useSearchParams();
     const { isAuthenticated, user } = useAuth();
     const { isFavorite, toggleFavorite } = useFavorites();
@@ -282,7 +282,7 @@ export default function SearchPage() {
                 }
             }
         });
-        navigate(`/search?${params.toString()}`, { replace: true });
+        navigate(`/${currentLanguage}/search?${params.toString()}`, { replace: true });
     };
 
     const handleApplyFilters = () => {
@@ -389,8 +389,8 @@ export default function SearchPage() {
                                                 transmission={car.transmission}
                                                 fuelType={car.fuelType}
                                                 ownerCount={car.ownerCount}
-                                                onPreview={() => navigate(`/car/${car.id}`)}
-                                                onEdit={() => navigate(`/car/${car.id}/edit`)}
+                                                onPreview={() => navigate(`/${currentLanguage}/car/${car.id}`)}
+                                                onEdit={() => navigate(`/${currentLanguage}/car/${car.id}/edit`)}
                                                 className="bg-white"
                                             />
                                         ))

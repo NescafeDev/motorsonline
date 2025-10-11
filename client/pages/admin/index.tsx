@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useI18n } from "@/contexts/I18nContext";
 
 export default function AdminLoginPage() {
   const navigate = useNavigate();
+  const { t , currentLanguage } = useI18n();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -14,11 +16,11 @@ export default function AdminLoginPage() {
       try {
         const parsed = JSON.parse(user);
         if (parsed.admin) {
-          navigate("/admin/blog");
+          navigate(`/${currentLanguage}/admin/blog`);
         }
       } catch {}
     }
-  }, [navigate]);
+  }, [navigate, currentLanguage]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,7 +40,7 @@ export default function AdminLoginPage() {
       } else {
         localStorage.setItem("user", JSON.stringify(data.user));
         localStorage.setItem("token", data.token);
-        navigate("/admin/blog");
+        navigate(`/${currentLanguage}/admin/blog`);
       }
     } catch {
       setError("Võrgu viga. Palun proovige hiljem uuesti.");
@@ -50,10 +52,10 @@ export default function AdminLoginPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 w-full">
       <form onSubmit={handleSubmit} className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Admini sisselogimine</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center">{t('admin.login')}</h1>
         {error && <div className="text-red-600 text-center mb-4">{error}</div>}
         <div className="mb-4">
-          <label className="block mb-2 font-medium">E-post</label>
+          <label className="block mb-2 font-medium">{t('admin.email')}</label>
           <input
             type="email"
             className="w-full border rounded px-3 py-2"
@@ -63,7 +65,7 @@ export default function AdminLoginPage() {
           />
         </div>
         <div className="mb-6">
-          <label className="block mb-2 font-medium">Parool</label>
+          <label className="block mb-2 font-medium">{t('admin.password')}</label>
           <input
             type="password"
             className="w-full border rounded px-3 py-2"
@@ -77,7 +79,7 @@ export default function AdminLoginPage() {
           className="w-full bg-brand-primary text-white py-2 rounded font-semibold hover:bg-opacity-90 transition"
           disabled={loading}
         >
-          {loading ? "Sisselogimine..." : "Logi sisse"}
+          {loading ? t('admin.loading') : t('admin.login')}
         </button>
       </form>
     </div>

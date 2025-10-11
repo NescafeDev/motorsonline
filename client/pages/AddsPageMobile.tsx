@@ -206,7 +206,7 @@ const inspectionValidityOptions = ( t: any ) => [
 export default function AddsPageMobile() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { t } = useI18n();
+  const { t , currentLanguage } = useI18n();
   const { id: carId } = useParams<{ id: string }>();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -491,7 +491,7 @@ export default function AddsPageMobile() {
           loadContactData();
         } else {
           // If car not found, redirect to user page
-          navigate('/user');
+          navigate(`/${currentLanguage}/user`);
         }
       } else {
         // Check for editing car data in localStorage (fallback for old approach)
@@ -969,7 +969,7 @@ export default function AddsPageMobile() {
       setIsModalOpen(false);
 
       // Navigate to user's listings after successful add or edit
-      navigate("/user");
+      navigate(`/${currentLanguage}/user`);
     } catch (error: any) {
       console.error('Error submitting car:', error, editingCar);
       if (error.response?.data?.message) {
@@ -2002,7 +2002,7 @@ export default function AddsPageMobile() {
                         setCarImages(Array(40).fill(null));
                         setShowMorePhotos(false);
                         setStereoInput("");
-                        navigate("/user");
+                        navigate(`/${currentLanguage}/user`);
                       }}
                     >
                       {t('common.cancel')}

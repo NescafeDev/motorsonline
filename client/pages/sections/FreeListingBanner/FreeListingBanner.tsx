@@ -6,7 +6,7 @@ import { useI18n } from "@/contexts/I18nContext";
 
 export const FreeListingBanner = (): JSX.Element => {
   const navigate = useNavigate();
-  const { t } = useI18n();
+  const { t , currentLanguage } = useI18n();
 
   return (
     <section className="max-w-[1240px] mx-auto mt-10">
@@ -20,9 +20,9 @@ export const FreeListingBanner = (): JSX.Element => {
           onClick={() => {
             const user = localStorage.getItem("user");
             if (!user) {
-              navigate('/login');
+              navigate(`/${currentLanguage}/login`);
             } else {
-              navigate('/adds');
+              navigate(`/${currentLanguage}/adds`);
             }
           }}
         >

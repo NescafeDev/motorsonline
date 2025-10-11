@@ -29,7 +29,7 @@ export const BlogSection = (): JSX.Element => {
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
-  const { t } = useI18n();
+  const { t, currentLanguage } = useI18n();
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
@@ -44,7 +44,7 @@ export const BlogSection = (): JSX.Element => {
     };
 
     fetchBlogs();
-  }, []);
+  }, [currentLanguage]);
 
   // Convert blogs to BlogPost format for display
   const blogPosts: BlogPost[] = blogs.map(blog => ({
@@ -56,9 +56,9 @@ export const BlogSection = (): JSX.Element => {
   }));
 
   return (
-    <div className="w-full bg-white pt-[70px]">
-      <section className="w-full pl-[2%] pr-[2%] mt-10 max-w-[1440px] mx-auto relative bg-white">
-        <div className="mb-12">
+    <div className="w-full bg-white pt-1">
+      <section className="w-full pl-[2%] pr-[2%] mt-3 max-w-[1440px] mx-auto relative bg-white">
+        <div className="mb-4">
           <h2 className="font-['Poppins',Helvetica] font-semibold text-[46px] text-black leading-normal mb-6">
             {t('blog.latestPosts')}
           </h2>
@@ -80,7 +80,7 @@ export const BlogSection = (): JSX.Element => {
               >
                 <div className="relative h-[189px]">
                   <img
-                    onClick={() => navigate(`/blog/${post.id}`)}
+                    onClick={() => navigate(`/${currentLanguage}/blog/${post.id}`)}
                     className="w-full h-full object-cover cursor-pointer"
                     alt={t('blog.thumbnailAlt')}
                     src={post.image || 'https://via.placeholder.com/300x189?text=No+Image'}
@@ -100,7 +100,7 @@ export const BlogSection = (): JSX.Element => {
                         __html: post.introduction?.replace(/<[^>]*>/g, '').substring(0, 100) + '...' || t('blog.fallbackDescription')
                       }}
                     />
-                    <div className="pt-6 flex items-center cursor-pointer mt-auto pb-2" onClick={() => navigate(`/blog/${post.id}`)}>
+                    <div className="pt-6 flex items-center cursor-pointer mt-auto pb-2" onClick={() => navigate(`/${currentLanguage}/blog/${post.id}`)}>
                       <button className="font-['Poppins',Helvetica] font-medium text-[#06d6a0] text-sm leading-[21px]">
                         {t('blog.readMore')}
                       </button>

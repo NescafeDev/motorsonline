@@ -24,7 +24,8 @@
     "addListing": "Добавить объявление",
     "saving": "Сохранение...",
     "deleteListing": "Удалить объявление",
-    "exchangepossible": "Возможность обмена"
+    "exchangepossible": "Возможность обмена",
+    "or": "или"
   },
   "navigation": {
     "home": "Главная",
@@ -59,7 +60,10 @@
     "register": "Регистрация",
     "logout": "Выйти",
     "email": "Электронная почта",
+    "emailAddress": "Адрес электронной почты",
+    "emailPlaceholder": "Введите email",
     "password": "Пароль",
+    "passwordPlaceholder": "Введите пароль",
     "confirmPassword": "Подтвердите пароль",
     "firstName": "Имя",
     "lastName": "Фамилия",
@@ -77,7 +81,21 @@
     "networkErrorTryLater": "Ошибка сети. Попробуйте позже.",
     "allFieldsRequired": "Все поля обязательны.",
     "mustAgreeToTerms": "Вы должны согласиться с условиями.",
-    "registrationFailed": "Ошибка регистрации."
+    "registrationFailed": "Ошибка регистрации.",
+    "loggingIn": "Вход...",
+    "loginWithApple": "Войти через Apple",
+    "loginWithGoogle": "Войти через Google",
+    "welcomeBack": "Добро пожаловать!",
+    "chooseIdealCar": "Выберите свой идеальный автомобиль вместе с нами",
+    "createAccount": "Создайте свою учетную запись!",
+    "selectUserType": "Выберите тип пользователя",
+    "privateUser": "Частное лицо",
+    "companyUser": "Компания",
+    "agreeToTerms": "Я прочитал и согласен с условиями использования и политикой конфиденциальности.",
+    "registering": "Регистрация...",
+    "registerWithApple": "Зарегистрироваться через Apple",
+    "registerWithGoogle": "Зарегистрироваться через Google",
+    "passwordsDoNotMatchError": "Пароли не совпадают."
   },
   "car": {
     "title": "Автомобиль",

@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageContainer from "../components/PageContainer";
+import { useI18n } from "@/contexts/I18nContext";
 
 export default function PasswordReset() {
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
-
+  const { currentLanguage , t } = useI18n();
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    navigate("/forgot-password");
+    navigate(`/${currentLanguage}/forgot-password`);
   };
 
   return (

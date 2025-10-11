@@ -97,7 +97,8 @@ interface VehicleDetailsSectionProps {
 
 // Helper function to get VAT display text (matching HomePage)
 const useVatText = () => {
-  const { t } = useI18n();
+  const { t  } = useI18n();
+
   return (car: Car): string => {
     if (car.vatRefundable === 'no' || car.vatRefundable === 'ei') {
       return t('vatInfo.vat0NoVatAdded');
@@ -108,10 +109,12 @@ const useVatText = () => {
 
 export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionProps): JSX.Element => {
   const navigate = useNavigate();
+  const { currentLanguage } = useI18n();
   const getVatDisplayText = useVatText();
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
 
   // Load cars on component mount
   const loadCars = useCallback(async () => {
@@ -190,7 +193,7 @@ export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionPro
           <Card
             key={car.id}
             className="w-full bg-white rounded-[10px] overflow-hidden relative cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => navigate(`/car/${car.id}`)}
+            onClick={() => navigate(`/${currentLanguage}/car/${car.id}`)}
           >
             <img
                 className="w-full h-[189px] object-cover"

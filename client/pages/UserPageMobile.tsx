@@ -27,7 +27,7 @@ interface Car {
 
 export default function UserPageMobile() {
   const navigate = useNavigate();
-  const { t } = useI18n();
+  const { t , currentLanguage } = useI18n();
   const [userCars, setUserCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -111,7 +111,7 @@ export default function UserPageMobile() {
         return [];
       }
     } else {
-      navigate('/login')
+      navigate(`/${currentLanguage}/login`)
     }
   }
 
@@ -120,7 +120,7 @@ export default function UserPageMobile() {
     const token = localStorage.getItem("token");
 
     if (!user || !token) {
-      navigate('/login');
+      navigate(`/${currentLanguage}/login`);
       return;
     }
 
@@ -153,7 +153,7 @@ export default function UserPageMobile() {
 
   const handleEditCar = (carId: number) => {
     // Navigate to update page with car ID for editing
-    navigate(`/update/${carId}`);
+    navigate(`/${currentLanguage}/update/${carId}`);
   };
 
   return (
@@ -170,7 +170,7 @@ export default function UserPageMobile() {
 
         {/* Add Listing Button */}
         <button
-          onClick={() => navigate('/adds')}
+          onClick={() => navigate(`/${currentLanguage}/adds`)}
           className="flex px-[30px] py-[15px] justify-center items-center gap-[10px] rounded-[10px] bg-[#06D6A0] mb-5"
         >
           <span className="text-white font-['Poppins'] text-[16px] font-normal leading-[150%]">

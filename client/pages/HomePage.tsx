@@ -224,7 +224,7 @@ export default function HomePage() {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
   const { isFavorite, toggleFavorite } = useFavorites();
-  const { t } = useI18n();
+  const { t ,currentLanguage } = useI18n();
   const [cars, setCars] = useState<Car[]>([]);
   const [filteredCars, setFilteredCars] = useState<Car[]>([]);
   const [filters, setFilters] = useState<CarFilters>({});
@@ -360,7 +360,7 @@ export default function HomePage() {
           }
         }
       });
-      navigate(`/search?${params.toString()}`);
+      navigate(`/${currentLanguage}/search?${params.toString()}`);
     } else {
       // If no filters, show all cars
       setFilteredCars(cars);
@@ -389,7 +389,7 @@ export default function HomePage() {
 
   return (
     <PageContainer>
-      <div className="w-full bg-[#f6f7f9] relative mb-[120px]">
+      <div className="w-full bg-[#f6f7f9] relative mb-12">
         {/* Hero Section */}
         <HeroSection />
 
@@ -439,7 +439,7 @@ export default function HomePage() {
                             key={car.id}
                             className="rounded-[10px] overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
                             onClick={() => {
-                              navigate(`/car/${car.id}`);
+                              navigate(`/${currentLanguage}/car/${car.id}`);
                               window.scrollTo(0, 0);
                             }}
                           >
@@ -449,126 +449,6 @@ export default function HomePage() {
                               src={displayCar.image}
                             />
                             <CardContent className="p-4 pt-5 pb-4 relative">
-                              {/* <div className="flex justify-between items-start mb-1">
-                                <div>
-                                  <h3 className="font-semibold text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]">
-                                    {displayCar.title}
-                                  </h3>
-                                  <p className="font-medium text-[#747474] text-sm tracking-[-0.28px] leading-[21px]">
-                                    {displayCar.details}
-                                  </p>
-                                </div>
-                                <button
-                                  className="w-6 h-6 cursor-pointer"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    if (!isAuthenticated) {
-                                      // You could show a login prompt here
-                                      alert('Please log in to save favorites');
-                                      return;
-                                    }
-                                    toggleFavorite(car.id);
-                                  }}
-                                >
-                                  <img
-                                    alt="Favorite"
-                                    src={
-                                      isFavorite(car.id)
-                                        ? "/img/vuesax-bold-heart.svg"
-                                        : "/img/vuesax-linear-heart.svg"
-                                    }
-                                  />
-                                </button>
-                              </div>
-
-                              <div className="flex items-center gap-5 mt-6 mb-4">
-                                <div className="flex items-center gap-2">
-                                  <img
-                                    className="w-5 h-5"
-                                    alt="Fuel type"
-                                    src="/img/vuesax-bold-gas-station.svg"
-                                  />
-                                  <span className="text-[#747474] text-sm tracking-[-0.28px] leading-[21px]">
-                                    {displayCar.fuel}
-                                  </span>
-                                </div>
-
-                                <div className="flex items-center gap-2">
-                                  <img className="w-6 h-6" alt="Google logo" src="/img/car/bevel.svg" />
-                                  <span className="text-[#747474] text-sm tracking-[-0.28px] leading-[21px]">
-                                    {displayCar.transmission}
-                                  </span>
-                                </div>
-                              </div>
-
-                              <div className="flex justify-between items-center">
-                                  <p className="font-semibold text-secondary-500 text-xl">
-                                    {displayCar.price}
-                                  </p>
-                                <Button
-                                  className="h-10 px-[30px] py-3 bg-[#06d6a0] text-white rounded-[10px]"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    navigate(`/car/${car.id}`);
-                                    window.scrollTo(0, 0);
-                                  }}
-                                >
-                                  Vaata
-                                </Button>
-                              </div> */}
-                              <div className="grid grid-cols-4 gap-4 h-20 p-2">
-                                <div className="col-span-3 flex flex-col justify-center">
-                                  <h3 className="font-semibold text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]">
-                                    {displayCar.title}
-                                  </h3>
-                                  <p className="font-medium text-black text-sm tracking-[-0.28px] leading-[21px]">
-                                    {displayCar.major}
-                                  </p>
-                                </div>
-                                <div className="absolute right-6 top-8">
-                                  <button
-                                    className="w-6 h-6 cursor-pointer "
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      if (!isAuthenticated) {
-                                        // You could show a login prompt here
-                                        alert('Please log in to save favorites');
-                                        return;
-                                      }
-                                      toggleFavorite(car.id);
-                                    }}
-                                  >
-                                    <img
-                                      className="w-6 h-6"
-                                      alt="Favorite"
-                                      src={
-                                        isFavorite(car.id)
-                                          ? "/img/vuesax-bold-heart.svg"
-                                          : "/img/vuesax-linear-heart.svg"
-                                      }
-                                    />
-                                  </button>
-                                </div>
-                              </div>
-                              {/* <div className="grid grid-cols-2 mb-4 h-20">
-                                <div className="flex items-center">
-                                  <img
-                                    className="w-5 h-5 mr-2"
-                                    alt="Fuel type"
-                                    src="/img/vuesax-bold-gas-station.svg"
-                                  />
-                                  <span className="text-[#747474] text-sm tracking-[-0.28px] leading-[21px]">
-                                    {displayCar.fuel}
-                                  </span>
-
-                                </div>
-                                <div className="flex items-center mr-2 gap-2">
-                                  <img className="w-6 h-6 ml-2" alt="Google logo" src="/img/car/bevel.svg" />
-                                  <span className="text-[#747474] text-sm tracking-[-0.28px] leading-[21px]">
-                                    {displayCar.transmission}
-                                  </span>
-                                </div>
-                              </div> */}
                               
                               <div className="grid grid-cols-2 gap-y-2 mb-8">
                                 {getVehicleDetails(car, t).map((detail, index) => (

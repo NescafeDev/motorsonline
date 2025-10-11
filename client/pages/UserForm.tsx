@@ -23,7 +23,7 @@ interface Car {
 
 export default function UserForm() {
   const navigate = useNavigate();
-  const { t } = useI18n();
+  const { t , currentLanguage } = useI18n();
   const [userCars, setUserCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -149,7 +149,7 @@ export default function UserForm() {
 
   const handleEditCar = (carId: number) => {
     // Navigate to update page with car ID for editing
-    navigate(`/update/${carId}`);
+    navigate(`/${currentLanguage}/update/${carId}`);
   };
 
   return (
@@ -161,7 +161,7 @@ export default function UserForm() {
             Minu kuulutused
           </h1>
           <button
-            onClick={() => navigate('/adds')}
+            onClick={() => navigate(`/${currentLanguage}/adds`)}
             className="flex px-[30px] py-[15px] justify-center items-center gap-[10px] rounded-[10px] bg-[#06D6A0]"
           >
             <span className="text-white font-['Poppins'] text-[16px] font-normal leading-[150%]">
@@ -196,7 +196,7 @@ export default function UserForm() {
                 vatNote={getVatDisplayText(car)}
                 onDelete={() => handleDeleteCar(car.id)}
                 onEdit={() => handleEditCar(car.id)}
-                onPreview={() => navigate(`/car/${car.id}`)}
+                onPreview={() => navigate(`/${currentLanguage}/car/${car.id}`)}
               />
             ))
           ) : (

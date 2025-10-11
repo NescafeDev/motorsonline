@@ -1,8 +1,11 @@
 import LoginForm from "../components/LoginForm";
 import PageContainer from "../components/PageContainer";
 import { useNavigate } from "react-router-dom";
+import { useI18n } from "@/contexts/I18nContext";
+
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { t } = useI18n();
 
   const handleLogin = () => {
     navigate("/");
@@ -35,7 +38,7 @@ export default function LoginPage() {
                 {/* Hero Text */}
                 <div className="relative z-10 flex items-center justify-center h-full p-6 lg:p-12">
                   <h2 className="text-white text-center font-poppins text-3xl lg:text-[46px] font-semibold leading-normal max-w-[538px]">
-                    Vali oma ideaalne auto koos meiega
+                    {t('auth.chooseIdealCar')}
                   </h2>
                 </div>
               </div>

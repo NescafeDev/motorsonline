@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "../../components/ui/dialog";
+import { useI18n } from "@/contexts/I18nContext";
 
 interface Car {
   id: number;
@@ -32,7 +33,7 @@ const AdminAddsPage: React.FC = () => {
   const [brands, setBrands] = useState<{ id: number; name: string }[]>([]);
   const [models, setModels] = useState<{ id: number; name: string }[]>([]);
   const [years, setYears] = useState<{ id: number; value: string }[]>([]);
-
+  const { currentLanguage } = useI18n();
   // Helper functions to get names/values
   const getBrandName = (id: number, fallback?: string) =>
     brands.find((b) => b.id === id)?.name || fallback || id;
@@ -44,18 +45,18 @@ const AdminAddsPage: React.FC = () => {
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (!user) {
-      window.location.href = "/admin";
+      window.location.href = `/${currentLanguage}/admin`;
       return;
     }
     try {
       const parsed = JSON.parse(user);
       if (!parsed.admin) {
-        window.location.href = "/admin";
+        window.location.href = `/${currentLanguage}/admin`;
         return;
       }
       setAdmin(parsed);
     } catch {
-      window.location.href = "/admin";
+      window.location.href = `/${currentLanguage}/admin`;
       return;
     }
     fetchCars();
@@ -65,7 +66,7 @@ const AdminAddsPage: React.FC = () => {
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    window.location.href = "/admin";
+    window.location.href = `/${currentLanguage}/admin`;
   };
 
   const fetchCars = async () => {

@@ -10,7 +10,7 @@ import { useI18n } from "@/contexts/I18nContext";
 
 export const RegistrationFormSection = (): JSX.Element => {
   const navigate = useNavigate();
-  const { t } = useI18n();
+  const { t , currentLanguage } = useI18n();
   const [form, setForm] = useState({
     fullname: "",
     email: "",
@@ -63,7 +63,7 @@ export const RegistrationFormSection = (): JSX.Element => {
       } else {
         localStorage.setItem("user", JSON.stringify(data.user));
         localStorage.setItem("token", data.token);
-        navigate("/");
+        navigate(`/${currentLanguage}`);
       }
     },
     onError: () => console.error("Login Failed"),
@@ -78,7 +78,7 @@ export const RegistrationFormSection = (): JSX.Element => {
       return;
     }
     if (form.password !== form.confirmPassword) {
-      setError("Paroolid ei kattu.");
+      setError(t('auth.passwordsDoNotMatchError'));
       return;
     }
     if (!form.terms) {
@@ -101,7 +101,7 @@ export const RegistrationFormSection = (): JSX.Element => {
         const data = await res.json();
         setError(data.message || t('auth.registrationFailed'));
       } else {
-        navigate("/login");
+        navigate(`/${currentLanguage}/login`);
       }
     } catch (err) {
       setError(t('auth.networkErrorTryLater'));
@@ -140,13 +140,13 @@ export const RegistrationFormSection = (): JSX.Element => {
       <div className="flex flex-col p-10 w-1/2 space-y-6">
         <form onSubmit={handleSubmit}>
           <h1 className="font-semibold text-3xl text-secondary-500 tracking-[-0.90px] [font-family:'Poppins',Helvetica] mb-5">
-            Loo oma kasutajakonto!
+            {t('auth.createAccount')}
           </h1>
 
           {/* User Type Radio Buttons */}
           <div className="space-y-4">
             <label className="block font-medium text-lg text-black [font-family:'Poppins',Helvetica]">
-              Vali kasutaja
+              {t('auth.selectUserType')}
             </label>
             <div className="flex space-x-10">
               <div className="flex items-center space-x-2">
@@ -163,7 +163,7 @@ export const RegistrationFormSection = (): JSX.Element => {
                   htmlFor="private"
                   className="text-lg [font-family:'Poppins',Helvetica] cursor-pointer"
                 >
-                  Eraisik
+                  {t('auth.privateUser')}
                 </label>
               </div>
               <div className="flex items-center space-x-2">
@@ -180,7 +180,7 @@ export const RegistrationFormSection = (): JSX.Element => {
                   htmlFor="company"
                   className="text-lg [font-family:'Poppins',Helvetica] cursor-pointer"
                 >
-                  Ettevõte
+                  {t('auth.companyUser')}
                 </label>
               </div>
             </div>
@@ -220,7 +220,7 @@ export const RegistrationFormSection = (): JSX.Element => {
               htmlFor="terms"
               className="text-lg [font-family:'Poppins',Helvetica] leading-6"
             >
-              Olen lugenud ja nõustun kasutustingimuste ja privaatsuspoliitikaga.
+              {t('auth.agreeToTerms')}
             </label>
           </div>
 
@@ -233,13 +233,13 @@ export const RegistrationFormSection = (): JSX.Element => {
             type="submit"
             disabled={loading}
           >
-            {loading ? "Registreerin..." : "Registreeru"}
+            {loading ? t('auth.registering') : t('auth.register')}
           </Button>
 
           <div className="flex items-center justify-center space-x-4 pt-4">
             <Separator className="w-[237px]" />
             <span className="[font-family:'Poppins',Helvetica] font-normal text-lg">
-              või
+              {t('common.or')}
             </span>
             <Separator className="w-[236px]" />
           </div>
@@ -253,7 +253,7 @@ export const RegistrationFormSection = (): JSX.Element => {
             alt="Apple logo"
             src="/img/apple.svg"
           />
-          Registreeru Apple&apos;i kaudu
+          {t('auth.registerWithApple')}
         </Button>
 
         <Button
@@ -262,13 +262,13 @@ export const RegistrationFormSection = (): JSX.Element => {
           className="w-full h-[57px] flex items-center justify-center gap-2 rounded-[10px] border-2 border-solid border-[#545454] [font-family:'Poppins',Helvetica] font-normal text-lg text-zinc-700"
         >
           <img className="w-6 h-6" alt="Google logo" src="/img/google.svg" />
-          Registreeru Google&apos;i kaudu
+          {t('auth.registerWithGoogle')}
         </Button>
       </div>
 
       <div className="w-1/2 bg-[url(/img/register.png)] bg-cover bg-center flex items-center justify-center">
         <h2 className="text-[46px] text-white font-semibold text-center [font-family:'Poppins',Helvetica] max-w-[538px]">
-          Vali oma ideaalne auto koos meiega
+          {t('auth.chooseIdealCar')}
         </h2>
       </div>
     </Card>

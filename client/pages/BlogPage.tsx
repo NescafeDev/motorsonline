@@ -32,7 +32,7 @@ export interface BlogPost {
 
 export default function BlogPage() {
   const navigate = useNavigate();
-  const { t } = useI18n();
+  const { t, currentLanguage } = useI18n();
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -50,7 +50,7 @@ export default function BlogPage() {
     };
 
     fetchBlogs();
-  }, []);
+  }, [currentLanguage]);
 
   // Convert blogs to BlogPost format for display
   const blogPosts: BlogPost[] = blogs.map(blog => ({
@@ -124,7 +124,7 @@ export default function BlogPage() {
                   <article
                     key={blog.id}
                     className="bg-motor-gray-bg rounded-[10px] overflow-hidden mb-8 cursor-pointer"
-                    onClick={() => navigate(`/blog/${blog.id}`)}
+                    onClick={() => navigate(`/${currentLanguage}/blog/${blog.id}`)}
                   >
                     <img
                       src={blog.title_image || 'https://cdn.builder.io/api/v1/image/assets/TEMP/2256f5dfb72d1770637f2f4590612ed3d96be898?width=2880'}
@@ -221,7 +221,7 @@ export default function BlogPage() {
               >
                 <div className="relative h-[189px]">
                   <img
-                    onClick={() => navigate(`/blog/${post.id}`)}
+                    onClick={() => navigate(`/${currentLanguage}/blog/${post.id}`)}
                     className="w-full h-full object-cover cursor-pointer"
                     alt="Blog post thumbnail"
                     src={post.title_image || 'https://via.placeholder.com/300x189?text=No+Image'}
@@ -241,7 +241,7 @@ export default function BlogPage() {
                         __html: post.introduction?.replace(/<[^>]*>/g, '').substring(0, 100) + '...' || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
                       }}
                     />
-                    <div className="pt-6 flex items-center cursor-pointer" onClick={() => navigate(`/blog/${post.id}`)}>
+                    <div className="pt-6 flex items-center cursor-pointer" onClick={() => navigate(`/${currentLanguage}/blog/${post.id}`)}>
                       <button className="font-['Poppins',Helvetica] font-medium text-[#06d6a0] text-sm leading-[21px]">
                         {t('blog.readMore')}
                       </button>

@@ -209,7 +209,7 @@ export default function HomePageMobile() {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
   const { isFavorite, toggleFavorite } = useFavorites();
-  const { t } = useI18n();
+  const { t , currentLanguage } = useI18n();
   const [filterOpen, setFilterOpen] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
   const [cars, setCars] = useState<Car[]>([]);
@@ -346,7 +346,7 @@ export default function HomePageMobile() {
           }
         }
       });
-      navigate(`/search?${params.toString()}`);
+      navigate(`/${currentLanguage}/search?${params.toString()}`);
     } else {
       // If no filters, show all cars
       setFilteredCars(cars);

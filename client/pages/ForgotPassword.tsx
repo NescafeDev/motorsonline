@@ -2,12 +2,14 @@ import { useState, useRef, useEffect } from "react";
 import { RotateCcw, AlertTriangle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import PageContainer from "../components/PageContainer";
+import { useI18n } from "@/contexts/I18nContext";
 
 export default function ForgotPassword() {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [countdown, setCountdown] = useState(14);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const navigate = useNavigate();
+  const { currentLanguage , t } = useI18n();
 
   // Countdown timer
   useEffect(() => {
@@ -40,7 +42,7 @@ export default function ForgotPassword() {
     const fullCode = code.join("");
     if (fullCode.length === 6) {
       // Handle form submission
-      navigate('/forgot-password');
+      navigate(`/${currentLanguage}/forgot-password`);
     }
   };
 
@@ -56,7 +58,7 @@ export default function ForgotPassword() {
               <img src="/img/lock.svg" alt="lock" className="w-8 h-8" />
             </div>
             <h1 className="text-[30px] font-semibold text-brand-text leading-[150%] tracking-[-0.9px] font-['Poppins']">
-              Lähtesta parool
+              {t('forgotPassword.title')}
             </h1>
           </div>
 

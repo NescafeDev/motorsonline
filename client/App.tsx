@@ -57,12 +57,7 @@ const App = () => (
             <BrowserRouter>
           <Routes>
             {/* Redirect root to default language */}
-            <Route path="/" element={<Navigate to="/en" />} />
-            
-            {/* Admin Panel Routes - Outside language wrapper */}
-            <Route path="/admin" element={<AdminLoginPage />} />
-            <Route path="/admin/blog" element={<AdminBlogPanel />} />
-            <Route path="/admin/adds" element={<AdminAddsPage />} />
+            <Route path="/" element={<Navigate to="/ee" />} />
             
             {/* Language-based routes */}
             <Route path="/:lang/*" element={
@@ -78,6 +73,10 @@ const App = () => (
                       />
                     }
                   />
+                  {/* Admin Panel Routes */}
+                  <Route path="admin" element={<AdminLoginPage />} />
+                  <Route path="admin/blog" element={<AdminBlogPanel />} />
+                  <Route path="admin/adds" element={<AdminAddsPage />} />
                   <Route
                     path="login"
                     element={
