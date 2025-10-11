@@ -200,7 +200,7 @@ export default function BlogPage() {
       </section>
 
       {/* Recent Posts Section */}
-      <section className="max-w-[1440px] mx-auto px-6 lg:px-[100px] py-16">
+      <section className="max-w-[1440px] mx-auto px-6 lg:px-[100px] py-8 mb-8">
         <div className="space-y-12">
           <div className="space-y-6">
             <h2 className="text-black text-[46px] font-semibold leading-tight">

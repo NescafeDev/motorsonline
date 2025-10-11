@@ -56,7 +56,7 @@ export const BlogSection = (): JSX.Element => {
   }));
 
   return (
-    <div className="w-full bg-white pt-1">
+    <div className="w-full bg-white pt-8">
       <section className="w-full pl-[2%] pr-[2%] mt-3 max-w-[1440px] mx-auto relative bg-white">
         <div className="mb-4">
           <h2 className="font-['Poppins',Helvetica] font-semibold text-[46px] text-black leading-normal mb-6">

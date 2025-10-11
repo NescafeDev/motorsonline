@@ -143,7 +143,7 @@ export default function BlogPostPage() {
       </section>
 
       {/* Recent Posts Section */}
-      <section className="max-w-[1440px] mx-auto px-6 lg:px-[100px] py-16">
+      <section className="max-w-[1440px] mx-auto px-6 lg:px-[100px] py-8 mb-8">
             <BlogSection />
       </section>
     </PageContainer>
