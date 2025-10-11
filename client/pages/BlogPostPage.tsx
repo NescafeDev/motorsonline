@@ -17,7 +17,7 @@ export default function BlogPostPage() {
       .then(res => res.json())
       .then(setBlog);
   }, [id]);
-  if (!blog) return <PageContainer className="font-poppins text-4xl text-center">Laetakse...</PageContainer>;
+  if (!blog) return <PageContainer className="font-poppins text-4xl text-center">{t('common.loading')}</PageContainer>;
   return (
     <PageContainer className="font-poppins">
 
