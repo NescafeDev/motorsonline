@@ -438,7 +438,7 @@ export default function SearchPageMobile() {
           {filterOpen && (
             <div
               ref={filterRef}
-              className="absolute left-0 right-0 max-w-md bg-white rounded-[10px] shadow-lg z-30 max-h-[80vh]"
+              className="absolute left-0 right-0 bg-white rounded-[10px] shadow-lg z-30 max-h-[80vh]"
             >
             <CarListingSection
               filters={filters}

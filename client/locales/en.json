@@ -423,7 +423,8 @@
     "seats": "Seats",
     "doors": "Doors",
     "popularEquipment": "Popular equipment (in listing title)",
-    "year": "Year"
+    "year": "Year",
+    "registeredCountry": "Registered Country"
   },
   "photo": {
     "addMain": "+ Add main photo",

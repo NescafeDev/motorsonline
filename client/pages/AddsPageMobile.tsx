@@ -999,10 +999,10 @@ export default function AddsPageMobile() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white w-full">
       <Header />
 
-      <main className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <h1 className="text-motorsoline-text text-3xl font-semibold mb-8">
           {editingCar ? t('listing.editListingTitle') : t('listing.createListing')}
         </h1>

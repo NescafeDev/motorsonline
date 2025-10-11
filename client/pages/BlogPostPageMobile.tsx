@@ -72,7 +72,7 @@ export default function BlogPostPageMobile() {
     }));
 
   return (
-    <div className="min-h-screen bg-white font-poppins">
+    <div className="min-h-screen bg-white font-poppins w-full md:w-1/2">
       {/* Header */}
       <Header />
 
@@ -82,7 +82,7 @@ export default function BlogPostPageMobile() {
           <p className="text-black text-4xl">{t('common.loading')}</p>
         </div>
       ) : (
-        <main className="px-5 py-5 max-w-md mx-auto lg:max-w-4xl">
+        <main className="px-5 py-5 mx-auto lg:max-w-4xl">
         {/* Categories Section */}
         <section className="mb-8 px-3">
           <h2 className="text-black font-normal text-lg leading-7 mb-6">
@@ -161,7 +161,7 @@ export default function BlogPostPageMobile() {
       <NewsletterSignup />
 
       {/* Latest Posts Section */}
-      <section className="px-5 py-12 max-w-md mx-auto lg:max-w-4xl">
+      <section className="px-5 py-12 mx-auto lg:max-w-4xl">
         <h2 className="text-black font-semibold text-2xl leading-normal mb-8 px-3">
           Viimased postitused
         </h2>

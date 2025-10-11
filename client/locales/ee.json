@@ -424,7 +424,8 @@
     "seats": "Istekoht",
     "doors": "Uksed",
     "popularEquipment": "Populaarne varustus (kuulutuse pealkirjas)",
-    "year": "Aasta"
+    "year": "Aasta",
+    "registeredCountry": "Registreeritud riik"
   },
   "photo": {
     "addMain": "+Lisa foto (põhipilt)",

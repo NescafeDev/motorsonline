@@ -62,7 +62,7 @@ export default function BlogPageMobile() {
   const latestPosts = blogPosts;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white w-full md:w-1/2">
       {/* Header */}
       <Header/>
 
@@ -74,7 +74,7 @@ export default function BlogPageMobile() {
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/40" />
-        <div className="relative z-10 px-5 py-20 lg:py-32 max-w-md mx-auto lg:max-w-4xl h-full flex flex-col justify-center">
+        <div className="relative z-10 px-5 py-20 lg:py-32 mx-aut0 h-full flex flex-col justify-center">
           <h1 className="text-white font-semibold text-2xl lg:text-4xl xl:text-5xl leading-normal text-center mb-8">
             MotorsBlogi – Hoia end kursis viimaste auto- ja mootoriuudistega
           </h1>
@@ -86,7 +86,7 @@ export default function BlogPageMobile() {
       </section>
 
       {/* Main Content */}
-      <main className="px-5 py-12 max-w-md mx-auto lg:max-w-4xl">
+      <main className="px-5 py-12 mx-auto lg:max-w-4xl">
         {/* Categories Section */}
         <section className="mb-12 px-3">
           <h2 className="text-black font-normal text-lg leading-7 mb-6">
@@ -120,7 +120,7 @@ export default function BlogPageMobile() {
       <NewsletterSignup />
 
       {/* Latest Posts Section */}
-      <section className="px-5 py-12 max-w-md mx-auto lg:max-w-4xl">
+      <section className="px-5 py-12 mx-auto lg:max-w-4xl">
         <h2 className="text-black font-semibold text-2xl leading-normal mb-8 px-3">
           Viimased postitused
         </h2>

@@ -157,12 +157,12 @@ export default function UserPageMobile() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white w-full">
       {/* Header */}
       <Header />
 
       {/* Main Content */}
-      <main className="px-5 pb-5">
+      <main className="mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Title */}
         <h1 className="text-[26px] font-semibold leading-[150%] tracking-[-0.78px] text-motorsonline-dark mb-10">
           Minu kuulutused

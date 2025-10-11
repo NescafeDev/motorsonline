@@ -423,7 +423,7 @@ export default function HomePageMobile() {
   }));
 
   return (
-    <div className="min-h-screen bg-white max-w-md">
+    <div className="min-h-screen bg-white w-full md:w-1/2">
       <Header />
 
       {/* Main Content */}
@@ -452,7 +452,7 @@ export default function HomePageMobile() {
 
         {/* Call to Action Section */}
         <section className="bg-[#F6F7F9] py-5 px-5">
-          <div className="bg-white px-3 py-6 rounded-lg max-w-md">
+          <div className="bg-white px-3 py-6 rounded-lg">
             <p className="text-motors-dark leading-[150%] tracking-[-0.48px] mb-6 text-center">
               {t('uiActions.sellBuyFree')}
             </p>

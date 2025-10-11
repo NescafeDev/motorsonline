@@ -457,7 +457,7 @@ export const CarListingSection = ({
   };
 
   return (
-    <div className={isMobile ? "w-full max-w-md" : "w-[300px]"} onClick={(e) => e.stopPropagation()}>
+    <div className={isMobile ? "w-full" : "w-[300px]"} onClick={(e) => e.stopPropagation()}>
       <Card className="rounded-[10px] h-full flex flex-col w-full">
         <CardContent className="p-5 space-y-4 flex-1">
           <div className="flex items-center justify-between">
