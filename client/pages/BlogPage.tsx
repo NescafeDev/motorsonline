@@ -123,32 +123,32 @@ export default function BlogPage() {
               </div>
             ) : (
               <div className="space-y-8">
-                {/* All Blog Posts - Show all blogs */}
-                {blogs.map((blog, index) => (
+                {/* First Blog Post - Full Width */}
+                {blogs.length > 0 && (
                   <article
-                    key={blog.id}
-                    className="bg-motor-gray-bg rounded-[10px] overflow-hidden mb-8 cursor-pointer"
-                    onClick={() => navigate(`/${currentLanguage}/blog/${blog.id}`)}
+                    key={blogs[0].id}
+                    className="bg-motor-gray-bg rounded-[10px] overflow-hidden cursor-pointer"
+                    onClick={() => navigate(`/${currentLanguage}/blog/${blogs[0].id}`)}
                   >
                     <img
-                      src={blog.title_image || 'https://cdn.builder.io/api/v1/image/assets/TEMP/2256f5dfb72d1770637f2f4590612ed3d96be898?width=2880'}
-                      alt={blog.title}
+                      src={blogs[0].title_image || 'https://cdn.builder.io/api/v1/image/assets/TEMP/2256f5dfb72d1770637f2f4590612ed3d96be898?width=2880'}
+                      alt={blogs[0].title}
                       className="w-full h-[450px] object-cover"
                     />
                     <div className="p-5 space-y-4">
                       <div className="inline-block bg-motor-gray-bg px-2 py-1 rounded-[10px]">
                         <span className="text-black text-sm font-medium">
-                          {blog.category}
+                          {blogs[0].category}
                         </span>
                       </div>
                       <div className="space-y-2">
                         <h3 className="text-black text-[30px] font-bold leading-[1.3]">
-                          {blog.title}
+                          {blogs[0].title}
                         </h3>
                         <div 
                           className="text-black text-lg font-normal leading-[1.5]"
                           dangerouslySetInnerHTML={{ 
-                            __html: blog.introduction?.replace(/<[^>]*>/g, '').substring(0, 150) + '...' || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                            __html: blogs[0].introduction?.replace(/<[^>]*>/g, '').substring(0, 150) + '...' || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
                           }}
                         />
                       </div>
@@ -158,8 +158,48 @@ export default function BlogPage() {
                       </div>
                     </div>
                   </article>
-                ))}
-                {/* All Blog Posts Grid */}
+                )}
+
+                {/* Remaining Blog Posts - 2 Column Grid */}
+                {blogs.length > 1 && (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {blogs.slice(1).map((blog) => (
+                      <article
+                        key={blog.id}
+                        className="bg-motor-gray-bg rounded-[10px] overflow-hidden cursor-pointer h-full flex flex-col"
+                        onClick={() => navigate(`/${currentLanguage}/blog/${blog.id}`)}
+                      >
+                        <img
+                          src={blog.title_image || 'https://cdn.builder.io/api/v1/image/assets/TEMP/2256f5dfb72d1770637f2f4590612ed3d96be898?width=2880'}
+                          alt={blog.title}
+                          className="w-full h-[300px] object-cover flex-shrink-0"
+                        />
+                        <div className="p-5 space-y-4 flex flex-col flex-grow">
+                          <div className="inline-block bg-motor-gray-bg px-2 py-1 rounded-[10px] self-start">
+                            <span className="text-black text-sm font-medium">
+                              {blog.category}
+                            </span>
+                          </div>
+                          <div className="space-y-2 flex-grow">
+                            <h3 className="text-black text-[24px] font-bold leading-[1.3] line-clamp-2">
+                              {blog.title}
+                            </h3>
+                            <div 
+                              className="text-black text-base font-normal leading-[1.5] line-clamp-3"
+                              dangerouslySetInnerHTML={{ 
+                                __html: blog.introduction?.replace(/<[^>]*>/g, '').substring(0, 100) + '...' || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                              }}
+                            />
+                          </div>
+                          <div className="flex items-center gap-3 text-[#06d6a0] mt-auto">
+                            <button className="text-base font-medium">{t('blog.readMore')}</button>
+                            <ArrowRight className="w-6 h-6" />
+                          </div>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </main>
