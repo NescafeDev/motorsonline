@@ -1733,7 +1733,7 @@ export default function AddsPageMobile() {
           </FormSection>
 
           {/* Equipment Section */}
-          <FormSection title={t('formLabels.higherValueEquipment')}>
+          <FormSection title={t('formLabels.higherValueAccessories')}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* First 12 checkboxes - always visible */}
               {accessoriesOptions(t).slice(0, 12).map((option) => (

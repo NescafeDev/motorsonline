@@ -434,7 +434,9 @@
     "chooseCountry": "Country",
     "email": "Email",
     "contactsSaved": "Contacts saved",
-    "addSocialNetwork": "Social Network"
+    "addSocialNetwork": "Social Network",
+    "higherValueAccessories": "Higher Value Accessories"
+
   },
   "photo": {
     "addMain": "+ Add main photo",

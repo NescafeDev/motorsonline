@@ -435,7 +435,8 @@
     "chooseCountry": "Riik",
     "email": "E-post",
     "contactsSaved": "Kontaktid salvestatud",
-    "addSocialNetwork": "Sotsiaalvõrgustik"
+    "addSocialNetwork": "Sotsiaalvõrgustik",
+    "higherValueAccessories": "Kõrgema väärtusega lisavarustus"
   },
   "photo": {
     "addMain": "+Lisa foto (põhipilt)",
