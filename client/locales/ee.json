@@ -6,7 +6,7 @@
     "cancel": "Tühista",
     "save": "Salvesta",
     "delete": "Kustuta",
-    "edit": "Muuda",
+    "edit": "Redigeeri",
     "view": "Vaata",
     "search": "Otsing",
     "filter": "Filtreeri",
@@ -437,7 +437,7 @@
     "contactsSaved": "Kontaktid salvestatud",
     "addSocialNetwork": "Sotsiaalvõrgustik",
     "higherValueAccessories": "Kõrgema väärtusega lisavarustus",
-    "examplePlaceholder": "Garantii, Panoraamkatus, Veokonks"
+    "examplePlaceholder": "Näide: Garantii, Panoraamkatus, Veokonks"
   },
   "photo": {
     "addMain": "+Lisa foto (põhipilt)",

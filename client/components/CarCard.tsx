@@ -319,34 +319,43 @@ export const CarCard: React.FC<CarCardProps> = ({
         <div className="absolute right-[30px] top-[230px] flex items-center gap-[21px]">
           {onPreview && (
             <button 
-              onClick={onPreview}
+              onClick={(e) => {
+                e.stopPropagation();
+                onPreview();
+              }}
               className="flex h-[45px] px-[20px] py-[12px] justify-center items-center gap-[10px] rounded-[10px] border border-[#3B82F6] text-[#3B82F6] hover:bg-[#EBF4FF]"
             >
               <Eye className="w-4 h-4" />
               <span className="text-[#3B82F6] text-center font-['Poppins'] text-[16px] font-normal leading-[150%]">
-                Eelvaade
+                {t('common.preview')}
               </span>
             </button>
           )}
           {onEdit && (
             <button 
-              onClick={onEdit}
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit();
+              }}
               className="flex h-[45px] px-[20px] py-[12px] justify-center items-center gap-[10px] rounded-[10px] border border-[#06D6A0] text-[#06D6A0]"
             >
               <Edit className="w-4 h-4" />
               <span className="text-[#06D6A0] text-center font-['Poppins'] text-[16px] font-normal leading-[150%]">
-                Redigeeri
+                {t('common.edit')}
               </span>
             </button>
           )}
           {onDelete && (
             <button 
-              onClick={onDelete}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete();
+              }}
               className="flex h-[45px] px-[20px] py-[12px] justify-center items-center gap-[10px] rounded-[10px] border border-[#FF0000]  text-[#FF0000] hover:bg-[#FFE5E5]"
             >
               <Trash2 className="w-4 h-4" />
               <span className="text-[#FF0000] text-center font-['Poppins'] text-[16px] font-normal leading-[150%]">
-                Kustuta
+                {t('common.delete')}
               </span>
             </button>
           )}
