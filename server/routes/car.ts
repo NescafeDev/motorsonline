@@ -5,7 +5,7 @@ import fs from 'fs';
 import jwt from 'jsonwebtoken';
 import { createCar, getCarById, getAllCars, updateCar, deleteCar, getCarsByUserId } from '../models/car';
 import { updateContact, getContactByUserId } from '../models/contact';
-import { pool } from '../db';
+import { pool, queryWithRetry } from '../db';
 import { DriveType } from '@shared/drive-types';
 
 // Helper function to safely convert to number
@@ -377,18 +377,18 @@ router.get('/public/approved', async (_req, res) => {
     console.log('Fetching all approved cars...');
     
     // First, let's check if the approved column exists
-    const [columns]: any = await pool.query('SHOW COLUMNS FROM cars LIKE "approved"');
+    const columns = await queryWithRetry('SHOW COLUMNS FROM cars LIKE "approved"');
     console.log('Approved column exists:', columns.length > 0);
     
     // Check if there are any cars at all
-    const [allCars]: any = await pool.query('SELECT COUNT(*) as count FROM cars');
+    const allCars = await queryWithRetry('SELECT COUNT(*) as count FROM cars');
     console.log('Total cars in table:', allCars[0].count);
     
     // Check if there are any approved cars
-    const [approvedCount]: any = await pool.query('SELECT COUNT(*) as count FROM cars WHERE approved = true');
+    const approvedCount = await queryWithRetry('SELECT COUNT(*) as count FROM cars WHERE approved = true');
     console.log('Approved cars count:', approvedCount[0].count);
     
-    const [rows]: any = await pool.query(`
+    const rows = await queryWithRetry(`
       SELECT cars.*, brand.name as brand_name, model.name as model_name, year.value as year_value, drive_type.name as drive_type_name, drive_type.ee_name as drive_type_ee_name
       FROM cars
       LEFT JOIN brand ON cars.brand_id = brand.id
@@ -712,7 +712,7 @@ router.get('/public/filtered', async (req, res) => {
     console.log('Filter query:', query);
     console.log('Filter params:', params);
 
-    const [rows]: any = await pool.query(query, params);
+    const rows = await queryWithRetry(query, params);
     console.log('Filtered cars found:', rows.length);
     res.json(rows);
   } catch (err: any) {
@@ -727,7 +727,7 @@ router.get('/:id', async (req, res) => {
     const carId = Number(req.params.id);
     
     // Get car with approval check
-    const [rows]: any = await pool.query(`
+    const rows = await queryWithRetry(`
       SELECT cars.*, brand.name as brand_name, model.name as model_name, year.value as year_value, drive_type.name as drive_type_name, drive_type.ee_name as drive_type_ee_name
       FROM cars
       LEFT JOIN brand ON cars.brand_id = brand.id
@@ -762,7 +762,7 @@ router.get('/edit/:id', authenticateToken, async (req: any, res) => {
     const userId = req.user.id;
     
     // Get car with ownership check
-    const [rows]: any = await pool.query(`
+    const rows = await queryWithRetry(`
       SELECT cars.*, brand.name as brand_name, model.name as model_name, year.value as year_value, drive_type.name as drive_type_name, drive_type.ee_name as drive_type_ee_name
       FROM cars
       LEFT JOIN brand ON cars.brand_id = brand.id

@@ -1,7 +1,7 @@
 import path from "path";
 import { createServer } from "./index";
 import * as express from "express";
-import { pool } from "./db";
+import { queryWithRetry } from "./db";
 
 const app = createServer();
 const port = process.env.PORT || 3000;
@@ -16,7 +16,7 @@ async function testDatabaseConnection() {
       database: process.env.DB_NAME || 'sql12801757',
     });
     
-    const [result]: any = await pool.query('SELECT 1 as connected');
+    const result = await queryWithRetry('SELECT 1 as connected');
     console.log('✅ Database connection successful:', result);
     return true;
   } catch (error: any) {

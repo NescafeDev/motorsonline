@@ -1,11 +1,11 @@
 import express from 'express';
-import { pool } from '../db';
+import { queryWithRetry } from '../db';
 
 const router = express.Router();
 
 router.get('/', async (_req, res) => {
   try {
-    const [rows]: any = await pool.query('SELECT id, value FROM year ORDER BY value DESC');
+    const rows = await queryWithRetry('SELECT id, value FROM year ORDER BY value DESC');
     res.json(rows);
   } catch (err: any) {
     console.error('Error fetching years:', err);
