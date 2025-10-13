@@ -107,7 +107,7 @@
     "engine": "Engine",
     "color": "Color",
     "condition": "Condition",
-    "description": "Description",
+    "description": "Additional info",
     "features": "Features",
     "images": "Images",
     "contactSeller": "Contact Seller",

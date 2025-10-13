@@ -1849,8 +1849,8 @@ export default function AddsPage() {
           {/* Equipment Section */}
           <FormSection title="">
             <TextAreaField
-              label={t('car.features')}
-              placeholder={t('car.features')}
+              label={t('formLabels.equipment')}
+              placeholder={t('formLabels.equipment')}
               value={formData.equipment}
               onChange={(value) => handleInputChange("equipment", value)}
             />
