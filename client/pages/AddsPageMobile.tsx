@@ -1189,7 +1189,7 @@ export default function AddsPageMobile() {
               />
               <FormField
                 label={t('formLabels.higherValueEquipment')}
-                placeholder=""
+                placeholder={t('formLabels.examplePlaceholder')}
                 value={formData.major}
                 onChange={(value) => handleInputChange("major", value)}
               />

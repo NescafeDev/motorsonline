@@ -450,7 +450,8 @@
     "email": "Электронная почта",
     "contactsSaved": "Контакты сохранены",
     "addSocialNetwork": "Социальная сеть",
-    "higherValueAccessories": "Высокоценное дополнительное оборудование"
+    "higherValueAccessories": "Высокоценное дополнительное оборудование",
+    "examplePlaceholder": "Гарантия, Панорамная крыша, Фаркопы"
   },
   "photo": {
     "addMain": "+ Добавить основное фото",
