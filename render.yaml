@@ -14,11 +14,11 @@ services:
       - key: DB_HOST
         value: sql12.freesqldatabase.com
       - key: DB_USER
-        value: sql12799751
+        value: sql12801757
       - key: DB_PASSWORD
-        value: QqLUJdKA4z
+        value: 3IfLc2uf4B
       - key: DB_NAME
-        value: sql12799751
+        value: sql12801757
       - key: DB_PORT
         value: 3306
       # JWT Secret
