@@ -138,32 +138,26 @@ export interface CarFilters {
 const getVehicleDetails = (car: Car, t: any) => [
   {
     icon: "/img/car/Car.png",
-    label: `${t('carSpecs.mileage')}:`,
     value: `${car.mileage.toLocaleString()} km`,
   },
   {
     icon: "/img/car/Speedometer.png",
-    label: `${t('carSpecs.power')}:`,
     value: car.power,
   },
   {
     icon: "/img/car/gear-box-switch.png",
-    label: `${t('carSpecs.transmission')}:`,
     value: car.transmission,
   },
   {
     icon: "/img/car/calendar.png",
-    label: `${t('carSpecs.firstRegistration')}:`,
     value: car.year_value?.toString() + " - " + (car.month.length === 1 ? `0${car.month}` : car.month) || "N/A",
   },
   {
     icon: "/img/car/gas_station.png",
-    label: t('carSpecs.fuel'),
     value: car.fuelType,
   },
   {
     icon: "/img/car/user_profile.png",
-    label: "Omanike arv:",
     value: car.ownerCount,
   },
 ];
@@ -456,13 +450,11 @@ export default function HomePage() {
                                     <div className="w-[35px] h-[35px] relative flex-shrink-0">
                                       <img
                                         className="w-[25px] h-[25px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                                        alt={detail.label}
                                         src={detail.icon}
                                       />
                                     </div>
                                     <div className="flex flex-col min-w-0 flex-1 justify-center">
                                       <span className="font-normal text-secondary-500 text-[12px] tracking-[-0.42px] leading-[20px] [font-family:'Poppins',Helvetica] break-all">
-                                        {detail.label}
                                       </span>
                                       <span className="font-medium text-secondary-500 text-[12px] tracking-[-0.54px] leading-[20px] [font-family:'Poppins',Helvetica] break-all">
                                         {detail.value}

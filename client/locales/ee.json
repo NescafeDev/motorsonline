@@ -437,7 +437,8 @@
     "contactsSaved": "Kontaktid salvestatud",
     "addSocialNetwork": "Sotsiaalvõrgustik",
     "higherValueAccessories": "Kõrgema väärtusega lisavarustus",
-    "examplePlaceholder": "Näide: Garantii, Panoraamkatus, Veokonks"
+    "examplePlaceholder": "Näide: Garantii, Panoraamkatus, Veokonks",
+    "sendEmail": "Saada e-post"
   },
   "photo": {
     "addMain": "+Lisa foto (põhipilt)",
