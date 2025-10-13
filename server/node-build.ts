@@ -1,9 +1,30 @@
 import path from "path";
 import { createServer } from "./index";
 import * as express from "express";
+import { pool } from "./db";
 
 const app = createServer();
 const port = process.env.PORT || 3000;
+
+// Test database connection on startup
+async function testDatabaseConnection() {
+  try {
+    console.log('Testing database connection...');
+    console.log('DB Config:', {
+      host: process.env.DB_HOST || 'sql12.freesqldatabase.com',
+      user: process.env.DB_USER || 'sql12801757',
+      database: process.env.DB_NAME || 'sql12801757',
+    });
+    
+    const [result]: any = await pool.query('SELECT 1 as connected');
+    console.log('✅ Database connection successful:', result);
+    return true;
+  } catch (error: any) {
+    console.error('❌ Database connection failed:', error.message);
+    console.error('Full error:', error);
+    return false;
+  }
+}
 
 // In production, serve the built SPA files
 const __dirname = import.meta.dirname;
@@ -22,10 +43,13 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(distPath, "index.html"));
 });
 
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log(`🚀 Fusion Starter server running on port ${port}`);
   console.log(`📱 Frontend: http://localhost:${port}`);
   console.log(`🔧 API: http://localhost:${port}/api`);
+  
+  // Test database connection after server starts
+  await testDatabaseConnection();
 });
 
 // Graceful shutdown
