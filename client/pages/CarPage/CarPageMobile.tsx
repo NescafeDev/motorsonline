@@ -275,7 +275,7 @@ export default function CarPageMobile() {
 
 
   return (
-    <div className="min-h-screen  bg-white font-['Poppins']">
+    <div className="min-h-screen  bg-white font-['Poppins'] w-full xl:w-full">
       <Header />
 
       <main className="pb-20">

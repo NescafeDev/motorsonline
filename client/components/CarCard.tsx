@@ -1,4 +1,4 @@
-import { Edit , Trash2, Eye } from "lucide-react";
+import { Edit, Trash2, Eye, MapPin } from "lucide-react";
 import React from "react";
 import { useI18n } from "@/contexts/I18nContext";
 
@@ -159,7 +159,7 @@ export const CarCard: React.FC<CarCardProps> = ({
 }) => {
   const { t } = useI18n();
   return (
-    <div className={`w-100 h-[307px] relative cursor-pointer`} onClick={onPreview ? onPreview : () => {}}>
+    <div className={`w-100 h-[307px] relative cursor-pointer`} onClick={onPreview ? onPreview : () => { }}>
       {/* Main Card Background */}
       <div className={`w-full h-full ${className} rounded-[10px] absolute left-0 top-0`}></div>
 
@@ -174,7 +174,7 @@ export const CarCard: React.FC<CarCardProps> = ({
       <h3 className="text-[#1A202C] font-['Poppins'] text-[30px] font-bold leading-[150%] tracking-[-0.9px] absolute left-[370px] top-[30px] w-fit h-[45px]">
         {title}
       </h3>
-      
+
 
       {/* Major */}
 
@@ -187,8 +187,8 @@ export const CarCard: React.FC<CarCardProps> = ({
           {breadcrumb}
         </span>
       </div>
-      
-   
+
+
       {/* Price Section */}
       <div className="absolute right-[30px] top-[46px] flex flex-col items-end gap-2">
         {price && (
@@ -223,7 +223,7 @@ export const CarCard: React.FC<CarCardProps> = ({
 
       {/* Car Information Section - Two Lines at Bottom */}
       {hideBottomIcons && (
-        <div className="absolute left-[370px] bottom-[40px] grid grid-cols-3 gap-x-[60px] gap-y-[15px]">
+        <div className="absolute left-[370px] bottom-[70px] grid grid-cols-3 gap-x-[60px] gap-y-[15px]">
           {power && (
             <div className="flex items-center gap-[4px]">
               <img
@@ -284,8 +284,15 @@ export const CarCard: React.FC<CarCardProps> = ({
               <span className="text-[#1A202C] font-['Poppins'] text-[12px] font-medium">{ownerCount}</span>
             </div>
           )}
+
         </div>
       )}
+      <div className="absolute left-[370px] bottom-[30px] flex items-center gap-[4px]">
+        <MapPin className="w-6 h-6" />
+        <span className="text-[#1A202C] font-['Poppins'] text-[14px] font-medium">
+          Tuleviku tee 4a Peetri, 75312 Harju maakond
+        </span>
+      </div>
 
       {/* Bottom Section */}
       {!hideBottomIcons && (
@@ -320,7 +327,7 @@ export const CarCard: React.FC<CarCardProps> = ({
       {(onEdit || onDelete || className === "") && !hideBottomIcons && (
         <div className="absolute right-[30px] top-[230px] flex items-center gap-[21px]">
           {onPreview && (
-            <button 
+            <button
               onClick={(e) => {
                 e.stopPropagation();
                 onPreview();
@@ -334,7 +341,7 @@ export const CarCard: React.FC<CarCardProps> = ({
             </button>
           )}
           {onEdit && (
-            <button 
+            <button
               onClick={(e) => {
                 e.stopPropagation();
                 onEdit();
@@ -348,7 +355,7 @@ export const CarCard: React.FC<CarCardProps> = ({
             </button>
           )}
           {onDelete && (
-            <button 
+            <button
               onClick={(e) => {
                 e.stopPropagation();
                 onDelete();
