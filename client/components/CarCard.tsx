@@ -221,23 +221,23 @@ export const CarCard: React.FC<CarCardProps> = ({
         {description}
       </p> */}
 
-      {/* Car Information Section - Single Line at Bottom */}
+      {/* Car Information Section - Two Lines at Bottom */}
       {hideBottomIcons && (
-        <div className="absolute left-[370px] bottom-[40px] flex items-center gap-[20px] flex-wrap">
+        <div className="absolute left-[370px] bottom-[40px] grid grid-cols-3 gap-x-[60px] gap-y-[15px]">
           {power && (
-            <div className="flex items-center gap-[8px]">
+            <div className="flex items-center gap-[4px]">
               <img
-                className="w-5 h-5"
+                className="w-8 h-8"
                 src="/img/car/Speedometer.png"
                 alt={t('carSpecs.power')}
               />
-              <span className="text-[#1A202C] font-['Poppins'] text-[12px] font-medium">{power} km</span>
+              <span className="text-[#1A202C] font-['Poppins'] text-[12px] font-medium">{power}</span>
             </div>
           )}
           {year && month && (
-            <div className="flex items-center gap-[8px]">
+            <div className="flex items-center gap-[4px]">
               <img
-                className="w-5 h-5"
+                className="w-8 h-8"
                 src="/img/car/calendar.png"
                 alt={t('carSpecs.firstRegistration')}
               />
@@ -245,9 +245,9 @@ export const CarCard: React.FC<CarCardProps> = ({
             </div>
           )}
           {mileage && (
-            <div className="flex items-center gap-[8px]">
+            <div className="flex items-center gap-[4px]">
               <img
-                className="w-5 h-5"
+                className="w-8 h-8"
                 src="/img/car/Car.png"
                 alt={t('carSpecs.mileage')}
               />
@@ -255,9 +255,9 @@ export const CarCard: React.FC<CarCardProps> = ({
             </div>
           )}
           {transmission && (
-            <div className="flex items-center gap-[8px]">
+            <div className="flex items-center gap-[4px]">
               <img
-                className="w-5 h-5"
+                className="w-8 h-8"
                 src="/img/car/gear-box-switch.png"
                 alt={t('carSpecs.transmission')}
               />
@@ -265,9 +265,9 @@ export const CarCard: React.FC<CarCardProps> = ({
             </div>
           )}
           {fuelType && (
-            <div className="flex items-center gap-[8px]">
+            <div className="flex items-center gap-[4px]">
               <img
-                className="w-5 h-5"
+                className="w-8 h-8"
                 src="/img/car/gas_station.png"
                 alt={t('carSpecs.fuel')}
               />
@@ -275,9 +275,9 @@ export const CarCard: React.FC<CarCardProps> = ({
             </div>
           )}
           {ownerCount && (
-            <div className="flex items-center gap-[8px]">
+            <div className="flex items-center gap-[4px]">
               <img
-                className="w-5 h-5"
+                className="w-8 h-8"
                 src="/img/car/user_profile.png"
                 alt="Omanike arv"
               />
