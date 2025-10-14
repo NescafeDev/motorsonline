@@ -61,10 +61,10 @@ export function CarCard({
       <div className="p-4 md:p-2">
         <div className="grid grid-cols-5 gap-2 h-20 p-2">
           <div className="col-span-4 flex flex-col justify-center">
-            <h3 className="text-xl font-semibold text-motors-dark mb-1 leading-[30px] tracking-[-0.6px]">
+            <h3 className="text-xl font-semibold text-motors-dark mb-1 leading-[30px] tracking-[-0.6px] pl-[10px]">
               {title}
             </h3>
-            <p className="text-sm text-motors-gray font-medium leading-[21px] tracking-[-0.28px]">
+            <p className="text-sm text-motors-gray font-medium leading-[21px] tracking-[-0.28px] pl-[10px]">
               {major}
             </p>
           </div>

@@ -1,4 +1,4 @@
-import { SearchIcon } from "lucide-react";
+import { HeartIcon, SearchIcon } from "lucide-react";
 import { Badge } from "../components/ui/badge";
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
@@ -211,7 +211,7 @@ export default function HomePage() {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
   const { isFavorite, toggleFavorite } = useFavorites();
-  const { t ,currentLanguage } = useI18n();
+  const { t, currentLanguage } = useI18n();
   const [cars, setCars] = useState<Car[]>([]);
   const [filteredCars, setFilteredCars] = useState<Car[]>([]);
   const [filters, setFilters] = useState<CarFilters>({});
@@ -245,16 +245,16 @@ export default function HomePage() {
     try {
       setLoading(true);
       const allCars = await fetchAllApprovedCars();
-      
+
       // Check for duplicates and log them
-      const uniqueCars = allCars.filter((car, index, self) => 
+      const uniqueCars = allCars.filter((car, index, self) =>
         index === self.findIndex(c => c.id === car.id)
       );
-      
+
       if (uniqueCars.length !== allCars.length) {
         console.warn(`Found ${allCars.length - uniqueCars.length} duplicate cars in API response`);
       }
-      
+
       console.log(`Loaded ${uniqueCars.length} unique cars`);
       setCars(uniqueCars);
       setFilteredCars(uniqueCars);
@@ -435,8 +435,44 @@ export default function HomePage() {
                               alt="Car"
                               src={displayCar.image}
                             />
+
                             <CardContent className="p-4 pt-5 pb-4 relative">
-                              
+                              <div className="grid grid-cols-5">
+                                <div className="col-span-4">
+                                  <h1 className="text-[22px] pl-[5px] font-semibold text-secondary-500 tracking-[-1.20px] leading-[45px] [font-family:'Poppins',Helvetica] ">
+                                    {car.brand_name} {car.model_name} {car.modelDetail}
+                                  </h1>
+                                </div>
+                                <div className="col-span-1 justify-end items-end">
+                                  <div className="absolute right-5 top-8">
+                                    <button
+                                      className="w-6 h-6 cursor-pointer "
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        if (!isAuthenticated) {
+                                          // You could show a login prompt here
+                                          alert('Please log in to save favorites');
+                                          return;
+                                        }
+                                        // toggleFavorite(car.id);
+                                      }}
+                                    >
+                                      <img
+                                        className="w-6 h-6"
+                                        alt="Favorite"
+                                        src={
+                                          isFavorite(car.id)
+                                            ? "/img/vuesax-bold-heart.svg"
+                                            : "/img/vuesax-linear-heart.svg"
+                                        }
+                                      />
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                              <span className="text-black text-[15px] pl-[5px] tracking-[0.34px] leading-[normal] [font-family:'Poppins',Helvetica] font-medium">
+                                {car.major}
+                              </span>
                               <div className="grid grid-cols-2 gap-y-2 mb-8">
                                 {getVehicleDetails(car, t).map((detail, index) => (
                                   <div key={index} className="flex items-center w-full h-[50px]">
@@ -487,7 +523,7 @@ export default function HomePage() {
                                     </p>
                                   </div>
                                 </div>
-                                
+
                               </div>
                             </CardContent>
                           </Card>
