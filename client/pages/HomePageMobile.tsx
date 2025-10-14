@@ -506,7 +506,7 @@ export default function HomePageMobile() {
         </section>
 
         {/* Car Listings */}
-        <section className={`px-6 py-6 ${filterOpen ? "blur-sm transition-all duration-300" : "transition-all duration-300"}`}>
+        <section className={`px-3 py-3 ${filterOpen ? "blur-sm transition-all duration-300" : "transition-all duration-300"}`}>
           {/* Loading State */}
           {loading && (
             <div className="flex justify-center items-center h-64">
