@@ -136,20 +136,20 @@ const getVehicleDetails = (car: Car, t: any) => [
     value: `${car.mileage.toLocaleString()} km`,
   },
   {
-    icon: "/img/car/Speedometer.png",
-    value: car.power + " kw",
-  },
-  {
-    icon: "/img/car/gear-box-switch.png",
-    value: car.transmission,
-  },
-  {
     icon: "/img/car/calendar.png",
     value: car.year_value?.toString() + " - " + (car.month.length === 1 ? `0${car.month}` : car.month) || "N/A",
   },
   {
+    icon: "/img/car/Speedometer.png",
+    value: car.power + " kw",
+  },
+  {
     icon: "/img/car/gas_station.png",
     value: car.fuelType,
+  },
+  {
+    icon: "/img/car/gear-box-switch.png",
+    value: car.transmission,
   },
   {
     icon: "/img/car/user_profile.png",
