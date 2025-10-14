@@ -231,7 +231,7 @@ export const CarCard: React.FC<CarCardProps> = ({
                 src="/img/car/Speedometer.png"
                 alt={t('carSpecs.power')}
               />
-              <span className="text-[#1A202C] font-['Poppins'] text-[12px] font-medium">{power}</span>
+              <span className="text-[#1A202C] font-['Poppins'] text-[12px] font-medium">{power} kw</span>
             </div>
           )}
           {year && month && (

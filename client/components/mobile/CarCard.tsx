@@ -121,7 +121,7 @@ export function CarCard({
             </div>
             <div className="flex flex-col min-w-0 flex-1 ml-2 justify-center">
               <span className="font-medium text-secondary-500 text-xs tracking-[-0.3px] leading-[20px] break-words">
-                {power || 'N/A'} km
+                {power || 'N/A'} kw
               </span>
             </div>
           </div>
