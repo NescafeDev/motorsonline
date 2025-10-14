@@ -58,7 +58,7 @@ export function CarCard({
         />
       </div>
 
-      <div className="p-4 md:p-2">
+      <div className="p-2 md:p-1">
         <div className="grid grid-cols-5 gap-2 h-20 p-2">
           <div className="col-span-4 flex flex-col justify-center">
             <h3 className="text-xl font-semibold text-motors-dark mb-1 leading-[30px] tracking-[-0.6px] pl-[10px]">
@@ -93,7 +93,7 @@ export function CarCard({
             </button>
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-2 p-2">
+        <div className="grid grid-cols-3 gap-1 p-1">
           {/* Mileage */}
           <div className="flex items-center bg-white rounded-lg p-2">
             <div className="w-8 h-8 relative flex-shrink-0">

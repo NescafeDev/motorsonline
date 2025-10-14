@@ -66,13 +66,13 @@ export default function CarGallery({
   };
 
   return (
-    <div className="px-5">
+    <div className="px-3">
       {/* Main image */}
-      <div className="relative mb-4 h-[280px] w-full">
+      <div className="relative mb-2 h-[247px] w-full">
         <img
           src={allImages[currentImageIndex]}
           alt="Car main view"
-          className="w-full h-[280px] object-cover rounded-[10px] cursor-pointer hover:opacity-95 transition-opacity"
+          className="w-full object-cover rounded-[10px] cursor-pointer hover:opacity-95 transition-opacity"
           onClick={handleMainImageClick}
           onKeyDown={handleKeyDown}
           tabIndex={0}
@@ -138,9 +138,9 @@ export default function CarGallery({
                   />
                 </div>
                 {/* Image number indicator */}
-                <div className="absolute bottom-1 right-1 bg-black bg-opacity-70 text-white text-xs px-1.5 py-0.5 rounded-full">
+                {/* <div className="absolute bottom-1 right-1 bg-black bg-opacity-70 text-white text-xs px-1.5 py-0.5 rounded-full">
                   {index + 1}
-                </div>
+                </div> */}
               </div>
             );
           })}
