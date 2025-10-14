@@ -45,7 +45,7 @@ export function CarCard({
   const { isFavorite: isFav, toggleFavorite } = useFavorites();
 
   return (
-    <div className="bg-white rounded-[13px] overflow-hidden shadow-sm w-full max-w-md mx-auto"
+    <div className="bg-white rounded-[13px] overflow-hidden shadow-sm w-full xl:w-full mx-auto"
       onClick={() => {
         navigate(`/${lang || 'ee'}/car/${id}`);
         window.scrollTo(0, 0);
@@ -93,7 +93,7 @@ export function CarCard({
             </button>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-2 p-2">
+        <div className="grid grid-cols-3 gap-2 p-2">
           {/* Mileage */}
           <div className="flex items-center bg-white rounded-lg p-2">
             <div className="w-8 h-8 relative flex-shrink-0">
