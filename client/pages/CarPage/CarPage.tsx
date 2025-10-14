@@ -301,7 +301,7 @@ export default function CarPage() {
           {/* Car details and gallery section - Sticky sidebar */}
           <div className="w-full max-w-[1400px] mx-auto">
             <div
-              className="grid grid-cols-1 md:grid-cols-3 gap-1"
+              className="grid grid-cols-1 md:grid-cols-3 gap-5"
               ref={gridRef}
               style={{ position: "relative" }}
             >

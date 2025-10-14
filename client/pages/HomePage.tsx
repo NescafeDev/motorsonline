@@ -529,7 +529,7 @@ export default function HomePage() {
 
                               </div>
                               <Separator className="my-3" />
-                              <div className="flex items-center gap-2 mx-1 my-2 justify-center h-[20px] text-center">
+                              <div className="flex items-start gap-2 mx-1 my-2 justify-start h-[20px]">
                                 <MapPin className="w-5 h-5 text-secondary-500 flex-shrink-0" />
                                 <span className="font-medium text-secondary-500 text-xs tracking-[-0.3px] leading-[20px]">
                                   Tuleviku tee 4a Peetri

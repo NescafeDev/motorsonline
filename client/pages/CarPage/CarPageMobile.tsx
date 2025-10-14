@@ -1,4 +1,4 @@
-import { Heart, Check } from "lucide-react";
+import { Heart, Check, MapPin } from "lucide-react";
 import Header from "@/components/mobile/Header";
 import CarGallery from "@/components/mobile/CarGallery";
 import SpecCard from "@/components/mobile/SpecCard";
@@ -287,7 +287,7 @@ export default function CarPageMobile() {
         />
         {/* Car title and breadcrumb */}
         <div className="px-5 mb-4">
-          <div className="bg-[#F6F7F9] rounded-[10px] px-5 py-[30px]">
+          <div className="bg-[#F6F7F9] rounded-[10px] px-5 py-[15px]">
             <div className="flex items-start justify-between mb-2">
               <h1 className="text-[#1A202C] text-[26px] font-semibold leading-[150%] tracking-[-0.78px]">
                 {car.brand_name} {car.model_name} {car.modelDetail}
@@ -337,6 +337,13 @@ export default function CarPageMobile() {
               />
               <SpecCard icon={<FuelIcon />} label={t('carSpecs.fuel') + ':'} value={car.fuelType} />
               <SpecCard icon={<UserIcon />} label={t('carSpecs.ownerCount') + ':'} value={car.ownerCount} />
+            </div>
+            <Separator className="my-3" />
+            <div className="flex items-start gap-2 mx-1 my-3 justify-start h-[10px]">
+              <MapPin className="w-5 h-5 text-secondary-500 flex-shrink-0" />
+              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
+                Tuleviku tee 4a Peetri
+              </span>
             </div>
           </div>
         </div>

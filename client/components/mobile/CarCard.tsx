@@ -218,7 +218,7 @@ export function CarCard({
           </p>
         </div>
         <Separator className="my-3" />
-        <div className="flex items-center gap-2 mx-2 my-3 justify-center">
+        <div className="flex items-start gap-2 mx-2 my-3 justify-start">
           <MapPin className="w-5 h-5 text-secondary-500 flex-shrink-0" />
           <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
             {address || 'Tuleviku tee 4a Peetri, 75312 Harju maakond'}
