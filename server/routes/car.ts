@@ -713,7 +713,6 @@ router.get('/public/filtered', async (req, res) => {
     console.log('Filter query:', query);
     console.log('Filter params:', params);
 
-<<<<<<< HEAD
     const [rows]: any = await pool.query(query, params);
     
     // Parse images JSON for each car
@@ -732,11 +731,6 @@ router.get('/public/filtered', async (req, res) => {
     
     console.log('Filtered cars found:', parsedRows.length);
     res.json(parsedRows);
-=======
-    const rows = await queryWithRetry(query, params);
-    console.log('Filtered cars found:', rows.length);
-    res.json(rows);
->>>>>>> 3147c6af82525bd092333260e55e326dcd017415
   } catch (err: any) {
     console.error('Filter error:', err);
     res.status(500).json({ message: 'Failed to fetch filtered cars.', error: err.message });
