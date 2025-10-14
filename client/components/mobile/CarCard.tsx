@@ -93,18 +93,18 @@ export function CarCard({
             </button>
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-1 p-1">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 p-1">
           {/* Mileage */}
           <div className="flex items-center bg-white rounded-lg p-2">
             <div className="w-8 h-8 relative flex-shrink-0">
               <img
-                className="w-6 h-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                className="w-7 h-7 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
                 alt="Mileage"
                 src="/img/car/Car.png"
               />
             </div>
-            <div className="flex flex-col min-w-0 flex-1 ml-2 justify-center">
-              <span className="font-medium text-secondary-500 text-xs tracking-[-0.3px] leading-[20px] break-words">
+            <div className="flex flex-col min-w-0 flex-1 ml-1 justify-center">
+              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
                 {mileage}
               </span>
             </div>
@@ -114,13 +114,13 @@ export function CarCard({
           <div className="flex items-center bg-white rounded-lg p-2">
             <div className="w-8 h-8 relative flex-shrink-0">
               <img
-                className="w-6 h-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                className="w-7 h-7 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
                 alt="Power"
                 src="/img/car/Speedometer.png"
               />
             </div>
-            <div className="flex flex-col min-w-0 flex-1 ml-2 justify-center">
-              <span className="font-medium text-secondary-500 text-xs tracking-[-0.3px] leading-[20px] break-words">
+            <div className="flex flex-col min-w-0 flex-1 ml-1 justify-center">
+              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
                 {power || 'N/A'} kw
               </span>
             </div>
@@ -130,13 +130,13 @@ export function CarCard({
           <div className="flex items-center bg-white rounded-lg p-2">
             <div className="w-8 h-8 relative flex-shrink-0">
               <img
-                className="w-6 h-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                className="w-7 h-7 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
                 alt="Transmission"
                 src="/img/car/gear-box-switch.png"
               />
             </div>
-            <div className="flex flex-col min-w-0 flex-1 ml-2 justify-center">
-              <span className="font-medium text-secondary-500 text-xs tracking-[-0.3px] leading-[20px] break-words">
+            <div className="flex flex-col min-w-0 flex-1 ml-1 justify-center">
+              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
                 {transmission}
               </span>
             </div>
@@ -146,13 +146,13 @@ export function CarCard({
           <div className="flex items-center bg-white rounded-lg p-2">
             <div className="w-8 h-8 relative flex-shrink-0">
               <img
-                className="w-6 h-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                className="w-7 h-7 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
                 alt="First Registration"
                 src="/img/car/calendar.png"
               />
             </div>
-            <div className="flex flex-col min-w-0 flex-1 ml-2 justify-center">
-              <span className="font-medium text-secondary-500 text-xs tracking-[-0.3px] leading-[20px] break-words">
+            <div className="flex flex-col min-w-0 flex-1 ml-1 justify-center">
+              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
                 {year} - {month ? (month.length === 1 ? `0${month}` : month) : 'N/A'}
               </span>
             </div>
@@ -162,13 +162,13 @@ export function CarCard({
           <div className="flex items-center bg-white rounded-lg p-2">
             <div className="w-8 h-8 relative flex-shrink-0">
               <img
-                className="w-6 h-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                className="w-7 h-7 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
                 alt="Fuel type"
                 src="/img/car/gas_station.png"
               />
             </div>
-            <div className="flex flex-col min-w-0 flex-1 ml-2 justify-center">
-              <span className="font-medium text-secondary-500 text-xs tracking-[-0.3px] leading-[20px] break-words">
+            <div className="flex flex-col min-w-0 flex-1 ml-1 justify-center">
+              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
                 {fuel}
               </span>
             </div>
@@ -178,13 +178,13 @@ export function CarCard({
           <div className="flex items-center bg-white rounded-lg p-2">
             <div className="w-8 h-8 relative flex-shrink-0">
               <img
-                className="w-6 h-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                className="w-7 h-7 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
                 alt="Owner Count"
                 src="/img/car/user_profile.png"
               />
             </div>
-            <div className="flex flex-col min-w-0 flex-1 ml-2 justify-center">
-              <span className="font-medium text-secondary-500 text-xs tracking-[-0.3px] leading-[20px] break-words">
+            <div className="flex flex-col min-w-0 flex-1 ml-1 justify-center">
+              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
                 {ownerCount || 'N/A'}
               </span>
             </div>
