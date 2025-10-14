@@ -437,9 +437,9 @@ export default function HomePage() {
                             />
 
                             <CardContent className="p-4 pt-5 pb-4 relative">
-                              <div className="grid grid-cols-5">
-                                <div className="col-span-4">
-                                  <h1 className="text-[22px] pl-[5px] font-semibold text-secondary-500 tracking-[-1.20px] leading-[45px] [font-family:'Poppins',Helvetica] ">
+                              <div className="grid grid-cols-6">
+                                <div className="col-span-5 h-[50px] pt-4">
+                                  <h1 className="text-[20px] pl-[5px] font-semibold text-secondary-500 tracking-[-1.20px] leading-[25px] [font-family:'Poppins',Helvetica] ">
                                     {car.brand_name} {car.model_name} {car.modelDetail}
                                   </h1>
                                 </div>
