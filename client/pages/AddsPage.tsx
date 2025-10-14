@@ -361,7 +361,6 @@ export default function AddsPage() {
             country: contactResponse.data.country || "",
           });
           setContactSaved(true); // Mark as saved since we loaded existing data
-          console.log('Loaded existing contact data:', contactResponse.data);
         }
       }
     } catch (error: any) {
