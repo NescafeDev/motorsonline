@@ -95,7 +95,8 @@
     "registering": "Регистрация...",
     "registerWithApple": "Зарегистрироваться через Apple",
     "registerWithGoogle": "Зарегистрироваться через Google",
-    "passwordsDoNotMatchError": "Пароли не совпадают."
+    "passwordsDoNotMatchError": "Пароли не совпадают.",
+    "alreadyHaveAccount": "У вас уже есть учетная запись?"
   },
   "car": {
     "title": "Автомобиль",

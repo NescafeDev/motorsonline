@@ -104,7 +104,7 @@ export function CarCard({
               />
             </div>
             <div className="flex flex-col min-w-0 flex-1 ml-2 justify-center">
-              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
+              <span className="font-medium text-secondary-500 text-xs tracking-[-0.3px] leading-[20px] break-words">
                 {mileage}
               </span>
             </div>
@@ -120,8 +120,8 @@ export function CarCard({
               />
             </div>
             <div className="flex flex-col min-w-0 flex-1 ml-2 justify-center">
-              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
-                {power || 'N/A'}
+              <span className="font-medium text-secondary-500 text-xs tracking-[-0.3px] leading-[20px] break-words">
+                {power || 'N/A'} km
               </span>
             </div>
           </div>
@@ -136,7 +136,7 @@ export function CarCard({
               />
             </div>
             <div className="flex flex-col min-w-0 flex-1 ml-2 justify-center">
-              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
+              <span className="font-medium text-secondary-500 text-xs tracking-[-0.3px] leading-[20px] break-words">
                 {transmission}
               </span>
             </div>
@@ -152,7 +152,7 @@ export function CarCard({
               />
             </div>
             <div className="flex flex-col min-w-0 flex-1 ml-2 justify-center">
-              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
+              <span className="font-medium text-secondary-500 text-xs tracking-[-0.3px] leading-[20px] break-words">
                 {year} - {month ? (month.length === 1 ? `0${month}` : month) : 'N/A'}
               </span>
             </div>
@@ -168,7 +168,7 @@ export function CarCard({
               />
             </div>
             <div className="flex flex-col min-w-0 flex-1 ml-2 justify-center">
-              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
+              <span className="font-medium text-secondary-500 text-xs tracking-[-0.3px] leading-[20px] break-words">
                 {fuel}
               </span>
             </div>
@@ -184,7 +184,7 @@ export function CarCard({
               />
             </div>
             <div className="flex flex-col min-w-0 flex-1 ml-2 justify-center">
-              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
+              <span className="font-medium text-secondary-500 text-xs tracking-[-0.3px] leading-[20px] break-words">
                 {ownerCount || 'N/A'}
               </span>
             </div>

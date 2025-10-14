@@ -95,7 +95,8 @@
     "registering": "Registreerin...",
     "registerWithApple": "Registreeru Apple'i kaudu",
     "registerWithGoogle": "Registreeru Google'i kaudu",
-    "passwordsDoNotMatchError": "Paroolid ei kattu."
+    "passwordsDoNotMatchError": "Paroolid ei kattu.",
+    "alreadyHaveAccount": "Sul on juba konto?"
   },
   "car": {
     "title": "Auto",

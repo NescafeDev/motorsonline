@@ -221,69 +221,71 @@ export const CarCard: React.FC<CarCardProps> = ({
         {description}
       </p> */}
 
-      {/* Car Information Section */}
-      {/* <div className="absolute left-[370px] top-[190px] w-[400px] grid grid-cols-3 gap-x-[30px] gap-y-[8px]">
-        {power && (
-          <div className="flex items-center gap-[8px]">
-            <img
-              className="w-5 h-5"
-              src="/img/car/Speedometer.png"
-              alt={t('carSpecs.power')}
-            />
-            <span className="text-[#1A202C] font-['Poppins'] text-[14px] font-medium">{power}</span>
-          </div>
-        )}
-        {year && month && (
-          <div className="flex items-center gap-[8px]">
-            <img
-              className="w-5 h-5"
-              src="/img/car/calendar.png"
-              alt={t('carSpecs.firstRegistration')}
-            />
-            <span className="text-[#1A202C] font-['Poppins'] text-[14px] font-medium">{year} - {month.length === 1 ? `0${month}` : month}</span>
-          </div>
-        )}
-        {mileage && (
-          <div className="flex items-center gap-[8px]">
-            <img
-              className="w-5 h-5"
-              src="/img/car/Car.png"
-              alt={t('carSpecs.mileage')}
-            />
-            <span className="text-[#1A202C] font-['Poppins'] text-[14px] font-medium">{mileage.toLocaleString()} km</span>
-          </div>
-        )}
-        {transmission && (
-          <div className="flex items-center gap-[8px]">
-            <img
-              className="w-5 h-5"
-              src="/img/car/gear-box-switch.png"
-              alt={t('carSpecs.transmission')}
-            />
-            <span className="text-[#1A202C] font-['Poppins'] text-[14px] font-medium">{transmission}</span>
-          </div>
-        )}
-        {fuelType && (
-          <div className="flex items-center gap-[8px]">
-            <img
-              className="w-5 h-5"
-              src="/img/car/gas_station.png"
-              alt={t('carSpecs.fuel')}
-            />
-            <span className="text-[#1A202C] font-['Poppins'] text-[14px] font-medium">{fuelType}</span>
-          </div>
-        )}
-        {ownerCount && (
-          <div className="flex items-center gap-[8px]">
-            <img
-              className="w-5 h-5"
-              src="/img/car/user_profile.png"
-              alt="Omanike arv"
-            />
-            <span className="text-[#1A202C] font-['Poppins'] text-[14px] font-medium">{ownerCount}</span>
-          </div>
-        )}
-      </div> */}
+      {/* Car Information Section - Single Line at Bottom */}
+      {hideBottomIcons && (
+        <div className="absolute left-[370px] bottom-[40px] flex items-center gap-[20px] flex-wrap">
+          {power && (
+            <div className="flex items-center gap-[8px]">
+              <img
+                className="w-5 h-5"
+                src="/img/car/Speedometer.png"
+                alt={t('carSpecs.power')}
+              />
+              <span className="text-[#1A202C] font-['Poppins'] text-[12px] font-medium">{power} km</span>
+            </div>
+          )}
+          {year && month && (
+            <div className="flex items-center gap-[8px]">
+              <img
+                className="w-5 h-5"
+                src="/img/car/calendar.png"
+                alt={t('carSpecs.firstRegistration')}
+              />
+              <span className="text-[#1A202C] font-['Poppins'] text-[12px] font-medium">{year} - {month.length === 1 ? `0${month}` : month}</span>
+            </div>
+          )}
+          {mileage && (
+            <div className="flex items-center gap-[8px]">
+              <img
+                className="w-5 h-5"
+                src="/img/car/Car.png"
+                alt={t('carSpecs.mileage')}
+              />
+              <span className="text-[#1A202C] font-['Poppins'] text-[12px] font-medium">{mileage.toLocaleString()} km</span>
+            </div>
+          )}
+          {transmission && (
+            <div className="flex items-center gap-[8px]">
+              <img
+                className="w-5 h-5"
+                src="/img/car/gear-box-switch.png"
+                alt={t('carSpecs.transmission')}
+              />
+              <span className="text-[#1A202C] font-['Poppins'] text-[12px] font-medium">{transmission}</span>
+            </div>
+          )}
+          {fuelType && (
+            <div className="flex items-center gap-[8px]">
+              <img
+                className="w-5 h-5"
+                src="/img/car/gas_station.png"
+                alt={t('carSpecs.fuel')}
+              />
+              <span className="text-[#1A202C] font-['Poppins'] text-[12px] font-medium">{fuelType}</span>
+            </div>
+          )}
+          {ownerCount && (
+            <div className="flex items-center gap-[8px]">
+              <img
+                className="w-5 h-5"
+                src="/img/car/user_profile.png"
+                alt="Omanike arv"
+              />
+              <span className="text-[#1A202C] font-['Poppins'] text-[12px] font-medium">{ownerCount}</span>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Bottom Section */}
       {!hideBottomIcons && (

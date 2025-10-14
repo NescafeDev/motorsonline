@@ -143,7 +143,7 @@ export const RegistrationFormSectionMobile = (): JSX.Element => {
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative z-10 flex items-center justify-center h-full p-4">
           <h2 className="text-white text-center font-poppins text-xl font-semibold leading-normal">
-            Vali oma ideaalne auto koos meiega
+            {t('auth.chooseIdealCar')}
           </h2>
         </div>
       </div>
@@ -153,12 +153,12 @@ export const RegistrationFormSectionMobile = (): JSX.Element => {
         <form onSubmit={handleSubmit}>
           <div className="space-y-6">
             <h1 className="font-semibold text-2xl text-secondary-500 tracking-[-0.90px] [font-family:'Poppins',Helvetica] text-center">
-              Loo oma kasutajakonto!
+              {t('auth.createAccount')}
             </h1>
             {/* User Type Radio Buttons */}
             <div className="space-y-5">
               <label className="block font-medium text-base text-black [font-family:'Poppins',Helvetica]">
-                Vali kasutaja
+                {t('auth.selectUserType')}
               </label>
               
             <div className="flex space-x-4">
@@ -176,7 +176,7 @@ export const RegistrationFormSectionMobile = (): JSX.Element => {
                     htmlFor="private"
                     className="text-base [font-family:'Poppins',Helvetica] cursor-pointer"
                   >
-                    Eraisik
+                    {t('auth.privateUser')}
                   </label>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -193,7 +193,7 @@ export const RegistrationFormSectionMobile = (): JSX.Element => {
                     htmlFor="company"
                     className="text-base [font-family:'Poppins',Helvetica] cursor-pointer"
                   >
-                    Ettevõte
+                    {t('auth.companyUser')}
                   </label>
                 </div>
               </div>
@@ -233,7 +233,7 @@ export const RegistrationFormSectionMobile = (): JSX.Element => {
                 htmlFor="terms"
                 className="text-sm [font-family:'Poppins',Helvetica] leading-5 text-black"
               >
-                Olen lugenud ja nõustun kasutustingimuste ja privaatsuspoliitikaga.
+                {t('auth.agreeToTerms')}
               </label>
             </div>
 
@@ -246,13 +246,13 @@ export const RegistrationFormSectionMobile = (): JSX.Element => {
               type="submit"
               disabled={loading}
             >
-              {loading ? "Registreerin..." : "Registreeru"}
+              {loading ? t('auth.registering') : t('auth.register')}
             </Button>
 
           <div className="flex items-center justify-center space-x-3 pt-4">
             <Separator className="w-16" />
             <span className="[font-family:'Poppins',Helvetica] font-normal text-sm text-black">
-              või
+              {t('auth.or')}
             </span>
             <Separator className="w-16" />
           </div>
@@ -267,7 +267,7 @@ export const RegistrationFormSectionMobile = (): JSX.Element => {
                 alt="Apple logo"
                 src="/img/apple.svg"
               />
-              Registreeru Apple&apos;i kaudu
+              {t('auth.registerWithApple')}
             </Button>
 
             <Button
@@ -276,16 +276,16 @@ export const RegistrationFormSectionMobile = (): JSX.Element => {
               className="w-full h-[50px] flex items-center justify-center gap-3 rounded-[10px] border-2 border-solid border-[#545454] [font-family:'Poppins',Helvetica] font-normal text-base text-zinc-700"
             >
               <img className="w-5 h-5" alt="Google logo" src="/img/google.png" />
-              Registreeru Google&apos;i kaudu
+              {t('auth.registerWithGoogle')}
             </Button>
           </div>
 
           {/* Login Link */}
           <div className="text-center pt-4">
             <p className="text-sm [font-family:'Poppins',Helvetica] text-black">
-              Sul on juba konto?{" "}
+              {t('auth.alreadyHaveAccount')}
               <a href="/login" className="text-[#06d6a0] font-medium hover:underline">
-                Logi sisse
+                {t('auth.login')}
               </a>
             </p>
           </div>

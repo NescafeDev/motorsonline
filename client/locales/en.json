@@ -95,7 +95,8 @@
     "registering": "Registering...",
     "registerWithApple": "Sign up with Apple",
     "registerWithGoogle": "Sign up with Google",
-    "passwordsDoNotMatchError": "Passwords do not match."
+    "passwordsDoNotMatchError": "Passwords do not match.",
+    "alreadyHaveAccount": "Do you already have an account?"
   },
   "car": {
     "title": "Car",

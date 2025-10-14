@@ -135,7 +135,7 @@ const getVehicleDetails = (car: Car, t: any) => [
   },
   {
     icon: "/img/car/Speedometer.png",
-    value: car.power,
+    value: car.power + " km",
   },
   {
     icon: "/img/car/gear-box-switch.png",
