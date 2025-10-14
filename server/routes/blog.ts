@@ -93,16 +93,26 @@ router.post('/', authenticateToken, requireAdmin, upload.fields([
 
 // Get all blogs (public)
 router.get('/', async (_req, res) => {
-  const blogs = await getAllBlogs();
-  res.json(blogs);
+  try {
+    const blogs = await getAllBlogs();
+    res.json(blogs);
+  } catch (err: any) {
+    console.error('Error fetching blogs:', err);
+    res.status(500).json({ message: 'Failed to fetch blogs.', error: err.message });
+  }
 });
 
 // Get blog by id (public)
 router.get('/:id', async (req, res) => {
-  const blog = await getBlogById(Number(req.params.id));
-  if (!blog) return res.status(404).json({ message: 'Blogi ei leitud.' });
-  console.log('blog', blog);
-  res.json(blog);
+  try {
+    const blog = await getBlogById(Number(req.params.id));
+    if (!blog) return res.status(404).json({ message: 'Blogi ei leitud.' });
+    console.log('blog', blog);
+    res.json(blog);
+  } catch (err: any) {
+    console.error('Error fetching blog:', err);
+    res.status(500).json({ message: 'Failed to fetch blog.', error: err.message });
+  }
 });
 
 // Update blog (admin only, with image upload)
