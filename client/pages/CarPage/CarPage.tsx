@@ -37,14 +37,7 @@ interface CarData {
   discountPrice?: number;
   vatRate?: string;
   vatRefundable?: string;
-  image_1?: string;
-  image_2?: string;
-  image_3?: string;
-  image_4?: string;
-  image_5?: string;
-  image_6?: string;
-  image_7?: string;
-  image_8?: string;
+  images?: string[];
   equipment?: string;
   description?: string;
   created_at?: string;
@@ -239,16 +232,7 @@ export default function CarPage() {
   }
 
   // Prepare car images array
-  const carImages = [
-    car.image_1,
-    car.image_2,
-    car.image_3,
-    car.image_4,
-    car.image_5,
-    car.image_6,
-    car.image_7,
-    car.image_8,
-  ].filter(Boolean) as string[];
+  const carImages = (car.images || []).filter(Boolean) as string[];
 
   // Vehicle details data
   const vehicleDetails = [
@@ -369,7 +353,7 @@ export default function CarPage() {
                   <Card className="w-full mt-10 bg-[#f6f7f9] rounded-[10px] border-none">
                     <CardContent className="p-5">
                       <h2 className="font-semibold text-secondary-500 text-xl tracking-[-0.60px] leading-[30px] [font-family:'Poppins',Helvetica] mb-6">
-                        {t('formLabels.additionalFeatures')}
+                        {t('formLabels.higherValueAccessories')}
                       </h2>
 
                       <div className="grid grid-cols-2 gap-4">

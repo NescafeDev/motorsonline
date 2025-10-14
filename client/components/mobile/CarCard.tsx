@@ -103,10 +103,7 @@ export function CarCard({
                 src="/img/car/Car.png"
               />
             </div>
-            <div className="flex flex-col min-w-0 flex-1 ml-2">
-              <span className="font-normal text-secondary-500 text-xs tracking-[-0.2px] leading-[16px] break-words">
-                Läbisõit:
-              </span>
+            <div className="flex flex-col min-w-0 flex-1 ml-2 justify-center">
               <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
                 {mileage}
               </span>
@@ -122,10 +119,7 @@ export function CarCard({
                 src="/img/car/Speedometer.png"
               />
             </div>
-            <div className="flex flex-col min-w-0 flex-1 ml-2">
-              <span className="font-normal text-secondary-500 text-xs tracking-[-0.2px] leading-[16px] break-words">
-                Võimsus:
-              </span>
+            <div className="flex flex-col min-w-0 flex-1 ml-2 justify-center">
               <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
                 {power || 'N/A'}
               </span>
@@ -141,10 +135,7 @@ export function CarCard({
                 src="/img/car/gear-box-switch.png"
               />
             </div>
-            <div className="flex flex-col min-w-0 flex-1 ml-2">
-              <span className="font-normal text-secondary-500 text-xs tracking-[-0.2px] leading-[16px] break-words">
-                Käigukast:
-              </span>
+            <div className="flex flex-col min-w-0 flex-1 ml-2 justify-center">
               <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
                 {transmission}
               </span>
@@ -160,10 +151,7 @@ export function CarCard({
                 src="/img/car/calendar.png"
               />
             </div>
-            <div className="flex flex-col min-w-0 flex-1 ml-2">
-              <span className="font-normal text-secondary-500 text-xs tracking-[-0.2px] leading-[16px] break-words">
-                Esmaregistreerimine:
-              </span>
+            <div className="flex flex-col min-w-0 flex-1 ml-2 justify-center">
               <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
                 {year} - {month ? (month.length === 1 ? `0${month}` : month) : 'N/A'}
               </span>
@@ -179,10 +167,7 @@ export function CarCard({
                 src="/img/car/gas_station.png"
               />
             </div>
-            <div className="flex flex-col min-w-0 flex-1 ml-2">
-              <span className="font-normal text-secondary-500 text-xs tracking-[-0.2px] leading-[16px] break-words">
-                Kütus
-              </span>
+            <div className="flex flex-col min-w-0 flex-1 ml-2 justify-center">
               <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
                 {fuel}
               </span>
@@ -198,10 +183,7 @@ export function CarCard({
                 src="/img/car/user_profile.png"
               />
             </div>
-            <div className="flex flex-col min-w-0 flex-1 ml-2">
-              <span className="font-normal text-secondary-500 text-xs tracking-[-0.2px] leading-[16px] break-words">
-                Omanike arv:
-              </span>
+            <div className="flex flex-col min-w-0 flex-1 ml-2 justify-center">
               <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
                 {ownerCount || 'N/A'}
               </span>

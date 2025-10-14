@@ -19,9 +19,10 @@ export default function CarGallery({
   totalImages,
   onImageClick,
 }: CarGalleryProps) {
-  // Filter out empty or null images
-  const validThumbnails = thumbnails.filter(img => img && img.trim() !== '');
+  // Filter out empty or null images and ensure no duplicates
   const validMainImage = mainImage && mainImage.trim() !== '' ? mainImage : '/placeholder.svg';
+  // Filter out the main image from thumbnails if it exists there to avoid duplicates
+  const validThumbnails = thumbnails.filter(img => img && img.trim() !== '' && img !== validMainImage);
   
   // Create a combined array of all images for easier management
   const allImages = [validMainImage, ...validThumbnails];
@@ -115,31 +116,30 @@ export default function CarGallery({
         )}
       </div>
 
-      {/* Thumbnails - only show if there are valid thumbnails */}
-      {validThumbnails.length > 0 && (
-        <div className="flex gap-[7px] overflow-x-auto pb-2">
-          {validThumbnails.map((thumb, index) => {
-            const actualIndex = index + 1; // +1 because main image is at index 0
-            const isSelected = currentImageIndex === actualIndex;
+      {/* Thumbnails - show all images including main image */}
+      {allImages.length > 0 && (
+        <div className="flex gap-[7px] overflow-x-auto pb-2 scrollbar-hide">
+          {allImages.map((thumb, index) => {
+            const isSelected = currentImageIndex === index;
             
             return (
-              <div key={index} className="relative flex-shrink-0">
+              <div key={index} className="relative flex-shrink-0 w-[calc(33.333%-4.67px)]">
                 <div
-                  className={`w-[126px] h-full rounded-[6.951px] overflow-hidden cursor-pointer transition-all duration-200 hover:scale-105 ${
+                  className={`w-full h-[100px] rounded-[6.951px] overflow-hidden cursor-pointer transition-all duration-200 hover:scale-105 ${
                     isSelected ? "border-[1.697px] border-primary" : "border border-gray-200 hover:border-primary"
                   }`}
-                  onClick={() => handleImageClick(actualIndex)}
+                  onClick={() => handleImageClick(index)}
                 >
                   <img
                     src={thumb}
-                    alt={`Car view ${actualIndex + 1}`}
+                    alt={`Car view ${index + 1}`}
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />
                 </div>
                 {/* Image number indicator */}
                 <div className="absolute bottom-1 right-1 bg-black bg-opacity-70 text-white text-xs px-1.5 py-0.5 rounded-full">
-                  {actualIndex + 1}
+                  {index + 1}
                 </div>
               </div>
             );

@@ -814,9 +814,27 @@ export default function AddsPage() {
         formDataObj.append(key, value as string);
       }
     });
-    carImages.forEach((file, idx) => {
-      if (file) formDataObj.append(`image_${idx + 1}`, file);
-    });
+    
+    // Handle images for editing - preserve existing images and add new ones
+    if (editingCar) {
+      const hasNewImages = carImages.some(file => file !== null);
+      if (hasNewImages) {
+        // User uploaded new images during edit - send them
+        carImages.forEach((file) => {
+          if (file) formDataObj.append('images', file);
+        });
+      } else {
+        // No new images uploaded, preserve existing images from database
+        if (editingCar.images && Array.isArray(editingCar.images)) {
+          formDataObj.append('existingImages', JSON.stringify(editingCar.images));
+        }
+      }
+    } else {
+      // For new listings, just add the uploaded images
+      carImages.forEach((file) => {
+        if (file) formDataObj.append('images', file);
+      });
+    }
 
     const techCheckSelected = Object.entries(checktechboxes)
       .filter(([k, v]) => v)
@@ -1057,8 +1075,8 @@ export default function AddsPage() {
               onImageChange={handleCarImageChange}
               onReorder={handleImageReorder}
               previews={
-                editingCar
-                  ? Array.from({ length: 40 }, (_, i) => editingCar[`image_${i + 1}`])
+                editingCar && editingCar.images
+                  ? editingCar.images
                   : []
               }
               maxPhotos={40}
@@ -1068,11 +1086,11 @@ export default function AddsPage() {
             />
           </FormSection>
           {/* Vehicle Details */}
-          <FormSection title="Mudelidetailid">
+          <FormSection title={t('modelDetails.title')}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <FormField
-                label={t('modelDetails.title')}
-                placeholder={t('model.title')}
+                label={t('formLabels.selectVehicleType')}
+                placeholder={t('common.select')}
                 isSelect
                 value={formData.vehicleType}
                 onChange={(value) => handleInputChange("vehicleType", value)}
@@ -1149,7 +1167,7 @@ export default function AddsPage() {
               />
               <FormField
                 label={t('formLabels.bodyType')}
-                placeholder={t('formLabels.bodyType')}
+                placeholder={t('common.select')}
                 isSelect
                 value={formData.bodyType}
                 onChange={(value) => handleInputChange("bodyType", value)}
@@ -1205,7 +1223,7 @@ export default function AddsPage() {
               />
               <FormField
                 label={t('formLabels.model')}
-                placeholder={t('formLabels.model')}
+                placeholder={t('common.select')}
                 isSelect
                 value={formData.model_id}
                 onChange={(value) => handleInputChange("model_id", value)}
@@ -1231,7 +1249,7 @@ export default function AddsPage() {
 
               <FormField
                 label={t('formLabels.firstRegistration')}
-                placeholder={t('formLabels.year')}
+                placeholder={t('common.select')}
                 isSelect
                 value={formData.year_id}
                 onChange={(value) => handleInputChange("year_id", value)}
@@ -1294,7 +1312,7 @@ export default function AddsPage() {
               />
               <FormField
                 label={t('formLabels.vehicleCondition')}
-                placeholder={t('formLabels.vehicleCondition')}
+                placeholder={t('common.select')}
                 value={formData.technicalData}
                 isSelect
                 onChange={(value) => handleInputChange("technicalData", value)}
@@ -1319,7 +1337,7 @@ export default function AddsPage() {
               />
               <FormField
                 label={t('formLabels.mileage')}
-                placeholder={t('formLabels.mileage')}
+                placeholder={t('common.select')}
                 value={formData.mileage}
                 onChange={(value) => handleInputChange("mileage", value)}
               />
@@ -1331,7 +1349,7 @@ export default function AddsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <FormField
                 label={t('formLabels.fuelType')}
-                placeholder={t('formLabels.chooseFuelType')}
+                placeholder={t('common.select')}
                 isSelect
                 value={formData.fuelType}
                 onChange={(value) => handleInputChange("fuelType", value)}

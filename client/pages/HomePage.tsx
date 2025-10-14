@@ -52,14 +52,7 @@ export interface Car {
   businessType: string;
   socialNetwork: string;
   email: string;
-  image_1?: string;
-  image_2?: string;
-  image_3?: string;
-  image_4?: string;
-  image_5?: string;
-  image_6?: string;
-  image_7?: string;
-  image_8?: string;
+  images?: string[];
   tech_check?: string;
   accessories?: string;
   seats?: number;
@@ -369,7 +362,7 @@ export default function HomePage() {
 
   // Format car data for display
   const formatCarForDisplay = (car: Car) => ({
-    image: car.image_1 || "img/Rectangle 34624924.png",
+    image: car.images?.[0] || "img/Rectangle 34624924.png",
     title: `${car.brand_name || 'Unknown'} ${car.model_name || ''} ${car.modelDetail || ''}`,
     details: `${car.year_value || 'N/A'}, ${car.mileage?.toLocaleString() || 'N/A'} km`,
     fuel: car.fuelType || 'N/A',

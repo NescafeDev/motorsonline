@@ -46,14 +46,7 @@ export interface Car {
   businessType: string;
   socialNetwork: string;
   email: string;
-  image_1?: string;
-  image_2?: string;
-  image_3?: string;
-  image_4?: string;
-  image_5?: string;
-  image_6?: string;
-  image_7?: string;
-  image_8?: string;
+  images?: string[];
   tech_check?: string;
   accessories?: string;
   seats?: number;
@@ -143,32 +136,26 @@ const apiClient = axios.create({
 const vehicleDetails = (car: Car, t: any) => [
   {
     icon: "/img/car/Car.png",
-    label: `${t('carSpecs.mileage')}:`,
     value: `${car.mileage.toLocaleString()} km`,
   },
   {
     icon: "/img/car/Speedometer.png",
-    label: `${t('carSpecs.power')}:`,
     value: car.power,
   },
   {
     icon: "/img/car/gear-box-switch.png",
-    label: `${t('carSpecs.transmission')}:`,
     value: car.transmission,
   },
   {
     icon: "/img/car/calendar.png",
-    label: `${t('carSpecs.firstRegistration')}:`,
     value: car.year_value?.toString() + " - " + (car.month.length === 1 ? `0${car.month}` : car.month) || "N/A",
   },
   {
     icon: "/img/car/gas_station.png",
-    label: t('carSpecs.fuel'),
     value: car.fuelType,
   },
   {
     icon: "/img/car/user_profile.png",
-    label: `${t('carSpecs.ownerCount')}:`,
     value: car.ownerCount,
   },
 ];
@@ -383,7 +370,7 @@ export default function HomePageMobile() {
     vatNote: getVatDisplayText(car),
     fuel: car.fuelType || 'N/A',
     transmission: car.transmission || 'N/A',
-    image: car.image_1 || "img/Rectangle 34624924.png",
+    image: car.images?.[0] || "img/Rectangle 34624924.png",
     isFavorite: isFavorite(car.id),
     power: car.power || 'N/A',
     ownerCount: car.ownerCount || 'N/A',

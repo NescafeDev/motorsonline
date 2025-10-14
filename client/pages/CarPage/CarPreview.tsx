@@ -104,14 +104,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
       discountPrice: formData.discountPrice ? parseFloat(formData.discountPrice) : undefined,
       vatRate: formData.vatRate || '24',
       vatRefundable: formData.vatRefundable || '',
-      image_1: carImages[0] ? URL.createObjectURL(carImages[0]) : undefined,
-      image_2: carImages[1] ? URL.createObjectURL(carImages[1]) : undefined,
-      image_3: carImages[2] ? URL.createObjectURL(carImages[2]) : undefined,
-      image_4: carImages[3] ? URL.createObjectURL(carImages[3]) : undefined,
-      image_5: carImages[4] ? URL.createObjectURL(carImages[4]) : undefined,
-      image_6: carImages[5] ? URL.createObjectURL(carImages[5]) : undefined,
-      image_7: carImages[6] ? URL.createObjectURL(carImages[6]) : undefined,
-      image_8: carImages[7] ? URL.createObjectURL(carImages[7]) : undefined,
+      images: carImages.map((file, idx) => file ? URL.createObjectURL(file) : '').filter(Boolean),
       equipment: formData.equipment || '',
       description: formData.description || '',
       businessType: contactFormData.businessType || '',
@@ -127,16 +120,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
   const car = getCarData();
 
   // Prepare car images array
-  const carImagesArray = [
-    car.image_1,
-    car.image_2,
-    car.image_3,
-    car.image_4,
-    car.image_5,
-    car.image_6,
-    car.image_7,
-    car.image_8,
-  ].filter(Boolean) as string[];
+  const carImagesArray = (car.images || []).filter(Boolean) as string[];
 
   // Vehicle details data
   const vehicleDetails = [

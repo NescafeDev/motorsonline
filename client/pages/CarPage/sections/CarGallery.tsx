@@ -25,20 +25,16 @@ export default function CarGallery({
   };
 
   const handlePreviousImage = () => {
-    console.log('Previous clicked!');
     setSelectedImage((prev) => (prev === 0 ? validImages.length - 1 : prev - 1));
   };
 
   const handleNextImage = () => {
-    console.log('Next clicked!');
     setSelectedImage((prev) => (prev === validImages.length - 1 ? 0 : prev + 1));
   };
   const [isOpen, setIsOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
-  console.log('lightboxIndex', lightboxIndex);
 
   const handleImageClick = () => {
-    console.log('Image clicked');
     setLightboxIndex(selectedImage);
     setIsOpen(true);
   };
@@ -51,25 +47,23 @@ export default function CarGallery({
     }
   };
 
-  // Build images without duplicates; don't repeat main image in thumbnails
-  const validThumbnails = thumbnails.filter(
-    (img) => img && img.trim() !== '' && img !== mainImage
-  );
-  const allImages = [mainImage, ...validThumbnails];
+  // Build images array - ensure no duplicates
+  // Filter out the main image from thumbnails if it exists there
+  const filteredThumbnails = thumbnails.filter(img => img && img.trim() !== '' && img !== mainImage);
+  const allImages = [mainImage, ...filteredThumbnails].filter(img => img && img.trim() !== '');
   const currentMainImage = allImages[selectedImage];
 
   // Filter out empty or null images
-  const validImages = allImages.filter(img => img && img.trim() !== '');
+  const validImages = allImages;
 
-  // Calculate how many thumbnails to show at once
-  const thumbnailsPerView = Math.min(4, validThumbnails.length || 1);
-  const totalSlides = Math.ceil(validThumbnails.length / thumbnailsPerView);
-
+  // Calculate how many thumbnails to show at once (show all images as thumbnails)
+  const thumbnailsPerView = Math.min(4, validImages.length || 1);
+  const totalSlides = Math.ceil(validImages.length / thumbnailsPerView);
 
   // Get current set of thumbnails to display
   const getCurrentThumbnails = () => {
     const startIndex = currentSlide * thumbnailsPerView;
-    return validThumbnails.slice(startIndex, startIndex + thumbnailsPerView);
+    return validImages.slice(startIndex, startIndex + thumbnailsPerView);
   };
 
   // Handle manual slide navigation
@@ -136,18 +130,18 @@ export default function CarGallery({
         {/* Image counter */}
         {validImages.length > 1 && (
           <div className="absolute bottom-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm">
-            {selectedImage +1 } / {validImages.length }
+            {selectedImage + 1} / {validImages.length}
           </div>
         )}
       </div>
 
-      {/* Thumbnails - only show if there are valid thumbnails */}
-      {validThumbnails.length > 0 && (
+      {/* Thumbnails - show all images including main image */}
+      {validImages.length > 0 && (
         <div className="relative">
           {/* Thumbnails container with overflow hidden */}
           <div className="flex gap-[7px] overflow-hidden">
             {getCurrentThumbnails().map((thumb, index) => {
-              const uniqueKey = currentSlide * thumbnailsPerView + index + 1; // +1 because mainImage is index 0
+              const uniqueKey = currentSlide * thumbnailsPerView + index; // Direct index mapping
               return (
                 <div
                   key={uniqueKey}
@@ -166,7 +160,7 @@ export default function CarGallery({
                   >
                     <img
                       src={thumb}
-                      alt={`Car view ${uniqueKey}`}
+                      alt={`Car view ${uniqueKey + 1}`}
                       className="w-full h-full object-cover transition-transform duration-200 hover:scale-110 rounded-[6.951px]"
                     />
                   </div>

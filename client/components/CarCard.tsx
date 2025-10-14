@@ -222,7 +222,7 @@ export const CarCard: React.FC<CarCardProps> = ({
       </p> */}
 
       {/* Car Information Section */}
-      <div className="absolute left-[370px] top-[190px] w-[400px] grid grid-cols-3 gap-x-[30px] gap-y-[8px]">
+      {/* <div className="absolute left-[370px] top-[190px] w-[400px] grid grid-cols-3 gap-x-[30px] gap-y-[8px]">
         {power && (
           <div className="flex items-center gap-[8px]">
             <img
@@ -283,11 +283,11 @@ export const CarCard: React.FC<CarCardProps> = ({
             <span className="text-[#1A202C] font-['Poppins'] text-[14px] font-medium">{ownerCount}</span>
           </div>
         )}
-      </div>
+      </div> */}
 
       {/* Bottom Section */}
       {!hideBottomIcons && (
-        <div className="absolute left-[370px] top-[237px] flex items-center gap-[10px]">
+        <div className="absolute left-[370px] top-[190px] 2xl:left-[370px] 2xl:top-[237px] flex items-center gap-[10px]">
           {/* Date */}
           <div className="flex items-center gap-[10px]">
             <CalendarIcon />

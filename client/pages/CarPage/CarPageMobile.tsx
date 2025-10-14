@@ -49,14 +49,7 @@ interface CarData {
   discountPrice?: number;
   vatRate?: string;
   vatRefundable?: string;
-  image_1?: string;
-  image_2?: string;
-  image_3?: string;
-  image_4?: string;
-  image_5?: string;
-  image_6?: string;
-  image_7?: string;
-  image_8?: string;
+  images?: string[];
   equipment?: string;
   description?: string;
   created_at?: string;
@@ -205,16 +198,7 @@ export default function CarPageMobile() {
   }
 
   // Prepare car images array
-  const carImages = [
-    car.image_1,
-    car.image_2,
-    car.image_3,
-    car.image_4,
-    car.image_5,
-    car.image_6,
-    car.image_7,
-    car.image_8,
-  ].filter(Boolean) as string[];
+  const carImages = (car.images || []).filter(Boolean) as string[];
 
   const vehicleDetails = [
     {
@@ -298,7 +282,7 @@ export default function CarPageMobile() {
         {/* Car gallery */}
         <CarGallery
           mainImage={carImages[0]}
-          thumbnails={carImages.slice(1)}
+          thumbnails={carImages}
           totalImages={carImages.length}
         />
         {/* Car title and breadcrumb */}

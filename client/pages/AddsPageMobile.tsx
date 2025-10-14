@@ -930,9 +930,27 @@ export default function AddsPageMobile() {
         formDataObj.append(key, value as string);
       }
     });
-    carImages.forEach((file, idx) => {
-      if (file) formDataObj.append(`image_${idx + 1}`, file);
-    });
+    
+    // Handle images for editing - preserve existing images and add new ones
+    if (editingCar) {
+      const hasNewImages = carImages.some(file => file !== null);
+      if (hasNewImages) {
+        // User uploaded new images during edit - send them
+        carImages.forEach((file) => {
+          if (file) formDataObj.append('images', file);
+        });
+      } else {
+        // No new images uploaded, preserve existing images from database
+        if (editingCar.images && Array.isArray(editingCar.images)) {
+          formDataObj.append('existingImages', JSON.stringify(editingCar.images));
+        }
+      }
+    } else {
+      // For new listings, just add the uploaded images
+      carImages.forEach((file) => {
+        if (file) formDataObj.append('images', file);
+      });
+    }
 
     const techCheckSelected = Object.entries(checktechboxes)
       .filter(([k, v]) => v)
@@ -1022,8 +1040,8 @@ export default function AddsPageMobile() {
               onImageChange={handleCarImageChange}
               onReorder={handleImageReorder}
               previews={
-                editingCar
-                  ? Array.from({ length: 40 }, (_, i) => editingCar[`image_${i + 1}`])
+                editingCar && editingCar.images
+                  ? editingCar.images
                   : []
               }
               maxPhotos={40}

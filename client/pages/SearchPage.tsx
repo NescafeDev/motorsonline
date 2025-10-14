@@ -47,14 +47,7 @@ export interface Car {
     businessType: string;
     socialNetwork: string;
     email: string;
-    image_1?: string;
-    image_2?: string;
-    image_3?: string;
-    image_4?: string;
-    image_5?: string;
-    image_6?: string;
-    image_7?: string;
-    image_8?: string;
+    images?: string[];
     tech_check?: string;
     accessories?: string;
     seats?: number;
@@ -301,7 +294,7 @@ export default function SearchPage() {
 
     // Format car data for display
     const formatCarForDisplay = (car: Car) => ({
-        image: car.image_1 || "img/Rectangle 34624924.png",
+        image: car.images?.[0] || "img/Rectangle 34624924.png",
         title: `${car.brand_name || 'Unknown'} ${car.model_name || ''} ${car.modelDetail || ''}`,
         details: `${car.year_value || 'N/A'}, ${car.mileage?.toLocaleString() || 'N/A'} km`,
         fuel: car.fuelType || 'N/A',
@@ -371,7 +364,7 @@ export default function SearchPage() {
                                                 key={car.id || index}
                                                 title={`${car.brand_name || 'Unknown'} ${car.model_name || ''} ${car.modelDetail || ''}`}
                                                 breadcrumb={`Kasutatud autod  »  ${car.brand_name || 'Unknown'} ${car.model_name || ''}  »  ${car.year_value || ''}`}
-                                                image={car.image_1 || "https://cdn.builder.io/api/v1/image/assets/TEMP/cc7bda4b04e2c28565ece34ac8989e7268a2a60f?width=620"}
+                                                image={car.images?.[0] || "https://cdn.builder.io/api/v1/image/assets/TEMP/cc7bda4b04e2c28565ece34ac8989e7268a2a60f?width=620"}
                                                 description={""}
                                                 price={`€ ${car.price?.toLocaleString() || '0'}`}
                                                 originalPrice={car.discountPrice ? `€ ${car.discountPrice.toLocaleString()}` : undefined}

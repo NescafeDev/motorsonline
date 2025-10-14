@@ -20,14 +20,7 @@ interface CarData {
   discountPrice?: number;
   vatRate?: string;
   vatRefundable?: string;
-  image_1?: string;
-  image_2?: string;
-  image_3?: string;
-  image_4?: string;
-  image_5?: string;
-  image_6?: string;
-  image_7?: string;
-  image_8?: string;
+  images?: string[];
   equipment?: string;
   description?: string;
   created_at?: string;

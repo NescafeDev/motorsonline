@@ -41,14 +41,7 @@ export interface Car {
   businessType: string;
   socialNetwork: string;
   email: string;
-  image_1?: string;
-  image_2?: string;
-  image_3?: string;
-  image_4?: string;
-  image_5?: string;
-  image_6?: string;
-  image_7?: string;
-  image_8?: string;
+  images?: string[];
   tech_check?: string;
   accessories?: string;
   seats?: number;
@@ -198,13 +191,13 @@ export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionPro
             <img
                 className="w-full h-[189px] object-cover"
                 alt={`${car.brand_name || 'Unknown'} ${car.model_name || ''}`}
-                src={car.image_1 || "/img/Rectangle 34624924.png"}
+                src={car.images?.[0] || "/img/Rectangle 34624924.png"}
               />
             <CardContent className="p-4 pt-5 pb-3 relative">
               {/* <img
                 className="w-full h-[189px] object-cover"
                 alt={`${car.brand_name || 'Unknown'} ${car.model_name || ''}`}
-                src={car.image_1 || "/img/Rectangle 34624924.png"}
+                src={car.images?.[0] || "/img/Rectangle 34624924.png"}
               /> */}
 
               <div className="grid grid-cols-4 gap-4 mb-4 h-20 p-2">

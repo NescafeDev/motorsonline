@@ -29,14 +29,7 @@ export interface Car {
   description: string;
   equipment: string;
   additionalInfo: string;
-  image_1?: string;
-  image_2?: string;
-  image_3?: string;
-  image_4?: string;
-  image_5?: string;
-  image_6?: string;
-  image_7?: string;
-  image_8?: string;
+  images?: string[];
   tech_check?: string;
   accessories?: string;
   seats?: number;
@@ -66,11 +59,14 @@ export interface Car {
 }
 
 export async function createCar(car: Omit<Car, 'id'>): Promise<Car> {
+  // Serialize images array to JSON string
+  const imagesJson = car.images ? JSON.stringify(car.images) : null;
+  
   const [result]: any = await pool.query(
     `INSERT INTO cars (
-      user_id, brand_id, model_id, year_id, drive_type_id, category, transmission, fuelType, plateNumber, month, mileage, power, displacement, technicalData, ownerCount, modelDetail, price, discountPrice, warranty, vatRefundable, vatRate, accident, vinCode, description, equipment, additionalInfo, image_1, image_2, image_3, image_4, image_5, image_6, image_7, image_8, tech_check, accessories, salonColor, bodyType, stereo, carColor, carColorType, vehicleType, inspectionValidityPeriod, seats, doors, valuveljed, major
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [car.user_id, car.brand_id, car.model_id, car.year_id, car.drive_type_id, car.category, car.transmission, car.fuelType, car.plateNumber, car.month, car.mileage, car.power, car.displacement, car.technicalData, car.ownerCount, car.modelDetail, car.price, car.discountPrice, car.warranty, car.vatRefundable, car.vatRate, car.accident, car.vinCode, car.description, car.equipment, car.additionalInfo,  car.image_1, car.image_2, car.image_3, car.image_4, car.image_5, car.image_6, car.image_7, car.image_8, car.tech_check, car.accessories, car.salonColor, car.bodyType, car.stereo, car.carColor, car.carColorType, car.vehicleType, car.inspectionValidityPeriod, car.seats, car.doors, car.valuveljed, car.major]
+      user_id, brand_id, model_id, year_id, drive_type_id, category, transmission, fuelType, plateNumber, month, mileage, power, displacement, technicalData, ownerCount, modelDetail, price, discountPrice, warranty, vatRefundable, vatRate, accident, vinCode, description, equipment, additionalInfo, images, tech_check, accessories, salonColor, bodyType, stereo, carColor, carColorType, vehicleType, inspectionValidityPeriod, seats, doors, valuveljed, major
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [car.user_id, car.brand_id, car.model_id, car.year_id, car.drive_type_id, car.category, car.transmission, car.fuelType, car.plateNumber, car.month, car.mileage, car.power, car.displacement, car.technicalData, car.ownerCount, car.modelDetail, car.price, car.discountPrice, car.warranty, car.vatRefundable, car.vatRate, car.accident, car.vinCode, car.description, car.equipment, car.additionalInfo, imagesJson, car.tech_check, car.accessories, car.salonColor, car.bodyType, car.stereo, car.carColor, car.carColorType, car.vehicleType, car.inspectionValidityPeriod, car.seats, car.doors, car.valuveljed, car.major]
   );
   return { id: result.insertId, ...car };
 }
@@ -88,8 +84,20 @@ export async function getCarById(id: number): Promise<any | null> {
     WHERE cars.id = ?
   `, [id]);
   if (rows.length === 0) return null;
-  // Split tech_check and accessories into arrays if not null
-  return rows[0];
+  
+  const car = rows[0];
+  // Parse images JSON and filter out empty strings
+  if (car.images) {
+    try {
+      car.images = JSON.parse(car.images).filter((img: string) => img && img.trim() !== '');
+    } catch (e) {
+      car.images = [];
+    }
+  } else {
+    car.images = [];
+  }
+  
+  return car;
 }
 
 export async function getAllCars(): Promise<any[]> {
@@ -104,8 +112,20 @@ export async function getAllCars(): Promise<any[]> {
     LEFT JOIN contacts ON cars.user_id = contacts.user_id
     ORDER BY cars.created_at DESC
   `);
-  // Split tech_check and accessories into arrays if not null
-  return rows;
+  
+  // Parse images JSON for each car
+  return rows.map((car: any) => {
+    if (car.images) {
+      try {
+        car.images = JSON.parse(car.images).filter((img: string) => img && img.trim() !== '');
+      } catch (e) {
+        car.images = [];
+      }
+    } else {
+      car.images = [];
+    }
+    return car;
+  });
 }
 
 export async function getCarsByUserId(userId: number): Promise<any[]> {
@@ -121,7 +141,20 @@ export async function getCarsByUserId(userId: number): Promise<any[]> {
     WHERE cars.user_id = ?
     ORDER BY cars.created_at DESC
   `, [userId]);
-  return rows;
+  
+  // Parse images JSON for each car
+  return rows.map((car: any) => {
+    if (car.images) {
+      try {
+        car.images = JSON.parse(car.images).filter((img: string) => img && img.trim() !== '');
+      } catch (e) {
+        car.images = [];
+      }
+    } else {
+      car.images = [];
+    }
+    return car;
+  });
 }
 
 export async function updateCar(id: number, car: Partial<Omit<Car, 'id'>>): Promise<boolean> {
@@ -132,8 +165,12 @@ export async function updateCar(id: number, car: Partial<Omit<Car, 'id'>>): Prom
     .filter(key => !fieldsToExclude.includes(key))
     .reduce((obj, key) => {
       const value = car[key];
+      // Handle images array serialization
+      if (key === 'images' && Array.isArray(value)) {
+        obj[key] = JSON.stringify(value);
+      }
       // Handle NaN values and convert them to null or 0
-      if (value === 'NaN' || (typeof value === 'number' && isNaN(value))) {
+      else if (value === 'NaN' || (typeof value === 'number' && isNaN(value))) {
         obj[key] = null;
       } else if (value == 'null' || value == '') {
         obj[key] = null;

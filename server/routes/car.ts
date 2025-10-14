@@ -54,14 +54,7 @@ export interface Car {
   businessType: string;
   socialNetwork: string;
   email: string;
-  image_1?: string;
-  image_2?: string;
-  image_3?: string;
-  image_4?: string;
-  image_5?: string;
-  image_6?: string;
-  image_7?: string;
-  image_8?: string;
+  images?: string[];
   tech_check?: string;
   accessories?: string;
   seats?: number;
@@ -184,23 +177,16 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Create car (authenticated users can create cars)
-router.post('/', authenticateToken, upload.fields([
-  { name: 'image_1', maxCount: 1 },
-  { name: 'image_2', maxCount: 1 },
-  { name: 'image_3', maxCount: 1 },
-  { name: 'image_4', maxCount: 1 },
-  { name: 'image_5', maxCount: 1 },
-  { name: 'image_6', maxCount: 1 },
-  { name: 'image_7', maxCount: 1 },
-  { name: 'image_8', maxCount: 1 },
-]), async (req: any, res) => {
+router.post('/', authenticateToken, upload.array('images', 40), async (req: any, res) => {
   try {
     let data = req.body;
     const reqWithFiles = req as typeof req & { files?: any };
-    for (let i = 1; i <= 8; i++) {
-      if (reqWithFiles.files && reqWithFiles.files[`image_${i}`]) {
-        data[`image_${i}`] = `/img/cars/${reqWithFiles.files[`image_${i}`][0].filename}`;
-      }
+    
+    // Handle images array
+    if (reqWithFiles.files && Array.isArray(reqWithFiles.files)) {
+      data.images = reqWithFiles.files.map((file: any) => `/img/cars/${file.filename}`);
+    } else {
+      data.images = [];
     }
     
     // Validate required fields
@@ -329,7 +315,7 @@ router.get('/public/test', async (_req, res) => {
     
     // Test if cars table exists
     const [tableTest]: any = await pool.query('SHOW TABLES LIKE "cars"');
-    console.log('Cars table exists:', tableTest.length > 0);
+    console.log('cars table exists:', tableTest.length > 0);
     
     // Test if brand table exists
     const [brandTableTest]: any = await pool.query('SHOW TABLES LIKE "brand"');
@@ -345,7 +331,7 @@ router.get('/public/test', async (_req, res) => {
     
     // Test cars table structure
     const [carsStructure]: any = await pool.query('DESCRIBE cars');
-    console.log('Cars table structure:', carsStructure);
+    console.log('cars table structure:', carsStructure);
     
     // Test getting cars
     const cars = await getAllCars();
@@ -398,8 +384,23 @@ router.get('/public/approved', async (_req, res) => {
       WHERE cars.approved = true
       ORDER BY cars.created_at DESC
     `);
-    console.log('Approved cars found:', rows.length);
-    res.json(rows);
+    
+    // Parse images JSON for each car
+    const parsedRows = rows.map((car: any) => {
+      if (car.images) {
+        try {
+          car.images = JSON.parse(car.images).filter((img: string) => img && img.trim() !== '');
+        } catch (e) {
+          car.images = [];
+        }
+      } else {
+        car.images = [];
+      }
+      return car;
+    });
+    
+    console.log('Approved cars found:', parsedRows.length);
+    res.json(parsedRows);
   } catch (err: any) {
     console.error('Error fetching approved cars:', err);
     res.status(500).json({ message: 'Failed to fetch approved cars.', error: err.message });
@@ -713,8 +714,23 @@ router.get('/public/filtered', async (req, res) => {
     console.log('Filter params:', params);
 
     const [rows]: any = await pool.query(query, params);
-    console.log('Filtered cars found:', rows.length);
-    res.json(rows);
+    
+    // Parse images JSON for each car
+    const parsedRows = rows.map((car: any) => {
+      if (car.images) {
+        try {
+          car.images = JSON.parse(car.images).filter((img: string) => img && img.trim() !== '');
+        } catch (e) {
+          car.images = [];
+        }
+      } else {
+        car.images = [];
+      }
+      return car;
+    });
+    
+    console.log('Filtered cars found:', parsedRows.length);
+    res.json(parsedRows);
   } catch (err: any) {
     console.error('Filter error:', err);
     res.status(500).json({ message: 'Failed to fetch filtered cars.', error: err.message });
@@ -741,7 +757,19 @@ router.get('/:id', async (req, res) => {
       return res.status(404).json({ message: 'Car not found or not approved.' });
     }
     
-    res.json(rows[0]);
+    const car = rows[0];
+    // Parse images JSON and filter out empty strings
+    if (car.images) {
+      try {
+        car.images = JSON.parse(car.images).filter((img: string) => img && img.trim() !== '');
+      } catch (e) {
+        car.images = [];
+      }
+    } else {
+      car.images = [];
+    }
+    
+    res.json(car);
   } catch (err: any) {
     console.error('Error fetching car:', err);
     res.status(500).json({ message: 'Failed to fetch car.', error: err.message });
@@ -776,7 +804,19 @@ router.get('/edit/:id', authenticateToken, async (req: any, res) => {
       return res.status(404).json({ message: 'Car not found or access denied.' });
     }
     
-    res.json(rows[0]);
+    const car = rows[0];
+    // Parse images JSON and filter out empty strings
+    if (car.images) {
+      try {
+        car.images = JSON.parse(car.images).filter((img: string) => img && img.trim() !== '');
+      } catch (e) {
+        car.images = [];
+      }
+    } else {
+      car.images = [];
+    }
+    
+    res.json(car);
   } catch (err: any) {
     console.error('Error fetching car for editing:', err);
     res.status(500).json({ message: 'Failed to fetch car.', error: err.message });
@@ -784,16 +824,7 @@ router.get('/edit/:id', authenticateToken, async (req: any, res) => {
 });
 
 // Update car (user can edit their own cars, admin can edit any car)
-router.put('/:id', authenticateToken, upload.fields([
-  { name: 'image_1', maxCount: 1 },
-  { name: 'image_2', maxCount: 1 },
-  { name: 'image_3', maxCount: 1 },
-  { name: 'image_4', maxCount: 1 },
-  { name: 'image_5', maxCount: 1 },
-  { name: 'image_6', maxCount: 1 },
-  { name: 'image_7', maxCount: 1 },
-  { name: 'image_8', maxCount: 1 },
-]), async (req: any, res) => {
+router.put('/:id', authenticateToken, upload.array('images', 40), async (req: any, res) => {
   try {
     const id = Number(req.params.id);
     const userId = req.user.id;
@@ -811,9 +842,17 @@ router.put('/:id', authenticateToken, upload.fields([
 
     let data = req.body;
     const reqWithFiles = req as typeof req & { files?: any };
-    for (let i = 1; i <= 8; i++) {
-      if (reqWithFiles.files && reqWithFiles.files[`image_${i}`]) {
-        data[`image_${i}`] = `/img/cars/${reqWithFiles.files[`image_${i}`][0].filename}`;
+    
+    // Handle images array - if new images are uploaded, use them; otherwise keep existing
+    if (reqWithFiles.files && Array.isArray(reqWithFiles.files) && reqWithFiles.files.length > 0) {
+      data.images = reqWithFiles.files.map((file: any) => `/img/cars/${file.filename}`);
+    } else if (data.existingImages) {
+      // If existingImages is sent from frontend, use it (for reordering/deleting without new uploads)
+      try {
+        data.images = JSON.parse(data.existingImages);
+      } catch (e) {
+        // If parsing fails, keep the existing images from the database
+        data.images = car.images;
       }
     }
     
