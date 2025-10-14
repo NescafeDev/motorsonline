@@ -405,6 +405,7 @@ export default function SearchPageMobile() {
     fuel: car.fuelType || 'N/A',
     transmission: car.transmission || 'N/A',
     image: car.images?.[0] || "img/Rectangle 34624924.png",
+    images: car.images,
     isFavorite: isFavorite(car.id),
     power: car.power || 'N/A',
     ownerCount: car.ownerCount || 'N/A',

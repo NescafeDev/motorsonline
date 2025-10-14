@@ -1,4 +1,4 @@
-import { HeartIcon, SearchIcon , MapPin} from "lucide-react";
+import { HeartIcon, SearchIcon , MapPin, ChevronLeft, ChevronRight} from "lucide-react";
 import { Badge } from "../components/ui/badge";
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
@@ -220,6 +220,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filtersApplied, setFiltersApplied] = useState(false);
+  const [carImageIndices, setCarImageIndices] = useState<{[key: number]: number}>({});
   const getVatDisplayText = (car: Car | null) => {
     if (!car) return '';
 
@@ -362,20 +363,51 @@ export default function HomePage() {
     setFiltersApplied(false); // Reset filter state when searching
   };
 
+  // Image navigation functions
+  const handlePreviousImage = (carId: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const car = cars.find(c => c.id === carId);
+    if (!car || !car.images || car.images.length <= 1) return;
+    
+    setCarImageIndices(prev => ({
+      ...prev,
+      [carId]: prev[carId] === 0 ? car.images.length - 1 : (prev[carId] || 0) - 1
+    }));
+  };
+
+  const handleNextImage = (carId: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const car = cars.find(c => c.id === carId);
+    if (!car || !car.images || car.images.length <= 1) return;
+    
+    setCarImageIndices(prev => ({
+      ...prev,
+      [carId]: (prev[carId] || 0) === car.images.length - 1 ? 0 : (prev[carId] || 0) + 1
+    }));
+  };
+
   // Format car data for display
-  const formatCarForDisplay = (car: Car) => ({
-    image: car.images?.[0] || "img/Rectangle 34624924.png",
-    title: `${car.brand_name || 'Unknown'} ${car.model_name || ''} ${car.modelDetail || ''}`,
-    details: `${car.year_value || 'N/A'}, ${car.mileage?.toLocaleString() || 'N/A'} km`,
-    fuel: car.fuelType || 'N/A',
-    transmission: car.transmission || 'N/A',
-    price: `€ ${car.price?.toLocaleString() || 'N/A'}`,
-    isFavorite: false,
-    discountPrice: `€ ${car.discountPrice?.toLocaleString() || 'N/A'}`,
-    discountPercentage: discountPercentage(car),
-    major: car.major || '',
-    address: car.address || ''
-  });
+  const formatCarForDisplay = (car: Car) => {
+    const currentImageIndex = carImageIndices[car.id] || 0;
+    const allImages = car.images && car.images.length > 0 ? car.images.filter(img => img && img.trim() !== '') : [];
+    const currentImage = allImages.length > 0 ? allImages[currentImageIndex] : "img/Rectangle 34624924.png";
+    
+    return {
+      image: currentImage,
+      images: allImages,
+      currentImageIndex,
+      title: `${car.brand_name || 'Unknown'} ${car.model_name || ''} ${car.modelDetail || ''}`,
+      details: `${car.year_value || 'N/A'}, ${car.mileage?.toLocaleString() || 'N/A'} km`,
+      fuel: car.fuelType || 'N/A',
+      transmission: car.transmission || 'N/A',
+      price: `€ ${car.price?.toLocaleString() || 'N/A'}`,
+      isFavorite: false,
+      discountPrice: `€ ${car.discountPrice?.toLocaleString() || 'N/A'}`,
+      discountPercentage: discountPercentage(car),
+      major: car.major || '',
+      address: car.address || ''
+    };
+  };
 
   return (
     <PageContainer>
@@ -433,11 +465,43 @@ export default function HomePage() {
                               window.scrollTo(0, 0);
                             }}
                           >
-                            <img
-                              className="w-full h-[189px] object-cover"
-                              alt="Car"
-                              src={displayCar.image}
-                            />
+                            <div className="relative group">
+                              <img
+                                className="w-full h-[189px] object-cover"
+                                alt="Car"
+                                src={displayCar.image}
+                              />
+                              
+                              {/* Navigation arrows - only show if there are multiple images */}
+                              {displayCar.images && displayCar.images.length > 1 && (
+                                <>
+                                  {/* Previous button */}
+                                  <button
+                                    onClick={(e) => handlePreviousImage(car.id, e)}
+                                    className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-40 hover:bg-opacity-70 rounded-full p-2 shadow-lg transition-all duration-200 hover:shadow-xl z-10 opacity-0 group-hover:opacity-100"
+                                    aria-label="Previous image"
+                                  >
+                                    <ChevronLeft className="w-4 h-4 text-gray-700" />
+                                  </button>
+
+                                  {/* Next button */}
+                                  <button
+                                    onClick={(e) => handleNextImage(car.id, e)}
+                                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-40 hover:bg-opacity-70 rounded-full p-2 shadow-lg transition-all duration-200 hover:shadow-xl z-10 opacity-0 group-hover:opacity-100"
+                                    aria-label="Next image"
+                                  >
+                                    <ChevronRight className="w-4 h-4 text-gray-700" />
+                                  </button>
+                                </>
+                              )}
+
+                              {/* Image counter */}
+                              {displayCar.images && displayCar.images.length > 1 && (
+                                <div className="absolute bottom-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                  {displayCar.currentImageIndex + 1} / {displayCar.images.length}
+                                </div>
+                              )}
+                            </div>
 
                             <CardContent className="p-4 pt-5 pb-2 relative">
                               <div className="grid grid-cols-6">
@@ -478,7 +542,7 @@ export default function HomePage() {
                               </span>
                               <div className="grid grid-cols-2 gap-y-2 mb-2">
                                 {getVehicleDetails(car, t).map((detail, index) => (
-                                  <div key={index} className="flex items-center w-full h-[50px]">
+                                  <div key={index} className="flex items-center w-full h-[40px]">
                                     <div className="w-[35px] h-[35px] relative flex-shrink-0">
                                       <img
                                         className="w-[25px] h-[25px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"

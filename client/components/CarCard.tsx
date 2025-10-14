@@ -1,11 +1,12 @@
-import { Edit, Trash2, Eye, MapPin } from "lucide-react";
-import React from "react";
+import { Edit, Trash2, Eye, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
+import React, { useState } from "react";
 import { useI18n } from "@/contexts/I18nContext";
 
 interface CarCardProps {
   title: string;
   breadcrumb: string;
   image: string;
+  images?: string[];
   description: string;
   price: string;
   originalPrice?: string;
@@ -135,6 +136,7 @@ export const CarCard: React.FC<CarCardProps> = ({
   title,
   breadcrumb,
   image,
+  images,
   description,
   price,
   originalPrice,
@@ -158,17 +160,67 @@ export const CarCard: React.FC<CarCardProps> = ({
   onPreview,
 }) => {
   const { t } = useI18n();
+  
+  // Image navigation state
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+  // Prepare images array - use images prop if available, otherwise fallback to single image
+  const allImages = images && images.length > 0 ? images.filter(img => img && img.trim() !== '') : [image].filter(img => img && img.trim() !== '');
+  const currentImage = allImages[currentImageIndex] || image;
+  
+  // Navigation functions
+  const handlePreviousImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
+  };
+  
+  const handleNextImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prev) => (prev === allImages.length - 1 ? 0 : prev + 1));
+  };
   return (
     <div className={`w-100 h-[307px] relative cursor-pointer`} onClick={onPreview ? onPreview : () => { }}>
       {/* Main Card Background */}
       <div className={`w-full h-full ${className} rounded-[10px] absolute left-0 top-0`}></div>
 
-      {/* Car Image */}
-      <img
-        src={image}
-        alt={title}
-        className="w-[310px] h-[227px] rounded-[10px] absolute left-[30px] top-[40px] object-cover"
-      />
+      {/* Car Image with Navigation */}
+      <div className="w-[310px] h-[227px] absolute left-[30px] top-[40px] group">
+        <img
+          src={currentImage}
+          alt={title}
+          className="w-full h-full rounded-[10px] object-cover"
+        />
+        
+        {/* Navigation arrows - only show if there are multiple images */}
+        {allImages.length > 1 && (
+          <>
+            {/* Previous button */}
+            <button
+              onClick={handlePreviousImage}
+              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-40 hover:bg-opacity-70 rounded-full p-2 shadow-lg transition-all duration-200 hover:shadow-xl z-10 opacity-0 group-hover:opacity-100"
+              aria-label="Previous image"
+            >
+              <ChevronLeft className="w-4 h-4 text-gray-700" />
+            </button>
+
+            {/* Next button */}
+            <button
+              onClick={handleNextImage}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-40 hover:bg-opacity-70 rounded-full p-2 shadow-lg transition-all duration-200 hover:shadow-xl z-10 opacity-0 group-hover:opacity-100"
+              aria-label="Next image"
+            >
+              <ChevronRight className="w-4 h-4 text-gray-700" />
+            </button>
+          </>
+        )}
+
+        {/* Image counter */}
+        {allImages.length > 1 && (
+          <div className="absolute bottom-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            {currentImageIndex + 1} / {allImages.length}
+          </div>
+        )}
+      </div>
 
       {/* Car Title */}
       <h3 className="text-[#1A202C] font-['Poppins'] text-[30px] font-bold leading-[150%] tracking-[-0.9px] absolute left-[370px] top-[30px] w-fit h-[45px]">
@@ -284,15 +336,18 @@ export const CarCard: React.FC<CarCardProps> = ({
               <span className="text-[#1A202C] font-['Poppins'] text-[12px] font-medium">{ownerCount}</span>
             </div>
           )}
-
         </div>
       )}
-      <div className="absolute left-[370px] bottom-[30px] flex items-center gap-[4px]">
-        <MapPin className="w-6 h-6" />
-        <span className="text-[#1A202C] font-['Poppins'] text-[14px] font-medium">
-          Tuleviku tee 4a Peetri, 75312 Harju maakond
-        </span>
-      </div>
+      
+      {hideBottomIcons && (
+        <div className="absolute left-[370px] bottom-[30px] flex items-center gap-[4px]">
+          <MapPin className="w-6 h-6" />
+          <span className="text-[#1A202C] font-['Poppins'] text-[14px] font-medium">
+            Tuleviku tee 4a Peetri, 75312 Harju maakond
+          </span>
+        </div>
+      )}
+
 
       {/* Bottom Section */}
       {!hideBottomIcons && (

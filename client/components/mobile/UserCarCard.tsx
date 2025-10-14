@@ -1,5 +1,5 @@
-import React from "react";
-import { Eye, Heart, Edit, Trash2, } from "lucide-react";
+import React, { useState } from "react";
+import { Eye, Heart, Edit, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 
 interface UserCarCardProps {
@@ -7,6 +7,7 @@ interface UserCarCardProps {
   title: string;
   breadcrumb: string;
   image: string;
+  images?: string[];
   description: string;
   price: string;
   originalPrice?: string;
@@ -25,6 +26,7 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
   title,
   breadcrumb,
   image,
+  images,
   description,
   price,
   originalPrice,
@@ -39,19 +41,67 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
 }) => {
   const navigate = useNavigate();
   const { lang } = useParams<{ lang: string }>();
+  
+  // Image navigation state
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+  // Prepare images array - use images prop if available, otherwise fallback to single image
+  const allImages = images && images.length > 0 ? images.filter(img => img && img.trim() !== '') : [image].filter(img => img && img.trim() !== '');
+  const currentImage = allImages[currentImageIndex] || image;
+  
+  // Navigation functions
+  const handlePreviousImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
+  };
+  
+  const handleNextImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prev) => (prev === allImages.length - 1 ? 0 : prev + 1));
+  };
 
   const handleViewCar = () => {
     navigate(`/${lang || 'ee'}/car/${id}`);
   };
   return (
-    <div className="bg-white rounded-[13px] overflow-hidden shadow-sm w-full max-w-md mx-auto">
+    <div className="bg-white rounded-[13px] overflow-hidden shadow-sm w-full xl:w-full mx-auto">
       {/* Image Section */}
-      <div className="relative mb-5">
+      <div className="relative mb-5 group">
         <img
-          src={image}
+          src={currentImage}
           alt={title}
-          className="w-full h-[247px] object-cover"
+          className="w-full h-auto object-cover"
         />
+        
+        {/* Navigation arrows - only show if there are multiple images */}
+        {allImages.length > 1 && (
+          <>
+            {/* Previous button */}
+            <button
+              onClick={handlePreviousImage}
+              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-40 hover:bg-opacity-70 rounded-full p-2 shadow-lg transition-all duration-200 hover:shadow-xl z-10 opacity-0 group-hover:opacity-100"
+              aria-label="Previous image"
+            >
+              <ChevronLeft className="w-4 h-4 text-gray-700" />
+            </button>
+
+            {/* Next button */}
+            <button
+              onClick={handleNextImage}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-40 hover:bg-opacity-70 rounded-full p-2 shadow-lg transition-all duration-200 hover:shadow-xl z-10 opacity-0 group-hover:opacity-100"
+              aria-label="Next image"
+            >
+              <ChevronRight className="w-4 h-4 text-gray-700" />
+            </button>
+          </>
+        )}
+
+        {/* Image counter */}
+        {allImages.length > 1 && (
+          <div className="absolute bottom-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            {currentImageIndex + 1} / {allImages.length}
+          </div>
+        )}
 
         {/* Discount Badge */}
         {discount && (
