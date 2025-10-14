@@ -50,6 +50,7 @@ export interface Car {
   businessType: string;
   socialNetwork: string;
   email: string;
+  address?: string;
   images?: string[];
   tech_check?: string;
   accessories?: string;

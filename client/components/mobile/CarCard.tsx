@@ -1,4 +1,4 @@
-import { Heart, Fuel } from "lucide-react";
+import { Heart, Fuel, MapPin } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useFavorites } from "../../hooks/useFavorites";
 import { useAuth } from "../../contexts/AuthContext";
@@ -20,6 +20,7 @@ interface CarCardProps {
   power?: string;
   ownerCount?: string;
   month?: string;
+  address?: string;
 }
 
 export function CarCard({
@@ -38,6 +39,7 @@ export function CarCard({
   power,
   ownerCount,
   month,
+  address,
 }: CarCardProps) {
   const navigate = useNavigate();
   const { lang } = useParams<{ lang: string }>();
@@ -93,7 +95,7 @@ export function CarCard({
             </button>
           </div>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 p-1">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 px-5">
           {/* Mileage */}
           <div className="flex items-center bg-white rounded-lg p-2">
             <div className="w-8 h-8 relative flex-shrink-0">
@@ -109,7 +111,21 @@ export function CarCard({
               </span>
             </div>
           </div>
-
+          {/* First Registration */}
+          <div className="flex items-center bg-white rounded-lg p-2">
+            <div className="w-8 h-8 relative flex-shrink-0">
+              <img
+                className="w-7 h-7 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                alt="First Registration"
+                src="/img/car/calendar.png"
+              />
+            </div>
+            <div className="flex flex-col min-w-0 flex-1 ml-1 justify-center">
+              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
+                {year} - {month ? (month.length === 1 ? `0${month}` : month) : 'N/A'}
+              </span>
+            </div>
+          </div>
           {/* Power */}
           <div className="flex items-center bg-white rounded-lg p-2">
             <div className="w-8 h-8 relative flex-shrink-0">
@@ -122,6 +138,21 @@ export function CarCard({
             <div className="flex flex-col min-w-0 flex-1 ml-1 justify-center">
               <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
                 {power || 'N/A'} kw
+              </span>
+            </div>
+          </div>
+          {/* Fuel */}
+          <div className="flex items-center bg-white rounded-lg p-2">
+            <div className="w-8 h-8 relative flex-shrink-0">
+              <img
+                className="w-7 h-7 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                alt="Fuel type"
+                src="/img/car/gas_station.png"
+              />
+            </div>
+            <div className="flex flex-col min-w-0 flex-1 ml-1 justify-center">
+              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
+                {fuel}
               </span>
             </div>
           </div>
@@ -142,38 +173,7 @@ export function CarCard({
             </div>
           </div>
 
-          {/* First Registration */}
-          <div className="flex items-center bg-white rounded-lg p-2">
-            <div className="w-8 h-8 relative flex-shrink-0">
-              <img
-                className="w-7 h-7 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                alt="First Registration"
-                src="/img/car/calendar.png"
-              />
-            </div>
-            <div className="flex flex-col min-w-0 flex-1 ml-1 justify-center">
-              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
-                {year} - {month ? (month.length === 1 ? `0${month}` : month) : 'N/A'}
-              </span>
-            </div>
-          </div>
-
-          {/* Fuel */}
-          <div className="flex items-center bg-white rounded-lg p-2">
-            <div className="w-8 h-8 relative flex-shrink-0">
-              <img
-                className="w-7 h-7 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                alt="Fuel type"
-                src="/img/car/gas_station.png"
-              />
-            </div>
-            <div className="flex flex-col min-w-0 flex-1 ml-1 justify-center">
-              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
-                {fuel}
-              </span>
-            </div>
-          </div>
-
+          
           {/* Owner Count */}
           <div className="flex items-center bg-white rounded-lg p-2">
             <div className="w-8 h-8 relative flex-shrink-0">
@@ -216,6 +216,13 @@ export function CarCard({
           <p className="text-[#747474] text-xs tracking-[-0.2px] leading-[16px] mt-1 text-start">
             {vatNote}
           </p>
+        </div>
+        <Separator className="my-3" />
+        <div className="flex items-center gap-2 mx-2 my-3 justify-center">
+          <MapPin className="w-5 h-5 text-secondary-500 flex-shrink-0" />
+          <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
+            {address || 'Tuleviku tee 4a Peetri, 75312 Harju maakond'}
+          </span>
         </div>
         {/* <div className="flex items-start justify-between mb-4">
           <div className="flex-1">

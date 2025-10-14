@@ -46,6 +46,7 @@ export interface Car {
   businessType: string;
   socialNetwork: string;
   email: string;
+  address?: string;
   images?: string[];
   tech_check?: string;
   accessories?: string;
@@ -376,6 +377,7 @@ export default function HomePageMobile() {
     ownerCount: car.ownerCount || 'N/A',
     month: car.month || 'N/A',
     major: car.major,
+    address: car.address || 'Tuleviku tee 4a Peetri, 75312 Harju maakond',
   });
 
 

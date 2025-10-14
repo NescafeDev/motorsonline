@@ -1,4 +1,4 @@
-import { HeartIcon, SearchIcon } from "lucide-react";
+import { HeartIcon, SearchIcon , MapPin} from "lucide-react";
 import { Badge } from "../components/ui/badge";
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
@@ -77,6 +77,7 @@ export interface Car {
   carColorType?: string;
   carColor?: string;
   major?: string;
+  address?: string;
 }
 
 export interface CarFilters {
@@ -125,6 +126,7 @@ export interface CarFilters {
   carColorType?: string;
   carColor?: string;
   major?: string;
+  address?: string;
 }
 
 // Vehicle details data function
@@ -372,6 +374,7 @@ export default function HomePage() {
     discountPrice: `€ ${car.discountPrice?.toLocaleString() || 'N/A'}`,
     discountPercentage: discountPercentage(car),
     major: car.major || '',
+    address: car.address || ''
   });
 
   return (
@@ -436,7 +439,7 @@ export default function HomePage() {
                               src={displayCar.image}
                             />
 
-                            <CardContent className="p-4 pt-5 pb-4 relative">
+                            <CardContent className="p-4 pt-5 pb-2 relative">
                               <div className="grid grid-cols-6">
                                 <div className="col-span-5 h-[50px] pt-4">
                                   <h1 className="text-[20px] pl-[5px] font-semibold text-secondary-500 tracking-[-1.20px] leading-[25px] [font-family:'Poppins',Helvetica] ">
@@ -473,7 +476,7 @@ export default function HomePage() {
                               <span className="text-black text-[15px] pl-[5px] tracking-[0.34px] leading-[normal] [font-family:'Poppins',Helvetica] font-medium">
                                 {car.major}
                               </span>
-                              <div className="grid grid-cols-2 gap-y-2 mb-8">
+                              <div className="grid grid-cols-2 gap-y-2 mb-2">
                                 {getVehicleDetails(car, t).map((detail, index) => (
                                   <div key={index} className="flex items-center w-full h-[50px]">
                                     <div className="w-[35px] h-[35px] relative flex-shrink-0">
@@ -524,6 +527,13 @@ export default function HomePage() {
                                   </div>
                                 </div>
 
+                              </div>
+                              <Separator className="my-3" />
+                              <div className="flex items-center gap-2 mx-1 my-2 justify-center h-[20px] text-center">
+                                <MapPin className="w-5 h-5 text-secondary-500 flex-shrink-0" />
+                                <span className="font-medium text-secondary-500 text-xs tracking-[-0.3px] leading-[20px]">
+                                  Tuleviku tee 4a Peetri
+                                </span>
                               </div>
                             </CardContent>
                           </Card>
