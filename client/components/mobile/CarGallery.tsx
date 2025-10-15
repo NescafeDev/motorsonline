@@ -72,7 +72,7 @@ export default function CarGallery({
         <img
           src={allImages[currentImageIndex]}
           alt="Car main view"
-          className="w-full h-full object-fit rounded-[10px] cursor-pointer hover:opacity-95 transition-opacity"
+          className="w-full h-[380px] object-fit rounded-[10px] cursor-pointer hover:opacity-95 transition-opacity"
           onClick={handleMainImageClick}
           onKeyDown={handleKeyDown}
           tabIndex={0}

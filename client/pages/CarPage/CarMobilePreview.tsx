@@ -1,5 +1,5 @@
 import { ChevronDownIcon, HeartIcon } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
@@ -24,7 +24,8 @@ interface CarMobilePreviewProps {
 export default function CarMobilePreview({ formData, contactFormData, checkboxes, brands, models, years, driveTypes, carImages }: CarMobilePreviewProps) {
     const { user } = useAuth();
     const { t } = useI18n();
-    
+    const [showAllTechSpecs, setShowAllTechSpecs] = useState(false);
+
     // Function to get VAT display text
     const getVatDisplayText = (car: any) => {
         if (!car) return '';
@@ -75,7 +76,12 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
             email: contactFormData.email || '',
             language: contactFormData.language || '',
             website: contactFormData.website || '',
-            address: contactFormData.address || ''
+            address: contactFormData.address || '',
+            vinCode: formData.vinCode || '',
+            doors: formData.doors || '',
+            bodyType: formData.bodyType || '',
+            salonColor: formData.salonColor || '',
+            color: formData.color || '',
         };
     };
 
@@ -120,14 +126,21 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
 
     // Technical specifications data
     const technicalSpecs = [
-        { label: "Tehnilised andmed", value: car.technicalData },
-        { label: t('formLabels.displacement') + ":", value: car.displacement },
-        { label: t('formLabels.categoryDesignation') + ":", value: car.category },
-        { label: t('carSpecs.power') + ":", value: car.power },
+        { label: t('formLabels.vehicleCondition') + ':', value: car.technicalData },
+        { label: t('formLabels.displacement') + ':', value: car.displacement },
+        { label: t('formLabels.categoryDesignation') + ':', value: car.category },
+        { label: t('formLabels.powerKw') + ':', value: car.power },
         { label: t('formLabels.vehicleNumber'), value: car.plateNumber },
-        { label: t('formLabels.driveType') + ":", value: car.drive_type_ee_name },
-        { label: t('carSpecs.mileage') + ":", value: `${car.mileage.toLocaleString()} km` },
-        { label: t('formLabels.fuelType') + ":", value: car.fuelType },
+        { label: t('formLabels.driveType') + ':', value: car.drive_type_ee_name },
+        { label: t('carSpecs.mileage') + ':', value: `${car.mileage.toLocaleString()} km` },
+        { label: t('formLabels.fuelType') + ':', value: car.fuelType },
+        { label: t('formLabels.ownerCountLabel') + ':', value: car.ownerCount },
+        { label: t('formLabels.vinCode') + ':', value: car.vinCode },
+        { label: t('formLabels.year') + ':', value: car.year_value },
+        { label: t('formLabels.doors') + ':', value: car.doors },
+        { label: t('formLabels.bodyType') + ':', value: car.bodyType },
+        { label: t('formLabels.interiorColor') + ':', value: car.salonColor },
+        { label: t('formLabels.color') + ':', value: car.color },
     ];
 
     // Equipment features data - parse from equipment string
@@ -255,7 +268,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                         <Card className="bg-[#f6f7f9] rounded-[10px] border-none">
                             <CardContent className="p-4">
                                 <h2 className="font-semibold text-secondary-500 text-lg tracking-[-0.4px] leading-[24px] mb-4">
-                                    Tehnilised andmed
+                                    {t('formLabels.technicalSpecs')}
                                 </h2>
 
                                 <div className="grid grid-cols-2 gap-3">
@@ -330,7 +343,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                         </h2>
 
                         <div className="space-y-3">
-                            {technicalSpecs.map((spec, index) => (
+                            {(showAllTechSpecs ? technicalSpecs : technicalSpecs.slice(0, 6)).map((spec, index) => (
                                 <div
                                     key={index}
                                     className="bg-white rounded-[10px] p-3 flex justify-between items-center"
@@ -345,15 +358,18 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                             ))}
                         </div>
 
-                        <div className="flex justify-center mt-6">
-                            <Button
-                                variant="outline"
-                                className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2 px-4 py-2"
-                            >
-                                {t('formLabels.showMore')}
-                                <ChevronDownIcon className="w-4 h-4" />
-                            </Button>
-                        </div>
+                        {technicalSpecs.length > 6 && (
+                            <div className="flex justify-center mt-6">
+                                <Button
+                                    variant="outline"
+                                    className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2 px-4 py-2"
+                                    onClick={() => setShowAllTechSpecs(!showAllTechSpecs)}
+                                >
+                                    {showAllTechSpecs ? t('formLabels.showLess') : t('formLabels.showMore')}
+                                    <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${showAllTechSpecs ? 'rotate-180' : ''}`} />
+                                </Button>
+                            </div>
+                        )}
                     </CardContent>
                 </Card>
 

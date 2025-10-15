@@ -28,6 +28,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
   const sidebarRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const [sidebarTop, setSidebarTop] = useState(0);
+  const [showAllTechSpecs, setShowAllTechSpecs] = useState(false);
   const offset = 20; // px from top of viewport
   const { user } = useAuth();
   // Function to get VAT display text
@@ -113,7 +114,12 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
       email: contactFormData.email || '',
       language: contactFormData.language || '',
       website: contactFormData.website || '',
-      address: contactFormData.address || ''
+      address: contactFormData.address || '',
+      vinCode: formData.vinCode || '',
+      doors: formData.doors || '',
+      bodyType: formData.bodyType || '',
+      salonColor: formData.salonColor || '',
+      color: formData.color || '',
     };
   };
 
@@ -158,14 +164,21 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
 
   // Technical specifications data
   const technicalSpecs = [
-    { label: t('formLabels.technicalSpecs'), value: car.technicalData },
+    { label: t('formLabels.vehicleCondition') + ':', value: car.technicalData },
     { label: t('formLabels.displacement') + ':', value: car.displacement },
     { label: t('formLabels.categoryDesignation') + ':', value: car.category },
-    { label: t('carSpecs.power') + ':', value: car.power },
-    { label: t('formLabels.vehicleNumber'), value: car.plateNumber },
+    { label: t('formLabels.powerKw') + ':', value: car.power },
+    { label: t('formLabels.vehicleNumber') , value: car.plateNumber },
     { label: t('formLabels.driveType') + ':', value: car.drive_type_ee_name },
     { label: t('carSpecs.mileage') + ':', value: `${car.mileage.toLocaleString()} km` },
     { label: t('formLabels.fuelType') + ':', value: car.fuelType },
+    { label: t('formLabels.ownerCountLabel') + ':' , value:car.ownerCount},
+    { label: t('formLabels.vinCode') + ':' , value:car.vinCode},
+    { label: t('formLabels.year') + ':' , value:car.year_value},
+    { label: t('formLabels.doors') + ':' , value:car.doors},
+    { label: t('formLabels.bodyType') + ':' , value:car.bodyType},
+    { label: t('formLabels.interiorColor') + ':' , value:car.salonColor},
+    { label: t('formLabels.color') + ':' , value:car.color},
   ];
 
   // Equipment features data - get from checkboxes
@@ -261,11 +274,11 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
               <Card className="w-full mt-10 bg-[#f6f7f9] rounded-[10px] border-none">
                 <CardContent className="p-5">
                   <h2 className="font-semibold text-secondary-500 text-xl tracking-[-0.60px] leading-[30px] [font-family:'Poppins',Helvetica] mb-6">
-                    Tehnilised andmed
+                    {t('formLabels.technicalSpecs')}
                   </h2>
 
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    {technicalSpecs.map((spec, index) => (
+                    {(showAllTechSpecs ? technicalSpecs : technicalSpecs.slice(0, 6)).map((spec, index) => (
                       <div
                         key={index}
                         className="bg-white rounded-[10px] p-2.5 flex justify-between items-center"
@@ -280,15 +293,18 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
                     ))}
                   </div>
 
-                  <div className="flex justify-center mt-8">
-                    <Button
-                      variant="outline"
-                      className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2.5"
-                    >
-                      Näita rohkem
-                      <ChevronDownIcon className="w-4 h-4" />
-                    </Button>
-                  </div>
+                  {technicalSpecs.length > 6 && (
+                    <div className="flex justify-center mt-8">
+                      <Button
+                        variant="outline"
+                        className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2.5"
+                        onClick={() => setShowAllTechSpecs(!showAllTechSpecs)}
+                      >
+                        {showAllTechSpecs ? t('formLabels.showLess') : t('formLabels.showMore')}
+                        <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${showAllTechSpecs ? 'rotate-180' : ''}`} />
+                      </Button>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
@@ -297,7 +313,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
                 <Card className="w-full mt-10 bg-[#f6f7f9] rounded-[10px] border-none">
                   <CardContent className="p-5">
                     <h2 className="font-semibold text-secondary-500 text-xl tracking-[-0.60px] leading-[30px] [font-family:'Poppins',Helvetica] mb-6">
-                      Kõrgema väärtusega lisvarustus 
+                      {t('formLabels.higherValueAccessories')}
                     </h2>
 
                     <div className="grid grid-cols-2 gap-4">
@@ -321,7 +337,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
                         variant="outline"
                         className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2.5"
                       >
-                        Näita rohkem
+                        {t('formLabels.showMore')}
                         <ChevronDownIcon className="w-4 h-4" />
                       </Button>
                     </div>
@@ -366,7 +382,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
                     </div>
 
                     <h2 className="mt-10 font-semibold text-secondary-500 text-[16px] tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica]">
-                      Tehnilised andmed
+                      {t('formLabels.technicalSpecs')}
                     </h2>
 
                     <div className="grid grid-cols-2 gap-y-3 gap-x-1 mt-6">
@@ -430,7 +446,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
                           <Button
                             className="bg-[#06d6a0] text-white rounded-[10px] px-[30px] py-[15px]"
                           >
-                            Saada e-mail
+                            {t('formLabels.sendEmail')}
                           </Button>
                           
                         </div>

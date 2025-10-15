@@ -1,4 +1,4 @@
-import { Heart, Check, MapPin } from "lucide-react";
+import { Heart, Check, MapPin, ChevronDownIcon } from "lucide-react";
 import Header from "@/components/mobile/Header";
 import CarGallery from "@/components/mobile/CarGallery";
 import SpecCard from "@/components/mobile/SpecCard";
@@ -55,6 +55,11 @@ interface CarData {
   created_at?: string;
   modelDetail?: string;
   major?: string;
+  vinCode?: string;
+  doors?: string;
+  bodyType?: string;
+  salonColor?: string;
+  color?: string;
   // Seller information
   businessType?: string;
   country?: string;
@@ -71,6 +76,7 @@ export default function CarPageMobile() {
   const [contacts, setContacts] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showAllTechSpecs, setShowAllTechSpecs] = useState(false);
   const { user } = useAuth();
 
   // Function to get VAT display text
@@ -234,15 +240,25 @@ export default function CarPageMobile() {
   ];
 
   const technicalSpecs = [
-    { label: "Tehnilised andmed", value: car.technicalData },
-    { label: "Töömaht:", value: car.displacement },
-    { label: "Kategooria:", value: car.category },
-    { label: "Võimsus:", value: car.power },
-    { label: "Sõiduki number:", value: car.plateNumber },
-    { label: "Veoskeem:", value: car.drive_type_ee_name },
-    { label: "Läbisõit:", value: `${car.mileage.toLocaleString()} km` },
-    { label: "Kütuse tüüp:", value: car.fuelType },
+    { label: t('formLabels.vehicleCondition') + ':', value: car.technicalData },
+    { label: t('formLabels.displacement') + ':', value: car.displacement },
+    { label: t('formLabels.categoryDesignation') + ':', value: car.category },
+    { label: t('formLabels.powerKw') + ':', value: car.power },
+    { label: t('formLabels.vehicleNumber') , value: car.plateNumber },
+    { label: t('formLabels.driveType') + ':', value: car.drive_type_ee_name },
+    { label: t('carSpecs.mileage') + ':', value: `${car.mileage.toLocaleString()} km` },
+    { label: t('formLabels.fuelType') + ':', value: car.fuelType },
+    { label: t('formLabels.ownerCountLabel') + ':' , value:car.ownerCount},
+    { label: t('formLabels.vinCode') + ':' , value:car.vinCode},
+    { label: t('formLabels.year') + ':' , value:car.year_value},
+    { label: t('formLabels.doors') + ':' , value:car.doors},
+    { label: t('formLabels.bodyType') + ':' , value:car.bodyType},
+    { label: t('formLabels.interiorColor') + ':' , value:car.salonColor},
+    { label: t('formLabels.color') + ':' , value:car.color},
   ];
+
+
+
 
   const equipmentFeatures = car.accessories
     ? car.accessories.split(',').map(item => ({
@@ -321,21 +337,21 @@ export default function CarPageMobile() {
                 value={`${car.mileage.toLocaleString()} km`}
               />
               <SpecCard
+                icon={<CalendarIcon />}
+                label={t('carSpecs.firstRegistration') + ':'}
+                value={car.year_value?.toString() || "N/A"}
+              />
+              <SpecCard
                 icon={<SpeedometerIcon />}
                 label={t('carSpecs.power') + ':'}
-                value={car.power}
+                value={`${car.power} kw`}
               />
+              <SpecCard icon={<FuelIcon />} label={t('carSpecs.fuel') + ':'} value={car.fuelType} />
               <SpecCard
                 icon={<GearboxIcon />}
                 label={t('carSpecs.transmission') + ':'}
                 value={car.transmission}
               />
-              <SpecCard
-                icon={<CalendarIcon />}
-                label={t('carSpecs.firstRegistration') + ':'}
-                value={car.year_value?.toString() || "N/A"}
-              />
-              <SpecCard icon={<FuelIcon />} label={t('carSpecs.fuel') + ':'} value={car.fuelType} />
               <SpecCard icon={<UserIcon />} label={t('carSpecs.ownerCount') + ':'} value={car.ownerCount} />
             </div>
             <Separator className="my-3" />
@@ -388,73 +404,32 @@ export default function CarPageMobile() {
 
         {/* Technical data section */}
         <div className="px-5 mb-6">
-          <ExpandableSection title="Tehnilised andmed">
+          <ExpandableSection title={t('formLabels.technicalSpecs')}>
             <div className="space-y-3">
-              <div className="bg-white rounded-[10px] p-3 flex justify-between">
-                <span className="text-[#1A202C] text-sm font-medium">
-                  {t('formLabels.technicalSpecs')}
-                </span>
-                <span className="text-[#1A202C] text-sm font-normal">
-                  {car.technicalData}
-                </span>
-              </div>
-              <div className="bg-white rounded-[10px] p-3 flex justify-between">
-                <span className="text-[#1A202C] text-sm font-medium">
-                  {t('formLabels.categoryDesignation')}:
-                </span>
-                <span className="text-[#1A202C] text-sm font-normal">
-                  {car.category}
-                </span>
-              </div>
-              <div className="bg-white rounded-[10px] p-3 flex justify-between">
-                <span className="text-[#1A202C] text-sm font-medium">
-                  {t('formLabels.vehicleNumber')}:
-                </span>
-                <span className="text-[#1A202C] text-sm font-normal">
-                  {car.plateNumber}
-                </span>
-              </div>
-              <div className="bg-white rounded-[10px] p-3 flex justify-between">
-                <span className="text-[#1A202C] text-sm font-medium">
-                  {t('carSpecs.mileage') + ':'}
-                </span>
-                <span className="text-[#1A202C] text-sm font-normal">
-                  {car.mileage.toLocaleString()} km
-                </span>
-              </div>
-              <div className="bg-white rounded-[10px] p-3 flex justify-between">
-                <span className="text-[#1A202C] text-sm font-medium">
-                  {t('formLabels.displacement') + ':'}
-                </span>
-                <span className="text-[#1A202C] text-sm font-normal">
-                  {car.displacement} cm³
-                </span>
-              </div>
-              <div className="bg-white rounded-[10px] p-3 flex justify-between">
-                <span className="text-[#1A202C] text-sm font-medium">
-                  {t('carSpecs.power') + ':'}
-                </span>
-                <span className="text-[#1A202C] text-sm font-normal">
-                  {car.power}
-                </span>
-              </div>
-              <div className="bg-white rounded-[10px] p-3 flex justify-between">
-                <span className="text-[#1A202C] text-sm font-medium">
-                  {t('formLabels.driveType') + ':'}
-                </span>
-                <span className="text-[#1A202C] text-sm font-normal">
-                  {car.drive_type_ee_name}
-                </span>
-              </div>
-              <div className="bg-white rounded-[10px] p-3 flex justify-between">
-                <span className="text-[#1A202C] text-sm font-medium">
-                  {t('formLabels.fuelType') + ':'}
-                </span>
-                <span className="text-[#1A202C] text-sm font-normal">
-                  {car.fuelType}
-                </span>
-              </div>
+              {(showAllTechSpecs ? technicalSpecs : technicalSpecs.slice(0, 6)).map((spec, index) => (
+                <div key={index} className="bg-white rounded-[10px] p-3 flex justify-between">
+                  <span className="text-[#1A202C] text-sm font-medium">
+                    {spec.label}
+                  </span>
+                  <span className="text-[#1A202C] text-sm font-normal">
+                    {spec.value}
+                  </span>
+                </div>
+              ))}
             </div>
+            
+            {technicalSpecs.length > 6 && (
+              <div className="flex justify-center mt-4">
+                <Button
+                  variant="outline"
+                  className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2 px-4 py-2"
+                  onClick={() => setShowAllTechSpecs(!showAllTechSpecs)}
+                >
+                  {showAllTechSpecs ? t('formLabels.showLess') : t('formLabels.showMore')}
+                  <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${showAllTechSpecs ? 'rotate-180' : ''}`} />
+                </Button>
+              </div>
+            )}
           </ExpandableSection>
         </div>
 

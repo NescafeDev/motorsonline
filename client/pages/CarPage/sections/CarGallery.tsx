@@ -20,6 +20,11 @@ export default function CarGallery({
   const [selectedImage, setSelectedImage] = useState(0);
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  useEffect(() => {
+    const slide = Math.floor(selectedImage / 4);
+    setCurrentSlide(slide);
+  }, [selectedImage]);
+
   const handleThumbnailClick = (index: number) => {
     setSelectedImage(index);
   };
@@ -29,7 +34,7 @@ export default function CarGallery({
   };
 
   const handleNextImage = () => {
-    setSelectedImage((prev) => (prev === validImages.length - 1 ? 0 : prev + 1));
+    setSelectedImage((prev) => (prev === validImages.length - 1 ? 0 : prev + 1));    
   };
   const [isOpen, setIsOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
@@ -137,7 +142,7 @@ export default function CarGallery({
 
       {/* Thumbnails - show all images including main image */}
       {validImages.length > 0 && (
-        <div className="relative">
+        <div className="relative px-5">
           {/* Thumbnails container with overflow hidden */}
           <div className="flex gap-[7px] overflow-hidden">
             {getCurrentThumbnails().map((thumb, index) => {
@@ -177,7 +182,6 @@ export default function CarGallery({
                   key={index}
                   onClick={() => {
                     goToSlide(index);
-                    // handleThumbnailInteraction();
                   }}
                   className={`w-2 h-2 rounded-full transition-all duration-300 ${currentSlide === index
                       ? 'bg-green-500'
@@ -188,36 +192,6 @@ export default function CarGallery({
               ))}
             </div>
           )}
-
-          {/* Navigation arrows - only show when auto-sliding is active */}
-          {/* {totalSlides > 1 && (
-            <>
-              <button
-                onClick={() => {
-                  setCurrentSlide((prev) => prev === 0 ? totalSlides - 1 : prev - 1);
-                  // handleThumbnailInteraction();
-                }}
-                className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all duration-200"
-                aria-label="Previous slide"
-              >
-                <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
-              <button
-                onClick={() => {
-                  setCurrentSlide((prev) => (prev + 1) % totalSlides);
-                  // handleThumbnailInteraction();
-                }}
-                className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all duration-200"
-                aria-label="Next slide"
-              >
-                <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </>
-          )} */}
         </div>
       )}
       {/* Render Lightbox outside positioned containers to avoid stacking issues */}

@@ -18,12 +18,12 @@ export default function ExpandableSection({
         {title}
       </h2>
       {children}
-      <button className="w-full flex items-center justify-center gap-[10px] border bg-transparent rounded-[10px] px-5 py-3 mt-5 border-[#06d6a0] text-[#06d6a0]">
+      {/* <button className="w-full flex items-center justify-center gap-[10px] border bg-transparent rounded-[10px] px-5 py-3 mt-5 border-[#06d6a0] text-[#06d6a0]">
         <span className="text-center text-base font-normal leading-[150%]">
           Näita rohkem
         </span>
         <ChevronDown className="w-4 h-4 text-primary" />
-      </button>
+      </button> */}
     </div>
   );
 }

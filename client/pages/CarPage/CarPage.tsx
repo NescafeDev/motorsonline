@@ -44,6 +44,11 @@ interface CarData {
   accessories?: string;
   modelDetail?: string;
   major?: string;
+  vinCode?: string;
+  doors?: string;
+  salonColor?: string;
+  bodyType?: string;
+  color?: string;
   // Seller information
   businessType?: string;
   country?: string;
@@ -96,6 +101,7 @@ export default function CarPage() {
   const [contacts, setContacts] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showAllTechSpecs, setShowAllTechSpecs] = useState(false);
   const { user } = useAuth();
 
 
@@ -270,14 +276,21 @@ export default function CarPage() {
 
   // Technical specifications data
   const technicalSpecs = [
-    { label: t('formLabels.technicalSpecs'), value: car.technicalData },
+    { label: t('formLabels.vehicleCondition') + ':', value: car.technicalData },
     { label: t('formLabels.displacement') + ':', value: car.displacement },
     { label: t('formLabels.categoryDesignation') + ':', value: car.category },
-    { label: t('carSpecs.power') + ':', value: car.power },
-    { label: t('formLabels.vehicleNumber') + ':', value: car.plateNumber },
+    { label: t('formLabels.powerKw') + ':', value: car.power },
+    { label: t('formLabels.vehicleNumber') , value: car.plateNumber },
     { label: t('formLabels.driveType') + ':', value: car.drive_type_ee_name },
     { label: t('carSpecs.mileage') + ':', value: `${car.mileage.toLocaleString()} km` },
     { label: t('formLabels.fuelType') + ':', value: car.fuelType },
+    { label: t('formLabels.ownerCountLabel') + ':' , value:car.ownerCount},
+    { label: t('formLabels.vinCode') + ':' , value:car.vinCode},
+    { label: t('formLabels.year') + ':' , value:car.year_value},
+    { label: t('formLabels.doors') + ':' , value:car.doors},
+    { label: t('formLabels.bodyType') + ':' , value:car.bodyType},
+    { label: t('formLabels.interiorColor') + ':' , value:car.salonColor},
+    { label: t('formLabels.color') + ':' , value:car.color},
   ];
 
   // Equipment features data - parse from equipment string
@@ -321,7 +334,7 @@ export default function CarPage() {
                     </h2>
 
                     <div className="grid grid-cols-2 gap-4">
-                      {technicalSpecs.map((spec, index) => (
+                      {(showAllTechSpecs ? technicalSpecs : technicalSpecs.slice(0, 6)).map((spec, index) => (
                         <div
                           key={index}
                           className="bg-white rounded-[10px] p-2.5 flex justify-between items-center"
@@ -336,15 +349,18 @@ export default function CarPage() {
                       ))}
                     </div>
 
-                    <div className="flex justify-center mt-8">
-                      <Button
-                        variant="outline"
-                        className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2.5"
-                      >
-                        {t('formLabels.showMore')}
-                        <ChevronDownIcon className="w-4 h-4" />
-                      </Button>
-                    </div>
+                    {technicalSpecs.length > 6 && (
+                      <div className="flex justify-center mt-8">
+                        <Button
+                          variant="outline"
+                          className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2.5"
+                          onClick={() => setShowAllTechSpecs(!showAllTechSpecs)}
+                        >
+                          {showAllTechSpecs ? t('formLabels.showLess') : t('formLabels.showMore')}
+                          <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${showAllTechSpecs ? 'rotate-180' : ''}`} />
+                        </Button>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
 
