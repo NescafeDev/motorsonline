@@ -253,7 +253,7 @@ export const CarCard: React.FC<CarCardProps> = ({
               </span>
               <div className="absolute top-1/2 left-0 w-full h-[1px] bg-[#747474]"></div>
             </div>
-            {discount !== "0%" && (
+            {!hideBottomIcons &&discount !== "0%" && (
               <div className="px-[15px] py-[2px] rounded-full border border-[#FF0000] bg-[#FFE5E5]">
                 <span className="text-[#FF0000] font-['Poppins'] text-[16px] font-medium">
                   {discount}
