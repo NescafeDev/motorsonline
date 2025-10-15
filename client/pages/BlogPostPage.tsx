@@ -55,7 +55,7 @@ export default function BlogPostPage() {
               <img
                 src={blog.title_image}
                 alt="Featured post"
-                className="w-full h-[450px] object-cover rounded-[10px]"
+                className="w-full h-[600px] object-fit rounded-[10px]"
               />
               <div className="p-0 space-y-4 mt-5">
                 <div className="inline-block bg-motor-gray-bg px-2 py-0 rounded-[10px] hover:bg-gray-50 transition-colors mt-5">

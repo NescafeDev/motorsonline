@@ -133,7 +133,7 @@ export default function BlogPage() {
                     <img
                       src={blogs[0].title_image || 'https://cdn.builder.io/api/v1/image/assets/TEMP/2256f5dfb72d1770637f2f4590612ed3d96be898?width=2880'}
                       alt={blogs[0].title}
-                      className="w-full h-[450px] object-cover"
+                      className="w-full h-[600px] object-cover"
                     />
                     <div className="p-5 space-y-4">
                       <div className="inline-block bg-motor-gray-bg px-2 py-1 rounded-[10px]">
