@@ -25,6 +25,7 @@ interface CarCardProps {
   transmission?: string;
   fuelType?: string;
   ownerCount?: string;
+  address?: string;
   onDelete?: () => void;
   onEdit?: () => void;
   onPreview?: () => void;
@@ -158,6 +159,7 @@ export const CarCard: React.FC<CarCardProps> = ({
   onDelete,
   onEdit,
   onPreview,
+  address,
 }) => {
   const { t } = useI18n();
   
@@ -343,7 +345,7 @@ export const CarCard: React.FC<CarCardProps> = ({
         <div className="absolute left-[370px] bottom-[30px] flex items-center gap-[4px]">
           <MapPin className="w-6 h-6" />
           <span className="text-[#1A202C] font-['Poppins'] text-[14px] font-medium">
-            Tuleviku tee 4a Peetri, 75312 Harju maakond
+            {address}
           </span>
         </div>
       )}

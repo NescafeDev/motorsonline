@@ -81,7 +81,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
             doors: formData.doors || '',
             bodyType: formData.bodyType || '',
             salonColor: formData.salonColor || '',
-            color: formData.color || '',
+            carColor: formData.carColor || '',
         };
     };
 
@@ -140,7 +140,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
         { label: t('formLabels.doors') + ':', value: car.doors },
         { label: t('formLabels.bodyType') + ':', value: car.bodyType },
         { label: t('formLabels.interiorColor') + ':', value: car.salonColor },
-        { label: t('formLabels.color') + ':', value: car.color },
+        { label: t('formLabels.color') + ':', value: car.carColor },
     ];
 
     // Equipment features data - parse from equipment string

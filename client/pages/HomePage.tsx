@@ -78,6 +78,7 @@ export interface Car {
   carColor?: string;
   major?: string;
   address?: string;
+  user_id?: number; // Add user_id to fetch contact data
 }
 
 export interface CarFilters {
@@ -221,6 +222,7 @@ export default function HomePage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filtersApplied, setFiltersApplied] = useState(false);
   const [carImageIndices, setCarImageIndices] = useState<{[key: number]: number}>({});
+  const [carContacts, setCarContacts] = useState<{[carId: number]: {address?: string}}>({});
   const getVatDisplayText = (car: Car | null) => {
     if (!car) return '';
 
@@ -233,9 +235,6 @@ export default function HomePage() {
     // if (car.vatRate === '24') {
     return t('vatInfo.priceIncludesVat') + ' ' + car.vatRate + '%';
     // }
-
-    // For any other VAT rate, show the specific rate
-    // return `Hind sisaldab käibemaksu ${car.vatRate}%`;
   };
 
   // Calculate discount percentage
@@ -278,6 +277,14 @@ export default function HomePage() {
     loadCars();
   }, [isAuthenticated, user, loadCars]);
 
+  useEffect(() => {
+    cars.forEach(car => {
+      if (car.user_id && !carContacts[car.id]) {
+        fetchContactForCar(car.id, car.user_id);
+      }
+    });
+  }, [cars]);
+
   // Update filtered cars when cars change or search term changes
   useEffect(() => {
     if (filtersApplied) {
@@ -308,6 +315,20 @@ export default function HomePage() {
       console.error('Failed to load filtered cars:', error);
     } finally {
       setLoading(false);
+    }
+  };
+  const fetchContactForCar = async (carId: number, userId: number) => {
+    try {
+      const response = await fetch(`/api/contacts/public/${userId}`);
+      if (response.ok) {
+        const contactData = await response.json();
+        setCarContacts(prev => ({
+          ...prev,
+          [carId]: contactData
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching contact data:', error);
     }
   };
 
@@ -405,7 +426,7 @@ export default function HomePage() {
       discountPrice: `€ ${car.discountPrice?.toLocaleString() || 'N/A'}`,
       discountPercentage: discountPercentage(car),
       major: car.major || '',
-      address: car.address || ''
+      address: carContacts[car.id]?.address || car.address
     };
   };
 
@@ -537,9 +558,9 @@ export default function HomePage() {
                                   </div>
                                 </div>
                               </div>
-                              <span className="text-black text-[15px] pl-[5px] tracking-[0.34px] leading-[normal] [font-family:'Poppins',Helvetica] font-medium">
+                              <div className="text-black text-[15px] pl-[5px] tracking-[0.34px] leading-[normal] [font-family:'Poppins',Helvetica] font-medium h-[50px]">
                                 {car.major}
-                              </span>
+                              </div>
                               <div className="grid grid-cols-2 gap-y-2 mb-2">
                                 {getVehicleDetails(car, t).map((detail, index) => (
                                   <div key={index} className="flex items-center w-full h-[40px]">
@@ -595,8 +616,8 @@ export default function HomePage() {
                               <Separator className="my-3" />
                               <div className="flex items-start gap-2 mx-1 my-2 justify-start h-[20px]">
                                 <MapPin className="w-5 h-5 text-secondary-500 flex-shrink-0" />
-                                <span className="font-medium text-secondary-500 text-xs tracking-[-0.3px] leading-[20px]">
-                                  Tuleviku tee 4a Peetri
+                                <span className="font-medium text-secondary-500 text-xs tracking-[-0.3px] leading-[15px]">
+                                  {displayCar.address}
                                 </span>
                               </div>
                             </CardContent>

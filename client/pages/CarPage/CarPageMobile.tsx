@@ -59,7 +59,8 @@ interface CarData {
   doors?: string;
   bodyType?: string;
   salonColor?: string;
-  color?: string;
+  carColor?: string;
+  address?: string;
   // Seller information
   businessType?: string;
   country?: string;
@@ -254,7 +255,7 @@ export default function CarPageMobile() {
     { label: t('formLabels.doors') + ':' , value:car.doors},
     { label: t('formLabels.bodyType') + ':' , value:car.bodyType},
     { label: t('formLabels.interiorColor') + ':' , value:car.salonColor},
-    { label: t('formLabels.color') + ':' , value:car.color},
+    { label: t('formLabels.color') + ':' , value:car.carColor},
   ];
 
 
@@ -358,7 +359,7 @@ export default function CarPageMobile() {
             <div className="flex items-start gap-2 mx-1 my-3 justify-start h-[10px]">
               <MapPin className="w-5 h-5 text-secondary-500 flex-shrink-0" />
               <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
-                Tuleviku tee 4a Peetri
+                {contacts.address}
               </span>
             </div>
           </div>

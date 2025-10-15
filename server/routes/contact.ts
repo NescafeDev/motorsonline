@@ -33,7 +33,6 @@ const authenticateToken = (req: any, res: any, next: any) => {
 // Create or update contact
 router.post('/user', authenticateToken, async (req: any, res) => {
 // router.post('/contacts/user', async (req: any, res) => {
-  console.log('aaa');
   try {
     console.log('Creating or updating contact with data:', req.body);
     console.log('Language field type:', typeof req.body.language, 'Value:', req.body.language);

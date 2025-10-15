@@ -74,6 +74,7 @@ export interface Car {
     views?: number;
     favoriteCount?: number;
     major?: string;
+    address?: string;
 }
 
 export interface CarFilters {
@@ -386,6 +387,7 @@ export default function SearchPage() {
                                                 onPreview={() => navigate(`/${currentLanguage}/car/${car.id}`)}
                                                 onEdit={() => navigate(`/${currentLanguage}/car/${car.id}/edit`)}
                                                 className="bg-white"
+                                                address={car.address}
                                             />
                                         ))
                                     ) : (

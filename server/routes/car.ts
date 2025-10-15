@@ -375,12 +375,14 @@ router.get('/public/approved', async (_req, res) => {
     console.log('Approved cars count:', approvedCount[0].count);
     
     const rows = await queryWithRetry(`
-      SELECT cars.*, brand.name as brand_name, model.name as model_name, year.value as year_value, drive_type.name as drive_type_name, drive_type.ee_name as drive_type_ee_name
+      SELECT cars.*, brand.name as brand_name, model.name as model_name, year.value as year_value, drive_type.name as drive_type_name, drive_type.ee_name as drive_type_ee_name,
+             contacts.phone, contacts.businessType, contacts.socialNetwork, contacts.email, contacts.address, contacts.website, contacts.language, contacts.country
       FROM cars
       LEFT JOIN brand ON cars.brand_id = brand.id
       LEFT JOIN model ON cars.model_id = model.id
       LEFT JOIN year ON cars.year_id = year.id
       LEFT JOIN drive_type ON cars.drive_type_id = drive_type.id
+      LEFT JOIN contacts ON cars.user_id = contacts.user_id
       WHERE cars.approved = true
       ORDER BY cars.created_at DESC
     `);
@@ -463,12 +465,14 @@ router.get('/public/filtered', async (req, res) => {
     } = req.query;
 
     let query = `
-      SELECT cars.*, brand.name as brand_name, model.name as model_name, year.value as year_value, drive_type.name as drive_type_name, drive_type.ee_name as drive_type_ee_name
+      SELECT cars.*, brand.name as brand_name, model.name as model_name, year.value as year_value, drive_type.name as drive_type_name, drive_type.ee_name as drive_type_ee_name,
+             contacts.phone, contacts.businessType, contacts.socialNetwork, contacts.email, contacts.address, contacts.website, contacts.language, contacts.country
       FROM cars
       LEFT JOIN brand ON cars.brand_id = brand.id
       LEFT JOIN model ON cars.model_id = model.id
       LEFT JOIN year ON cars.year_id = year.id
       LEFT JOIN drive_type ON cars.drive_type_id = drive_type.id
+      LEFT JOIN contacts ON cars.user_id = contacts.user_id
       WHERE cars.approved = true
     `;
     

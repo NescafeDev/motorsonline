@@ -48,7 +48,7 @@ interface CarData {
   doors?: string;
   salonColor?: string;
   bodyType?: string;
-  color?: string;
+  carColor?: string;
   // Seller information
   businessType?: string;
   country?: string;
@@ -290,7 +290,7 @@ export default function CarPage() {
     { label: t('formLabels.doors') + ':' , value:car.doors},
     { label: t('formLabels.bodyType') + ':' , value:car.bodyType},
     { label: t('formLabels.interiorColor') + ':' , value:car.salonColor},
-    { label: t('formLabels.color') + ':' , value:car.color},
+    { label: t('formLabels.color') + ':', value: car.carColor },
   ];
 
   // Equipment features data - parse from equipment string
