@@ -146,7 +146,7 @@ export function CarCard({
             </button>
           </div>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 px-5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 px-2">
           {/* Mileage */}
           <div className="flex items-center bg-white rounded-lg p-2">
             <div className="w-8 h-8 relative flex-shrink-0">
