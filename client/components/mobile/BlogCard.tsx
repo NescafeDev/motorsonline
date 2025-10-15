@@ -29,13 +29,13 @@ export function BlogCard({
         />
       </div>
       <div className="p-6">
-        <div className="text-motors-gray-500 font-medium text-base mb-4">
+        <div className="text-motors-gray-500 font-medium text-base">
           {category}
         </div>
-        <h3 className="text-black font-semibold text-xl leading-7 mb-4">
+        <h3 className="text-black font-semibold text-xl leading-7 break-all">
           {title}
         </h3>
-        <p className="text-black text-base leading-normal mb-6">
+        <p className="text-black text-base leading-normal mb-6 break-all">
           {description}
         </p>
         <div className="flex items-center gap-2" onClick={() => navigate(`/${lang || 'ee'}/blog/${id}`)}>

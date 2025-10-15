@@ -264,7 +264,7 @@ export default function BlogPage() {
                 <div className="relative h-[189px]">
                   <img
                     onClick={() => navigate(`/${currentLanguage}/blog/${post.id}`)}
-                    className="w-full h-full object-cover cursor-pointer"
+                    className="w-full h-full object-fit cursor-pointer"
                     alt="Blog post thumbnail"
                     src={post.title_image || 'https://via.placeholder.com/300x189?text=No+Image'}
                   />

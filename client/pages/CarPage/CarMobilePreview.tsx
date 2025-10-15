@@ -273,7 +273,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
 
                                 <div className="grid grid-cols-2 gap-3">
                                     {vehicleDetails.map((detail, index) => (
-                                        <div key={index} className="flex items-center bg-white rounded-lg p-3">
+                                        <div key={index} className="flex items-center bg-white rounded-lg p-1">
                                             <div className="w-12 h-12 relative flex-shrink-0">
                                                 <img
                                                     className="w-8 h-8 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
@@ -281,7 +281,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                                                     src={detail.icon}
                                                 />
                                             </div>
-                                            <div className="flex flex-col min-w-0 flex-1 ml-2">
+                                            <div className="flex flex-col min-w-0 flex-1">
                                                 <span className="font-normal text-secondary-500 text-xs tracking-[-0.2px] leading-[16px] break-words">
                                                     {detail.label}
                                                 </span>

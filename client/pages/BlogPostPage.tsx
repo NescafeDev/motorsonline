@@ -78,18 +78,13 @@ export default function BlogPostPage() {
               </div>
             </article>
             <article className="bg-motor-gray-bg rounded-[10px] overflow-hidden mb-8">
-              <img
-                src={blog.intro_image}
-                alt="Featured post"
-                className="w-full h-[450px] object-cover rounded-[10px]"
-              />
               <div className="p-0 space-y-4 mt-[60px]">
                 <div className="space-y-4">
                 <h3 className="text-black text-[26px] font-bold leading-[1.3]">
                     Sissejuhatuse detailid
                   </h3>
                   <div 
-                    className="text-black text-[18px] font-thin leading-[1.5] prose prose-lg max-w-none "
+                    className="text-black text-[18px] font-semi leading-[1.5] prose prose-lg max-w-none "
                     dangerouslySetInnerHTML={{ __html: blog.intro_detail }}
                   />
                 </div>

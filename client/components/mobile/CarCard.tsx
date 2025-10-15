@@ -148,7 +148,7 @@ export function CarCard({
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 px-2">
           {/* Mileage */}
-          <div className="flex items-center bg-white rounded-lg p-2">
+          <div className="flex items-center bg-white rounded-lg p-1">
             <div className="w-8 h-8 relative flex-shrink-0">
               <img
                 className="w-7 h-7 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
@@ -163,7 +163,7 @@ export function CarCard({
             </div>
           </div>
           {/* First Registration */}
-          <div className="flex items-center bg-white rounded-lg p-2">
+          <div className="flex items-center bg-white rounded-lg p-1">
             <div className="w-8 h-8 relative flex-shrink-0">
               <img
                 className="w-7 h-7 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
@@ -178,7 +178,7 @@ export function CarCard({
             </div>
           </div>
           {/* Power */}
-          <div className="flex items-center bg-white rounded-lg p-2">
+          <div className="flex items-center bg-white rounded-lg p-1">
             <div className="w-8 h-8 relative flex-shrink-0">
               <img
                 className="w-7 h-7 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
@@ -193,7 +193,7 @@ export function CarCard({
             </div>
           </div>
           {/* Fuel */}
-          <div className="flex items-center bg-white rounded-lg p-2">
+          <div className="flex items-center bg-white rounded-lg p-1">
             <div className="w-8 h-8 relative flex-shrink-0">
               <img
                 className="w-7 h-7 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
@@ -209,7 +209,7 @@ export function CarCard({
           </div>
 
           {/* Transmission */}
-          <div className="flex items-center bg-white rounded-lg p-2">
+          <div className="flex items-center bg-white rounded-lg p-1">
             <div className="w-8 h-8 relative flex-shrink-0">
               <img
                 className="w-7 h-7 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
@@ -226,7 +226,7 @@ export function CarCard({
 
           
           {/* Owner Count */}
-          <div className="flex items-center bg-white rounded-lg p-2">
+          <div className="flex items-center bg-white rounded-lg p-1">
             <div className="w-8 h-8 relative flex-shrink-0">
               <img
                 className="w-7 h-7 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"

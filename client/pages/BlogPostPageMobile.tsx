@@ -88,7 +88,7 @@ export default function BlogPostPageMobile() {
           <h2 className="text-black font-normal text-lg leading-7 mb-6">
             {t('blog.categories')}
           </h2>
-          <div className="bg-gray-100 rounded-[10px] p-4">
+          <div className="bg-white rounded-[10px] p-4">
             <span className="text-black text-lg font-semibold">
               {blog.category}
             </span>
@@ -127,17 +127,12 @@ export default function BlogPostPageMobile() {
 
           {/* Intro Detail Section */}
           <article className="bg-gray-100 rounded-[10px] overflow-hidden mb-6">
-            <img
-              src={blog.intro_image || 'https://cdn.builder.io/api/v1/image/assets/TEMP/affbcd99d59bab2d47bfc87453dd4cc6d4f56b3c?width=780'}
-              alt={blog.title}
-              className="w-full h-[300px] object-cover"
-            />
             <div className="p-5 space-y-4">
               <h3 className="text-black text-lg font-bold leading-[1.3]">
                 Sissejuhatuse detailid
               </h3>
               <div 
-                className="text-black text-base font-thin leading-[1.5] prose prose-base max-w-none"
+                className="text-black text-base font-semi leading-[1.5] prose prose-base max-w-none"
                 dangerouslySetInnerHTML={{ __html: blog.intro_detail }}
               />
             </div>
