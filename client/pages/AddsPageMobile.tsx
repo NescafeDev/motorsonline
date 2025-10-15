@@ -1962,7 +1962,7 @@ export default function AddsPageMobile() {
                       onClick={handleCarSubmit}
                       disabled={carLoading}
                     >
-                      {carLoading ? t('common.saving') : t('common.saveChanges')}
+                      {carLoading ? t('common.saving') : t('common.save')}
                     </button>
                     <button
                       type="button"
@@ -2085,7 +2085,7 @@ export default function AddsPageMobile() {
                 disabled={carLoading}
                 onClick={handleCarSubmit}
               >
-                {carLoading ? t('common.saving') : (editingCar ? t('common.saveChanges') : t('common.addListing'))}
+                {carLoading ? t('common.saving') : (editingCar ? t('common.save') : t('common.addListing'))}
               </button>
             </div>
           </DialogFooter>

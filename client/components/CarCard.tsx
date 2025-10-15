@@ -244,7 +244,7 @@ export const CarCard: React.FC<CarCardProps> = ({
 
 
       {/* Price Section */}
-      <div className="absolute right-[30px] top-[46px] flex flex-col items-end gap-2">
+      <div className="absolute right-[15px] top-[46px] flex flex-col items-end gap-2">
         {price && (
           <div className="flex items-center gap-[15px]">
             <div className="relative">

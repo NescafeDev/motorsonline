@@ -176,6 +176,27 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+// Helper function to delete old car images from filesystem
+const deleteOldImages = async (oldImages: string[]): Promise<void> => {
+  if (!oldImages || !Array.isArray(oldImages)) return;
+  
+  for (const imagePath of oldImages) {
+    try {
+      // Convert relative path to absolute path
+      const fullPath = path.join(process.cwd(), 'public', imagePath);
+      
+      // Check if file exists before attempting to delete
+      if (fs.existsSync(fullPath)) {
+        fs.unlinkSync(fullPath);
+        console.log(`Deleted old image: ${fullPath}`);
+      }
+    } catch (error) {
+      console.error(`Error deleting image ${imagePath}:`, error);
+      // Don't throw error - continue with other images
+    }
+  }
+};
+
 // Create car (authenticated users can create cars)
 router.post('/', authenticateToken, upload.array('images', 40), async (req: any, res) => {
   try {
@@ -847,13 +868,28 @@ router.put('/:id', authenticateToken, upload.array('images', 40), async (req: an
     let data = req.body;
     const reqWithFiles = req as typeof req & { files?: any };
     
-    // Handle images array - if new images are uploaded, use them; otherwise keep existing
+    // Store old images for deletion
+    const oldImages = car.images || [];
+    
+    // Handle images array - if new images are uploaded, append them to existing ones
     if (reqWithFiles.files && Array.isArray(reqWithFiles.files) && reqWithFiles.files.length > 0) {
-      data.images = reqWithFiles.files.map((file: any) => `/img/cars/${file.filename}`);
+      // Create new image paths for uploaded files
+      const newImagePaths = reqWithFiles.files.map((file: any) => `/img/cars/${file.filename}`);
+      
+      // Combine old images with new ones
+      data.images = [...oldImages, ...newImagePaths];
     } else if (data.existingImages) {
       // If existingImages is sent from frontend, use it (for reordering/deleting without new uploads)
       try {
-        data.images = JSON.parse(data.existingImages);
+        const newImages = JSON.parse(data.existingImages);
+        
+        // Find images that were removed (exist in old but not in new)
+        const removedImages = oldImages.filter((oldImg: string) => !newImages.includes(oldImg));
+        
+        // Delete removed images from filesystem
+        await deleteOldImages(removedImages);
+        
+        data.images = newImages;
       } catch (e) {
         // If parsing fails, keep the existing images from the database
         data.images = car.images;
@@ -947,6 +983,11 @@ router.delete('/:id', authenticateToken, async (req: any, res) => {
     // Check if user owns the car or is admin
     if (car.user_id !== userId) {
       return res.status(403).json({ message: 'Access denied. You can only delete your own cars.' });
+    }
+
+    // Delete associated images from filesystem before deleting the car record
+    if (car.images && Array.isArray(car.images)) {
+      await deleteOldImages(car.images);
     }
 
     const ok = await deleteCar(carId);
