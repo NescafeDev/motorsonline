@@ -225,7 +225,7 @@ export const CarCard: React.FC<CarCardProps> = ({
       </div>
 
       {/* Car Title */}
-      <h3 className="text-[#1A202C] font-['Poppins'] text-[30px] font-bold leading-[150%] tracking-[-0.9px] absolute left-[370px] top-[30px] w-fit h-[45px]">
+      <h3 className="text-[#1A202C] font-['Poppins'] text-[30px] font-medium leading-[150%] tracking-[-0.9px] absolute left-[370px] top-[30px] w-fit h-[45px]">
         {title}
       </h3>
 
@@ -262,7 +262,7 @@ export const CarCard: React.FC<CarCardProps> = ({
             )}
           </div>
         )}
-        <div className="text-[#1A202C] font-['Poppins'] text-[24px] font-bold text-right">
+        <div className="text-[#1A202C] font-['Poppins'] text-[24px] font-medium text-right">
           {originalPrice}
         </div>
         <div className="text-[#747474] font-['Poppins'] text-[12px] font-normal leading-[150%] tracking-[-0.36px] text-right">

@@ -366,7 +366,7 @@ export default function CarPageMobile() {
         </div>
 
         {/* Price section */}
-        <div className="flex items-center justify-between mb-4 px-8">
+        <div className="flex items-center justify-between mb-4 px-6">
           <div className="flex-1">
             <div className="flex items-center gap-2">
               {car.discountPrice && (
@@ -389,14 +389,14 @@ export default function CarPageMobile() {
               <span className="font-semibold text-secondary-500 text-2xl leading-[32px]">
                 € {(car.discountPrice || car.price).toLocaleString()}
               </span>
-              <p className="text-[#747474] text-xs tracking-[-0.2px] leading-[16px] mt-1 text-center">
+              <p className="text-[#747474] text-xs tracking-[-0.2px] leading-[16px] mt-1 text-start">
                 {getVatDisplayText(car)}
               </p>
             </div>
           </div>
-          <div className="ml-4 mt-7">
+          <div className="pl-4 item-center">
             <Button
-              className="bg-[#06d6a0] text-white rounded-[10px] px-8 py-3 text-sm "
+              className="bg-[#06d6a0] text-white rounded-[10px] px-4 py-3"
             >
               {t('formLabels.sendEmail')}
             </Button>
