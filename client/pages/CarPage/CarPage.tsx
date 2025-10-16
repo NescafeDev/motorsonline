@@ -250,7 +250,7 @@ export default function CarPage() {
     {
       icon: "/img/car/Speedometer.png",
       label: t('carSpecs.power') + ':',
-      value: car.power,
+      value: car.power+' kW',
     },
     {
       icon: "/img/car/gear-box-switch.png",
