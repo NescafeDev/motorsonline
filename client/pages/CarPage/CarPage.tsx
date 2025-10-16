@@ -309,7 +309,7 @@ export default function CarPage() {
 
   return (
     <PageContainer>
-      <div className="bg-white overflow-hidden w-full flex flex-col items-center">
+      <div className="bg-white w-full flex flex-col items-center">
         {/* Main content */}
         <main className="px-6 lg:px-[100px]">
           {/* Car details and gallery section - Sticky sidebar */}
