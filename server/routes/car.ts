@@ -878,7 +878,8 @@ router.put('/:id', authenticateToken, upload.array('images', 40), async (req: an
       
       // Combine old images with new ones
       data.images = [...oldImages, ...newImagePaths];
-    } else if (data.existingImages) {
+    } 
+    else if (data.existingImages) {
       // If existingImages is sent from frontend, use it (for reordering/deleting without new uploads)
       try {
         const newImages = JSON.parse(data.existingImages);

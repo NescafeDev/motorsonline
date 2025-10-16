@@ -412,6 +412,7 @@ export default function SearchPageMobile() {
     month: car.month || 'N/A',
     major: car.major,
     address: car.address || 'Tuleviku tee 4a Peetri, 75312 Harju maakond',
+    businessType: car.businessType || 'N/A',
   });
 
   return (

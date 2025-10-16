@@ -38,37 +38,28 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
 
   // Get current language from URL or localStorage
   const getCurrentLanguage = (): SupportedLanguage => {
-    console.log('getCurrentLanguage - lang param:', lang);
-    console.log('getCurrentLanguage - location.pathname:', location.pathname);
     
     // First, try to get language from URL params
     if (lang && SUPPORTED_LANGUAGES.some(l => l.code === lang.toLowerCase())) {
-      console.log('getCurrentLanguage - Using lang param:', lang);
       return lang.toLowerCase() as SupportedLanguage;
     }
 
     // If no valid lang in params, try to extract from pathname
     const pathSegments = location.pathname.split('/');
     const urlLang = pathSegments[1]?.toLowerCase();
-    console.log('getCurrentLanguage - pathSegments:', pathSegments);
-    console.log('getCurrentLanguage - urlLang from pathname:', urlLang);
     
     if (urlLang && SUPPORTED_LANGUAGES.some(l => l.code === urlLang)) {
-      console.log('getCurrentLanguage - Using urlLang from pathname:', urlLang);
       return urlLang as SupportedLanguage;
     }
 
     // Fallback to localStorage
     const savedLanguage = localStorage.getItem('selectedLanguage');
-    console.log('getCurrentLanguage - savedLanguage from localStorage:', savedLanguage);
     
     if (savedLanguage && SUPPORTED_LANGUAGES.some(l => l.code === savedLanguage.toLowerCase())) {
-      console.log('getCurrentLanguage - Using savedLanguage:', savedLanguage);
       return savedLanguage.toLowerCase() as SupportedLanguage;
     }
 
     // Final fallback to default
-    console.log('getCurrentLanguage - Using DEFAULT_LANGUAGE:', DEFAULT_LANGUAGE);
     return DEFAULT_LANGUAGE;
   };
 
@@ -76,7 +67,6 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
   const [currentLanguage, setCurrentLanguageState] = useState<SupportedLanguage>(() => {
     // Initialize with the current language from URL on first render
     const initialLang = getCurrentLanguage();
-    console.log('Initial language on mount:', initialLang);
     return initialLang;
   });
   const [isLoading, setIsLoading] = useState(true);
@@ -84,12 +74,10 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
 
   // Load translations for the current language
   const loadTranslations = async (language: SupportedLanguage) => {
-    console.log(`Loading translations for language: ${language}`);
     setIsLoading(true);
     try {
       const translationModule = await import(`../locales/${language}.json`);
       setTranslations(translationModule.default);
-      console.log(`Successfully loaded translations for ${language}`);
     } catch (error) {
       console.error(`Failed to load translations for ${language}:`, error);
       // Fallback to default language if current language fails
@@ -114,10 +102,6 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
 
   // Initialize and update language when URL or location changes
   useEffect(() => {
-    console.log('I18nContext useEffect triggered');
-    console.log('lang param:', lang);
-    console.log('location.pathname:', location.pathname);
-    console.log('currentLanguage:', currentLanguage);
     
     const newLanguage = getCurrentLanguage();
     console.log('newLanguage detected:', newLanguage);

@@ -107,7 +107,6 @@ router.get('/:id', async (req, res) => {
   try {
     const blog = await getBlogById(Number(req.params.id));
     if (!blog) return res.status(404).json({ message: 'Blogi ei leitud.' });
-    console.log('blog', blog);
     res.json(blog);
   } catch (err: any) {
     console.error('Error fetching blog:', err);

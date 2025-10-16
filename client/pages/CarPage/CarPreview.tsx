@@ -165,20 +165,21 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
   // Technical specifications data
   const technicalSpecs = [
     { label: t('formLabels.vehicleCondition') + ':', value: car.technicalData },
-    { label: t('formLabels.displacement') + ':', value: car.displacement },
-    { label: t('formLabels.categoryDesignation') + ':', value: car.category },
-    { label: t('formLabels.powerKw') + ':', value: car.power },
-    { label: t('formLabels.vehicleNumber') , value: car.plateNumber },
-    { label: t('formLabels.driveType') + ':', value: car.drive_type_ee_name },
-    { label: t('carSpecs.mileage') + ':', value: `${car.mileage.toLocaleString()} km` },
-    { label: t('formLabels.fuelType') + ':', value: car.fuelType },
     { label: t('formLabels.ownerCountLabel') + ':' , value:car.ownerCount},
     { label: t('formLabels.vinCode') + ':' , value:car.vinCode},
+    { label: t('formLabels.vehicleNumber') , value: car.plateNumber },
+    { label: t('carSpecs.mileage') + ':', value: `${car.mileage.toLocaleString()} km` },
     { label: t('formLabels.year') + ':' , value:car.year_value},
+    { label: t('formLabels.powerKw') + ':', value: car.power },
+    { label: t('formLabels.displacement') + ':', value: car.displacement },
+    { label: t('formLabels.transmission') + ':', value: car.transmission },
+    { label: t('formLabels.driveType') + ':', value: car.drive_type_ee_name },
+    { label: t('formLabels.fuelType') + ':', value: car.fuelType },
+    { label: t('formLabels.categoryDesignation') + ':', value: car.category },
     { label: t('formLabels.doors') + ':' , value:car.doors},
     { label: t('formLabels.bodyType') + ':' , value:car.bodyType},
     { label: t('formLabels.interiorColor') + ':' , value:car.salonColor},
-    { label: t('formLabels.color') + ':' , value:car.carColor},
+    { label: t('formLabels.color') + ':', value: car.carColor },
   ];
 
   // Equipment features data - get from checkboxes
@@ -397,7 +398,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
                           </div>
                           <div className="flex flex-col min-w-0 flex-1">
                             <span className="font-normal text-secondary-500 text-[12px] tracking-[-0.42px] leading-[21px] [font-family:'Poppins',Helvetica] break-words">
-                              {detail.label}
+                              {/* {detail.label} */}
                             </span>
                             <span className="font-medium text-secondary-500 text-[12px] tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica] break-words">
                               {detail.value}

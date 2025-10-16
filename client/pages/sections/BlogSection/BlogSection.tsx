@@ -5,6 +5,8 @@ import { useNavigate , useParams } from "react-router-dom";
 import { useEffect, useState } from 'react'
 import axios from "axios";
 import { useI18n } from "@/contexts/I18nContext";
+import { slugify } from "@/lib/utils";
+import ExpandableSection from "@/components/mobile/ExpandableSection";
 
 interface Blog {
   id: number;
@@ -57,7 +59,7 @@ export const BlogSection = (): JSX.Element => {
 
   return (
     <div className="w-full bg-white pt-8">
-      <section className="w-full pl-[2%] pr-[2%] mt-3 max-w-[1440px] mx-auto relative bg-white">
+      <section className="w-full pl-[2%] pr-[2%] mt-3 max-w-[1300px] mx-auto relative bg-white">
         <div className="mb-4">
           <h2 className="font-['Poppins',Helvetica] font-semibold text-[46px] text-black leading-normal mb-6">
             {t('blog.latestPosts')}
@@ -78,9 +80,9 @@ export const BlogSection = (): JSX.Element => {
                 key={post.id || index}
                 className="bg-[#f6f7f9] rounded-[10px] overflow-hidden border-none h-full flex flex-col"
               >
-                <div className="relative h-[189px]">
+                <div className="relative h-[200px]">
                   <img
-                    onClick={() => {navigate(`/${currentLanguage}/blog/${post.id}`); window.scrollTo(0, 0);}}
+                    onClick={() => {navigate(`/${currentLanguage}/blog/${slugify(post.title)}`); window.scrollTo(0, 0);}}
                     className="w-full h-full object-fit cursor-pointer"
                     alt={t('blog.thumbnailAlt')}
                     src={post.image || 'https://via.placeholder.com/300x189?text=No+Image'}
@@ -100,7 +102,7 @@ export const BlogSection = (): JSX.Element => {
                         __html: post.introduction?.replace(/<[^>]*>/g, '').substring(0, 100) + '...' || t('blog.fallbackDescription')
                       }}
                     />
-                    <div className="pt-6 flex items-center cursor-pointer mt-auto pb-2" onClick={() => navigate(`/${currentLanguage}/blog/${post.id}`)}>
+                    <div className="pt-6 flex items-center cursor-pointer mt-auto pb-2" onClick={() => navigate(`/${currentLanguage}/blog/${slugify(post.title)}`)}>
                       <button className="font-['Poppins',Helvetica] font-medium text-[#06d6a0] text-sm leading-[21px]">
                         {t('blog.readMore')}
                       </button>

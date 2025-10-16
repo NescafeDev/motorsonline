@@ -19,6 +19,8 @@ interface Car {
   favoriteCount?: number;
   views?: number;
   major?: string;
+  address?: string;
+  businessType?: string;
 }
 
 export default function UserForm() {
@@ -198,6 +200,8 @@ export default function UserForm() {
                 onDelete={() => handleDeleteCar(car.id)}
                 onEdit={() => handleEditCar(car.id)}
                 onPreview={() => navigate(`/${currentLanguage}/car/${car.id}`)}
+                address={car.address}
+                businessType={car.businessType}
               />
             ))
           ) : (

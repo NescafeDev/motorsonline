@@ -1,4 +1,4 @@
-import { Heart, Fuel, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
+import { Heart, Fuel, MapPin, ChevronLeft, ChevronRight, ChevronRight as ArrowRight } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useFavorites } from "../../hooks/useFavorites";
 import { useAuth } from "../../contexts/AuthContext";
@@ -23,6 +23,7 @@ interface CarCardProps {
   ownerCount?: string;
   month?: string;
   address?: string;
+  businessType?: string;
 }
 
 export function CarCard({
@@ -43,25 +44,26 @@ export function CarCard({
   ownerCount,
   month,
   address,
+  businessType
 }: CarCardProps) {
   const navigate = useNavigate();
   const { lang } = useParams<{ lang: string }>();
   const { isAuthenticated } = useAuth();
   const { isFavorite: isFav, toggleFavorite } = useFavorites();
-  
+
   // Image navigation state
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  
+
   // Prepare images array - use images prop if available, otherwise fallback to single image
   const allImages = images && images.length > 0 ? images.filter(img => img && img.trim() !== '') : [image].filter(img => img && img.trim() !== '');
   const currentImage = allImages[currentImageIndex] || image;
-  
+
   // Navigation functions
   const handlePreviousImage = (e: React.MouseEvent) => {
     e.stopPropagation();
     setCurrentImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
   };
-  
+
   const handleNextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
     setCurrentImageIndex((prev) => (prev === allImages.length - 1 ? 0 : prev + 1));
@@ -79,7 +81,7 @@ export function CarCard({
           alt={title}
           className="w-full h-auto md:h-full object-cover"
         />
-        
+
         {/* Navigation arrows - only show if there are multiple images */}
         {allImages.length > 1 && (
           <>
@@ -224,7 +226,7 @@ export function CarCard({
             </div>
           </div>
 
-          
+
           {/* Owner Count */}
           <div className="flex items-center bg-white rounded-lg p-1">
             <div className="w-8 h-8 relative flex-shrink-0">
@@ -269,11 +271,31 @@ export function CarCard({
           </p>
         </div>
         <Separator className="my-3" />
-        <div className="flex items-start gap-2 mx-2 my-3 justify-start">
-          <MapPin className="w-5 h-5 text-secondary-500 flex-shrink-0" />
-          <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
-            {address}
-          </span>
+        <div className="flex items-center gap-2 mx-2 my-3 pt-3 justify-between h-[20px]">
+          <div className="flex items-center gap-2">
+            <MapPin className="w-5 h-5 text-secondary-500 flex-shrink-0" />
+            <div className="flex flex-col">
+              <div className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
+                {address}
+              </div>
+              <div className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
+                {businessType}
+              </div>
+            </div>
+          </div>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (address) {
+                const encodedAddress = encodeURIComponent(address);
+                window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank');
+              }
+            }}
+            className="w-6 h-6 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors"
+            disabled={!address}
+          >
+            <ArrowRight className="w-4 h-4 text-gray-400" />
+          </button>
         </div>
         {/* <div className="flex items-start justify-between mb-4">
           <div className="flex-1">

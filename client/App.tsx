@@ -114,7 +114,7 @@ const App = () => (
                     }
                   />
                   <Route
-                    path="blog/:id"
+                    path="blog/:slug"
                     element={
                       <MobilePageWrapper
                         desktopComponent={BlogPostPage}

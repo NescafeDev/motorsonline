@@ -1,4 +1,4 @@
-import { Heart, Check, MapPin, ChevronDownIcon } from "lucide-react";
+import { Heart, Check, MapPin, ChevronDownIcon, Divide } from "lucide-react";
 import Header from "@/components/mobile/Header";
 import CarGallery from "@/components/mobile/CarGallery";
 import SpecCard from "@/components/mobile/SpecCard";
@@ -242,20 +242,21 @@ export default function CarPageMobile() {
 
   const technicalSpecs = [
     { label: t('formLabels.vehicleCondition') + ':', value: car.technicalData },
-    { label: t('formLabels.displacement') + ':', value: car.displacement },
-    { label: t('formLabels.categoryDesignation') + ':', value: car.category },
-    { label: t('formLabels.powerKw') + ':', value: car.power },
-    { label: t('formLabels.vehicleNumber') , value: car.plateNumber },
-    { label: t('formLabels.driveType') + ':', value: car.drive_type_ee_name },
-    { label: t('carSpecs.mileage') + ':', value: `${car.mileage.toLocaleString()} km` },
-    { label: t('formLabels.fuelType') + ':', value: car.fuelType },
     { label: t('formLabels.ownerCountLabel') + ':' , value:car.ownerCount},
     { label: t('formLabels.vinCode') + ':' , value:car.vinCode},
+    { label: t('formLabels.vehicleNumber') , value: car.plateNumber },
+    { label: t('carSpecs.mileage') + ':', value: `${car.mileage.toLocaleString()} km` },
     { label: t('formLabels.year') + ':' , value:car.year_value},
+    { label: t('formLabels.powerKw') + ':', value: car.power },
+    { label: t('formLabels.displacement') + ':', value: car.displacement },
+    { label: t('formLabels.transmission') + ':', value: car.transmission },
+    { label: t('formLabels.driveType') + ':', value: car.drive_type_ee_name },
+    { label: t('formLabels.fuelType') + ':', value: car.fuelType },
+    { label: t('formLabels.categoryDesignation') + ':', value: car.category },
     { label: t('formLabels.doors') + ':' , value:car.doors},
     { label: t('formLabels.bodyType') + ':' , value:car.bodyType},
     { label: t('formLabels.interiorColor') + ':' , value:car.salonColor},
-    { label: t('formLabels.color') + ':' , value:car.carColor},
+    { label: t('formLabels.color') + ':', value: car.carColor },
   ];
 
 
@@ -356,11 +357,16 @@ export default function CarPageMobile() {
               <SpecCard icon={<UserIcon />} label={t('carSpecs.ownerCount') + ':'} value={car.ownerCount} />
             </div>
             <Separator className="my-3" />
-            <div className="flex items-start gap-2 mx-1 my-3 justify-start h-[10px]">
+            <div className="flex items-center gap-2 mx-1 my-3 pt-3 justify-start h-[20px]">
               <MapPin className="w-5 h-5 text-secondary-500 flex-shrink-0" />
-              <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
-                {contacts.address}
-              </span>
+              <div className="flex flex-col">
+                <div className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
+                  {contacts.address}
+                </div>
+                <div className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
+                  {contacts.businessType}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -434,29 +440,7 @@ export default function CarPageMobile() {
           </ExpandableSection>
         </div>
 
-        {/* High-value features section */}
-        {/* <div className="px-5 mb-6">
-          <ExpandableSection title="Kõrgema väärtusega lisvarustus">
-            <div className="space-y-3">
-              {equipmentFeatures.length > 0 ? (
-                equipmentFeatures.map((feature, index) => (
-                  <div key={index} className="bg-white rounded-[10px] p-3 flex justify-between items-center">
-                    <span className="text-[#1A202C] text-sm font-medium">
-                      {equipmentDisplayMap[feature.label] || feature.label}
-                    </span>
-                    <Check className="w-5 h-5 text-black" />
-                  </div>
-                ))
-              ) : (
-                <div className="bg-white rounded-[10px] p-3 text-center">
-                  <span className="text-[#1A202C] text-sm font-medium text-gray-500">
-                    Lisavarustus puudub
-                  </span>
-                </div>
-              )}
-            </div>
-          </ExpandableSection>
-        </div> */}
+        
         <ImageGallerySection car={car} />
 
         {/* Seller information section */}

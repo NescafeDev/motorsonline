@@ -388,6 +388,7 @@ export default function SearchPage() {
                                                 onEdit={() => navigate(`/${currentLanguage}/car/${car.id}/edit`)}
                                                 className="bg-white"
                                                 address={car.address}
+                                                businessType={car.businessType}
                                             />
                                         ))
                                     ) : (

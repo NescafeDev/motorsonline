@@ -9,6 +9,7 @@ import { CountryCode, CountryFlag } from 'react-country-flags-lazyload';
 import ReactCountryFlag from 'react-country-flag';
 import countryList from "react-select-country-list";
 import { useAuth } from "../../../../contexts/AuthContext";
+import { Phone, Mail, Globe, MapPin } from "lucide-react";
 
 export interface SellerData {
   title: string;
@@ -206,18 +207,38 @@ export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps
 
               <div className="flex flex-col gap-1">
 
-                <p className="[font-family:'Poppins',Helvetica] font-normal text-lg text-secondary-500 tracking-[-0.54px] leading-[27px]">
-                  {displayData.phone}
-                </p>
-                <p className="[font-family:'Poppins',Helvetica] font-normal text-lg text-secondary-500 tracking-[-0.54px] leading-[27px]">
-                  {displayData.email}
-                </p>
-                <p className="[font-family:'Poppins',Helvetica] font-normal text-lg text-secondary-500 tracking-[-0.54px] leading-[27px]">
-                  {displayData.website}
-                </p>
-                <p className="[font-family:'Poppins',Helvetica] font-normal text-lg text-secondary-500 tracking-[-0.54px] leading-[27px]">
-                  {displayData.address}
-                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6  flex items-center justify-center">
+                    <Phone className="w-4 h-4" />
+                  </div>
+                  <p className="[font-family:'Poppins',Helvetica] font-normal text-lg text-secondary-500 tracking-[-0.54px] leading-[27px]">
+                    {displayData.phone}
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <Mail className="w-4 h-4" />
+                  </div>
+                  <p className="[font-family:'Poppins',Helvetica] font-normal text-lg text-secondary-500 tracking-[-0.54px] leading-[27px]">
+                    {displayData.email}
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <Globe className="w-4 h-4" />
+                  </div>
+                  <p className="[font-family:'Poppins',Helvetica] font-normal text-lg text-secondary-500 tracking-[-0.54px] leading-[27px]">
+                    {displayData.website}
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <MapPin className="w-4 h-4" />
+                  </div>
+                  <p className="[font-family:'Poppins',Helvetica] font-normal text-lg text-secondary-500 tracking-[-0.54px] leading-[27px]">
+                    {displayData.address}
+                  </p>
+                </div>
                 <div className="[font-family:'Poppins',Helvetica] font-normal text-lg text-secondary-500 tracking-[-0.54px] leading-[27px]">
                   {renderLanguageFlags(displayData.language || '')}
                 </div>

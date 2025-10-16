@@ -1,4 +1,4 @@
-import { HeartIcon, SearchIcon , MapPin, ChevronLeft, ChevronRight} from "lucide-react";
+import { HeartIcon, SearchIcon, MapPin, ChevronLeft, ChevronRight, ChevronRight as ArrowRight } from "lucide-react";
 import { Badge } from "../components/ui/badge";
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
@@ -221,8 +221,8 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filtersApplied, setFiltersApplied] = useState(false);
-  const [carImageIndices, setCarImageIndices] = useState<{[key: number]: number}>({});
-  const [carContacts, setCarContacts] = useState<{[carId: number]: {address?: string}}>({});
+  const [carImageIndices, setCarImageIndices] = useState<{ [key: number]: number }>({});
+  const [carContacts, setCarContacts] = useState<{ [carId: number]: { address?: string, businessType?: string } }>({});
   const getVatDisplayText = (car: Car | null) => {
     if (!car) return '';
 
@@ -389,7 +389,7 @@ export default function HomePage() {
     e.stopPropagation();
     const car = cars.find(c => c.id === carId);
     if (!car || !car.images || car.images.length <= 1) return;
-    
+
     setCarImageIndices(prev => ({
       ...prev,
       [carId]: prev[carId] === 0 ? car.images.length - 1 : (prev[carId] || 0) - 1
@@ -400,7 +400,7 @@ export default function HomePage() {
     e.stopPropagation();
     const car = cars.find(c => c.id === carId);
     if (!car || !car.images || car.images.length <= 1) return;
-    
+
     setCarImageIndices(prev => ({
       ...prev,
       [carId]: (prev[carId] || 0) === car.images.length - 1 ? 0 : (prev[carId] || 0) + 1
@@ -412,7 +412,7 @@ export default function HomePage() {
     const currentImageIndex = carImageIndices[car.id] || 0;
     const allImages = car.images && car.images.length > 0 ? car.images.filter(img => img && img.trim() !== '') : [];
     const currentImage = allImages.length > 0 ? allImages[currentImageIndex] : "img/Rectangle 34624924.png";
-    
+
     return {
       image: currentImage,
       images: allImages,
@@ -426,7 +426,8 @@ export default function HomePage() {
       discountPrice: `€ ${car.discountPrice?.toLocaleString() || 'N/A'}`,
       discountPercentage: discountPercentage(car),
       major: car.major || '',
-      address: carContacts[car.id]?.address || car.address
+      address: carContacts[car.id]?.address || car.address,
+      businessType: carContacts[car.id]?.businessType || car.businessType
     };
   };
 
@@ -492,7 +493,7 @@ export default function HomePage() {
                                 alt="Car"
                                 src={displayCar.image}
                               />
-                              
+
                               {/* Navigation arrows - only show if there are multiple images */}
                               {displayCar.images && displayCar.images.length > 1 && (
                                 <>
@@ -614,11 +615,31 @@ export default function HomePage() {
 
                               </div>
                               <Separator className="my-3" />
-                              <div className="flex items-start gap-2 mx-1 my-2 justify-start h-[20px]">
-                                <MapPin className="w-5 h-5 text-secondary-500 flex-shrink-0" />
-                                <span className="font-medium text-secondary-500 text-xs tracking-[-0.3px] leading-[15px]">
-                                  {displayCar.address}
-                                </span>
+                              <div className="flex items-center gap-2 mx-1 my-3 pt-3 justify-between h-[20px]">
+                                <div className="flex items-center gap-2">
+                                  <MapPin className="w-5 h-5 text-secondary-500 flex-shrink-0" />
+                                  <div className="flex flex-col">
+                                    <div className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
+                                      {displayCar.address}
+                                    </div>
+                                    <div className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
+                                      {displayCar.businessType}
+                                    </div>
+                                  </div>
+                                </div>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (displayCar.address) {
+                                      const encodedAddress = encodeURIComponent(displayCar.address);
+                                      window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank');
+                                    }
+                                  }}
+                                  className="w-6 h-6 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors"
+                                  disabled={!displayCar.address}
+                                >
+                                  <ArrowRight className="w-4 h-4 text-gray-400" />
+                                </button>
                               </div>
                             </CardContent>
                           </Card>

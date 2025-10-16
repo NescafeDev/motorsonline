@@ -1,5 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import { slugify } from "@/lib/utils";
 interface BlogCardProps {
   image: string;
   category: string;
@@ -20,7 +21,7 @@ export function BlogCard({
   const navigate = useNavigate();
   const { lang } = useParams<{ lang: string }>();
   return (
-    <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer" onClick={() => navigate(`/${lang || 'ee'}/blog/${id}`)}>
+    <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer" onClick={() => navigate(`/${lang || 'ee'}/blog/${slugify(title)}`)}>
       <div className="aspect-[390/247] w-full overflow-hidden">
         <img
           src={image}
@@ -38,11 +39,11 @@ export function BlogCard({
         <p className="text-black text-base leading-normal mb-6 break-all">
           {description}
         </p>
-        <div className="flex items-center gap-2" onClick={() => navigate(`/${lang || 'ee'}/blog/${id}`)}>
+        <div className="flex items-center gap-2" onClick={() => navigate(`/${lang || 'ee'}/blog/${slugify(title)}`)}>
           <button className="text-motors-green font-medium text-base text-[#06d6a0]" >
             {readMoreText}
           </button>
-          <ArrowRight className="w-5 h-5 text-motors-green text-[#06d6a0]" onClick={() => navigate(`/${lang || 'ee'}/blog/${id}`)}/>
+          <ArrowRight className="w-5 h-5 text-motors-green text-[#06d6a0]" onClick={() => navigate(`/${lang || 'ee'}/blog/${slugify(title)}`)}/>
         </div>
       </div>
     </div>

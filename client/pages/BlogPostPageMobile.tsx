@@ -7,6 +7,7 @@ import { ChevronLeft, Menu } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useI18n } from "@/contexts/I18nContext";
+import { slugify } from "@/lib/utils";
 
 interface Blog {
   id: number;
@@ -22,7 +23,7 @@ interface Blog {
 export default function BlogPostPageMobile() {
   const navigate = useNavigate();
   const { t } = useI18n();
-  const { id } = useParams();
+  const { slug } = useParams();
   const [blog, setBlog] = useState<Blog | null>(null);
   const [allBlogs, setAllBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,22 +31,23 @@ export default function BlogPostPageMobile() {
   // Scroll to top when page loads or id changes
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [id]);
+  }, [slug]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch specific blog
-        if (id) {
-          const blogResponse = await fetch(`/api/blogs/${id}`);
-          const blogData = await blogResponse.json();
-          setBlog(blogData);
-        }
-        
-        // Fetch all blogs for recent posts
+        // Fetch all blogs, then resolve slug to id and fetch that blog
         const blogsResponse = await fetch('/api/blogs');
         const blogsData = await blogsResponse.json();
         setAllBlogs(blogsData);
+        if (slug) {
+          const match = blogsData.find((b: any) => b && b.title && slugify(b.title) === slug);
+          if (match?.id) {
+            const blogResponse = await fetch(`/api/blogs/${match.id}`);
+            const blogData = await blogResponse.json();
+            setBlog(blogData);
+          }
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -54,7 +56,7 @@ export default function BlogPostPageMobile() {
     };
 
     fetchData();
-  }, [id]);
+  }, [slug]);
 
   // Get unique categories for tabs
   const categories = [t('uiActions.viewAll'), ...Array.from(new Set(allBlogs.map(blog => blog.category)))];

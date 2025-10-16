@@ -1,4 +1,4 @@
-import { Edit, Trash2, Eye, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
+import { Edit, Trash2, Eye, MapPin, ChevronLeft, ChevronRight, ChevronRight as ArrowRight } from "lucide-react";
 import React, { useState } from "react";
 import { useI18n } from "@/contexts/I18nContext";
 
@@ -26,6 +26,7 @@ interface CarCardProps {
   fuelType?: string;
   ownerCount?: string;
   address?: string;
+  businessType?: string;
   onDelete?: () => void;
   onEdit?: () => void;
   onPreview?: () => void;
@@ -160,22 +161,23 @@ export const CarCard: React.FC<CarCardProps> = ({
   onEdit,
   onPreview,
   address,
+  businessType
 }) => {
   const { t } = useI18n();
-  
+
   // Image navigation state
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  
+
   // Prepare images array - use images prop if available, otherwise fallback to single image
   const allImages = images && images.length > 0 ? images.filter(img => img && img.trim() !== '') : [image].filter(img => img && img.trim() !== '');
   const currentImage = allImages[currentImageIndex] || image;
-  
+
   // Navigation functions
   const handlePreviousImage = (e: React.MouseEvent) => {
     e.stopPropagation();
     setCurrentImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
   };
-  
+
   const handleNextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
     setCurrentImageIndex((prev) => (prev === allImages.length - 1 ? 0 : prev + 1));
@@ -192,7 +194,7 @@ export const CarCard: React.FC<CarCardProps> = ({
           alt={title}
           className="w-full h-full rounded-[10px] object-cover"
         />
-        
+
         {/* Navigation arrows - only show if there are multiple images */}
         {allImages.length > 1 && (
           <>
@@ -253,7 +255,7 @@ export const CarCard: React.FC<CarCardProps> = ({
               </span>
               <div className="absolute top-1/2 left-0 w-full h-[1px] bg-[#747474]"></div>
             </div>
-            {!hideBottomIcons &&discount !== "0%" && (
+            {!hideBottomIcons && discount !== "0%" && (
               <div className="px-[15px] py-[2px] rounded-full border border-[#FF0000] bg-[#FFE5E5]">
                 <span className="text-[#FF0000] font-['Poppins'] text-[16px] font-medium">
                   {discount}
@@ -340,15 +342,7 @@ export const CarCard: React.FC<CarCardProps> = ({
           )}
         </div>
       )}
-      
-      {hideBottomIcons && (
-        <div className="absolute left-[370px] bottom-[30px] flex items-center gap-[4px]">
-          <MapPin className="w-6 h-6" />
-          <span className="text-[#1A202C] font-['Poppins'] text-[14px] font-medium">
-            {address}
-          </span>
-        </div>
-      )}
+
 
 
       {/* Bottom Section */}
@@ -377,6 +371,36 @@ export const CarCard: React.FC<CarCardProps> = ({
               {likes}
             </span>
           </div>
+        </div>
+      )}
+
+      {/* Address Section - Always visible */}
+      {(address || businessType) && (
+        <div className="absolute left-[370px] bottom-0 flex items-center gap-[4px] justify-between w-[500px]">
+          <div className="flex items-center gap-[4px]">
+            <MapPin className="w-6 h-6" />
+            <div className="flex flex-col">
+              <div className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
+                {address}
+              </div>
+              <div className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
+                {businessType}
+              </div>
+            </div>
+          </div>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (address) {
+                const encodedAddress = encodeURIComponent(address);
+                window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank');
+              }
+            }}
+            className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors border border-gray-200"
+            disabled={!address}
+          >
+            <ArrowRight className="w-5 h-5 text-gray-600" />
+          </button>
         </div>
       )}
 
