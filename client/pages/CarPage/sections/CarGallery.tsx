@@ -98,7 +98,7 @@ export default function CarGallery({
         <img
           src={currentMainImage || validImages[0]}
           alt="Car main view"
-          className="absolute object-contain transition-all duration-300 ease-in-out transform cursor-pointer w-full h-[480px]"
+          className="absolute object-contain transition-all duration-300 ease-in-out transform cursor-pointer w-full h-[480px] rounded-[10px]"
           onClick={handleImageClick}
           onKeyDown={handleKeyDown}
           tabIndex={0}

@@ -11,8 +11,8 @@ export interface LanguageConfig {
 }
 
 export const SUPPORTED_LANGUAGES: LanguageConfig[] = [
-  { code: 'en', name: 'English', nativeName: 'English', flag: '🇺🇸' },
   { code: 'ee', name: 'Estonian', nativeName: 'Eesti', flag: '🇪🇪' },
+  { code: 'en', name: 'English', nativeName: 'English', flag: '🇺🇸' },
   { code: 'ru', name: 'Russian', nativeName: 'Русский', flag: '🇷🇺' },
 ];
 
