@@ -317,7 +317,7 @@ export default function CarPage() {
             <div
               className="grid grid-cols-1 md:grid-cols-3 gap-5"
               ref={gridRef}
-              style={{ position: "relative" }}
+              style={{ position: "relative",}}
             >
               {/* Left: 2/3 width on md+ screens */}
               <div className="md:col-span-2">
@@ -407,123 +407,114 @@ export default function CarPage() {
               </div>
               {/* Right: 1/3 width on md+ screens, floating */}
               <div className="md:col-span-1">
-                <div
-                  ref={sidebarRef}
-                  style={{
-                    position: "absolute",
-                    top: sidebarTop,
-                    transition: "top 0.2s",
-                  }}
-                >
-                  {/* Car details card */}
-                  <Card className="bg-[#f6f7f9] rounded-[10px] border-none">
-                    <CardContent className="px-[20px] py-[30px]">
-                      <div className="flex justify-between items-start">
-                        <h1 className="text-[30px] font-semibold text-secondary-500 tracking-[-1.20px] leading-[60px] [font-family:'Poppins',Helvetica] ">
-                          {car.brand_name} {car.model_name} {car.modelDetail}
-                        </h1>
+                {/* Car details card */}
+                <Card className="bg-[#f6f7f9] rounded-[10px] border-none sticky top-0">
+                  <CardContent className="px-[20px] py-[30px]">
+                    <div className="flex justify-between items-start">
+                      <h1 className="text-[30px] font-semibold text-secondary-500 tracking-[-1.20px] leading-[60px] [font-family:'Poppins',Helvetica] ">
+                        {car.brand_name} {car.model_name} {car.modelDetail}
+                      </h1>
 
-                        <Button
-                          variant="ghost"
-                          className="p-0 mt-3"
-                          onClick={handleHeartClick}
-                        >
-                          <HeartIcon
-                            className={`w-[29px] h-[29px] transition-colors duration-200 ${isFavorite(car.id)
-                              ? "text-red-500 fill-red-500"
-                              : "text-gray-400 hover:text-red-400"
-                              }`}
-                          />
-                        </Button>
-                      </div>
-                      <span className="text-black text-[20px] tracking-[0.34px] leading-[normal] [font-family:'Poppins',Helvetica] font-medium">
-                        {car.major}
+                      <Button
+                        variant="ghost"
+                        className="p-0 mt-3"
+                        onClick={handleHeartClick}
+                      >
+                        <HeartIcon
+                          className={`w-[29px] h-[29px] transition-colors duration-200 ${isFavorite(car.id)
+                            ? "text-red-500 fill-red-500"
+                            : "text-gray-400 hover:text-red-400"
+                            }`}
+                        />
+                      </Button>
+                    </div>
+                    <span className="text-black text-[20px] tracking-[0.34px] leading-[normal] [font-family:'Poppins',Helvetica] font-medium">
+                      {car.major}
+                    </span>
+                    <div className="mt-2">
+                      <span className="text-[#747474] text-[12px] tracking-[0.34px] leading-[normal] [font-family:'Poppins',Helvetica] font-medium">
+                        Kasutatud autod » {car.brand_name} {car.model_name} » {car.year_value}
                       </span>
-                      <div className="mt-2">
-                        <span className="text-[#747474] text-[12px] tracking-[0.34px] leading-[normal] [font-family:'Poppins',Helvetica] font-medium">
-                          Kasutatud autod » {car.brand_name} {car.model_name} » {car.year_value}
-                        </span>
-                      </div>
+                    </div>
 
-                      <h2 className="mt-10 font-semibold text-secondary-500 text-[16px] tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica]">
-                        {t('formLabels.technicalSpecs')}
-                      </h2>
+                    <h2 className="mt-10 font-semibold text-secondary-500 text-[16px] tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica]">
+                      {t('formLabels.technicalSpecs')}
+                    </h2>
 
-                      <div className="grid grid-cols-2 gap-y-3 gap-x-1 mt-6">
-                        {vehicleDetails.map((detail, index) => (
-                          <div key={index} className="flex items-center w-full">
-                            <div className="w-[60px] h-[60px] relative flex-shrink-0">
-                              <img
-                                className="w-[40px] h-[40px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                                alt={detail.label}
-                                src={detail.icon}
-                              />
-                            </div>
-                            <div className="flex flex-col min-w-0 flex-1">
-                              <span className="font-normal text-secondary-500 text-[12px] tracking-[-0.42px] leading-[21px] [font-family:'Poppins',Helvetica] break-words">
-                                {/* {detail.label} */}
-                              </span>
-                              <span className="font-medium text-secondary-500 text-[12px] tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica] break-words">
-                                {detail.value}
-                              </span>
-                            </div>
+                    <div className="grid grid-cols-2 gap-y-3 gap-x-1 mt-6">
+                      {vehicleDetails.map((detail, index) => (
+                        <div key={index} className="flex items-center w-full">
+                          <div className="w-[60px] h-[60px] relative flex-shrink-0">
+                            <img
+                              className="w-[40px] h-[40px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                              alt={detail.label}
+                              src={detail.icon}
+                            />
                           </div>
-                        ))}
-                      </div>
-
-                      <div className="mt-10 row flex">
-                        <div className="col-6 w-full">
-                          <div className="flex items-center gap-1">
-                            {car.discountPrice && (
-                              <>
-                                <div className="relative">
-                                  <span className="font-medium text-[#747474] text-[14px] leading-[normal] [font-family:'Poppins',Helvetica]">
-                                    € {car.price.toLocaleString()}
-                                  </span>
-                                  <Separator className="absolute w-[40px] top-[12px] -left-1 bg-gray-400" />
-                                </div>
-                                {
-                                  discountPercentage != 0 && (
-                                    <Badge className="bg-[#ffe5e5] text-[#ff0000] border border-[#ff0000] rounded-[100px] ml-1 mt-1 px-2.5 py-0.4 text-[12px]">
-                                      {discountPercentage}%
-                                    </Badge>
-                                  )
-                                }
-                              </>
-                            )}
-                          </div>
-
-                          <div className="mt-2">
-                            <span className="font-semibold text-secondary-500 text-[24px] leading-[normal] [font-family:'Poppins',Helvetica]">
-                              € {(car.discountPrice || car.price).toLocaleString()}
+                          <div className="flex flex-col min-w-0 flex-1">
+                            <span className="font-normal text-secondary-500 text-[12px] tracking-[-0.42px] leading-[21px] [font-family:'Poppins',Helvetica] break-words">
+                              {/* {detail.label} */}
                             </span>
-                            <p className="text-[#747474] text-[10px] tracking-[-0.36px] leading-[18px] [font-family:'Poppins',Helvetica] mt-2">
-                              {getVatDisplayText(car)}
-                            </p>
+                            <span className="font-medium text-secondary-500 text-[12px] tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica] break-words">
+                              {detail.value}
+                            </span>
                           </div>
                         </div>
-                        <div
-                          className="col-6 w-full relative"
-                          style={{ minHeight: "80px" }}
-                        >
-                          <div className="absolute right-0 bottom-6">
-                            <a href={`mailto:${contacts?.email || car.email || 'futuresea.dev@gmail.com'}`}>
-                              <Button
-                                onClick={() => {
-                                  window.open(`mailto:${contacts?.email || car.email || 'futuresea.dev@gmail.com'}`);
-                                }}
-                                className="bg-[#06d6a0] text-white rounded-[10px] px-[30px] py-[15px]"
-                              >
-                                {t('formLabels.sendEmail')}
-                              </Button>
+                      ))}
+                    </div>
 
-                            </a>
-                          </div>
+                    <div className="mt-10 row flex">
+                      <div className="col-6 w-full">
+                        <div className="flex items-center gap-1">
+                          {car.discountPrice && (
+                            <>
+                              <div className="relative">
+                                <span className="font-medium text-[#747474] text-[14px] leading-[normal] [font-family:'Poppins',Helvetica]">
+                                  € {car.price.toLocaleString()}
+                                </span>
+                                <Separator className="absolute w-[40px] top-[12px] -left-1 bg-gray-400" />
+                              </div>
+                              {
+                                discountPercentage != 0 && (
+                                  <Badge className="bg-[#ffe5e5] text-[#ff0000] border border-[#ff0000] rounded-[100px] ml-1 mt-1 px-2.5 py-0.4 text-[12px]">
+                                    {discountPercentage}%
+                                  </Badge>
+                                )
+                              }
+                            </>
+                          )}
+                        </div>
+
+                        <div className="mt-2">
+                          <span className="font-semibold text-secondary-500 text-[24px] leading-[normal] [font-family:'Poppins',Helvetica]">
+                            € {(car.discountPrice || car.price).toLocaleString()}
+                          </span>
+                          <p className="text-[#747474] text-[10px] tracking-[-0.36px] leading-[18px] [font-family:'Poppins',Helvetica] mt-2">
+                            {getVatDisplayText(car)}
+                          </p>
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                </div>
+                      <div
+                        className="col-6 w-full relative"
+                        style={{ minHeight: "80px" }}
+                      >
+                        <div className="absolute right-0 bottom-6">
+                          <a href={`mailto:${contacts?.email || car.email || 'futuresea.dev@gmail.com'}`}>
+                            <Button
+                              onClick={() => {
+                                window.open(`mailto:${contacts?.email || car.email || 'futuresea.dev@gmail.com'}`);
+                              }}
+                              className="bg-[#06d6a0] text-white rounded-[10px] px-[30px] py-[15px]"
+                            >
+                              {t('formLabels.sendEmail')}
+                            </Button>
+
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             </div>
           </div>
