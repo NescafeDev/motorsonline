@@ -309,11 +309,11 @@ export default function CarPage() {
 
   return (
     <PageContainer>
-      <div className="bg-white w-full flex flex-col items-center">
+      <div className="bg-white  w-full flex flex-col items-center">
         {/* Main content */}
-        <main className="px-6 lg:px-[100px]">
+        <main className="px-6 lg:px-[100px] w-full">
           {/* Car details and gallery section - Sticky sidebar */}
-          <div className="w-full max-w-[1400px] mx-auto">
+          <div className="w-[80%] mx-auto px-3">
             <div
               className="grid grid-cols-1 md:grid-cols-3 gap-5"
               ref={gridRef}

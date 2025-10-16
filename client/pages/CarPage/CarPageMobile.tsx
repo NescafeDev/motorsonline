@@ -332,7 +332,7 @@ export default function CarPageMobile() {
             </h2>
 
             {/* Specs grid */}
-            <div className="grid grid-cols-2 gap-x-[20px] gap-y-[20px]">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-[20px] gap-y-[20px]">
               <SpecCard
                 icon={<CarIcon />}
                 label={t('carSpecs.mileage') + ':'}
