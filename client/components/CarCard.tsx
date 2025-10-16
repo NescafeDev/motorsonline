@@ -375,7 +375,7 @@ export const CarCard: React.FC<CarCardProps> = ({
       )}
 
       {/* Address Section - Always visible */}
-      {(address || businessType) && (
+      { hideBottomIcons &&  (
         <div className="absolute left-[370px] bottom-0 flex items-center gap-[4px] justify-between w-[500px]">
           <div className="flex items-center gap-[4px]">
             <MapPin className="w-6 h-6" />

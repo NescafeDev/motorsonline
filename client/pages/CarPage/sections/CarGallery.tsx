@@ -144,7 +144,7 @@ export default function CarGallery({
       {validImages.length > 0 && (
         <div className="relative px-5">
           {/* Thumbnails container with overflow hidden */}
-          <div className="flex gap-[7px] overflow-hidden">
+          <div className="flex gap-[7px]">
             {getCurrentThumbnails().map((thumb, index) => {
               const uniqueKey = currentSlide * thumbnailsPerView + index; // Direct index mapping
               return (
@@ -215,6 +215,7 @@ export default function CarGallery({
           gap: 5,
           borderColor: 'white',
           imageFit: 'cover',
+          vignette: true,
         }}
       />
     </div>

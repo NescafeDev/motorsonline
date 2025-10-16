@@ -6,12 +6,22 @@
 
 .yarl__thumbnails_thumbnail {
   border: 2px solid white !important;
+  opacity: 0.3 !important;
 }
 
 .yarl__thumbnails_thumbnail_active {
-  border-color: red !important; 
+  opacity: 1 !important; /* Selected image has full opacity */
 }
 
+/* Hover effects only for unselected thumbnails */
+.yarl__thumbnails_thumbnail:not(.yarl__thumbnails_thumbnail_active):hover {
+  opacity: 1 !important;
+}
+
+/* No hover effects for selected/active thumbnail */
+.yarl__thumbnails_thumbnail_active:hover {
+  opacity: 1 !important; /* Keep full opacity on hover */
+}
 
 @layer base {
   /**
