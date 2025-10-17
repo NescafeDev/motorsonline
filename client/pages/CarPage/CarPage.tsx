@@ -411,7 +411,7 @@ export default function CarPage() {
                 <Card className="bg-[#f6f7f9] rounded-[10px] border-none sticky top-0">
                   <CardContent className="px-[20px] py-[30px]">
                     <div className="flex justify-between items-start">
-                      <h1 className="text-[30px] font-semibold text-secondary-500 tracking-[-1.20px] leading-[60px] [font-family:'Poppins',Helvetica] ">
+                      <h1 className="text-[30px] font-medium text-secondary-500 tracking-[-1.20px] [font-family:'Poppins',Helvetica] ">
                         {car.brand_name} {car.model_name} {car.modelDetail}
                       </h1>
 
