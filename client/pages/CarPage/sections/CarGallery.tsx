@@ -94,11 +94,11 @@ export default function CarGallery({
   return (
     <div className="px-5">
       {/* Main image */}
-      <div className="relative mb-4 group w-full h-[480px] overflow-hidden rounded-[7.5px] flex items-center bg-white">
+      <div className="relative mb-4 group w-full h-[480px] overflow-hidden rounded-[7.5px] flex items-center bg-white justify-center">
         <img
           src={currentMainImage || validImages[0]}
           alt="Car main view"
-          className="absolute object-contain transition-all duration-300 ease-in-out transform cursor-pointer w-full h-[480px] rounded-[10px]"
+          className="object-cover transition-all duration-300 ease-in-out transform cursor-pointer w-auto h-[480px] rounded-[10px] justify-items-center"
           onClick={handleImageClick}
           onKeyDown={handleKeyDown}
           tabIndex={0}
