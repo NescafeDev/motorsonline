@@ -504,7 +504,7 @@ export default function CarPage() {
                               onClick={() => {
                                 window.open(`mailto:${contacts?.email || car.email || 'futuresea.dev@gmail.com'}`);
                               }}
-                              className="bg-[#06d6a0] text-white rounded-[10px] px-[10px] py-[15px]"
+                              className="bg-[#06d6a0] text-white rounded-[10px] px-[15px] py-[15px]"
                             >
                               {t('formLabels.sendEmail')}
                             </Button>
