@@ -495,16 +495,16 @@ export default function CarPage() {
                         </div>
                       </div>
                       <div
-                        className="col-6 w-full relative"
+                        className="col-6 w-full relative flex items-center justify-center"
                         style={{ minHeight: "80px" }}
                       >
-                        <div className="absolute right-0 bottom-6">
+                        <div className="right-0 bottom-6">
                           <a href={`mailto:${contacts?.email || car.email || 'futuresea.dev@gmail.com'}`}>
                             <Button
                               onClick={() => {
                                 window.open(`mailto:${contacts?.email || car.email || 'futuresea.dev@gmail.com'}`);
                               }}
-                              className="bg-[#06d6a0] text-white rounded-[10px] px-[30px] py-[15px]"
+                              className="bg-[#06d6a0] text-white rounded-[10px] px-[10px] py-[15px]"
                             >
                               {t('formLabels.sendEmail')}
                             </Button>

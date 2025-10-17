@@ -133,11 +133,11 @@ export default function CarGallery({
         )}
 
         {/* Image counter */}
-        {validImages.length > 1 && (
+        {/* {validImages.length > 1 && (
           <div className="absolute bottom-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm">
             {selectedImage + 1} / {validImages.length}
           </div>
-        )}
+        )} */}
       </div>
 
       {/* Thumbnails - show all images including main image */}
