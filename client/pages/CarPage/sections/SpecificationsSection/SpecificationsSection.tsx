@@ -169,7 +169,7 @@ export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps
 
 
   return (
-    <section className="w-full md:w-[80%] mx-auto my-8 px-3">
+    <section className="w-full md:w-full mx-auto my-8 px-3">
       <Card className="w-full bg-[#f6f7f9] rounded-[10px] p-5">
         <CardContent className="p-0">
           <h3 className="font-semibold text-xl tracking-[-0.60px] leading-[30px] text-secondary-500 [font-family:'Poppins',Helvetica] mb-2">

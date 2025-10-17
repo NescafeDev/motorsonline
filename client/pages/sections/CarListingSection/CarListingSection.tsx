@@ -383,11 +383,11 @@ export const CarListingSection = ({
 
   // Range input groups
   const rangeInputGroups = [
-    { id: "seats", label: "Istekohti", minKey: "seats_min", maxKey: "seats_max" },
-    { id: "doors", label: "Uste arv", minKey: "doors_min", maxKey: "doors_max" },
     { id: "price", label: "Hind", minKey: "price_min", maxKey: "price_max" },
     { id: "year", label: "Aasta", minKey: "year_min", maxKey: "year_max" },
     { id: "mileage", label: t('carSpecs.mileage') + " (km)", minKey: "mileage_min", maxKey: "mileage_max" },
+    { id: "seats", label: "Istekohti", minKey: "seats_min", maxKey: "seats_max" },
+    { id: "doors", label: "Uste arv", minKey: "doors_min", maxKey: "doors_max" },
     { id: "power", label: t('carSpecs.power') + " (kw)", minKey: "power_min", maxKey: "power_max" },
     { id: "engine", label: "Mootorimaht (cm3)", minKey: "engine_min", maxKey: "engine_max" },
     { id: "fuel-city", label: t('carSpecs.fuelCity') + " (100km)", minKey: "fuel_city_min", maxKey: "fuel_city_max" },
