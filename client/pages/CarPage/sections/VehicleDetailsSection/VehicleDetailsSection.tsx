@@ -131,7 +131,7 @@ export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionPro
   // Show loading state
   if (loading) {
     return (
-      <section className="w-full md:w-[80%] mx-auto my-8 px-3">
+      <section className="w-full md:w-full mx-auto my-8 px-3">
         <h2 className="font-semibold text-[46px] text-black [font-family:'Poppins',Helvetica] mb-12 text-center sm:text-left">
           Vaata viimast autot
         </h2>
@@ -145,7 +145,7 @@ export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionPro
   // Show error state
   if (error) {
     return (
-      <section className="w-full md:w-[80%] mx-auto my-8 px-3">
+      <section className="w-full md:w-full mx-auto my-8 px-3">
         <h2 className="font-semibold text-[46px] text-black [font-family:'Poppins',Helvetica] mb-12 text-center sm:text-left">
           Vaata viimast autot
         </h2>
@@ -159,7 +159,7 @@ export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionPro
   // Show no cars state
   if (cars.length === 0) {
     return (
-      <section className="w-full md:w-[80%] mx-auto my-8 px-3">
+      <section className="w-full md:w-full mx-auto my-8 px-3">
         <h2 className="font-semibold text-[46px] text-black [font-family:'Poppins',Helvetica] mb-12 text-center sm:text-left">
           Vaata viimast autot
         </h2>
@@ -176,7 +176,7 @@ export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionPro
     : cars;
 
   return (
-    <section className="w-full md:w-[80%] mx-auto my-8 px-3">
+    <section className="w-full md:w-full mx-auto my-8 px-3">
       <h2 className="font-semibold text-[46px] text-black [font-family:'Poppins',Helvetica] mb-12 text-center sm:text-left">
         Vaata viimast autot
       </h2>
