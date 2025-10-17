@@ -85,7 +85,7 @@ export default function BlogPostPage() {
                     {blog.title}
                   </h3>
                   <h3 className="text-black text-[26px] font-bold leading-[1.3]">
-                    Sissejuhatus
+                    {t('blog.introduction')}
                   </h3>
                   <div 
                     className="text-black text-[18px] font-normal leading-[1.5] prose prose-lg max-w-none"
@@ -98,7 +98,7 @@ export default function BlogPostPage() {
               <div className="p-0 space-y-4 mt-[60px]">
                 <div className="space-y-4">
                 <h3 className="text-black text-[26px] font-bold leading-[1.3]">
-                    Sissejuhatuse detailid
+                    {t('blog.introDetail')}
                   </h3>
                   <div 
                     className="text-black text-[18px] font-semi leading-[1.5] prose prose-lg max-w-none "
@@ -109,7 +109,7 @@ export default function BlogPostPage() {
               <div className="p-0 space-y-4 mt-[70px]">
                 <div className="space-y-2">
                   <h3 className="text-black text-[26px] font-bold leading-[1.3]">
-                    {t('uiActions.summary')}
+                    {t('blog.summary')}
                   </h3>
                   <div 
                     className="text-black text-[18px] font-normal leading-[1.5] prose prose-lg max-w-none"

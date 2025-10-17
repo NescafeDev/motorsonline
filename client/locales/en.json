@@ -144,7 +144,10 @@
     "enterEmail": "enter your email",
     "subscribe": "Subscribe",
     "newsletterDescription": "Subscribe to our newsletter and get the latest automotive news, reviews, and exclusive content delivered straight to your inbox.",
-    "newsletterTerms": "By clicking \"Subscribe\", you confirm that you agree to our terms."
+    "newsletterTerms": "By clicking \"Subscribe\", you confirm that you agree to our terms.",
+    "introduction": "Introduction",
+    "introDetail": "Introduction Details",
+    "summary": "Summary"
   },
   "search": {
     "placeholder": "Search cars...",

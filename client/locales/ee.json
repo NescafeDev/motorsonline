@@ -145,7 +145,10 @@
     "enterEmail": "sisesta oma e-post",
     "subscribe": "Telli",
     "newsletterDescription": "Lorem ipsum dolor sit amet consectetur. Sollicitudin interdum scelerisque mattis semper diam turpis a.",
-    "newsletterTerms": "Klikkides \"Registreeru\", kinnitate, et nõustute meie tingimustega."
+    "newsletterTerms": "Klikkides \"Registreeru\", kinnitate, et nõustute meie tingimustega.",
+    "introduction": "Sissejuhatus",
+    "introDetail": "Sissejuhatuse detailid",
+    "summary": "Kokkuvõte"
   },
   "search": {
     "placeholder": "Otsi autosid...",

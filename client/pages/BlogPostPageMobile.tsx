@@ -117,7 +117,7 @@ export default function BlogPostPageMobile() {
                   {blog.title}
                 </h3>
                 <h3 className="text-black text-lg font-bold leading-[1.3]">
-                  Sissejuhatus
+                  {t('blog.introduction')}
                 </h3>
                 <div 
                   className="text-black text-base font-normal leading-[1.5] prose prose-base max-w-none"
@@ -131,7 +131,7 @@ export default function BlogPostPageMobile() {
           <article className="bg-gray-100 rounded-[10px] overflow-hidden mb-6">
             <div className="p-5 space-y-4">
               <h3 className="text-black text-lg font-bold leading-[1.3]">
-                Sissejuhatuse detailid
+                {t('blog.introDetail')}
               </h3>
               <div 
                 className="text-black text-base font-semi leading-[1.5] prose prose-base max-w-none"
@@ -143,7 +143,7 @@ export default function BlogPostPageMobile() {
           {/* Summary Section */}
           <article className="bg-gray-100 rounded-[10px] p-5">
             <h3 className="text-black text-lg font-bold leading-[1.3]">
-              {t('uiActions.summary')}
+              {t('blog.summary')}
             </h3>
             <div 
               className="text-black text-base font-normal leading-[1.5] prose prose-base max-w-none"
