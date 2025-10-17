@@ -527,7 +527,7 @@ export default function HomePage() {
 
                             <CardContent className="p-4 pt-5 pb-2 relative">
                               <div className="grid grid-cols-6">
-                                <div className="col-span-5 h-[50px] pt-4">
+                                <div className="col-span-5 h-[50px]">
                                   <h1 className="text-[20px] pl-[5px] font-semibold text-secondary-500 tracking-[-1.20px] leading-[25px] [font-family:'Poppins',Helvetica] ">
                                     {car.brand_name} {car.model_name} {car.modelDetail}
                                   </h1>
@@ -559,7 +559,7 @@ export default function HomePage() {
                                   </div>
                                 </div>
                               </div>
-                              <div className="text-black text-[15px] pl-[5px] tracking-[0.34px] leading-[normal] [font-family:'Poppins',Helvetica] font-medium h-[50px]">
+                              <div className="text-black text-[15px] pl-[5px] tracking-[0.34px] leading-[normal] [font-family:'Poppins',Helvetica] font-medium h-[50px] break-words">
                                 {car.major}
                               </div>
                               <div className="grid grid-cols-2 gap-y-2 mb-2">
