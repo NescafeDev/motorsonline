@@ -868,7 +868,7 @@ export const CarListingSection = ({
                       <div className="flex items-center space-x-2">
                         <Input
                           className="w-[109px] h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]"
-                          placeholder="alates"
+                          placeholder={t('common.from')}
                           value={filters[group.minKey as keyof CarFilters]?.toString() || ''}
                           onChange={(e) => updateRangeFilter(
                             group.minKey as keyof CarFilters,
@@ -882,7 +882,7 @@ export const CarListingSection = ({
                         </span>
                         <Input
                           className="w-[109px] h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]"
-                          placeholder="kuni"
+                          placeholder={t('common.to')}
                           value={filters[group.maxKey as keyof CarFilters]?.toString() || ''}
                           onChange={(e) => updateRangeFilter(
                             group.minKey as keyof CarFilters,

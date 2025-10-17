@@ -1253,7 +1253,7 @@ export default function AddsPage() {
                 value={formData.year_id}
                 onChange={(value) => handleInputChange("year_id", value)}
                 options={[
-                  { value: "", label: "Aasta" },
+                  { value: "", label: t('car.year') },
                   ...years.map((y) => ({ value: y.id, label: y.value }))
                 ]}
               />
@@ -1265,7 +1265,7 @@ export default function AddsPage() {
                 value={formData.month}
                 onChange={(value) => handleInputChange("month", value)}
                 options={[
-                  { value: "", label: "Kuu" },
+                  { value: "", label: t('formLabels.month') },
                   { value: "1", label: "1" },
                   { value: "2", label: "2" },
                   { value: "3", label: "3" },
