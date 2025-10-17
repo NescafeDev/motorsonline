@@ -57,10 +57,10 @@ export default function Footer() {
             </p>
             <div className="text-left md:text-right space-y-1">
               <p className="text-[#6D6D6D] text-sm tracking-[-0.28px]">
-                private policy
+                {t('footer.privacy')}
               </p>
               <p className="text-[#6D6D6D] text-sm tracking-[-0.28px]">
-                terms and conditions
+                {t('footer.terms')}
               </p>
             </div>
           </div>

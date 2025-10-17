@@ -100,13 +100,13 @@ export default function Footer() {
               href="#"
               className="text-brand-gray-dark text-right font-poppins text-base font-normal leading-[150%] tracking-[-0.32px] hover:text-white transition-colors"
             >
-              Privacy & Policy
+              {t('footer.privacy')}
             </a>
             <a
               href="#"
               className="text-brand-gray-dark text-right font-poppins text-base font-normal leading-[150%] tracking-[-0.32px] hover:text-white transition-colors"
             >
-              Terms & Condition
+              {t('footer.terms')}
             </a>
           </div>
         </div>

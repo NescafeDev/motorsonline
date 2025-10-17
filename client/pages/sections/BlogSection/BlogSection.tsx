@@ -83,7 +83,7 @@ export const BlogSection = (): JSX.Element => {
                 <div className="relative h-[200px]">
                   <img
                     onClick={() => {navigate(`/${currentLanguage}/blog/${slugify(post.title)}`); window.scrollTo(0, 0);}}
-                    className="w-full h-full object-fit cursor-pointer"
+                    className="w-full h-full object-cover cursor-pointer"
                     alt={t('blog.thumbnailAlt')}
                     src={post.image || 'https://via.placeholder.com/300x189?text=No+Image'}
                   />
