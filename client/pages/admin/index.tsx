@@ -52,10 +52,10 @@ export default function AdminLoginPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 w-full">
       <form onSubmit={handleSubmit} className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">{t('admin.login')}</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center">{t('navigation.login')}</h1>
         {error && <div className="text-red-600 text-center mb-4">{error}</div>}
         <div className="mb-4">
-          <label className="block mb-2 font-medium">{t('admin.email')}</label>
+          <label className="block mb-2 font-medium">{t('formLabels.email')}</label>
           <input
             type="email"
             className="w-full border rounded px-3 py-2"
@@ -65,7 +65,7 @@ export default function AdminLoginPage() {
           />
         </div>
         <div className="mb-6">
-          <label className="block mb-2 font-medium">{t('admin.password')}</label>
+          <label className="block mb-2 font-medium">{t('auth.password')}</label>
           <input
             type="password"
             className="w-full border rounded px-3 py-2"
@@ -79,7 +79,7 @@ export default function AdminLoginPage() {
           className="w-full bg-brand-primary text-white py-2 rounded font-semibold hover:bg-opacity-90 transition"
           disabled={loading}
         >
-          {loading ? t('admin.loading') : t('admin.login')}
+          {loading ? t('common.loading') : t('navigation.login')}
         </button>
       </form>
     </div>

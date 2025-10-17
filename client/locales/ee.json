@@ -25,7 +25,13 @@
     "saving": "Salvestamine...",
     "deleteListing": "Kustuta kuulutus",
     "exchangepossible": "Vahetuse võimalus",
-    "or": "või"
+    "or": "või",
+    "warranty": "Garantiiga",
+    "searchForBrands": "Otsi marki",
+    "modelName": "Mudeli nimi",
+    "equipmentLevelVersion": "Varustustase/versioon",
+    "from": "Alates",
+    "to": "Kuni"
   },
   "navigation": {
     "home": "Avaleht",

@@ -11,6 +11,7 @@ import yearRoutes from "./routes/year";
 import driveTypeRoutes from "./routes/drive-type";
 import favoritesRoutes from "./routes/favorites";
 import viewsRoutes from "./routes/views";
+import privacyRoutes from "./routes/privacy";
 
 export function createServer() {
   const app = express();
@@ -33,6 +34,7 @@ export function createServer() {
   app.use("/api/drive-types", driveTypeRoutes);
   app.use("/api/favorites", favoritesRoutes);
   app.use("/api/views", viewsRoutes);
+  app.use("/api/privacy", privacyRoutes);
 
   // Example API routes
   app.get("/api/ping", (_req, res) => {

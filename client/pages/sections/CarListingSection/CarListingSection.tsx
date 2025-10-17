@@ -208,49 +208,49 @@ export const CarListingSection = ({
   ];
 
   const vehicleType = [
-    { id: "vali", label: "Vali" },
+    { id: "vali", label: t('common.select') },
     { id: "sõiduauto", label: t('vehicleTypes.passengerCar') },
-    { id: "maastur", label: "Maastur" },
-    { id: "kaubik", label: "Kaubik" },
-    { id: "buss", label: "Buss" },
-    { id: "veoauto", label: "Veoauto" },
-    { id: "haagis", label: "Haagis" },
-    { id: "mototehnika", label: "Mototehnika" },
-    { id: "haagissuvila", label: "Haagissuvila" },
-    { id: "autoelamu", label: "Autoelamu" },
+    { id: "maastur", label: t('vehicleTypes.suv') },
+    { id: "kaubik", label: t('vehicleTypes.van') },
+    { id: "buss", label: t('vehicleTypes.bus') },
+    { id: "veoauto", label: t('vehicleTypes.truck') },
+    { id: "haagis", label: t('vehicleTypes.trailer') },
+    { id: "mototehnika", label: t('vehicleTypes.motorcycle') },
+    { id: "haagissuvila", label: t('vehicleTypes.caravan') },
+    { id: "autoelamu", label: t('vehicleTypes.motorhome') },
     { id: "veesõiduk", label: t('vehicleTypes.watercraft') },
-    { id: "ehitustehnika", label: "Ehitustehnika" },
+    { id: "ehitustehnika", label: t('vehicleTypes.constructionMachinery') },
     { id: "põllumajandustehnika", label: t('vehicleTypes.agriculturalMachinery') },
-    { id: "metsatehnika", label: "Metsatehnika" },
-    { id: "kommunaaltehnika", label: "Kommunaaltehnika" },
+    { id: "metsatehnika", label: t('vehicleTypes.forestryMachinery') },
+    { id: "kommunaaltehnika", label: t('vehicleTypes.utilityMachinery') },
     { id: "võistlussõiduk", label: t('vehicleTypes.competitionVehicle') },
-    { id: "muu", label: "Muu" },
+    { id: "muu", label: t('vehicleTypes.other') },
   ];
 
   const [showAllEquipment, setShowAllEquipment] = useState(false);
 
   const bodyType = [
-    { id: "vali", label: "Vali" },
-    { id: "sedaan", label: "Sedaan" },
-    { id: "luukpara", label: t('vehicleTypes.hatchback') },
-    { id: "universaal", label: "Universaal" },
-    { id: "mahtuniversaal", label: "Mahtuniversaal" },
-    { id: "kupee", label: "Kupee" },
-    { id: "kabriolett", label: "Kabriolett" },
-    { id: "pikap", label: "Pikap" },
-    { id: "limusiin", label: "Limusiin" },
+    { id: "vali", label: t('common.select') },
+    { id: "sedaan", label: t('bodyTypes.sedan') },
+    { id: "luukpara", label: t('bodyTypes.hatchback') },
+    { id: "universaal", label: t('bodyTypes.wagon') },
+    { id: "mahtuniversaal", label: t('bodyTypes.mpv') },
+    { id: "kupee", label: t('bodyTypes.coupe')},
+    { id: "kabriolett", label: t('bodyTypes.convertible') },
+    { id: "pikap", label: t('bodyTypes.pickup') },
+    { id: "limusiin", label: t('bodyTypes.limousine') },
   ]
 
   // Data for vehicle condition
   const technicalData = [
-    { id: "vali", label: "Vali" },
-    { id: "uus", label: "Uus" },
-    { id: "kasutatud", label: "Kasutatud" },
-    { id: "avariiline", label: "Avariiline" },
+    { id: "vali", label: t('common.select') },
+    { id: "uus", label: t('vehicleCondition.new') },
+    { id: "kasutatud", label: t('vehicleCondition.used') },
+    { id: "avariiline", label: t('vehicleCondition.damaged') },
   ];
   // Data for category types
   const categoryTypes = [
-    { id: "vali", label: "Vali" },
+    { id: "vali", label: t('common.select') },
     { id: "M1", label: "M1" },
     { id: "M2", label: "M2" },
     { id: "M3", label: "M3" },
@@ -273,38 +273,38 @@ export const CarListingSection = ({
   // Data for colors - expanded array with 48 colors
   const allColors = [
     { id: "beež", label: t('colors.beige'), color: "bg-yellow-100" },
-    { id: "hall", label: "Hall", color: "bg-gray-500" },
+    { id: "hall", label: t('colors.grey'), color: "bg-gray-500" },
     { id: "helebeež", label: t('colors.lightBeige'), color: "bg-yellow-50" },
-    { id: "helehall", label: "Hele hall", color: "bg-gray-300" },
-    { id: "hellkollane", label: "Hele kollane", color: "bg-yellow-200" },
-    { id: "helelilla", label: "Hele Lilla", color: "bg-purple-200" },
+    { id: "helehall", label: t('colors.lightGrey'), color: "bg-gray-300" },
+    { id: "hellkollane", label: t('colors.lightYellow'), color: "bg-yellow-200" },
+    { id: "helelilla", label: t('colors.lightPurple'), color: "bg-purple-200" },
     { id: "heleanž", label: t('colors.lightOrange'), color: "bg-orange-200" },
-    { id: "helepruun", label: "Hele Pruun", color: "bg-amber-200" },
-    { id: "helepunane", label: "Hele Punane", color: "bg-red-200" },
-    { id: "heleroheline", label: "Hele Roheline", color: "bg-green-200" },
-    { id: "helesinine", label: "Hele Sinine", color: "bg-blue-200" },
+    { id: "helepruun", label: t('colors.lightBrown'), color: "bg-amber-200" },
+    { id: "helepunane", label: t('colors.lightRed'), color: "bg-red-200" },
+    { id: "heleroheline", label: t('colors.brown'), color: "bg-green-200" },
+    { id: "helesinine", label: t('colors.lightBlue'), color: "bg-blue-200" },
     { id: "hõbedane", label: t('colors.silver'), color: "bg-gray-200" },
-    { id: "kollane", label: "Kollane", color: "bg-yellow-400" },
-    { id: "kuldne", label: "Kuldne", color: "bg-yellow-500" },
-    { id: "lilla", label: "Lilla", color: "bg-purple-500" },
+    { id: "kollane", label: t('colors.yellow'), color: "bg-yellow-400" },
+    { id: "kuldne", label: t('colors.golden'), color: "bg-yellow-500" },
+    { id: "lilla", label: t('colors.purple'), color: "bg-purple-500" },
     { id: "heleoranž", label: t('colors.lightOrange'), color: "bg-orange-200" },
-    { id: "must", label: "Must", color: "bg-black" },
+    { id: "must", label: t('colors.black'), color: "bg-black" },
     { id: "oranž", label: t('colors.orange'), color: "bg-orange-500" },
-    { id: "pruun", label: "Pruun", color: "bg-amber-700" },
-    { id: "punane", label: "Punane", color: "bg-red-500" },
-    { id: "roheline", label: "Roheline", color: "bg-green-500" },
-    { id: "roosa", label: "Roosa", color: "bg-pink-400" },
-    { id: "sinine", label: "Sinine", color: "bg-blue-500" },
+    { id: "pruun", label: t('colors.brown'), color: "bg-amber-700" },
+    { id: "punane", label: t('colors.red'), color: "bg-red-500" },
+    { id: "roheline", label: t('colors.green'), color: "bg-green-500" },
+    { id: "roosa", label: t('colors.pink'), color: "bg-pink-400" },
+    { id: "sinine", label: t('colors.blue'), color: "bg-blue-500" },
     { id: "tumebeež", label: t('colors.darkBeige'), color: "bg-yellow-600", },
-    { id: "tumehall", label: "Tume Hall", color: "bg-gray-700" },
-    { id: "tumekollane", label: "Tume Kollane", color: "bg-yellow-600" },
-    { id: "tumelilla", label: "Tume Lilla", color: "bg-purple-700" },
+    { id: "tumehall", label: t('colors.darkGrey'), color: "bg-gray-700" },
+    { id: "tumekollane", label: t('colors.darkYellow'), color: "bg-yellow-600" },
+    { id: "tumelilla", label: t('colors.darkPurple'), color: "bg-purple-700" },
     { id: "tumeoranž", label: t('colors.darkOrange'), color: "bg-orange-600" },
-    { id: "tumerpruun", label: "Tume Pruun", color: "bg-amber-800" },
-    { id: "tumerpunane", label: "Tume Punane", color: "bg-red-700" },
-    { id: "tumeroheline", label: "Tume Oheline", color: "bg-green-700" },
-    { id: "tumesinine", label: "Tume Sinine", color: "bg-blue-700" },
-    { id: "valge", label: "Valge", color: "bg-white", },
+    { id: "tumerpruun", label: t('colors.darkBrown'), color: "bg-amber-800" },
+    { id: "tumerpunane", label: t('colors.darkRed'), color: "bg-red-700" },
+    { id: "tumeroheline", label: t('colors.darkGreen') , color: "bg-green-700" },
+    { id: "tumesinine", label: t('colors.darkBlue'), color: "bg-blue-700" },
+    { id: "valge", label: t('colors.white'), color: "bg-white", },
   ];
 
   // State to control showing all colors or just initial 6
@@ -322,78 +322,78 @@ export const CarListingSection = ({
   // Data for additional info
   const additionalInfo = [
     { id: "vahetuse-voimalus", label: t('common.exchangepossible'), filterKey: "exchange_possible" },
-    { id: "garantiiga", label: "Garantiiga", filterKey: "with_warranty" },
+    { id: "garantiiga", label: t('common.warranty'), filterKey: "with_warranty" },
   ];
 
   // Data for equipment
   const accessoriesOptions = [
     { key: 'kokkupõrgetennetavpidurisüsteem', label: t('carFeatures.collisionPreventionBrakingSystem') },
-    { key: 'pimenurgahoiatus', label: 'Pimenurga Hoiatus' },
+    { key: 'pimenurgahoiatus', label: t('carFeatures.blindSpotWarning') },
     { key: 'sõidurajahoidmiseabisüsteem', label: t('carFeatures.laneKeepingAssistSystem') },
     { key: 'sõidurajavahetamiseabisüsteem', label: t('carFeatures.laneChangeAssistSystem') },
     { key: 'adaptiivnepüsikiirusehoidja', label: t('carFeatures.adaptiveCruiseControl') },
     { key: 'liiklusmärkidetuvastusjakuvamine', label: t('carFeatures.trafficSignRecognition') },
-    { key: 'parkimisandurideesjataga', label: 'Parkimisandurid Ees ja Taga' },
-    { key: 'parkimiskaamera', label: 'Parkimiskaamera' },
-    { key: 'parkimiskaamera360', label: 'Parkimiskaamera 360°' },
+    { key: 'parkimisandurideesjataga', label: t('carFeatures.parkingSensorsFrontRear') },
+    { key: 'parkimiskaamera', label: t('carFeatures.parkingCamera') },
+    { key: 'parkimiskaamera360', label: t('carFeatures.parkingCamera360') },
     { key: 'kaugtuledeümberlülitamiseassistent', label: t('carFeatures.highBeamAssist') },
-    { key: 'LEDesituled', label: 'LED Esituled' },
-    { key: 'Xenonesituled', label: 'Xenon Esituled' },
-    { key: 'lasersituled', label: 'Laser Esituled' },
-    { key: 'elektriliseoojendusegaesiklaas', label: 'Elektrilise Soojendusega Esiklaas' },
-    { key: 'kliimaseade', label: 'Kliimaseade' },
-    { key: 'salongieelsoojendus', label: 'SalongiEelsoojendus' },
-    { key: 'mootorieelsoojendus', label: 'MootoriEelsoojendus' },
-    { key: 'salongilisaoojendus', label: 'Salongi Lisasoojendus' },
-    { key: 'istmesoojendused', label: 'Istmesoojendused' },
-    { key: 'elektriliseltreguleeritavadIstmed', label: 'Elektriliselt Reguleeritavad Istmed' },
-    { key: 'comfortistmed', label: 'Comfort Istmed' },
-    { key: 'sportistmed', label: 'Sport Istmed' },
-    { key: 'nahkpolster', label: 'Nahkpolster' },
-    { key: 'poolnahkpolster', label: 'Poolnahkpolster' },
-    { key: 'tagaistmeseljatugiallaklapitav', label: 'Tagaistme Seljatugi Allaklapitav' },
-    { key: 'eraldikliimaseadetagaistmetele', label: 'Eraldi Kliimaseade Tagaistmetele' },
+    { key: 'LEDesituled', label: t('carFeatures.ledHeadlights') },
+    { key: 'Xenonesituled', label: t('carFeatures.xenonHeadlights') },
+    { key: 'lasersituled', label: t('carFeatures.laserHeadlights') },
+    { key: 'elektriliseoojendusegaesiklaas', label: t('carFeatures.heatedWindscreen') },
+    { key: 'kliimaseade', label: t('carFeatures.airConditioning') },
+    { key: 'salongieelsoojendus', label: t('carFeatures.cabinPreheater') },
+    { key: 'mootorieelsoojendus', label: t('carFeatures.enginePreheater') },
+    { key: 'salongilisaoojendus', label: t('carFeatures.additionalCabinHeater') },
+    { key: 'istmesoojendused', label: t('carFeatures.seatHeating') },
+    { key: 'elektriliseltreguleeritavadIstmed', label: t('carFeatures.electricSeats') },
+    { key: 'comfortistmed', label: t('carFeatures.comfortSeats') },
+    { key: 'sportistmed', label: t('carFeatures.sportSeats') },
+    { key: 'nahkpolster', label: t('carFeatures.leatherUpholstery') },
+    { key: 'poolnahkpolster', label: t('carFeatures.semiLeatherUpholstery') },
+    { key: 'tagaistmeseljatugiallaklapitav', label: t('carFeatures.rearSeatBackFoldable') },
+    { key: 'eraldikliimaseadetagaistmetele', label: t('carFeatures.rearSeatIndependentClimate') },
     { key: 'võtmetavamine', label: t('carFeatures.keylessEntry') },
     { key: 'võtmetaäivitus', label: t('carFeatures.keylessStart') },
-    { key: 'pakiruumiavaminejasulgeminelektriliselt', label: 'Pakiruumi Avamine ja Sulgemine Elektriliselt' },
-    { key: 'soojendusegarool', label: 'Soojendusega Rool' },
-    { key: 'ventileeritavadstmed', label: 'Ventileeritavad Istmed' },
+    { key: 'pakiruumiavaminejasulgeminelektriliselt', label: t('carFeatures.powerTailgate') },
+    { key: 'soojendusegarool', label: t('carFeatures.heatedSteeringWheel') },
+    { key: 'ventileeritavadstmed', label: t('carFeatures.ventilatedSeats') },
     { key: 'massaažifunktsioonigaiistmed', label: t('carFeatures.massageSeats') },
-    { key: 'infokuvamineesiklaasile', label: 'Info Kuvamine Esiklaasile' },
-    { key: 'panoraamkatusklaasist', label: 'Panoraamkatus (klaasist)' },
-    { key: 'katuseluuk', label: 'Katuseluuk' },
-    { key: 'usteservosulgurid', label: 'Uste Servosulgurid' },
-    { key: 'topeltklaasid', label: 'Topeltklaasid' },
-    { key: 'rulookardinadustel', label: 'Rulookardinad Ustel' },
+    { key: 'infokuvamineesiklaasile', label: t('carFeatures.headUpDisplay') },
+    { key: 'panoraamkatusklaasist', label: t('carFeatures.panoramicRoof') },
+    { key: 'katuseluuk', label: t('carFeatures.sunroof') },
+    { key: 'usteservosulgurid', label: t('carFeatures.softCloseDoors') },
+    { key: 'topeltklaasid', label: t('carFeatures.doubleGlazing') },
+    { key: 'rulookardinadustel', label: t('carFeatures.doorSunblinds') },
     { key: 'integreeritudVäravapult', label: t('carFeatures.integratedGarageRemote') },
     { key: 'AppleCarPlay', label: 'Apple CarPlay' },
     { key: 'AndroidAuto', label: 'Android Auto' },
-    { key: 'stereo', label: 'Stereo' },
+    { key: 'stereo', label: t('carFeatures.stereo') },
     { key: 'õhkvedrustus', label: t('carFeatures.airSuspension') },
-    { key: 'reguleeritavvedrustus', label: 'Reguleeritav Vedrustus' },
+    { key: 'reguleeritavvedrustus', label: t('carFeatures.adjustableSuspension') },
     { key: '4-rattapööramine', label: t('carFeatures.fourWheelSteering') },
-    { key: 'veokonks', label: 'Veokonks' },
-    { key: 'elektrilisedliuguksed', label: 'Elektrilised Liuguksed' },
+    { key: 'veokonks', label: t('carFeatures.towHook') },
+    { key: 'elektrilisedliuguksed', label: t('carFeatures.powerSlidingDoors') },
     { key: 'öiseNägemiseassistent', label: t('carFeatures.nightVisionAssistant') },
-    { key: 'valgustuspakett', label: 'Valgustuspakett' },
-    { key: 'suverehvid', label: 'Suverehvid' },
-    { key: 'talverehvid', label: 'Talverehvid' },
-    { key: 'valuveljed', label: 'Valuveljed' },
+    { key: 'valgustuspakett', label: t('carFeatures.lightingPackage') },
+    { key: 'suverehvid', label: t('carFeatures.summerTires') },
+    { key: 'talverehvid', label: t('carFeatures.winterTires') },
+    { key: 'valuveljed', label: t('carFeatures.alloyWheels') },
   ];
 
   // Range input groups
   const rangeInputGroups = [
-    { id: "price", label: "Hind", minKey: "price_min", maxKey: "price_max" },
-    { id: "year", label: "Aasta", minKey: "year_min", maxKey: "year_max" },
+    { id: "price", label: t('car.price'), minKey: "price_min", maxKey: "price_max" },
+    { id: "year", label: t('car.year'), minKey: "year_min", maxKey: "year_max" },
     { id: "mileage", label: t('carSpecs.mileage') + " (km)", minKey: "mileage_min", maxKey: "mileage_max" },
-    { id: "seats", label: "Istekohti", minKey: "seats_min", maxKey: "seats_max" },
-    { id: "doors", label: "Uste arv", minKey: "doors_min", maxKey: "doors_max" },
+    { id: "seats", label: t('formLabels.seats'), minKey: "seats_min", maxKey: "seats_max" },
+    { id: "doors", label: t('formLabels.doors'), minKey: "doors_min", maxKey: "doors_max" },
     { id: "power", label: t('carSpecs.power') + " (kw)", minKey: "power_min", maxKey: "power_max" },
-    { id: "engine", label: "Mootorimaht (cm3)", minKey: "engine_min", maxKey: "engine_max" },
+    { id: "engine", label: t('car.engine'), minKey: "engine_min", maxKey: "engine_max" },
     { id: "fuel-city", label: t('carSpecs.fuelCity') + " (100km)", minKey: "fuel_city_min", maxKey: "fuel_city_max" },
     { id: "fuel-highway", label: t('carSpecs.fuelHighway') + " (100km)", minKey: "fuel_highway_min", maxKey: "fuel_highway_max" },
     { id: "fuel-average", label: t('carSpecs.fuelAverage') + " (100km)", minKey: "fuel_average_min", maxKey: "fuel_average_max" },
-    { id: "co2", label: "CO2 (100km)", minKey: "co2_min", maxKey: "co2_max" },
+    { id: "co2", label: t('car.co2'), minKey: "co2_min", maxKey: "co2_max" },
   ];
 
   const [selectedColor, setSelectedColor] = useState<string | null>(filters.carColor || null);
@@ -554,7 +554,7 @@ export const CarListingSection = ({
               }}
             >
               <SelectTrigger className="w-full h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]">
-                <SelectValue placeholder="Kategooria" />
+                <SelectValue placeholder={t('blog.category')} />
               </SelectTrigger>
               <SelectContent>
                 {categoryTypes.map((category) => (
@@ -604,7 +604,7 @@ export const CarListingSection = ({
                 options={brands.map(brand => ({ value: brand.id.toString(), label: brand.name }))}
                 value={filters.brand_id?.toString() || ""}
                 onValueChange={handleBrandChange}
-                placeholder="Mark"
+                placeholder={t('formLabels.brand')}
                 searchPlaceholder="Otsi marki..."
                 emptyMessage={t('uiActions.brandNotFound')}
               />
@@ -626,8 +626,8 @@ export const CarListingSection = ({
                     updateFilter('model_id', Number(value));
                   }
                 }}
-                placeholder="Mudelid"
-                searchPlaceholder="Otsi mudelit..."
+                placeholder={t('formLabels.model')}
+                searchPlaceholder={t('common.search')}
                 emptyMessage={t('uiActions.modelNotFound')}
                 disabled={filters.brand_id === undefined || filters.brand_id === null}
               />
@@ -635,14 +635,14 @@ export const CarListingSection = ({
 
             <Input
               className="h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474] border-none"
-              placeholder="Mudeli nimi"
+              placeholder={t('common.modelName')}
               value={filters.model_name || ''}
               onChange={(e) => updateFilter('model_name', e.target.value)}
             />
 
             <Input
               className="h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474] border-none"
-              placeholder="Varustustase/versioon"
+              placeholder={t('common.equipmentLevelVersion')}
               value={filters.trim_level || ''}
               onChange={(e) => updateFilter('trim_level', e.target.value)}
             />
@@ -670,7 +670,10 @@ export const CarListingSection = ({
                         htmlFor={type.id.toString()}
                         className="font-['Poppins',Helvetica] font-normal text-base"
                       >
-                        {type.ee_name}
+                        {type.name === 'esivedu' ? t('driveTypes.frontWheel') :
+                         type.name === 'tagavedu' ? t('driveTypes.rearWheel') :
+                         type.name === 'nelikvedu' ? t('driveTypes.allWheel') :
+                         type.ee_name}
                       </label>
                     </div>
                   ))}
@@ -697,7 +700,7 @@ export const CarListingSection = ({
                     <div className="flex items-center space-x-2">
                       <Input
                         className="w-[109px] h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]"
-                        placeholder="alates"
+                        placeholder={t('common.from')}
                         value={filters[group.minKey as keyof CarFilters]?.toString() || ''}
                         onChange={(e) => updateRangeFilter(
                           group.minKey as keyof CarFilters,
@@ -711,7 +714,7 @@ export const CarListingSection = ({
                       </span>
                       <Input
                         className="w-[109px] h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]"
-                        placeholder="kuni"
+                        placeholder={t('common.to')}
                         value={filters[group.maxKey as keyof CarFilters]?.toString() || ''}
                         onChange={(e) => updateRangeFilter(
                           group.minKey as keyof CarFilters,

@@ -162,7 +162,7 @@ export default function UserPageMobile() {
       <Header />
 
       {/* Main Content */}
-      <main className="mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Page Title */}
         <h1 className="text-[26px] font-semibold leading-[150%] tracking-[-0.78px] text-motorsonline-dark mb-10">
           {t('listing.myListings')}

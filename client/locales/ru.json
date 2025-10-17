@@ -25,7 +25,13 @@
     "saving": "Сохранение...",
     "deleteListing": "Удалить объявление",
     "exchangepossible": "Возможность обмена",
-    "or": "или"
+    "or": "или",
+    "warranty": "Гарантия",
+    "searchForBrands": "Поиск брендов",
+    "modelName":"Название модели",
+    "equipmentLevelVersion": "Уровень/версия оборудования",
+    "from": "От",
+    "to": "До"
   },
   "navigation": {
     "home": "Главная",

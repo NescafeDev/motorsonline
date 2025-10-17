@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useI18n } from "@/contexts/I18nContext";
 
 interface AdminSidebarProps {
-  active: "blog" | "adds";
+  active: "blog" | "adds" | "privacy" | "terms";
 }
 
 const AdminSidebar: React.FC<AdminSidebarProps> = ({ active }) => {
@@ -25,6 +25,18 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ active }) => {
           onClick={() => navigate(`/${currentLanguage}/admin/adds`)}
         >
           Adds
+        </button>
+        <button
+          className={`text-left px-4 py-2 rounded hover:bg-gray-100 font-semibold ${active === "privacy" ? "bg-brand-primary text-white" : ""}`}
+          onClick={() => navigate(`/${currentLanguage}/admin/privacy`)}
+        >
+          Privaatsuspoliitika
+        </button>
+        <button
+          className={`text-left px-4 py-2 rounded hover:bg-gray-100 font-semibold ${active === "terms" ? "bg-brand-primary text-white" : ""}`}
+          onClick={() => navigate(`/${currentLanguage}/admin/terms`)}
+        >
+          Teenusetingimused
         </button>
       </nav>
     </aside>

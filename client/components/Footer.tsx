@@ -97,13 +97,13 @@ export default function Footer() {
           {/* Legal Links */}
           <div className="flex flex-col lg:flex-row gap-4 lg:gap-[60px]">
             <a
-              href="#"
+              href={`/${currentLang}/privacy`}
               className="text-brand-gray-dark text-right font-poppins text-base font-normal leading-[150%] tracking-[-0.32px] hover:text-white transition-colors"
             >
               {t('footer.privacy')}
             </a>
             <a
-              href="#"
+              href={`/${currentLang}/terms`}
               className="text-brand-gray-dark text-right font-poppins text-base font-normal leading-[150%] tracking-[-0.32px] hover:text-white transition-colors"
             >
               {t('footer.terms')}

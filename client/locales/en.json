@@ -25,7 +25,13 @@
     "saving": "Saving...",
     "deleteListing": "Delete Listing",
     "exchangepossible": "Exchange possible",
-    "or": "or"
+    "or": "or",
+    "warranty": "Warranty",
+    "searchForBrands":"Search For Brands",
+    "modelName":"Model Name",
+    "equipmentLevelVersion":"Equipment Level/Version",
+    "from":"From",
+    "to":"To"
   },
   "navigation": {
     "home": "Home",

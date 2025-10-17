@@ -11,7 +11,7 @@ export default function Footer() {
 
 
   return (
-    <footer className="bg-[#1D1D1D] text-white px-5 py-16 mt-[10%]">
+    <footer className="bg-[#1D1D1D] text-white px-5 py-16 mt-[10%] w-full bottom-0">
       <div className="space-y-12 max-w-7xl mx-auto px-3">
         <div>
           <svg
@@ -56,10 +56,10 @@ export default function Footer() {
               All rights reserved.
             </p>
             <div className="text-left md:text-right space-y-1">
-              <p className="text-[#6D6D6D] text-sm tracking-[-0.28px]">
+              <p className="text-[#6D6D6D] text-sm tracking-[-0.28px]" onClick={() => navigate(`/${currentLang}/privacy`)}>
                 {t('footer.privacy')}
               </p>
-              <p className="text-[#6D6D6D] text-sm tracking-[-0.28px]">
+              <p className="text-[#6D6D6D] text-sm tracking-[-0.28px]" onClick={() => navigate(`/${currentLang}/terms`)}>
                 {t('footer.terms')}
               </p>
             </div>

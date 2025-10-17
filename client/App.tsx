@@ -28,6 +28,8 @@ import AddsPage from "./pages/AddsPage";
 import AdminLoginPage from "./pages/admin/index";
 import AdminBlogPanel from "./pages/admin/blog";
 import AdminAddsPage from "./pages/admin/adds";
+import AdminPrivacyPanel from "./pages/admin/privacy";
+import AdminTermsPanel from "./pages/admin/terms";
 
 // Mobile Pages
 import HomePageMobile from "./pages/HomePageMobile";
@@ -43,6 +45,10 @@ import BlogPostPageMobile from "./pages/BlogPostPageMobile";
 import SearchPage from "./pages/SearchPage";
 import SearchPageMobile from "./pages/SearchPageMobile";
 import { FavoritesTest } from "./components/FavoritesTest";
+import Privacy from "./pages/Privacy";
+import PrivacyMobile from "./pages/PrivacyMobile";
+import Terms from "./pages/Terms";
+import TermsMobile from "./pages/TermsMobile";
 
 const queryClient = new QueryClient();
 
@@ -77,6 +83,8 @@ const App = () => (
                   <Route path="admin" element={<AdminLoginPage />} />
                   <Route path="admin/blog" element={<AdminBlogPanel />} />
                   <Route path="admin/adds" element={<AdminAddsPage />} />
+                  <Route path="admin/privacy" element={<AdminPrivacyPanel />} />
+                  <Route path="admin/terms" element={<AdminTermsPanel />} />
                   <Route
                     path="login"
                     element={
@@ -157,6 +165,20 @@ const App = () => (
                       <MobilePageWrapper
                         desktopComponent={SearchPage}
                         mobileComponent={SearchPageMobile}
+                      />
+                    }
+                  />
+                  <Route path="privacy" element={
+                      <MobilePageWrapper
+                        desktopComponent={Privacy}
+                        mobileComponent={PrivacyMobile}
+                      />
+                    }
+                  />
+                  <Route path="terms" element={
+                      <MobilePageWrapper
+                        desktopComponent={Terms}
+                        mobileComponent={TermsMobile}
                       />
                     }
                   />
