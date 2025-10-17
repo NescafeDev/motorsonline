@@ -39,7 +39,7 @@ export const ImageGallerySection = ({ car }: ImageGallerySectionProps): JSX.Elem
   // Vehicle description data
   
   return (
-    <section className="w-full max-w-[1240px] mx-auto my-8">
+    <section className="w-full max-w-[1240px] mx-auto mt-8">
       <Card className="bg-[#f6f7f9] rounded-[10px] p-5">
         <CardContent className="p-0 space-y-8">
           {/* Equipment */}
