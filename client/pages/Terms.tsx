@@ -9,7 +9,8 @@ export default function Terms() {
   const { currentLanguage } = useI18n();
   const [termsContent, setTermsContent] = useState('');
   const [loading, setLoading] = useState(true);
-
+  const { t } = useI18n();
+  
   useEffect(() => {
     const loadTermsContent = async () => {
       try {
@@ -46,8 +47,8 @@ export default function Terms() {
       <PageContainer>
         <div className="py-8 xl:w-[75%] mx-auto">
             <div className="bg-white p-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-6">
-                Teenusetingimused
+              <h1 className="text-[30px] font-semibold leading-[150%] tracking-[-0.78px] text-motorsonline-dark mb-6">
+                {t('footer.terms')}
               </h1>
               
               {termsContent ? (

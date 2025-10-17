@@ -9,7 +9,7 @@ export default function TermsMobile() {
   const { currentLanguage } = useI18n();
   const [termsContent, setTermsContent] = useState('');
   const [loading, setLoading] = useState(true);
-
+  const { t } = useI18n();
   useEffect(() => {
     const loadTermsContent = async () => {
       try {
@@ -47,8 +47,8 @@ export default function TermsMobile() {
     <Header />
         <div className="py-8 xl:w-[75%] mx-auto">
             <div className="p-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            Teenusetingimused
+          <h1 className="text-[30px] font-semibold leading-[150%] tracking-[-0.78px] text-motorsonline-dark mb-4">
+            {t('footer.terms')}
           </h1>
           
           {termsContent ? (
