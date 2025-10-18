@@ -249,7 +249,7 @@ export default function CarPageMobile() {
     { label: t('formLabels.year') + ':' , value:car.year_value},
     { label: t('formLabels.powerKw') + ':', value: car.power },
     { label: t('formLabels.displacement') + ':', value: car.displacement },
-    { label: t('formLabels.transmission') + ':', value: car.transmission },
+    { label: t('formLabels.transmissionType') + ':', value: car.transmission },
     { label: t('formLabels.driveType') + ':', value: car.drive_type_ee_name },
     { label: t('formLabels.fuelType') + ':', value: car.fuelType },
     { label: t('formLabels.categoryDesignation') + ':', value: car.category },
