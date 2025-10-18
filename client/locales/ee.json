@@ -365,6 +365,15 @@
     "seller": "Müüja",
     "business": "Äri",
     "latvia": "Läti",
+    "estonia": "Eesti",
+    "lithuania": "Leedu",
+    "finland": "Soome",
+    "germany": "Saksamaa",
+    "netherlands": "Holland",
+    "belgium": "Belgia",
+    "france": "Prantsusmaa",
+    "private": "Era",
+    "importedFrom": "Toodud riigist",
     "priceAndGeneralInfo": "Hind & üldandmed",
     "withVAT": "Käibemaksuga",
     "inspection": "Ülevaatus",
@@ -448,7 +457,8 @@
     "addSocialNetwork": "Sotsiaalvõrgustik",
     "higherValueAccessories": "Kõrgema väärtusega lisavarustus",
     "examplePlaceholder": "Näide: Garantii, Panoraamkatus, Veokonks",
-    "sendEmail": "Saada e-post"
+    "sendEmail": "Saada e-post",
+    "search": "Osti"
   },
   "photo": {
     "addMain": "+Lisa foto (põhipilt)",

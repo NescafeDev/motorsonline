@@ -157,8 +157,8 @@ const salonColorOptions = ( t: any ) => [
   { value: "muu", label: t('vehicleTypes.other') },
 ];
 
-const inspectionValidityOptions = [
-  { value: "", label: "otsi" },
+const inspectionValidityOptions = ( t: any ) => [
+  { value: "", label: t('formLabels.search') },
   { value: "09.2025", label: "09.2025" },
   { value: "10.2025", label: "10.2025" },
   { value: "11.2025", label: "11.2025" },
@@ -1336,7 +1336,7 @@ export default function AddsPage() {
               />
               <FormField
                 label={t('formLabels.mileage')}
-                placeholder={t('common.select')}
+                placeholder="0"
                 value={formData.mileage}
                 onChange={(value) => handleInputChange("mileage", value)}
               />
@@ -1708,11 +1708,11 @@ export default function AddsPage() {
                   },
                   {
                     value: "jah",
-                    label: "JAH",
+                    label: t('common.yes'),
                   },
                   {
                     value: "ei",
-                    label: "EI",
+                    label: t('common.no'),
                   },
                 ]}
               />
@@ -1754,11 +1754,11 @@ export default function AddsPage() {
                   <div className="flex-1 items-center ml-7">
                     <FormField
                       label=""
-                      placeholder="otsi"
+                      placeholder={t('formLabels.search')}
                       isSelect
                       value={formData.inspectionValidityPeriod}
                       onChange={(value) => handleInputChange("inspectionValidityPeriod", value)}
-                      options={inspectionValidityOptions}
+                      options={inspectionValidityOptions(t)}
                       disabled={!checktechboxes.inspectionValid}
                     />
                   </div>

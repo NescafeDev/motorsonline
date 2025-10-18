@@ -364,6 +364,15 @@
     "seller": "Seller",
     "business": "Business",
     "latvia": "Latvia",
+    "estonia": "Estonia",
+    "lithuania": "Lithuania",
+    "finland": "Finland",
+    "germany": "Germany",
+    "netherlands": "Netherlands",
+    "belgium": "Belgium",
+    "france": "France",
+    "private": "Private",
+    "importedFrom": "Imported From",
     "priceAndGeneralInfo": "Price & General Information",
     "withVAT": "With VAT",
     "inspection": "Inspection",
@@ -447,7 +456,8 @@
     "addSocialNetwork": "Social Network",
     "higherValueAccessories": "Higher Value Accessories",
     "examplePlaceholder": "Example: Warranty, Panoramic roof, Towbar",
-    "sendEmail": "Send Email"
+    "sendEmail": "Send Email",
+    "search": "Search"
   },
   "photo": {
     "addMain": "+ Add main photo",

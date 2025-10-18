@@ -365,6 +365,15 @@
     "seller": "Продавец",
     "business": "Бизнес",
     "latvia": "Латвия",
+    "estonia": "Эстония",
+    "lithuania": "Литва",
+    "finland": "Финляндия",
+    "germany": "Германия",
+    "netherlands": "Нидерланды",
+    "belgium": "Белгия",
+    "france": "Франция",
+    "private": "Частное лицо",
+    "importedFrom": "Импортировано из",
     "priceAndGeneralInfo": "Цена и общая информация",
     "withVAT": "С НДС",
     "inspection": "Осмотр",
@@ -462,7 +471,8 @@
     "addSocialNetwork": "Социальная сеть",
     "higherValueAccessories": "Высокоценное дополнительное оборудование",
     "examplePlaceholder": "Пример: Гарантия, Панорамная крыша, Фаркопы",
-    "sendEmail": "электронная почта"
+    "sendEmail": "электронная почта",
+    "search": "поиск"
   },
   "photo": {
     "addMain": "+ Добавить основное фото",

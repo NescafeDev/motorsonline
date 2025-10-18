@@ -1213,7 +1213,7 @@ export default function AddsPageMobile() {
               />
               <FormField
                 label={t('formLabels.mileage')}
-                placeholder={t('formLabels.mileage')}
+                placeholder="0"
                 value={formData.mileage}
                 onChange={(value) => handleInputChange("mileage", value)}
               />
@@ -1653,11 +1653,11 @@ export default function AddsPageMobile() {
                   },
                   {
                     value: "jah",
-                    label: "JAH",
+                    label: t('common.yes'),
                   },
                   {
                     value: "ei",
-                    label: "EI",
+                    label: t('common.no'),
                   },
                 ]}
               />

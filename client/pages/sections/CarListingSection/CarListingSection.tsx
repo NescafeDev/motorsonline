@@ -393,7 +393,7 @@ export const CarListingSection = ({
     { id: "fuel-city", label: t('carSpecs.fuelCity') + " (100km)", minKey: "fuel_city_min", maxKey: "fuel_city_max" },
     { id: "fuel-highway", label: t('carSpecs.fuelHighway') + " (100km)", minKey: "fuel_highway_min", maxKey: "fuel_highway_max" },
     { id: "fuel-average", label: t('carSpecs.fuelAverage') + " (100km)", minKey: "fuel_average_min", maxKey: "fuel_average_max" },
-    { id: "co2", label: t('car.co2'), minKey: "co2_min", maxKey: "co2_max" },
+    { id: "co2", label: "CO2", minKey: "co2_min", maxKey: "co2_max" },
   ];
 
   const [selectedColor, setSelectedColor] = useState<string | null>(filters.carColor || null);
@@ -693,7 +693,7 @@ export const CarListingSection = ({
               </AccordionTrigger>
               <AccordionContent>
                 {rangeInputGroups.slice(0, 5).map((group) => (
-                  <div key={group.id} className="space-y-2">
+                  <div key={group.id} className="space-y-2 pb-2">
                     <label className="block font-['Poppins',Helvetica] font-normal text-[#747474] text-base">
                       {group.label}
                     </label>
@@ -859,7 +859,7 @@ export const CarListingSection = ({
                 {t('formLabels.technicalSpecs')}
               </AccordionTrigger>
               <AccordionContent>
-                <div className="space-y-4">
+                <div className="space-y-2 pb-2">
                   {rangeInputGroups.slice(5).map((group) => (
                     <div key={group.id} className="space-y-2">
                       <label className="block font-['Poppins',Helvetica] font-normal text-[#747474] text-base">
@@ -987,10 +987,10 @@ export const CarListingSection = ({
                       <SelectValue placeholder={t('formLabels.country')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Eesti">Eesti</SelectItem>
+                      <SelectItem value="Eesti">{t('formLabels.estonia')}</SelectItem>
                       <SelectItem value="Läti">{t('formLabels.latvia')}</SelectItem>
-                      <SelectItem value="Leedu">Leedu</SelectItem>
-                      <SelectItem value="Soome">Soome</SelectItem>
+                      <SelectItem value="Leedu">{t('formLabels.lithuania')}</SelectItem>
+                      <SelectItem value="Soome">{t('formLabels.finland')}</SelectItem>
                     </SelectContent>
                   </Select>
 
@@ -999,22 +999,22 @@ export const CarListingSection = ({
                       <SelectValue placeholder={t('formLabels.registeredCountry')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Eesti">Eesti</SelectItem>
+                      <SelectItem value="Eesti">{t('formLabels.estonia')}</SelectItem>
                       <SelectItem value="Läti">{t('formLabels.latvia')}</SelectItem>
-                      <SelectItem value="Leedu">Leedu</SelectItem>
-                      <SelectItem value="Soome">Soome</SelectItem>
+                      <SelectItem value="Leedu">{t('formLabels.lithuania')}</SelectItem>
+                      <SelectItem value="Soome">{t('formLabels.finland')}</SelectItem>
                     </SelectContent>
                   </Select>
 
                   <Select value={filters.imported_from} onValueChange={(value) => updateFilter('imported_from', value)}>
                     <SelectTrigger className="w-full h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]">
-                      <SelectValue placeholder="Toodud riigist" />
+                      <SelectValue placeholder={t('formLabels.importedFrom')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Saksamaa">Saksamaa</SelectItem>
-                      <SelectItem value="Holland">Holland</SelectItem>
-                      <SelectItem value="Belgia">Belgia</SelectItem>
-                      <SelectItem value="Prantsusmaa">Prantsusmaa</SelectItem>
+                      <SelectItem value="Saksamaa">{t('formLabels.germany')}</SelectItem>
+                      <SelectItem value="Holland">{t('formLabels.netherlands')}</SelectItem>
+                      <SelectItem value="Belgia">{t('formLabels.belgium')}</SelectItem>
+                      <SelectItem value="Prantsusmaa">{t('formLabels.france')}</SelectItem>
                     </SelectContent>
                   </Select>
 
@@ -1023,7 +1023,7 @@ export const CarListingSection = ({
                       <SelectValue placeholder={t('formLabels.seller')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="era">Era</SelectItem>
+                      <SelectItem value="era">{t('formLabels.private')}</SelectItem>
                       <SelectItem value="äri">{t('formLabels.business')}</SelectItem>
                     </SelectContent>
                   </Select>
