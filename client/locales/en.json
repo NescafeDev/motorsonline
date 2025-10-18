@@ -494,9 +494,17 @@
     "n1": "Vans, total mass ≤ 3.5 t",
     "n2": "Trucks, total mass 3.5–12 t",
     "n3": "Heavy trucks, total mass > 12 t",
+    "l1e": "Motorcycles with sidecar",
+    "l2e": "Three-wheeled motor vehicles",
+    "l3e": "Motorcycles",
     "l4e": "Motorcycles with sidecar",
     "l5e": "Three-wheeled motor vehicles",
-    "l7e": "Heavy four-wheeler (> 45 km/h or > 425 kg)"
+    "l6e": "Light four-wheeler (< 45 km/h or < 425 kg)",
+    "l7e": "Light four-wheeler (> 45 km/h or > 425 kg)",
+    "o1": "Light trailers, ≤ 0,75 t",
+    "o2": "Trailers, 0,75–3,5 t",
+    "o3": "Trailers, 3,5–10 t",
+    "o4": "Trailers, > 10 t"
   },
   "modelDetails": {
     "title": "Model Details"

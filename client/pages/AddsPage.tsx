@@ -1628,17 +1628,17 @@ export default function AddsPage() {
                           "N1": t('vehicleCategories.n1'),
                           "N2": t('vehicleCategories.n2'),
                           "N3": t('vehicleCategories.n3'),
-                          "L1e": "Kergetsiklid (≤ 50 cm³ ja ≤ 45 km/h)",
-                          "L2e": "Kolmerattalised kergetsiklid",
-                          "L3e": "Mootorrattad",
-                          "L4e": "Mootorrattad külgkorviga",
-                          "L5e": "Kolmerattalised mootorsõidukid",
-                          "L6e": "Kerge neljarattaline (≤ 45 km/h ja ≤ 425 kg)",
-                          "L7e": "Raske neljarattaline (> 45 km/h või > 425 kg)",
-                          "O1": "Kerghaagised, ≤ 0,75 t",
-                          "O2": "Haagised, 0,75–3,5 t",
-                          "O3": "Haagised, 3,5–10 t",
-                          "O4": "Haagised, > 10 t"
+                          "L1e": t('vehicleCategories.l1e'),
+                          "L2e": t('vehicleCategories.l2e'),
+                          "L3e": t('vehicleCategories.l3e'),
+                          "L4e": t('vehicleCategories.l4e'),
+                          "L5e": t('vehicleCategories.l5e'),
+                          "L6e": t('vehicleCategories.l6e'),
+                          "L7e": t('vehicleCategories.l7e'),
+                          "O1": t('vehicleCategories.o1'),
+                          "O2": t('vehicleCategories.o2'),
+                          "O3": t('vehicleCategories.o3'),
+                          "O4": t('vehicleCategories.o4'),
                         };
                         return descriptions[formData.category] || "";
                       })()}
