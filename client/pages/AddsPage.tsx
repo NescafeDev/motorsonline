@@ -45,13 +45,13 @@ const ChevronDownIcon = ({ className = "" }: { className?: string }) => (
     />
   </svg>
 );
-const techCheckOptions=( t: any ) => [
+const techCheckOptions = (t: any) => [
   { key: 'technicalInspection', label: t('formLabels.inspection') },
   { key: 'technicalMaintenance', label: t('formLabels.technicalMaintenance') },
   { key: 'serviceBook', label: t('formLabels.serviceBook') },
   { key: 'hideVin', label: t('formLabels.hideVin') },
 ];
-const accessoriesOptions = ( t: any ) => [
+const accessoriesOptions = (t: any) => [
   { key: 'kokkupõrgetennetavpidurisüsteem', label: t('carFeatures.collisionPreventionBrakingSystem') },
   { key: 'pimenurgahoiatus', label: t('carFeatures.blindSpotWarning') },
   { key: 'sõidurajahoidmiseabisüsteem', label: t('carFeatures.laneKeepingAssistSystem') },
@@ -106,7 +106,7 @@ const accessoriesOptions = ( t: any ) => [
   { key: 'valuveljed', label: t('carFeatures.alloyWheels') },
 ];
 
-const carColorOptions = ( t: any ) => [
+const carColorOptions = (t: any) => [
   { value: "beež", label: t('colors.beige') },
   { value: "helebeež", label: t('colors.lightBeige') },
   { value: "hall", label: t('colors.grey') },
@@ -142,7 +142,7 @@ const carColorOptions = ( t: any ) => [
   { value: "valge", label: t('colors.white') },
 ];
 
-const salonColorOptions = ( t: any ) => [
+const salonColorOptions = (t: any) => [
   { value: "must", label: t('colors.black') },
   { value: "hall", label: t('colors.grey') },
   { value: "beež", label: t('colors.beige') },
@@ -157,7 +157,7 @@ const salonColorOptions = ( t: any ) => [
   { value: "muu", label: t('vehicleTypes.other') },
 ];
 
-const inspectionValidityOptions = ( t: any ) => [
+const inspectionValidityOptions = (t: any) => [
   { value: "", label: t('formLabels.search') },
   { value: "09.2025", label: "09.2025" },
   { value: "10.2025", label: "10.2025" },
@@ -204,7 +204,7 @@ const inspectionValidityOptions = ( t: any ) => [
 export default function AddsPage() {
   const options = useMemo(() => countryList().getData(), []);
   const { user } = useAuth();
-  const { t , currentLanguage } = useI18n();
+  const { t, currentLanguage } = useI18n();
 
   const [formData, setFormData] = useState({
     brand_id: "",
@@ -222,6 +222,7 @@ export default function AddsPage() {
     power: "",
     displacement: "",
     technicalData: "",
+    serviceBook: "",
     ownerCount: "",
     modelDetail: "",
     price: "",
@@ -243,6 +244,8 @@ export default function AddsPage() {
     seats: "",
     doors: "",
     major: "",
+    lastMaintenance: "",
+    lastInspection: "",
   });
 
   const [contactFormData, setContactFormData] = useState({
@@ -259,9 +262,9 @@ export default function AddsPage() {
   const [contactSaved, setContactSaved] = useState(false);
 
   const [checktechboxes, setCheckTechboxes] = useState({
-    technicalInspection: false,
-    technicalMaintenance: false,
-    serviceBook: false,
+    // technicalInspection: false,
+    // technicalMaintenance: false,
+    // serviceBook: false,
     hideVin: false,
     inspectionValid: false,
   });
@@ -813,7 +816,7 @@ export default function AddsPage() {
         formDataObj.append(key, value as string);
       }
     });
-    
+
     // Handle images for editing - preserve existing images and add new ones
     if (editingCar) {
       const hasNewImages = carImages.some(file => file !== null);
@@ -1727,22 +1730,63 @@ export default function AddsPage() {
                 suffix="%"
                 step={1}
               />
-              <div className="space-y-3 mt-3">
+              <div className="space-y-3">
                 <FormField
-                  label={t('formLabels.warranty')}
-                  placeholder={t('formLabels.validUntil')}
-                  value={formData.warranty}
-                  onChange={(value) => handleInputChange("warranty", value)}
+                  label={t('formLabels.serviceBook')}
+                  placeholder="Yes"
+                  isSelect
+                  value={formData.serviceBook}
+                  onChange={(value) => handleInputChange("serviceBook", value)}
+                  options={[
+                    {
+                      value: "",
+                      label: t('common.select'),
+                    },
+                    {
+                      value: "jah",
+                      label: t('common.yes'),
+                    },
+                    {
+                      value: "ei",
+                      label: t('common.no'),
+                    },
+                  ]}
                 />
-                <FormField
-                  label={t('formLabels.vinCode')}
-                  placeholder={t('formLabels.vinCodePlaceholder')}
-                  value={formData.vinCode}
-                  onChange={(value) => handleInputChange("vinCode", value)}
-                />
+                <div className="space-y-3 pt-3">
+                  <FormField
+                    label={t('formLabels.warranty')}
+                    placeholder={t('formLabels.validUntil')}
+                    value={formData.warranty}
+                    onChange={(value) => handleInputChange("warranty", value)}
+                  />
+                </div>
+                <div className="space-y-3 pt-3">
+                  <FormField
+                    label={t('formLabels.vehicleNumber')}
+                    placeholder={t('formLabels.plateNumberPlaceholder')}
+                    value={formData.plateNumber}
+                    onChange={(value) => handleInputChange("plateNumber", value)}
+                  />
+                </div>
               </div>
-              <div className="ml-2 space-y-3 pt-1 mt-3">
-                <div className="flex items-center gap-2">
+              <div className="ml-2 space-y-3">
+                <div className="space-y-3">
+                  <FormField
+                    label={t('formLabels.lastMaintenance')}
+                    placeholder="DD.MM.YYYY"
+                    value={formData.lastMaintenance}
+                    onChange={(value) => handleInputChange("lastMaintenance", value)}
+                  />
+                </div>
+                <div className="space-y-3 pt-3">
+                  <FormField
+                    label={t('formLabels.lastInspection')}
+                    placeholder="DD.MM.YYYY"
+                    value={formData.lastInspection}
+                    onChange={(value) => handleInputChange("lastInspection", value)}
+                  />
+                </div>
+                <div className="flex items-center gap-2 pt-6 w-full">
                   <CheckboxField
                     label={t('formLabels.inspectionValid')}
                     checked={checktechboxes.inspectionValid}
@@ -1763,7 +1807,16 @@ export default function AddsPage() {
                     />
                   </div>
                 </div>
-                <CheckboxField
+                <div>
+                  <CheckboxField
+                    label={t('formLabels.hideVin')}
+                    checked={checktechboxes.hideVin}
+                    onChange={(checked) =>
+                      handleCheckTechboxChange("hideVin", checked)
+                    }
+                  />
+                </div>
+                {/* <CheckboxField
                   label={t('inspection.technicalInspectionPerformed')}
                   checked={checktechboxes.technicalInspection}
                   onChange={(checked) =>
@@ -1784,24 +1837,21 @@ export default function AddsPage() {
                     handleCheckTechboxChange("serviceBook", checked)
                   }
                 />
-                <CheckboxField
-                  label={t('formLabels.hideVin')}
-                  checked={checktechboxes.hideVin}
-                  onChange={(checked) =>
-                    handleCheckTechboxChange("hideVin", checked)
-                  }
-                />
+                 */}
 
               </div>
-              <div className="mt-0">
+              <div className="space-y-3">
+
                 <FormField
-                  label={t('formLabels.vehicleNumber')}
-                  placeholder={t('formLabels.plateNumberPlaceholder')}
-                  value={formData.plateNumber}
-                  onChange={(value) => handleInputChange("plateNumber", value)}
+                  label={t('formLabels.vinCode')}
+                  placeholder={t('formLabels.vinCodePlaceholder')}
+                  value={formData.vinCode}
+                  onChange={(value) => handleInputChange("vinCode", value)}
                 />
               </div>
+
             </div>
+
           </FormSection>
           {/* Equipment Section */}
           <FormSection title={t('formLabels.higherValueAccessories')}>
@@ -1971,8 +2021,8 @@ export default function AddsPage() {
               <button
                 onClick={handleSaveContact}
                 className={`flex items-center px-4 py-4 rounded-lg text-white transition-colors ${contactSaved
-                    ? 'bg-green-500 hover:bg-green-600'
-                    : 'bg-brand-primary hover:bg-motorsoline-primary'
+                  ? 'bg-green-500 hover:bg-green-600'
+                  : 'bg-brand-primary hover:bg-motorsoline-primary'
                   }`}
               >
                 {contactSaved ? '✓ ' + t('common.success') : t('formLabels.saveContacts')}
@@ -2037,6 +2087,7 @@ export default function AddsPage() {
                           power: "",
                           displacement: "",
                           technicalData: "",
+                          serviceBook: "",
                           ownerCount: "",
                           modelDetail: "",
                           price: "",
@@ -2058,6 +2109,8 @@ export default function AddsPage() {
                           seats: "",
                           doors: "",
                           major: "",
+                          lastMaintenance: "",
+                          lastInspection: "",
                         });
                         setContactFormData({
                           phone: "",

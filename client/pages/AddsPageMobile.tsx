@@ -252,7 +252,10 @@ export default function AddsPageMobile() {
     inspectionValidityPeriod: "",
     seats: "",
     doors: "",
-    major: ""
+    major: "",
+    lastMaintenance: "",
+    lastInspection: "",
+    serviceBook: "",
   });
 
   const [contactFormData, setContactFormData] = useState({
@@ -1678,6 +1681,39 @@ export default function AddsPageMobile() {
                 value={formData.warranty}
                 onChange={(value) => handleInputChange("warranty", value)}
               />
+              <FormField
+                label={t('formLabels.serviceBook')}
+                placeholder="Yes"
+                isSelect
+                value={formData.serviceBook}
+                onChange={(value) => handleInputChange("serviceBook", value)}
+                options={[
+                  {
+                    value: "",
+                    label: t('common.select'),
+                  },
+                  {
+                    value: "jah",
+                    label: t('common.yes'),
+                  },
+                  {
+                    value: "ei",
+                    label: t('common.no'),
+                  },
+                ]}
+              />
+              <FormField
+                    label={t('formLabels.lastMaintenance')}
+                    placeholder="DD.MM.YYYY"
+                value={formData.lastMaintenance}
+                onChange={(value) => handleInputChange("lastMaintenance", value)}
+              />
+              <FormField
+                label={t('formLabels.lastInspection')}
+                placeholder="DD.MM.YYYY"
+                value={formData.lastInspection}
+                onChange={(value) => handleInputChange("lastInspection", value)}
+              />
               {/* Checkboxes */}
               <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -1717,7 +1753,7 @@ export default function AddsPageMobile() {
                       />
                     </div>
                   </div>
-                  <CheckboxField
+                  {/* <CheckboxField
                     label={t('inspection.technicalInspectionPerformed')}
                     checked={checktechboxes.technicalInspection}
                     onChange={(checked) =>
@@ -1737,7 +1773,7 @@ export default function AddsPageMobile() {
                     onChange={(checked) =>
                       handleCheckTechboxChange("serviceBook", checked)
                     }
-                  />
+                  /> */}
                   <CheckboxField
                     label={t('formLabels.hideVin')}
                     checked={checktechboxes.hideVin}
@@ -2006,6 +2042,9 @@ export default function AddsPageMobile() {
                           seats: "",
                           doors: "",
                           major: "",
+                          serviceBook: "",
+                          lastMaintenance: "",
+                          lastInspection: "",
                         });
                         setContactFormData({
                           phone: "",

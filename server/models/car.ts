@@ -56,6 +56,8 @@ export interface Car {
   vehicleType?: string;
   inspectionValidityPeriod?: string;
   major?: string;
+  lastMaintenance?: string;
+  lastInspection?: string;
 }
 
 export async function createCar(car: Omit<Car, 'id'>): Promise<Car> {
@@ -64,9 +66,9 @@ export async function createCar(car: Omit<Car, 'id'>): Promise<Car> {
   
   const [result]: any = await pool.query(
     `INSERT INTO cars (
-      user_id, brand_id, model_id, year_id, drive_type_id, category, transmission, fuelType, plateNumber, month, mileage, power, displacement, technicalData, ownerCount, modelDetail, price, discountPrice, warranty, vatRefundable, vatRate, accident, vinCode, description, equipment, additionalInfo, images, tech_check, accessories, salonColor, bodyType, stereo, carColor, carColorType, vehicleType, inspectionValidityPeriod, seats, doors, valuveljed, major
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [car.user_id, car.brand_id, car.model_id, car.year_id, car.drive_type_id, car.category, car.transmission, car.fuelType, car.plateNumber, car.month, car.mileage, car.power, car.displacement, car.technicalData, car.ownerCount, car.modelDetail, car.price, car.discountPrice, car.warranty, car.vatRefundable, car.vatRate, car.accident, car.vinCode, car.description, car.equipment, car.additionalInfo, imagesJson, car.tech_check, car.accessories, car.salonColor, car.bodyType, car.stereo, car.carColor, car.carColorType, car.vehicleType, car.inspectionValidityPeriod, car.seats, car.doors, car.valuveljed, car.major]
+      user_id, brand_id, model_id, year_id, drive_type_id, category, transmission, fuelType, plateNumber, month, mileage, power, displacement, technicalData, ownerCount, modelDetail, price, discountPrice, warranty, vatRefundable, vatRate, accident, vinCode, description, equipment, additionalInfo, images, tech_check, accessories, salonColor, bodyType, stereo, carColor, carColorType, vehicleType, inspectionValidityPeriod, seats, doors, valuveljed, major, lastMaintenance, lastInspection, serviceBook 
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [car.user_id, car.brand_id, car.model_id, car.year_id, car.drive_type_id, car.category, car.transmission, car.fuelType, car.plateNumber, car.month, car.mileage, car.power, car.displacement, car.technicalData, car.ownerCount, car.modelDetail, car.price, car.discountPrice, car.warranty, car.vatRefundable, car.vatRate, car.accident, car.vinCode, car.description, car.equipment, car.additionalInfo, imagesJson, car.tech_check, car.accessories, car.salonColor, car.bodyType, car.stereo, car.carColor, car.carColorType, car.vehicleType, car.inspectionValidityPeriod, car.seats, car.doors, car.valuveljed, car.major, car.lastMaintenance, car.lastInspection, car.serviceBook]
   );
   return { id: result.insertId, ...car };
 }

@@ -61,6 +61,11 @@ interface CarData {
   salonColor?: string;
   carColor?: string;
   address?: string;
+  serviceBook?: string;
+  lastMaintenance?: string;
+  lastInspection?: string;
+  inspectionValidityPeriod?: string;
+  warranty?: string;
   // Seller information
   businessType?: string;
   country?: string;
@@ -242,20 +247,25 @@ export default function CarPageMobile() {
 
   const technicalSpecs = [
     { label: t('formLabels.vehicleCondition') + ':', value: car.technicalData },
-    { label: t('formLabels.ownerCountLabel') + ':', value: car.ownerCount },
-    { label: t('formLabels.vinCode') + ':', value: car.vinCode },
-    { label: t('formLabels.vehicleNumber'), value: car.plateNumber },
+    { label: t('formLabels.ownerCountLabel') + ':' , value:car.ownerCount},
+    { label: t('formLabels.vinCode') + ':' , value:car.vinCode},
+    { label: t('formLabels.vehicleNumber') , value: car.plateNumber },
     { label: t('carSpecs.mileage') + ':', value: `${car.mileage.toLocaleString()} km` },
-    { label: t('formLabels.year') + ':', value: car.year_value },
+    { label: t('formLabels.firstRegistration') + ':' , value:(car.month.length === 1 ? `0${car.month}` : car.month) + "." +  car.year_value?.toString() || "N/A"},
+    { label: t('formLabels.serviceBook') + ':' , value:car.serviceBook},
+    { label: t('formLabels.lastMaintenance') + ':' , value:car.lastMaintenance},
+    { label: t('formLabels.lastInspection') + ':' , value:car.lastInspection},
+    { label: t('formLabels.inspectionValid') + ':' , value:car.inspectionValidityPeriod},
+    { label: t('formLabels.warranty') + ':' , value:car.warranty},
     { label: t('formLabels.powerKw') + ':', value: car.power },
     { label: t('formLabels.displacement') + ':', value: car.displacement },
     { label: t('formLabels.transmissionType') + ':', value: car.transmission },
     { label: t('formLabels.driveType') + ':', value: car.drive_type_ee_name },
     { label: t('formLabels.fuelType') + ':', value: car.fuelType },
     { label: t('formLabels.categoryDesignation') + ':', value: car.category },
-    { label: t('formLabels.doors') + ':', value: car.doors },
-    { label: t('formLabels.bodyType') + ':', value: car.bodyType },
-    { label: t('formLabels.interiorColor') + ':', value: car.salonColor },
+    { label: t('formLabels.doors') + ':' , value:car.doors},
+    { label: t('formLabels.bodyType') + ':' , value:car.bodyType},
+    { label: t('formLabels.interiorColor') + ':' , value:car.salonColor},
     { label: t('formLabels.color') + ':', value: car.carColor },
   ];
 
