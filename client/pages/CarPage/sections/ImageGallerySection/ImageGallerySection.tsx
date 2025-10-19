@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, CardContent } from "../../../../components/ui/card";
 import { Separator } from "../../../../components/ui/separator";
+import { useI18n } from "@/contexts/I18nContext";
 
 interface CarData {
   id: number;
@@ -37,6 +38,7 @@ interface ImageGallerySectionProps {
 
 export const ImageGallerySection = ({ car }: ImageGallerySectionProps): JSX.Element => {
   // Vehicle description data
+  const { t } = useI18n();
   
   return (
     <section className="w-full max-w-[1240px] mx-auto mt-8">
@@ -45,7 +47,7 @@ export const ImageGallerySection = ({ car }: ImageGallerySectionProps): JSX.Elem
           {/* Equipment */}
           <div className="space-y-4">
             <h2 className="font-['Poppins',Helvetica] font-semibold text-secondary-500 text-lg tracking-[-0.60px] leading-[30px]">
-              Varustus:
+              {t('formLabels.equipment')}
             </h2>
             <ul className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px] pl-6 space-y-2">
               {car?.equipment && car.equipment.trim() ? (
@@ -61,21 +63,21 @@ export const ImageGallerySection = ({ car }: ImageGallerySectionProps): JSX.Elem
                   // <li key={index} className="break-words">asd</li>
                 ))
               ) : (
-                <li>Varustuse andmed puuduvad</li>
+                <li>{t('formLabels.equipmentDataMissing')}</li>
               )}
             </ul>
           </div>
           {/* Vehicle description */}
           <div className="space-y-4">
             <h2 className="font-['Poppins',Helvetica] font-semibold text-secondary-500 text-lg tracking-[-0.60px] leading-[30px]">
-              Sõiduki kirjeldus müüja poolt
+              {t('formLabels.vehicleDescription')}
             </h2>
             <div className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]">
               {car?.description && car.description.trim() ? (
                 // <p className="break-words">{car.description}</p>
                 <p className="break-all leading-relaxed py-1">{car.description}</p>
               ) : (
-                <p>Kirjeldus puudub</p>
+                <p>{t('formLabels.descriptionMissing')}</p>
               )}
             </div>
           </div>

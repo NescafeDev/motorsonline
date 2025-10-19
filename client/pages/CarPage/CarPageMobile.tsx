@@ -180,7 +180,7 @@ export default function CarPageMobile() {
         <div className="flex items-center justify-center py-20">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#06d6a0] mx-auto"></div>
-            <p className="mt-4 text-secondary-500">Laadimine...</p>
+            <p className="mt-4 text-secondary-500">{t('common.loading')}</p>
           </div>
         </div>
         <Footer />
@@ -195,8 +195,8 @@ export default function CarPageMobile() {
         <Header />
         <div className="flex items-center justify-center py-20">
           <div className="text-center">
-            <h1 className="text-2xl font-semibold text-secondary-500 mb-4">Viga</h1>
-            <p className="text-secondary-500">{error || 'Auto ei leitud'}</p>
+            <h1 className="text-2xl font-semibold text-secondary-500 mb-4">{t('common.error')}</h1>
+            <p className="text-secondary-500">{error || t('common.carNotFound')}</p>
           </div>
         </div>
         <Footer />
@@ -242,20 +242,20 @@ export default function CarPageMobile() {
 
   const technicalSpecs = [
     { label: t('formLabels.vehicleCondition') + ':', value: car.technicalData },
-    { label: t('formLabels.ownerCountLabel') + ':' , value:car.ownerCount},
-    { label: t('formLabels.vinCode') + ':' , value:car.vinCode},
-    { label: t('formLabels.vehicleNumber') , value: car.plateNumber },
+    { label: t('formLabels.ownerCountLabel') + ':', value: car.ownerCount },
+    { label: t('formLabels.vinCode') + ':', value: car.vinCode },
+    { label: t('formLabels.vehicleNumber'), value: car.plateNumber },
     { label: t('carSpecs.mileage') + ':', value: `${car.mileage.toLocaleString()} km` },
-    { label: t('formLabels.year') + ':' , value:car.year_value},
+    { label: t('formLabels.year') + ':', value: car.year_value },
     { label: t('formLabels.powerKw') + ':', value: car.power },
     { label: t('formLabels.displacement') + ':', value: car.displacement },
     { label: t('formLabels.transmissionType') + ':', value: car.transmission },
     { label: t('formLabels.driveType') + ':', value: car.drive_type_ee_name },
     { label: t('formLabels.fuelType') + ':', value: car.fuelType },
     { label: t('formLabels.categoryDesignation') + ':', value: car.category },
-    { label: t('formLabels.doors') + ':' , value:car.doors},
-    { label: t('formLabels.bodyType') + ':' , value:car.bodyType},
-    { label: t('formLabels.interiorColor') + ':' , value:car.salonColor},
+    { label: t('formLabels.doors') + ':', value: car.doors },
+    { label: t('formLabels.bodyType') + ':', value: car.bodyType },
+    { label: t('formLabels.interiorColor') + ':', value: car.salonColor },
     { label: t('formLabels.color') + ':', value: car.carColor },
   ];
 
@@ -324,7 +324,7 @@ export default function CarPageMobile() {
               </h3>
             </div>
             <p className="text-[#747474] text-[14px] font-medium tracking-[0.28px] mb-6">
-              Kasutatud autod » {car.brand_name} {car.model_name} » {car.year_value}
+              {car.technicalData} » {car.brand_name} {car.model_name} » {car.year_value}
             </p>
 
             <h2 className="text-[#1A202C] text-[16px] font-semibold leading-[150%] tracking-[-0.48px] mb-6">
@@ -361,10 +361,10 @@ export default function CarPageMobile() {
               <MapPin className="w-5 h-5 text-secondary-500 flex-shrink-0" />
               <div className="flex flex-col">
                 <div className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
-                  {contacts.address}
+                  {contacts.businessType}
                 </div>
                 <div className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
-                  {contacts.businessType}
+                  {contacts.address}
                 </div>
               </div>
             </div>
@@ -424,7 +424,7 @@ export default function CarPageMobile() {
                 </div>
               ))}
             </div>
-            
+
             {technicalSpecs.length > 6 && (
               <div className="flex justify-center mt-4">
                 <Button
@@ -440,13 +440,13 @@ export default function CarPageMobile() {
           </ExpandableSection>
         </div>
 
-        
+
         <ImageGallerySection car={car} />
 
         {/* Seller information section */}
         <SpecificationsSection
           sellerData={{
-            title: "Müüja andmed",
+            title: t('formLabels.sellerData'),
             company: contacts?.businessType || "ELKE Mustamäe",
             country: contacts?.country || "EE",
             address: contacts?.address || "Tallinn, Mustamäe tee 22",

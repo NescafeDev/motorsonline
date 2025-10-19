@@ -57,7 +57,7 @@ export default function PasswordReset() {
                 />
               </svg>
               <h1 className="text-[#1A202C] text-2xl lg:text-[30px] font-semibold leading-[1.5] tracking-[-0.9px]">
-                Lähtesta parool
+                {t('auth.resetPassword')}
               </h1>
             </div>
 
@@ -72,8 +72,7 @@ export default function PasswordReset() {
 
             {/* Description */}
             <p className="text-[#1A202C] text-lg font-normal leading-[1.5] tracking-[-0.54px] mb-6">
-              Palun sisesta oma registreerimisel kasutatud e-posti aadress, et
-              saaksime saata sulle 6-kohalise kinnituskoodi.
+              {t('auth.resetPasswordDescription')}
             </p>
 
             {/* Form */}
@@ -84,14 +83,14 @@ export default function PasswordReset() {
                   htmlFor="email"
                   className="block text-black text-lg font-medium"
                 >
-                  E-posti aadress
+                  {t('auth.emailAddress')}
                 </label>
                 <input
                   type="email"
                   id="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Sisesta e-post"
+                  placeholder={t('auth.emailPlaceholder')}
                   className="w-full h-[57px] px-5 py-4 border border-[#555555] rounded-[10px] bg-white text-base font-normal text-black placeholder-[#BFBFBF] focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
                   required
                 />
@@ -102,7 +101,7 @@ export default function PasswordReset() {
                 type="submit"
                 className="w-full h-[54px] px-8 py-4 bg-brand-primary hover:bg-brand-600 transition-colors rounded-[10px] text-white text-base font-normal flex items-center justify-center"
               >
-                Saada kinnituskood
+                {t('auth.sendVerificationCode')}
               </button>
             </form>
           </div>

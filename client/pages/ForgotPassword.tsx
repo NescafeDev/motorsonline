@@ -58,7 +58,7 @@ export default function ForgotPassword() {
               <img src="/img/lock.svg" alt="lock" className="w-8 h-8" />
             </div>
             <h1 className="text-[30px] font-semibold text-brand-text leading-[150%] tracking-[-0.9px] font-['Poppins']">
-              {t('forgotPassword.title')}
+              {t('auth.forgotPassword')}
             </h1>
           </div>
 
@@ -73,16 +73,14 @@ export default function ForgotPassword() {
 
           {/* Main Text */}
           <p className="text-brand-text font-['Poppins'] text-lg leading-[150%] tracking-[-0.54px] mb-6">
-            Oleme saatnud kinnituskoodi aadressile [email]. Palun sisesta see
-            kood, et jätkata.
+            {t('auth.verificationCodeSent')}
           </p>
 
           {/* Warning Message */}
           <div className="bg-brand-warning-bg border border-brand-warning rounded-[14px] p-4 mb-8 flex items-start gap-3">
             <AlertTriangle className="w-4 h-4 text-brand-warning flex-shrink-0 mt-0.5" />
             <p className="text-brand-warning font-['Poppins'] text-sm leading-5">
-              Kui sa ei ole pikka aega aktiivne olnud, võidi sinu konto kustutada
-              andmekaitse kaalutlustel.
+              {t('auth.warningMessage')}
             </p>
           </div>
 
@@ -109,13 +107,14 @@ export default function ForgotPassword() {
             disabled={!isComplete}
             className="w-full bg-brand-button text-white font-['Poppins'] text-base leading-[150%] py-[15px] px-[30px] rounded-[10px] transition-opacity disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90"
           >
-            Kinnita
+            {t('auth.verify')}
           </button>
 
           {/* Footer Text */}
           <p className="text-center text-brand-text font-['Poppins'] text-sm leading-[150%] tracking-[-0.42px] mt-6">
-            Ei saanud koodi? Kontrolli oma e-posti aadressi või taotle uut{" "}
-            {countdown > 0 ? `${countdown} sekundi` : ""} pärast.
+            {t('auth.noCodeSent')}
+            {countdown > 0 ? `${countdown} ${t('common.seconds')}` : ""}
+            {t('common.after')}
           </p>
         </div>
       </div>

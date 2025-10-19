@@ -381,10 +381,10 @@ export const CarCard: React.FC<CarCardProps> = ({
             <MapPin className="w-6 h-6" />
             <div className="flex flex-col">
               <div className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
-                {address}
+                {businessType}
               </div>
               <div className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
-                {businessType}
+                {address}
               </div>
             </div>
           </div>

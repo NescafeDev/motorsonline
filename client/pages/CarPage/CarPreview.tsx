@@ -378,7 +378,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
 
                     <div className="mt-2">
                       <span className="text-[#747474] text-[12px] tracking-[0.34px] leading-[normal] [font-family:'Poppins',Helvetica] font-medium">
-                        Kasutatud autod » {car.brand_name} {car.model_name} » {car.year_value}
+                        {car.technicalData} » {car.brand_name} {car.model_name} » {car.year_value}
                       </span>
                     </div>
 

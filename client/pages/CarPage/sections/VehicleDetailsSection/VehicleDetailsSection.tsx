@@ -102,7 +102,7 @@ const useVatText = () => {
 
 export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionProps): JSX.Element => {
   const navigate = useNavigate();
-  const { currentLanguage } = useI18n();
+  const { currentLanguage, t } = useI18n();
   const getVatDisplayText = useVatText();
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
@@ -133,10 +133,10 @@ export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionPro
     return (
       <section className="w-full md:w-full mx-auto my-8 px-3">
         <h2 className="font-semibold text-[46px] text-black [font-family:'Poppins',Helvetica] mb-12 text-center sm:text-left">
-          Vaata viimast autot
+          {t('formLabels.seeTheLatestCar')}
         </h2>
         <div className="flex justify-center items-center h-64">
-          <div className="text-lg text-gray-600">Loading cars...</div>
+          <div className="text-lg text-gray-600">{t('common.loading')}</div>
         </div>
       </section>
     );
@@ -147,7 +147,7 @@ export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionPro
     return (
       <section className="w-full md:w-full mx-auto my-8 px-3">
         <h2 className="font-semibold text-[46px] text-black [font-family:'Poppins',Helvetica] mb-12 text-center sm:text-left">
-          Vaata viimast autot
+          {t('formLabels.seeTheLatestCar')}
         </h2>
         <div className="flex justify-center items-center h-64">
           <div className="text-lg text-red-600">{error}</div>
@@ -161,10 +161,10 @@ export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionPro
     return (
       <section className="w-full md:w-full mx-auto my-8 px-3">
         <h2 className="font-semibold text-[46px] text-black [font-family:'Poppins',Helvetica] mb-12 text-center sm:text-left">
-          Vaata viimast autot
+          {t('formLabels.seeTheLatestCar')}
         </h2>
         <div className="flex justify-center items-center h-64">
-          <div className="text-lg text-gray-600">No cars available</div>
+          <div className="text-lg text-gray-600">{t('formLabels.noCarsAvailable')}</div>
         </div>
       </section>
     );
@@ -178,7 +178,7 @@ export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionPro
   return (
     <section className="w-full md:w-full mx-auto my-8 px-3">
       <h2 className="font-semibold text-[46px] text-black [font-family:'Poppins',Helvetica] mb-12 text-center sm:text-left">
-        Vaata viimast autot
+        {t('formLabels.seeTheLatestCar')}
       </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 px-4 sm:px-0">

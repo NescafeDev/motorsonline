@@ -2,10 +2,12 @@ import Header from "@/components/mobile/Header";
 import LoginForm from "../components/LoginForm";
 import Footer from "@/components/mobile/Footer";
 import { useNavigate } from "react-router-dom";
+import { useI18n } from "@/contexts/I18nContext";
 
 export default function LoginPageMobile() {
   const navigate = useNavigate();
-
+  const { t } = useI18n();
+  
   const handleLogin = () => {
     navigate("/");
   };
@@ -36,7 +38,7 @@ export default function LoginPageMobile() {
                 {/* Hero Text - Mobile optimized */}
                 <div className="relative z-10 flex items-center justify-center h-full p-4">
                   <h2 className="text-white text-center font-poppins text-xl font-semibold leading-normal">
-                    Vali oma ideaalne auto koos meiega
+                    {t('auth.chooseIdealCar')}
                   </h2>
                 </div>
               </div>

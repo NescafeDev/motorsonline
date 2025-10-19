@@ -10,6 +10,7 @@ import ReactCountryFlag from 'react-country-flag';
 import countryList from "react-select-country-list";
 import { useAuth } from "../../../../contexts/AuthContext";
 import { Phone, Mail, Globe, MapPin } from "lucide-react";
+import { useI18n } from "@/contexts/I18nContext";
 
 export interface SellerData {
   title: string;
@@ -30,9 +31,10 @@ interface SpecificationsSectionProps {
 
 export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps): JSX.Element => {
   const { user } = useAuth();
+  const { t } = useI18n();
   // Default fallback data if no seller data is provided
   const defaultSellerData: SellerData = {
-    title: "Müüja andmed",
+    title: t('formLabels.sellerData'),
     company: "ELKE Mustamäe",
     address: "Tallinn, Mustamäe tee 22",
     contactPerson: user?.userType || "Lorem Ipsum",

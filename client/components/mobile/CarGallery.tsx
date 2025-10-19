@@ -5,6 +5,7 @@ import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import { Fullscreen } from "yet-another-react-lightbox/plugins";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
+import { useI18n } from '@/contexts/I18nContext';
 
 interface CarGalleryProps {
   mainImage: string;
@@ -19,6 +20,7 @@ export default function CarGallery({
   totalImages,
   onImageClick,
 }: CarGalleryProps) {
+  const { t } = useI18n();
   // Filter out empty or null images and ensure no duplicates
   const validMainImage = mainImage && mainImage.trim() !== '' ? mainImage : '/placeholder.svg';
   // Filter out the main image from thumbnails if it exists there to avoid duplicates
@@ -150,7 +152,7 @@ export default function CarGallery({
       {/* No images message */}
       {!hasImages && (
         <div className="text-center py-8 text-gray-500">
-          <p>No images available for this car</p>
+          <p>{t('formLabels.noImagesAvailableForThisCar')}</p>
         </div>
       )}
       

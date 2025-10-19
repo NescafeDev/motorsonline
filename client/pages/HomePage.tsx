@@ -620,10 +620,10 @@ export default function HomePage() {
                                   <MapPin className="w-5 h-5 text-secondary-500 flex-shrink-0" />
                                   <div className="flex flex-col">
                                     <div className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
-                                      {displayCar.address}
+                                      {displayCar.businessType}
                                     </div>
                                     <div className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
-                                      {displayCar.businessType}
+                                      {displayCar.address}
                                     </div>
                                   </div>
                                 </div>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Eye, Heart, Edit, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useI18n } from "@/contexts/I18nContext";
 
 interface UserCarCardProps {
   id: number;
@@ -41,7 +42,7 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
 }) => {
   const navigate = useNavigate();
   const { lang } = useParams<{ lang: string }>();
-  
+  const { t } = useI18n();
   // Image navigation state
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   
@@ -172,7 +173,7 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
             className="flex-1 flex items-center justify-center gap-0 py-3 px-2 rounded-[10px] border border-[#3B82F6] text-[#3B82F6] hover:bg-[#EBF4FF] font-medium transition-colors"
           >
             <Eye className="w-4 h-4" />
-              Eelvaade
+              {t('common.preview')}
           </button>
           {/* Edit and Delete Buttons */}
             <button
@@ -180,14 +181,14 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
               className="flex-1 flex items-center justify-center gap-2 py-3 px-2 rounded-[10px] border border-[#06D6A0] bg-white text-[#06D6A0] font-medium text-sm hover:bg-[#06D6A0] hover:text-white transition-colors"
             >
               <Edit className="w-4 h-4" />
-              Redigeeri
+              {t('common.edit')}
             </button>
             <button
               onClick={onDelete}
               className="flex-1 flex items-center justify-center gap-2 py-3 px-2 rounded-[10px] border border-[#FF0000] bg-white text-[#FF0000] font-medium text-sm hover:bg-[#FF0000] hover:text-white transition-colors"
             >
               <Trash2 className="w-4 h-4" />
-              Kustuta
+              {t('common.delete')}
             </button>
         </div>
       </div>

@@ -477,10 +477,10 @@ export default function SearchPageMobile() {
               <div className="flex justify-center items-center h-64">
                 <div className="text-center">
                   <div className="text-lg text-gray-500 mb-2">
-                    Autosid ei leitud valitud filtritega
+                    {/* Autosid ei leitud valitud filtritega */}
                   </div>
                   <div className="text-sm text-gray-400">
-                    Proovige muuta otsingukriteeriume
+                    {/* Proovige muuta otsingukriteeriume */}
                   </div>
                 </div>
               </div>

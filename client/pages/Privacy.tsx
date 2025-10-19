@@ -9,7 +9,7 @@ export default function Privacy() {
   const { currentLanguage } = useI18n();
   const [privacyContent, setPrivacyContent] = useState('');
   const [loading, setLoading] = useState(true);
-
+  const { t } = useI18n();
   useEffect(() => {
     const loadPrivacyContent = async () => {
       try {
@@ -33,7 +33,7 @@ export default function Privacy() {
           <div className="flex items-center justify-center min-h-[400px]">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-primary mx-auto mb-4"></div>
-              <p className="text-gray-600">Laen privaatsuspoliitika sisu...</p>
+              <p className="text-gray-600">{t('common.loading')}</p>
             </div>
           </div>
         </PageContainer>
@@ -45,7 +45,7 @@ export default function Privacy() {
         <div className="py-8 xl:w-[75%] mx-auto">
             <div className="bg-white p-8">
               <h1 className="text-3xl font-bold text-gray-900 mb-6">
-                Privaatsuspoliitika
+                {t('footer.privacy')}
               </h1>
               
               {privacyContent ? (
@@ -56,7 +56,7 @@ export default function Privacy() {
               ) : (
                 <div className="text-center py-12">
                   <p className="text-gray-500 text-lg">
-                    Privaatsuspoliitika sisu pole veel lisatud.
+                    {t('messages.privacyContentNotAdded')}
                   </p>
                 </div>
               )}

@@ -69,11 +69,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (email: string, password: string) => {
     try {
       const response = await axios.post('/api/auth/login', { email, password });
-      console.log("login response:", response.data);
       const { token: newToken, user: userData } = response.data;
       
-      console.log("Setting token:", newToken);
-      console.log("Setting user:", userData);
       
       setToken(newToken);
       setUser(userData);
@@ -89,14 +86,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const googleLogin = async (name: string, email: string) => {
-    console.log("google login called with email:", email);
     try {
       const response = await axios.post('/api/auth/google', { name, email });
-      console.log("login response:", response.data);
       const { token: newToken, user: userData } = response.data;
       
-      console.log("Setting token:", newToken);
-      console.log("Setting user:", userData);
       
       setToken(newToken);
       setUser(userData);
@@ -104,7 +97,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       localStorage.setItem('user', JSON.stringify(userData));
       axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
       
-      console.log("Login completed successfully");
     } catch (error) {
       console.error('Login failed:', error);
       throw error;
@@ -112,14 +104,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }
 
   const logout = () => {
-    console.log("logout called");
     setToken(null);
     setUser(null);
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     localStorage.removeItem('pendingContactData')
     delete axios.defaults.headers.common['Authorization'];
-    console.log("Logout completed");
   };
 
   const value: AuthContextType = {

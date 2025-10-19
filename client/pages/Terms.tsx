@@ -35,7 +35,7 @@ export default function Terms() {
           <div className="flex items-center justify-center min-h-[400px]">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-primary mx-auto mb-4"></div>
-              <p className="text-gray-600">Laen teenusetingimuste sisu...</p>
+              <p className="text-gray-600">{t('common.loading')}</p>
             </div>
           </div>
         </PageContainer>
@@ -59,7 +59,7 @@ export default function Terms() {
               ) : (
                 <div className="text-center py-12">
                   <p className="text-gray-500 text-lg">
-                    Teenusetingimuste sisu pole veel lisatud.
+                    {t('messages.termsContentNotAdded')}
                   </p>
                 </div>
               )}

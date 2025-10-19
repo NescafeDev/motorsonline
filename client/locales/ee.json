@@ -2,6 +2,7 @@
   "common": {
     "loading": "Laetakse...",
     "error": "Viga",
+    "carNotFound": "Auto ei leitud",
     "success": "Edukas",
     "cancel": "Tühista",
     "save": "Salvesta",
@@ -31,7 +32,10 @@
     "modelName": "Mudeli nimi",
     "equipmentLevelVersion": "Varustustase/versioon",
     "from": "Alates",
-    "to": "Kuni"
+    "to": "Kuni",
+    "searchLanguages": "Otsi keeleid...",
+    "seconds": "sekundit",
+    "after": "pärast"
   },
   "navigation": {
     "home": "Avaleht",
@@ -75,6 +79,8 @@
     "lastName": "Perekonnanimi",
     "forgotPassword": "Unustasid parooli?",
     "resetPassword": "Lähtesta parool",
+    "resetPasswordDescription": "Palun sisesta oma registreerimisel kasutatud e-posti aadress, et saaksime saata sulle 6-kohalise kinnituskoodi.",
+    "sendVerificationCode": "Saada kinnituskood",
     "loginSuccess": "Sisselogimine õnnestus",
     "registerSuccess": "Registreerumine õnnestus",
     "logoutSuccess": "Väljalogimine õnnestus",
@@ -102,7 +108,11 @@
     "registerWithApple": "Registreeru Apple'i kaudu",
     "registerWithGoogle": "Registreeru Google'i kaudu",
     "passwordsDoNotMatchError": "Paroolid ei kattu.",
-    "alreadyHaveAccount": "Sul on juba konto?"
+    "alreadyHaveAccount": "Sul on juba konto?",
+    "verificationCodeSent": "Oleme saatnud kinnituskoodi aadressile [email]. Palun sisesta see kood jätkamiseks.",
+    "warningMessage": "Kui sa ei ole pikka aega aktiivne olnud, võidi sinu konto kustutada andmekaitse kaalutlustel.",
+    "verify": "Kinnita",
+    "noCodeSent": "Ei saanud koodi? Kontrolli oma e-posti aadressi või taotle uut [countdown] sekundi pärast."
   },
   "car": {
     "title": "Auto",
@@ -148,7 +158,8 @@
     "newsletterTerms": "Klikkides \"Registreeru\", kinnitate, et nõustute meie tingimustega.",
     "introduction": "Sissejuhatus",
     "introDetail": "Sissejuhatuse detailid",
-    "summary": "Kokkuvõte"
+    "summary": "Kokkuvõte",
+    "noBlogsFound": "Blogisid ei leitud"
   },
   "search": {
     "placeholder": "Otsi autosid...",
@@ -190,7 +201,11 @@
     "errorOccurred": "Tekkis viga. Palun proovige uuesti.",
     "networkError": "Võrgu viga. Palun kontrollige oma ühendust.",
     "unauthorized": "Teil pole õigust seda toimingut teha.",
-    "notFound": "Soovitud lehte ei leitud."
+    "notFound": "Soovitud lehte ei leitud.",
+    "returnToHome": "Tagasi avalehele",
+    "pageNotFound": "Soovitud lehte ei leitud.",
+    "privacyContentNotAdded": "Privaatsuspoliitika sisu ei ole lisatud.",
+    "termsContentNotAdded": "Teenusetingimuste sisu ei ole lisatud."
   },
   "carSpecs": {
     "power": "Võimsus",
@@ -458,7 +473,15 @@
     "higherValueAccessories": "Kõrgema väärtusega lisavarustus",
     "examplePlaceholder": "Näide: Garantii, Panoraamkatus, Veokonks",
     "sendEmail": "Saada e-post",
-    "search": "Osti"
+    "search": "Osti",
+    "equipmentDataMissing": "Varustuse andmed puuduvad",
+    "vehicleDescription": "Sõiduki kirjeldus müüja poolt",
+    "descriptionMissing": "Kirjeldus puudub",
+    "equipmentMissing": "Varustus puudub",
+    "sellerData": "Müüja andmed",
+    "seeTheLatestCar": "Vaata viimast autot",
+    "noCarsAvailable": "Autosid pole saadaval",
+    "noImagesAvailableForThisCar": "Selle autoga ei ole pilti"
   },
   "photo": {
     "addMain": "+Lisa foto (põhipilt)",

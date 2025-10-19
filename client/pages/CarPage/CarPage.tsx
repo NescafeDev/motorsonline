@@ -213,7 +213,7 @@ export default function CarPage() {
           <div className="px-6 lg:px-[100px] w-full max-w-[1400px] mx-auto py-20">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#06d6a0] mx-auto"></div>
-              <p className="mt-4 text-secondary-500">Laadimine...</p>
+              <p className="mt-4 text-secondary-500">{t('common.loading')}</p>
             </div>
           </div>
         </div>
@@ -228,8 +228,8 @@ export default function CarPage() {
         <div className="bg-white overflow-hidden w-full flex flex-col items-center">
           <div className="px-6 lg:px-[100px] w-full max-w-[1400px] mx-auto py-20">
             <div className="text-center">
-              <h1 className="text-2xl font-semibold text-secondary-500 mb-4">Viga</h1>
-              <p className="text-secondary-500">{error || 'Auto ei leitud'}</p>
+              <h1 className="text-2xl font-semibold text-secondary-500 mb-4">{t('common.error')}</h1>
+              <p className="text-secondary-500">{error || t('common.carNotFound')}</p>
             </div>
           </div>
         </div>
@@ -433,7 +433,7 @@ export default function CarPage() {
                     </span>
                     <div className="mt-2">
                       <span className="text-[#747474] text-[12px] tracking-[0.34px] leading-[normal] [font-family:'Poppins',Helvetica] font-medium">
-                        Kasutatud autod » {car.brand_name} {car.model_name} » {car.year_value}
+                        {car.technicalData} » {car.brand_name} {car.model_name} » {car.year_value}
                       </span>
                     </div>
 
@@ -521,7 +521,7 @@ export default function CarPage() {
           {/* Now, OUTSIDE the grid, render the next sections */}
           <SpecificationsSection
             sellerData={{
-              title: "Müüja andmed",
+              title: t('formLabels.sellerData'),
               company: contacts?.businessType || car.businessType || "ELKE Mustamäe",
               country: contacts?.country || car.country || "EE",
               phone: contacts?.phone || car.phone || "+372 8888 8888",

@@ -2,6 +2,7 @@
   "common": {
     "loading": "Loading...",
     "error": "Error",
+    "carNotFound": "Car not found",
     "success": "Success",
     "cancel": "Cancel",
     "save": "Save",
@@ -31,7 +32,10 @@
     "modelName":"Model Name",
     "equipmentLevelVersion":"Equipment Level/Version",
     "from":"From",
-    "to":"To"
+    "to":"To",
+    "searchLanguages": "Search Languages...",
+    "seconds": "seconds",
+    "after": "after"
   },
   "navigation": {
     "home": "Home",
@@ -75,6 +79,8 @@
     "lastName": "Last Name",
     "forgotPassword": "Forgot Password?",
     "resetPassword": "Reset Password",
+    "resetPasswordDescription": "Please enter the email address you used for registration to send you a 6-digit verification code.",
+    "sendVerificationCode": "Send Verification Code",
     "loginSuccess": "Login successful",
     "registerSuccess": "Registration successful",
     "logoutSuccess": "Logout successful",
@@ -102,7 +108,11 @@
     "registerWithApple": "Sign up with Apple",
     "registerWithGoogle": "Sign up with Google",
     "passwordsDoNotMatchError": "Passwords do not match.",
-    "alreadyHaveAccount": "Do you already have an account?"
+    "alreadyHaveAccount": "Do you already have an account?",
+    "verificationCodeSent": "We have sent a verification code to [email]. Please enter this code to continue.",
+    "warningMessage": "If you have not been active for a long time, your account may be deleted for data protection reasons.",
+    "verify": "Verify",
+    "noCodeSent": "Did not receive the code? Check your email address or request a new [countdown] seconds later."
   },
   "car": {
     "title": "Car",
@@ -147,7 +157,8 @@
     "newsletterTerms": "By clicking \"Subscribe\", you confirm that you agree to our terms.",
     "introduction": "Introduction",
     "introDetail": "Introduction Details",
-    "summary": "Summary"
+    "summary": "Summary",
+    "noBlogsFound": "Blogs not found"
   },
   "search": {
     "placeholder": "Search cars...",
@@ -189,7 +200,11 @@
     "errorOccurred": "An error occurred. Please try again.",
     "networkError": "Network error. Please check your connection.",
     "unauthorized": "You are not authorized to perform this action.",
-    "notFound": "The requested page was not found."
+    "notFound": "The requested page was not found.",
+    "returnToHome": "Return to Home",
+    "pageNotFound": "The requested page was not found.",
+    "privacyContentNotAdded": "Privacy content is not added yet.",
+    "termsContentNotAdded": "Terms content is not added yet."
   },
   "carSpecs": {
     "power": "Power",
@@ -457,7 +472,15 @@
     "higherValueAccessories": "Higher Value Accessories",
     "examplePlaceholder": "Example: Warranty, Panoramic roof, Towbar",
     "sendEmail": "Send Email",
-    "search": "Search"
+    "search": "Search",
+    "equipmentDataMissing": "Equipment data missing",
+    "vehicleDescription": "Vehicle description by seller",
+    "descriptionMissing": "Description missing",
+    "equipmentMissing": "Equipment missing",
+    "sellerData": "Seller Data",
+    "seeTheLatestCar": "See the latest car",
+    "noCarsAvailable": "No cars available",
+    "noImagesAvailableForThisCar": "No images available for this car"
   },
   "photo": {
     "addMain": "+ Add main photo",

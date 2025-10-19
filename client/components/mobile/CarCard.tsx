@@ -276,10 +276,10 @@ export function CarCard({
             <MapPin className="w-5 h-5 text-secondary-500 flex-shrink-0" />
             <div className="flex flex-col">
               <div className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
-                {address}
+                {businessType}
               </div>
               <div className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
-                {businessType}
+                {address}
               </div>
             </div>
           </div>

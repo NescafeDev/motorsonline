@@ -1231,12 +1231,12 @@ export default function AddsPageMobile() {
               <FormField
                 label=""
                 className="space-y-3 mt-5"
-                placeholder="Kuu"
+                placeholder={t('formLabels.month')}
                 isSelect
                 value={formData.month}
                 onChange={(value) => handleInputChange("month", value)}
                 options={[
-                  { value: "", label: "Kuu" },
+                  { value: "", label: t('formLabels.month') },
                   { value: "1", label: "1" },
                   { value: "2", label: "2" },
                   { value: "3", label: "3" },

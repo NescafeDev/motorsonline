@@ -4,8 +4,10 @@ import {
   ToggleGroup,
   ToggleGroupItem,
 } from "../../../../components/ui/toggle-group";
+import { useI18n } from "@/contexts/I18nContext";
 
 export const MainContentSection = (): JSX.Element => {
+  const { t } = useI18n();
   // Navigation menu items
   const menuItems = [
     { id: 1, text: "Lorem ipsum" },
@@ -67,10 +69,10 @@ export const MainContentSection = (): JSX.Element => {
               variant="outline"
               className="h-[45px] px-5 py-3 rounded-[10px] border border-solid border-[#06d6a0] text-[#06d6a0] font-['Poppins',Helvetica] font-normal text-base"
             >
-              Logi sisse
+              {t('navigation.login')}
             </Button>
             <Button className="h-[45px] px-5 py-3 rounded-[10px] bg-[#06d6a0] text-white font-['Poppins',Helvetica] font-normal text-base">
-              Registreeru
+              {t('navigation.register')}
             </Button>
           </div>
         </div>
