@@ -4,6 +4,8 @@ import { useFavorites } from "../../hooks/useFavorites";
 import { useAuth } from "../../contexts/AuthContext";
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
+import { Car } from "@/pages/CarPage/sections/VehicleDetailsSection/VehicleDetailsSection";
+import { Badge } from "@/components/ui/badge";
 
 interface CarCardProps {
   id: number;
@@ -24,6 +26,7 @@ interface CarCardProps {
   month?: string;
   address?: string;
   businessType?: string;
+  discountPercentage?: number;
 }
 
 export function CarCard({
@@ -68,7 +71,14 @@ export function CarCard({
     e.stopPropagation();
     setCurrentImageIndex((prev) => (prev === allImages.length - 1 ? 0 : prev + 1));
   };
-
+  // Clean the price strings by removing non-numeric characters
+  const cleanPrice = Number(price.toString().replace(/[^\d.-]/g, ''));
+  const cleanDiscountPrice = Number(discountPrice.toString().replace(/[^\d.-]/g, ''));
+  
+  const discountPercentage = cleanPrice > 0 && cleanDiscountPrice > 0 
+    ? Math.round(((cleanPrice - cleanDiscountPrice) / cleanPrice) * 100)
+    : 0;
+    
   return (
     <div className="bg-white rounded-[13px] overflow-hidden shadow-sm w-full xl:w-full mx-auto"
       onClick={() => {
@@ -79,7 +89,7 @@ export function CarCard({
         <img
           src={currentImage}
           alt={title}
-          className="w-full h-auto md:h-full object-cover"
+          className="w-full h-[250px] sm:h-[450px] object-cover"
         />
 
         {/* Navigation arrows - only show if there are multiple images */}
@@ -88,19 +98,19 @@ export function CarCard({
             {/* Previous button */}
             <button
               onClick={handlePreviousImage}
-              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-40 hover:bg-opacity-70 rounded-full p-2 shadow-lg transition-all duration-200 hover:shadow-xl z-10 opacity-0 group-hover:opacity-100"
+              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-40 hover:bg-opacity-70 rounded-full p-2 shadow-lg transition-all duration-200 hover:scale-110"
               aria-label="Previous image"
             >
-              <ChevronLeft className="w-4 h-4 text-gray-700" />
+              <ChevronLeft className="w-4 h-4 text-white" />
             </button>
 
             {/* Next button */}
             <button
               onClick={handleNextImage}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-40 hover:bg-opacity-70 rounded-full p-2 shadow-lg transition-all duration-200 hover:shadow-xl z-10 opacity-0 group-hover:opacity-100"
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-40 hover:bg-opacity-70 rounded-full p-2 shadow-lg transition-all duration-200 hover:scale-110"
               aria-label="Next image"
             >
-              <ChevronRight className="w-4 h-4 text-gray-700" />
+              <ChevronRight className="w-4 h-4 text-white" />
             </button>
           </>
         )}
@@ -246,11 +256,18 @@ export function CarCard({
         <div className="grid grid-cols-2 h-2 mx-2 justify-center">
           {discountPrice && (
             <>
-              <div className="relative">
+              <div className="relative flex items-center gap-2">
                 <span className="font-medium text-[#747474] text-[14px] leading-[normal] [font-family:'Poppins',Helvetica]">
                   {price.toLocaleString()}
                 </span>
                 <Separator className="absolute w-[40px] top-[12px] -left-1 bg-gray-400" />
+                {
+                  discountPercentage != 0 && (
+                    <Badge className="bg-[#ffe5e5] text-[#ff0000] border border-[#ff0000] rounded-[100px] ml-1 mt-1 px-2.5 py-0.4 text-[12px]">
+                      {discountPercentage}%
+                    </Badge>
+                  )
+                }
               </div>
 
             </>
@@ -271,7 +288,7 @@ export function CarCard({
           </p>
         </div>
         <Separator className="my-3" />
-        <div className="flex items-center gap-2 mx-2 my-3 pt-3 justify-between h-[20px]">
+        <div className="flex items-center gap-2 mx-2 justify-between">
           <div className="flex items-center gap-2">
             <MapPin className="w-5 h-5 text-secondary-500 flex-shrink-0" />
             <div className="flex flex-col">

@@ -180,7 +180,7 @@ export default function CarPageMobile() {
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-white font-['Poppins']">
+      <div className="min-h-screen bg-white font-['Poppins'] w-full">
         <Header />
         <div className="flex items-center justify-center py-20">
           <div className="text-center">
@@ -196,7 +196,7 @@ export default function CarPageMobile() {
   // Error state
   if (error || !car) {
     return (
-      <div className="min-h-screen bg-white font-['Poppins']">
+      <div className="min-h-screen bg-white font-['Poppins'] w-full">
         <Header />
         <div className="flex items-center justify-center py-20">
           <div className="text-center">
@@ -351,7 +351,7 @@ export default function CarPageMobile() {
               <SpecCard
                 icon={<CalendarIcon />}
                 label={t('carSpecs.firstRegistration') + ':'}
-                value={car.year_value?.toString() || "N/A"}
+                value={car.year_value?.toString() + " - " + (car.month.length === 1 ? `0${car.month}` : car.month) || "N/A"}
               />
               <SpecCard
                 icon={<SpeedometerIcon />}

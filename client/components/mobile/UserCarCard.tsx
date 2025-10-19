@@ -67,11 +67,11 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
   return (
     <div className="bg-white rounded-[13px] overflow-hidden shadow-sm w-full xl:w-full mx-auto">
       {/* Image Section */}
-      <div className="relative mb-5 group">
+      <div className="relative mb-5 group h-[250px] sm:h-[450px]">
         <img
           src={currentImage}
           alt={title}
-          className="w-full h-auto object-cover"
+          className="w-full h-full object-cover"
         />
         
         {/* Navigation arrows - only show if there are multiple images */}
@@ -80,19 +80,19 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
             {/* Previous button */}
             <button
               onClick={handlePreviousImage}
-              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-40 hover:bg-opacity-70 rounded-full p-2 shadow-lg transition-all duration-200 hover:shadow-xl z-10 opacity-0 group-hover:opacity-100"
+              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-40 hover:bg-opacity-70 rounded-full p-2 shadow-lg transition-all duration-200 hover:scale-110"
               aria-label="Previous image"
             >
-              <ChevronLeft className="w-4 h-4 text-gray-700" />
+              <ChevronLeft className="w-4 h-4 text-white" />
             </button>
 
             {/* Next button */}
             <button
               onClick={handleNextImage}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-40 hover:bg-opacity-70 rounded-full p-2 shadow-lg transition-all duration-200 hover:shadow-xl z-10 opacity-0 group-hover:opacity-100"
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-40 hover:bg-opacity-70 rounded-full p-2 shadow-lg transition-all duration-200 hover:scale-110"
               aria-label="Next image"
             >
-              <ChevronRight className="w-4 h-4 text-gray-700" />
+              <ChevronRight className="w-4 h-4 text-white" />
             </button>
           </>
         )}

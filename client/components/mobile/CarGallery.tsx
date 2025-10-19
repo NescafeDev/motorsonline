@@ -70,11 +70,11 @@ export default function CarGallery({
   return (
     <div className="px-3">
       {/* Main image */}
-      <div className="relative mb-3 h-auto w-full">
+      <div className="relative mb-3 h-[250px] sm:h-[450px] w-full">
         <img
           src={allImages[currentImageIndex]}
           alt="Car main view"
-          className="w-full xl:h-[250px] h-full object-fit rounded-[10px] cursor-pointer hover:opacity-95 transition-opacity"
+          className="w-full h-full object-cover rounded-[10px] cursor-pointer hover:opacity-95 transition-opacity"
           onClick={handleMainImageClick}
           onKeyDown={handleKeyDown}
           tabIndex={0}

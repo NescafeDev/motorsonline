@@ -568,7 +568,7 @@ export default function HomePageMobile() {
             <h2 className="text-2xl md:text-3xl font-bold text-black mb-6">
               {t('footer.blog')}
             </h2>
-            <p className="text-motors-dark leading-[150%] tracking-[-0.48px] max-w-md">
+            <p className="text-motors-dark leading-[150%] tracking-[-0.48px] w-full">
               {t('blog.description')}
             </p>
           </div>

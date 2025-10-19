@@ -234,7 +234,7 @@ export const CarCard: React.FC<CarCardProps> = ({
 
       {/* Major */}
 
-      <div className="absolute left-[370px] top-[75px] w-fit h-[29px]">
+      <div className="absolute left-[370px] top-[75px] w-fit h-[29px] tracking-[-0.6px] text-[15px]">
         {major}
       </div>
       {/* Breadcrumb */}
@@ -246,7 +246,7 @@ export const CarCard: React.FC<CarCardProps> = ({
 
 
       {/* Price Section */}
-      <div className="absolute right-[15px] top-[46px] flex flex-col items-end gap-2">
+      <div className="absolute right-[15px] top-[55px] flex flex-col items-end gap-2">
         {price && (
           <div className="flex items-center gap-[15px]">
             <div className="relative">

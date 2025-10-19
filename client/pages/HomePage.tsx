@@ -615,7 +615,7 @@ export default function HomePage() {
 
                               </div>
                               <Separator className="my-3" />
-                              <div className="flex items-center gap-2 mx-1 my-3 pt-3 justify-between h-[20px]">
+                              <div className="flex items-center gap-2 mx-1 justify-between">
                                 <div className="flex items-center gap-2">
                                   <MapPin className="w-5 h-5 text-secondary-500 flex-shrink-0" />
                                   <div className="flex flex-col">
