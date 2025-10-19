@@ -13,7 +13,7 @@ export default function LoginPageMobile() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col bg-white w-full">
       {/* Header */}
       <Header />
 
@@ -45,7 +45,7 @@ export default function LoginPageMobile() {
 
               {/* Login Form Section - Full width on mobile */}
               <div className="flex-1 p-4 flex items-center justify-center">
-                <div className="w-full max-w-sm">
+                <div className="w-full">
                   <LoginForm />
                 </div>
               </div>

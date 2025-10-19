@@ -14,7 +14,7 @@ export function NewsletterSignup() {
 
   return (
     <div className="bg-motors-gray-50 py-12 px-5">
-      <div className="max-w-md mx-auto px-3">
+      <div className="w-full mx-auto px-3">
         <h2 className="text-black font-semibold text-2xl leading-normal mb-6">
           {t('uiActions.joinOurBlog')}
         </h2>

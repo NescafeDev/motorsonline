@@ -23,6 +23,7 @@ interface Car {
   favoriteCount?: number;
   views?: number;
   major?: string;
+  technicalData?: string;
 }
 
 export default function UserPageMobile() {
@@ -192,7 +193,7 @@ export default function UserPageMobile() {
                 key={car.id || index}
                 id={car.id}
                 title={`${car.brand_name || 'Unknown'} ${car.model_name || ''} ${car.modelDetail || ''}`}
-                breadcrumb={`Kasutatud autod  »  ${car.brand_name || 'Unknown'} ${car.model_name || ''}  »  ${car.year_value || ''}`}
+                breadcrumb={`${car.technicalData}  »  ${car.brand_name || 'Unknown'} ${car.model_name || ''}  »  ${car.year_value || ''}`}
                 image={car.images?.[0] || "https://cdn.builder.io/api/v1/image/assets/TEMP/cc7bda4b04e2c28565ece34ac8989e7268a2a60f?width=620"}
                 images={car.images}
                 description={car.description || "No description available"}

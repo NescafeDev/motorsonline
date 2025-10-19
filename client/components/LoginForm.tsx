@@ -63,9 +63,9 @@ export default function LoginForm() {
   })
 
   return (
-    <form className="w-full max-w-[540px]" onSubmit={handleSubmit}>
+    <form className="w-full" onSubmit={handleSubmit}>
       {/* Title */}
-      <h1 className="text-brand-text font-poppins text-[30px] font-semibold leading-[150%] tracking-[-0.9px] mb-[60px]">
+      <h1 className="text-brand-text font-poppins text-[30px] font-semibold leading-[150%] tracking-[-0.9px] mb-[60px] text-center">
         {t('auth.welcomeBack')}
       </h1>
 

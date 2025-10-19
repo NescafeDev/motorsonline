@@ -262,7 +262,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
 
                         <div className="mb-4">
                             <span className="text-[#747474] text-sm tracking-[0.2px] leading-[20px] font-medium">
-                                Kasutatud autod » {car.brand_name} {car.model_name} » {car.year_value}
+                                {car.technicalData} » {car.brand_name} {car.model_name} » {car.year_value}
                             </span>
                         </div>
                         {/* Vehicle details */}
