@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 
-export type SupportedLanguage = 'en' | 'ee' | 'ru';
+export type SupportedLanguage = 'en' | 'ee' | 'ru' | 'de' | 'fi';
 
 export interface LanguageConfig {
   code: SupportedLanguage;
@@ -14,6 +14,8 @@ export const SUPPORTED_LANGUAGES: LanguageConfig[] = [
   { code: 'ee', name: 'Estonian', nativeName: 'Eesti', flag: '🇪🇪' },
   { code: 'en', name: 'English', nativeName: 'English', flag: '🇺🇸' },
   { code: 'ru', name: 'Russian', nativeName: 'Русский', flag: '🇷🇺' },
+  { code: 'de', name: 'German', nativeName: 'Deutsch', flag: '🇩🇪' },
+  { code: 'fi', name: 'Finnish', nativeName: 'Suomi', flag: '🇫🇮' },
 ];
 
 export const DEFAULT_LANGUAGE: SupportedLanguage = 'ee';

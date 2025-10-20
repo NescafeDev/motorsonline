@@ -8,7 +8,7 @@ export const useCurrentLanguage = () => {
 
   useEffect(() => {
     // First, try to get language from URL params
-    if (lang && ['en', 'ee', 'ru'].includes(lang.toLowerCase())) {
+    if (lang && ['en', 'ee', 'ru', 'de', 'fi'].includes(lang.toLowerCase())) {
       setCurrentLang(lang.toLowerCase());
       return;
     }
@@ -16,14 +16,14 @@ export const useCurrentLanguage = () => {
     // If no valid lang in params, try to extract from pathname
     const pathSegments = location.pathname.split('/');
     const urlLang = pathSegments[1]?.toLowerCase();
-    if (urlLang && ['en', 'ee', 'ru'].includes(urlLang)) {
+    if (urlLang && ['en', 'ee', 'ru', 'de', 'fi'].includes(urlLang)) {
       setCurrentLang(urlLang);
       return;
     }
 
     // Fallback to localStorage
     const savedLanguage = localStorage.getItem('selectedLanguage');
-    if (savedLanguage && ['EN', 'EE', 'RU'].includes(savedLanguage)) {
+    if (savedLanguage && ['EN', 'EE', 'RU', 'DE', 'FI'].includes(savedLanguage)) {
       setCurrentLang(savedLanguage.toLowerCase());
       return;
     }

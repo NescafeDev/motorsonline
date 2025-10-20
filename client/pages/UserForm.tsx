@@ -22,6 +22,7 @@ interface Car {
   address?: string;
   businessType?: string;
   technicalData?: string;
+  month?: string;
 }
 
 export default function UserForm() {
@@ -187,6 +188,7 @@ export default function UserForm() {
                 key={car.id || index}
                 title={`${car.brand_name || 'Unknown'} ${car.model_name || ''} ${car.modelDetail || ''}`}
                 major={car.major}
+                majorTruncateLimit={80}
                 breadcrumb={`${car.technicalData}  »  ${car.brand_name || 'Unknown'} ${car.model_name || ''}  »  ${car.year_value || ''}`}
                 image={car.images?.[0] || "https://cdn.builder.io/api/v1/image/assets/TEMP/cc7bda4b04e2c28565ece34ac8989e7268a2a60f?width=620"}
                 images={car.images}
@@ -194,7 +196,7 @@ export default function UserForm() {
                 price={`€ ${car.price?.toLocaleString() || '0'}`}
                 originalPrice={car.discountPrice ? `€ ${car.discountPrice.toLocaleString()}` : undefined}
                 discount={car.discountPrice ? `${Math.round(((car.price - car.discountPrice) / car.price) * 100)}%` : undefined}
-                dateEnd="Kuni 25. juunini 2025"
+                dateEnd={car.month ? `${t('common.to')} ${car.month}-${car.year_value}` : undefined}
                 views={car.views || 0}
                 likes={car.favoriteCount || 0}
                 vatNote={getVatDisplayText(car)}

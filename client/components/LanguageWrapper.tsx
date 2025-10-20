@@ -11,7 +11,7 @@ export const LanguageWrapper: React.FC<LanguageWrapperProps> = ({ children }) =>
 
   useEffect(() => {
     // Validate language parameter
-    const validLanguages = ['en', 'ee', 'ru'];
+    const validLanguages = ['en', 'ee', 'ru', 'de', 'fi'];
     const currentLang = lang?.toLowerCase();
     
     if (!currentLang || !validLanguages.includes(currentLang)) {

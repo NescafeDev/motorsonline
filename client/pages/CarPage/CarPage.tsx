@@ -443,7 +443,7 @@ export default function CarPage() {
                       </Button>
                     </div>
                     <span className="text-black text-[20px] tracking-[0.34px] leading-[normal] [font-family:'Poppins',Helvetica] font-medium">
-                      {car.major}
+                      {car.major && car.major.length > 50 ? `${car.major.substring(0, 50)}...` : car.major}
                     </span>
                     <div className="mt-2">
                       <span className="text-[#747474] text-[12px] tracking-[0.34px] leading-[normal] [font-family:'Poppins',Helvetica] font-medium">

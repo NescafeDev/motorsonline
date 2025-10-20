@@ -87,7 +87,8 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
             lastMaintenance: formData.lastMaintenance || '',
             lastInspection: formData.lastInspection || '',
             inspectionValidityPeriod: formData.inspectionValidityPeriod || '',
-            warranty: formData.warranty || ''
+            warranty: formData.warranty || '',
+            major: formData.major || '',
         };
     };
 
@@ -133,26 +134,26 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
     // Technical specifications data
     const technicalSpecs = [
         { label: t('formLabels.vehicleCondition') + ':', value: car.technicalData },
-    { label: t('formLabels.ownerCountLabel') + ':' , value:car.ownerCount},
-    { label: t('formLabels.vinCode') + ':' , value:car.vinCode},
-    { label: t('formLabels.vehicleNumber') , value: car.plateNumber },
-    { label: t('carSpecs.mileage') + ':', value: `${car.mileage.toLocaleString()} km` },
-    { label: t('formLabels.firstRegistration') + ':' , value:(car.month.length === 1 ? `0${car.month}` : car.month) + "." +  car.year_value?.toString() || "N/A"},
-    { label: t('formLabels.serviceBook') + ':' , value:car.serviceBook},
-    { label: t('formLabels.lastMaintenance') + ':' , value:car.lastMaintenance},
-    { label: t('formLabels.lastInspection') + ':' , value:car.lastInspection},
-    { label: t('formLabels.inspectionValid') + ':' , value:car.inspectionValidityPeriod},
-    { label: t('formLabels.warranty') + ':' , value:car.warranty},
-    { label: t('formLabels.powerKw') + ':', value: car.power },
-    { label: t('formLabels.displacement') + ':', value: car.displacement },
-    { label: t('formLabels.transmissionType') + ':', value: car.transmission },
-    { label: t('formLabels.driveType') + ':', value: car.drive_type_ee_name },
-    { label: t('formLabels.fuelType') + ':', value: car.fuelType },
-    { label: t('formLabels.categoryDesignation') + ':', value: car.category },
-    { label: t('formLabels.doors') + ':' , value:car.doors},
-    { label: t('formLabels.bodyType') + ':' , value:car.bodyType},
-    { label: t('formLabels.interiorColor') + ':' , value:car.salonColor},
-    { label: t('formLabels.color') + ':', value: car.carColor },
+        { label: t('formLabels.ownerCountLabel') + ':', value: car.ownerCount },
+        { label: t('formLabels.vinCode') + ':', value: car.vinCode },
+        { label: t('formLabels.vehicleNumber'), value: car.plateNumber },
+        { label: t('carSpecs.mileage') + ':', value: `${car.mileage.toLocaleString()} km` },
+        { label: t('formLabels.firstRegistration') + ':', value: (car.month.length === 1 ? `0${car.month}` : car.month) + "." + car.year_value?.toString() || "N/A" },
+        { label: t('formLabels.serviceBook') + ':', value: car.serviceBook },
+        { label: t('formLabels.lastMaintenance') + ':', value: car.lastMaintenance },
+        { label: t('formLabels.lastInspection') + ':', value: car.lastInspection },
+        { label: t('formLabels.inspectionValid') + ':', value: car.inspectionValidityPeriod },
+        { label: t('formLabels.warranty') + ':', value: car.warranty },
+        { label: t('formLabels.powerKw') + ':', value: car.power },
+        { label: t('formLabels.displacement') + ':', value: car.displacement },
+        { label: t('formLabels.transmissionType') + ':', value: car.transmission },
+        { label: t('formLabels.driveType') + ':', value: car.drive_type_ee_name },
+        { label: t('formLabels.fuelType') + ':', value: car.fuelType },
+        { label: t('formLabels.categoryDesignation') + ':', value: car.category },
+        { label: t('formLabels.doors') + ':', value: car.doors },
+        { label: t('formLabels.bodyType') + ':', value: car.bodyType },
+        { label: t('formLabels.interiorColor') + ':', value: car.salonColor },
+        { label: t('formLabels.color') + ':', value: car.carColor },
     ];
 
     // Equipment features data - parse from equipment string
@@ -270,7 +271,11 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                                 />
                             </Button>
                         </div>
-
+                        <div className="flex items-center gap-2">
+                            <h3 className="text-[#747474] text-[14px] font-medium tracking-[0.28px]">
+                                {car.major && car.major.length > 50 ? `${car.major.substring(0, 50)}...` : car.major}
+                            </h3>
+                        </div>
                         <div className="mb-4">
                             <span className="text-[#747474] text-sm tracking-[0.2px] leading-[20px] font-medium">
                                 {car.technicalData} » {car.brand_name} {car.model_name} » {car.year_value}
@@ -308,7 +313,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                         </Card>
                         {/* Price section */}
                         <div className="flex items-center justify-between mb-4">
-                            <div className="flex-1">
+                            <div className="flex-1 mt-5">
                                 <div className="flex items-center gap-2">
                                     {car.discountPrice && (
                                         <>
@@ -337,7 +342,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                             </div>
                             <div className="ml-4 mt-7">
                                 <Button
-                                    className="bg-[#06d6a0] text-white rounded-[10px] px-6 py-3 text-sm"
+                                    className="bg-[#06d6a0] text-white rounded-[10px] px-4 py-3 text-sm"
                                 >
                                     {t('formLabels.sendEmail')}
                                 </Button>

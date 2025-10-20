@@ -529,7 +529,20 @@
     "o1": "Kerghaagised, ≤ 0,75 t",
     "o2": "Haagised, 0,75–3,5 t",
     "o3": "Haagised, 3,5–10 t",
-    "o4": "Haagised, > 10 t"
+    "o4": "Haagised, > 10 t",
+    "t3": "ratastraktorid, mille kiirus ≤40 km/h ja tühimass ≤600 kg",
+    "t4.1": "kõrgkliirens-ratastraktorid, mis on projekteeritud töötamiseks kõrgekasvuliste kultuuridega",
+    "t4.2": "ülilaiad ratastraktorid, ette nähtud suurtel maa-aladel töötamiseks",
+    "t4.3": "neljarattaveoga madalkliirens-ratastraktorid põllu- ja metsamajanduses",
+    "t5": "ratastraktorid, mille kiirus on üle 40 km/h",
+    "lm": "Kõik liikurmasinad liigituvad LM kategooriaks",
+    "c1c5": "Roomiktraktorid, mis liiguvad roomikutega ja mille kategooriad määratakse analoogselt T1–T5 kategooriatega",
+    "r1": "haagised, mille teljekoormuste summa ei ületa 1500 kg",
+    "r2": "haagised, mille teljekoormuste summa ületab 1500 kg, kuid ei ületa 3500 kg",
+    "r3": "haagised, mille teljekoormuste summa ületab 3500 kg, kuid ei ületa 21 000 kg",
+    "r4": "haagised, mille teljekoormuste summa ületab 21 000 kg",
+    "ms1": "jalaste ja roomikuga varustatud mootoriga maastikusõiduk, millel kuni kaks istekohta",
+    "ms2": "vähemalt kolmerattaline maastikusõiduk, mootori töömaht üle 90 cm³, ette nähtud maastikul liikumiseks"
   },
   "modelDetails": {
     "title": "Mudelidetailid"

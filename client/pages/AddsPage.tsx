@@ -46,9 +46,9 @@ const ChevronDownIcon = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 const techCheckOptions = (t: any) => [
-  { key: 'technicalInspection', label: t('formLabels.inspection') },
-  { key: 'technicalMaintenance', label: t('formLabels.technicalMaintenance') },
-  { key: 'serviceBook', label: t('formLabels.serviceBook') },
+  // { key: 'technicalInspection', label: t('formLabels.inspection') },
+  // { key: 'technicalMaintenance', label: t('formLabels.technicalMaintenance') },
+  // { key: 'serviceBook', label: t('formLabels.serviceBook') },
   { key: 'hideVin', label: t('formLabels.hideVin') },
 ];
 const accessoriesOptions = (t: any) => [
@@ -669,6 +669,7 @@ export default function AddsPage() {
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+    console.log('lastMaintence:' , formData.lastMaintenance)
   };
 
   const handleContactInputChange = (field: string, value: string | string[]) => {
@@ -1618,6 +1619,57 @@ export default function AddsPage() {
                       value: "O4",
                       label: "O4",
                     },
+                    {
+                      value: "T3",
+                      label: "T3"
+                    },
+                    {
+                      value: "T4.1",
+                      label: "T4.1",
+                    },
+                    {
+                      value: "T4.2",
+                      label: "T4.2",
+                    },
+                    {
+                      value: "T4.3",
+                      label: "T4.3",
+                    },
+                    {
+                      value: "T5",
+                      label: "T5",
+                    },
+                    {
+                      value: "LM",
+                      label: "LM",
+                    },
+                    {
+                      value: "C1-C5",
+                      label: "C1-C5",
+                    },
+                    {
+                      value: "R1",
+                      label: "R1",
+                    },
+                    {
+                      value: "R2",
+                      label: "R2",
+                    },
+                    {
+                      value: "R3",
+                      label: "R3",
+                    },
+                    {
+                      value: "R4",
+                      label: "R4",
+                    },
+                    {
+                      value: "MS1",
+                      label: "MS1",
+                    },{
+                      value: "MS2",
+                      label: "MS2",
+                    }
                   ]}
                 />
                 {formData.category && (
@@ -1642,6 +1694,19 @@ export default function AddsPage() {
                           "O2": t('vehicleCategories.o2'),
                           "O3": t('vehicleCategories.o3'),
                           "O4": t('vehicleCategories.o4'),
+                          "T3": t('vehicleCategories.t3'),
+                          "T4.1": t('vehicleCategories.t4.1'),
+                          "T4.2": t('vehicleCategories.t4.2'),
+                          "T4.3": t('vehicleCategories.t4.3'),
+                          "T5": t('vehicleCategories.t5'),
+                          "LM": t('vehicleCategories.lm'),
+                          "C1-C5": t('vehicleCategories.c1c5'),
+                          "R1": t('vehicleCategories.r1'),
+                          "R2": t('vehicleCategories.r2'),
+                          "R3": t('vehicleCategories.r3'),
+                          "R4": t('vehicleCategories.r4'),
+                          "MS1": t('vehicleCategories.ms1'),
+                          "MS2": t('vehicleCategories.ms2'),
                         };
                         return descriptions[formData.category] || "";
                       })()}

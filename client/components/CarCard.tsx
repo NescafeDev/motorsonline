@@ -17,6 +17,7 @@ interface CarCardProps {
   vatNote: string;
   className?: string;
   major?: string;
+  majorTruncateLimit?: number;
   hideBottomIcons?: boolean;
   power?: string;
   month?: string;
@@ -149,6 +150,7 @@ export const CarCard: React.FC<CarCardProps> = ({
   vatNote,
   className = "bg-gray-50",
   major,
+  majorTruncateLimit = 50,
   hideBottomIcons = false,
   power,
   month,
@@ -234,8 +236,8 @@ export const CarCard: React.FC<CarCardProps> = ({
 
       {/* Major */}
 
-      <div className="absolute left-[370px] top-[75px] w-fit h-[29px] tracking-[-0.6px] text-[15px]">
-        {major}
+      <div className="absolute left-[370px] top-[75px] w-fit h-[29px] tracking-[-0.6px] text-[16px]">
+        {major && major.length > majorTruncateLimit ? `${major.substring(0, majorTruncateLimit)}...` : major}
       </div>
       {/* Breadcrumb */}
       <div className="flex items-center gap-[9.764px] absolute left-[370px] top-[100px] h-[29px]">
@@ -255,7 +257,7 @@ export const CarCard: React.FC<CarCardProps> = ({
               </span>
               <div className="absolute top-1/2 left-0 w-full h-[1px] bg-[#747474]"></div>
             </div>
-            {!hideBottomIcons && discount !== "0%" && (
+            {discount !== "0%" && (
               <div className="px-[15px] py-[2px] rounded-full border border-[#FF0000] bg-[#FFE5E5]">
                 <span className="text-[#FF0000] font-['Poppins'] text-[16px] font-medium">
                   {discount}
@@ -347,9 +349,9 @@ export const CarCard: React.FC<CarCardProps> = ({
 
       {/* Bottom Section */}
       {!hideBottomIcons && (
-        <div className="absolute left-[370px] top-[190px] 2xl:left-[370px] 2xl:top-[237px] flex items-center gap-[10px]">
+        <div className="absolute left-[370px] top-[190px] 2xl:left-[370px] 2xl:top-[237px] flex items-center gap-[5px]">
           {/* Date */}
-          <div className="flex items-center gap-[10px]">
+          <div className="flex items-center gap-[5px]">
             <CalendarIcon />
             <span className="text-[#1A202C] font-['Poppins'] text-[18px] font-normal leading-[150%] tracking-[-0.54px]">
               {dateEnd}
@@ -357,7 +359,7 @@ export const CarCard: React.FC<CarCardProps> = ({
           </div>
 
           {/* Views */}
-          <div className="flex items-center gap-[10px] ml-[25px]">
+          <div className="flex items-center gap-[8px] ml-[15px]">
             <EyeIcon />
             <span className="text-[#1A202C] font-['Poppins'] text-[18px] font-normal leading-[150%] tracking-[-0.54px]">
               {views}
@@ -365,7 +367,7 @@ export const CarCard: React.FC<CarCardProps> = ({
           </div>
 
           {/* Likes */}
-          <div className="flex items-center gap-[10px] ml-[10px]">
+          <div className="flex items-center gap-[8px] ml-[10px]">
             <HeartIcon />
             <span className="text-[#1A202C] font-['Poppins'] text-[18px] font-normal leading-[150%] tracking-[-0.54px]">
               {likes}
@@ -413,7 +415,7 @@ export const CarCard: React.FC<CarCardProps> = ({
                 e.stopPropagation();
                 onPreview();
               }}
-              className="flex h-[45px] px-[20px] py-[12px] justify-center items-center gap-[10px] rounded-[10px] border border-[#3B82F6] text-[#3B82F6] hover:bg-[#EBF4FF]"
+              className="flex h-[45px] px-[15px] py-[12px] justify-center items-center gap-[10px] rounded-[10px] border border-[#3B82F6] text-[#3B82F6] hover:bg-[#EBF4FF]"
             >
               <Eye className="w-4 h-4" />
               <span className="text-[#3B82F6] text-center font-['Poppins'] text-[16px] font-normal leading-[150%]">
@@ -427,7 +429,7 @@ export const CarCard: React.FC<CarCardProps> = ({
                 e.stopPropagation();
                 onEdit();
               }}
-              className="flex h-[45px] px-[20px] py-[12px] justify-center items-center gap-[10px] rounded-[10px] border border-[#06D6A0] text-[#06D6A0]"
+              className="flex h-[45px] px-[15px] py-[12px] justify-center items-center gap-[10px] rounded-[10px] border border-[#06D6A0] text-[#06D6A0]"
             >
               <Edit className="w-4 h-4" />
               <span className="text-[#06D6A0] text-center font-['Poppins'] text-[16px] font-normal leading-[150%]">
@@ -441,7 +443,7 @@ export const CarCard: React.FC<CarCardProps> = ({
                 e.stopPropagation();
                 onDelete();
               }}
-              className="flex h-[45px] px-[20px] py-[12px] justify-center items-center gap-[10px] rounded-[10px] border border-[#FF0000]  text-[#FF0000] hover:bg-[#FFE5E5]"
+              className="flex h-[45px] px-[15px] py-[12px] justify-center items-center gap-[10px] rounded-[10px] border border-[#FF0000]  text-[#FF0000] hover:bg-[#FFE5E5]"
             >
               <Trash2 className="w-4 h-4" />
               <span className="text-[#FF0000] text-center font-['Poppins'] text-[16px] font-normal leading-[150%]">

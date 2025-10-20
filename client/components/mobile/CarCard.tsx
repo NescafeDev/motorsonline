@@ -130,7 +130,7 @@ export function CarCard({
               {title}
             </h3>
             <p className="text-sm text-motors-gray font-medium leading-[21px] tracking-[-0.28px] pl-[10px]">
-              {major}
+              {major && major.length > 50 ? `${major.substring(0, 50)}...` : major}
             </p>
           </div>
           <div className="justify-self-end">

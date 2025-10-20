@@ -47,14 +47,14 @@ const ChevronDownIcon = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 
-const techCheckOptions = ( t: any ) => [
+const techCheckOptions = (t: any) => [
   { key: 'technicalInspection', label: t('inspection.technicalInspectionPerformed') },
   { key: 'technicalMaintenance', label: t('formLabels.technicalMaintenance') },
   { key: 'serviceBook', label: t('formLabels.serviceBook') },
   { key: 'hideVin', label: t('formLabels.hideVin') },
 ];
 
-const accessoriesOptions = ( t: any ) => [
+const accessoriesOptions = (t: any) => [
   { key: 'kokkupõrgetennetavpidurisüsteem', label: t('carFeatures.collisionPreventionBrakingSystem') },
   { key: 'pimenurgahoiatus', label: t('carFeatures.blindSpotWarning') },
   { key: 'sõidurajahoidmiseabisüsteem', label: t('carFeatures.laneKeepingAssistSystem') },
@@ -109,7 +109,7 @@ const accessoriesOptions = ( t: any ) => [
   { key: 'valuveljed', label: t('carFeatures.alloyWheels') },
 ];
 
-const carColorOptions = ( t: any ) => [
+const carColorOptions = (t: any) => [
   { value: "beež", label: t('colors.beige') },
   { value: "helebeež", label: t('colors.lightBeige') },
   { value: "hall", label: t('colors.grey') },
@@ -145,7 +145,7 @@ const carColorOptions = ( t: any ) => [
   { value: "valge", label: t('colors.white') },
 ];
 
-const salonColorOptions = ( t: any ) => [
+const salonColorOptions = (t: any) => [
   { value: "must", label: t('colors.black') },
   { value: "hall", label: t('colors.grey') },
   { value: "beež", label: t('colors.beige') },
@@ -159,7 +159,7 @@ const salonColorOptions = ( t: any ) => [
   { value: "valge", label: t('colors.white') },
   { value: "muu", label: t('vehicleTypes.other') },
 ];
-const inspectionValidityOptions = ( t: any ) => [
+const inspectionValidityOptions = (t: any) => [
   { value: "", label: "otsi" },
   { value: "09.2025", label: "09.2025" },
   { value: "10.2025", label: "10.2025" },
@@ -206,7 +206,7 @@ const inspectionValidityOptions = ( t: any ) => [
 export default function AddsPageMobile() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { t , currentLanguage } = useI18n();
+  const { t, currentLanguage } = useI18n();
   const { id: carId } = useParams<{ id: string }>();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -933,7 +933,7 @@ export default function AddsPageMobile() {
         formDataObj.append(key, value as string);
       }
     });
-    
+
     // Handle images for editing - preserve existing images and add new ones
     if (editingCar) {
       const hasNewImages = carImages.some(file => file !== null);
@@ -1010,7 +1010,7 @@ export default function AddsPageMobile() {
         <main className="max-w-sm mx-auto px-4 py-4">
           <div className="text-center">
             <h1 className="text-motorsoline-text text-3xl font-semibold mb-8">
-            {t('common.loading')}
+              {t('common.loading')}
             </h1>
           </div>
         </main>
@@ -1539,6 +1539,57 @@ export default function AddsPageMobile() {
                     value: "O4",
                     label: "O4",
                   },
+                  {
+                    value: "T3",
+                    label: "T3"
+                  },
+                  {
+                    value: "T4.1",
+                    label: "T4.1",
+                  },
+                  {
+                    value: "T4.2",
+                    label: "T4.2",
+                  },
+                  {
+                    value: "T4.3",
+                    label: "T4.3",
+                  },
+                  {
+                    value: "T5",
+                    label: "T5",
+                  },
+                  {
+                    value: "LM",
+                    label: "LM",
+                  },
+                  {
+                    value: "C1-C5",
+                    label: "C1-C5",
+                  },
+                  {
+                    value: "R1",
+                    label: "R1",
+                  },
+                  {
+                    value: "R2",
+                    label: "R2",
+                  },
+                  {
+                    value: "R3",
+                    label: "R3",
+                  },
+                  {
+                    value: "R4",
+                    label: "R4",
+                  },
+                  {
+                    value: "MS1",
+                    label: "MS1",
+                  }, {
+                    value: "MS2",
+                    label: "MS2",
+                  }
                 ]}
               />
               {formData.category && (
@@ -1563,6 +1614,19 @@ export default function AddsPageMobile() {
                         "O2": t('vehicleCategories.o2'),
                         "O3": t('vehicleCategories.o3'),
                         "O4": t('vehicleCategories.o4'),
+                        "T3": t('vehicleCategories.t3'),
+                        "T4.1": t('vehicleCategories.t4.1'),
+                        "T4.2": t('vehicleCategories.t4.2'),
+                        "T4.3": t('vehicleCategories.t4.3'),
+                        "T5": t('vehicleCategories.t5'),
+                        "LM": t('vehicleCategories.lm'),
+                        "C1-C5": t('vehicleCategories.c1c5'),
+                        "R1": t('vehicleCategories.r1'),
+                        "R2": t('vehicleCategories.r2'),
+                        "R3": t('vehicleCategories.r3'),
+                        "R4": t('vehicleCategories.r4'),
+                        "MS1": t('vehicleCategories.ms1'),
+                        "MS2": t('vehicleCategories.ms2'),
                       };
                       return descriptions[formData.category] || "";
                     })()}
@@ -1703,8 +1767,8 @@ export default function AddsPageMobile() {
                 ]}
               />
               <FormField
-                    label={t('formLabels.lastMaintenance')}
-                    placeholder="DD.MM.YYYY"
+                label={t('formLabels.lastMaintenance')}
+                placeholder="DD.MM.YYYY"
                 value={formData.lastMaintenance}
                 onChange={(value) => handleInputChange("lastMaintenance", value)}
               />

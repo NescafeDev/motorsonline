@@ -895,6 +895,9 @@ router.put('/:id', authenticateToken, upload.array('images', 40), async (req: an
         // If parsing fails, keep the existing images from the database
         data.images = car.images;
       }
+    } else {
+      // If no new images uploaded and no existingImages sent, keep the current images
+      data.images = car.images;
     }
     
     // Validate required fields
@@ -942,6 +945,9 @@ router.put('/:id', authenticateToken, upload.array('images', 40), async (req: an
     // Join tech_check and accessories arrays to comma-separated strings if present
     if (Array.isArray(data.tech_check)) data.tech_check = data.tech_check.join(',');
     if (Array.isArray(data.accessories)) data.accessories = data.accessories.join(',');
+    
+    // Remove existingImages field as it's not a database column
+    delete data.existingImages;
     
     const ok = await updateCar(id, data);
     if (!ok) return res.status(404).json({ message: 'Car update failed.' });

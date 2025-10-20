@@ -376,7 +376,7 @@ export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionPro
                   </div>
                 </div>
                 <div className="flex items-center justify-start text-black text-[15px] pl-[5px] tracking-[0.34px] leading-[normal] [font-family:'Poppins',Helvetica] font-medium h-[50px] break-words">
-                  {car.major}
+                  {car.major && car.major.length > 50 ? `${car.major.substring(0, 50)}...` : car.major}
                 </div>
                 <div className="grid grid-cols-2 gap-y-2 mb-2">
                   {getVehicleDetails(car, t).map((detail, index) => (

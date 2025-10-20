@@ -24,6 +24,7 @@ interface Car {
   views?: number;
   major?: string;
   technicalData?: string;
+  month?: string;
 }
 
 export default function UserPageMobile() {
@@ -200,7 +201,7 @@ export default function UserPageMobile() {
                 price={`€ ${car.price?.toLocaleString() || '0'}`}
                 originalPrice={car.discountPrice ? `€ ${car.discountPrice.toLocaleString()}` : undefined}
                 discount={car.discountPrice ? `${Math.round(((car.price - car.discountPrice) / car.price) * 100)}%` : undefined}
-                dateEnd="Kuni 25. juunini 2025"
+                dateEnd={car.month ? `${t('common.to')} ${car.month}-${car.year_value}` : undefined}
                 views={car.views || 0}
                 likes={car.favoriteCount || 0}
                 vatNote={getVatDisplayText(car)}

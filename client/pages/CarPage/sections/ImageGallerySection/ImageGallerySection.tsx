@@ -75,7 +75,7 @@ export const ImageGallerySection = ({ car }: ImageGallerySectionProps): JSX.Elem
             <div className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]">
               {car?.description && car.description.trim() ? (
                 // <p className="break-words">{car.description}</p>
-                <p className="break-all leading-relaxed py-1">{car.description}</p>
+                <p className="break-words leading-relaxed py-1">{car.description}</p>
               ) : (
                 <p>{t('formLabels.descriptionMissing')}</p>
               )}

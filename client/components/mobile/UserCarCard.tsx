@@ -120,7 +120,7 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
             {title}
           </h3>
           <div className="text-sm text-motors-gray leading-[21px] tracking-[-0.42px]">
-            {major}
+            {major && major.length > 50 ? `${major.substring(0, 50)}...` : major}
           </div>
           <p className="text-sm text-motors-gray leading-[21px] tracking-[-0.42px]">
             {breadcrumb}

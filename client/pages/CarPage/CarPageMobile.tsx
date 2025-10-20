@@ -331,7 +331,7 @@ export default function CarPageMobile() {
             </div>
             <div className="flex items-center gap-2">
               <h3 className="text-[#747474] text-[14px] font-medium tracking-[0.28px]">
-                {car.major}
+                {car.major && car.major.length > 50 ? `${car.major.substring(0, 50)}...` : car.major}
               </h3>
             </div>
             <p className="text-[#747474] text-[14px] font-medium tracking-[0.28px] mb-6">

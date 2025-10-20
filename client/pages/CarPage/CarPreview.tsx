@@ -126,6 +126,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
       lastInspection: formData.lastInspection || '',
       inspectionValidityPeriod: formData.inspectionValidityPeriod || '',
       warranty: formData.warranty || '',
+      major: formData.major || '',
     };
   };
 
@@ -268,9 +269,9 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
       {/* Main content */}
       <main className="px-6 lg:px-[100px]">
         {/* Car details and gallery section - Sticky sidebar */}
-        <div className="w-full max-w-[1400px] mx-auto">
+        <div className="w-full mx-auto">
           <div
-            className="grid grid-cols-1 md:grid-cols-3 gap-10"
+            className="grid grid-cols-1 md:grid-cols-3 gap-5"
             ref={gridRef}
             style={{ position: "relative" }}
           >
@@ -368,7 +369,6 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
               <div
                 ref={sidebarRef}
                 style={{
-                  position: "absolute",
                   top: sidebarTop,
                   // No transition for instant movement
                 }}
@@ -377,7 +377,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
                 <Card className="bg-[#f6f7f9] rounded-[10px] border-none">
                   <CardContent className="px-[20px] py-[30px]">
                     <div className="flex justify-between items-start">
-                      <h1 className="text-[30px] font-medium text-secondary-500 tracking-[-1.20px] [font-family:'Poppins',Helvetica] ">
+                      <h1 className="text-[26px] font-medium text-secondary-500 tracking-[-1.50px] [font-family:'Poppins',Helvetica] ">
                         {car.brand_name} {car.model_name} {car.modelDetail}
                       </h1>
                       <Button
@@ -389,7 +389,9 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
                         />
                       </Button>
                     </div>
-
+                    <span className="text-black text-[20px] tracking-[0.34px] leading-[normal] [font-family:'Poppins',Helvetica] font-medium">
+                      {car.major && car.major.length > 50 ? `${car.major.substring(0, 50)}...` : car.major}
+                    </span>
                     <div className="mt-2">
                       <span className="text-[#747474] text-[12px] tracking-[0.34px] leading-[normal] [font-family:'Poppins',Helvetica] font-medium">
                         {car.technicalData} » {car.brand_name} {car.model_name} » {car.year_value}
@@ -459,7 +461,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
                       >
                         <div className="absolute right-0 bottom-6">
                           <Button
-                            className="bg-[#06d6a0] text-white rounded-[10px] px-[30px] py-[15px]"
+                            className="bg-[#06d6a0] text-white rounded-[10px] px-[15px] py-[15px]"
                           >
                             {t('formLabels.sendEmail')}
                           </Button>
