@@ -29,6 +29,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
   const gridRef = useRef<HTMLDivElement>(null);
   const [sidebarTop, setSidebarTop] = useState(0);
   const [showAllTechSpecs, setShowAllTechSpecs] = useState(false);
+  const [showAllEquipment, setShowAllEquipment] = useState(false);
   const offset = 20; // px from top of viewport
   const { user } = useAuth();
   // Function to get VAT display text
@@ -328,7 +329,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
                     </h2>
 
                     <div className="grid grid-cols-2 gap-4">
-                      {equipmentFeatures.slice(0, 12).map((feature, index) => (
+                      {equipmentFeatures.slice(0, showAllEquipment ? equipmentFeatures.length : 10).map((feature, index) => (
                         <div
                           key={index}
                           className="bg-white rounded-[10px] p-2.5 flex justify-between items-start gap-2"
@@ -343,15 +344,18 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
                       ))}
                     </div>
 
-                    <div className="flex justify-center mt-8">
-                      <Button
-                        variant="outline"
-                        className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2.5"
-                      >
-                        {t('formLabels.showMore')}
-                        <ChevronDownIcon className="w-4 h-4" />
-                      </Button>
-                    </div>
+                    {equipmentFeatures.length > 10 && (
+                      <div className="flex justify-center mt-8">
+                        <Button
+                          variant="outline"
+                          className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2.5"
+                          onClick={() => setShowAllEquipment(!showAllEquipment)}
+                        >
+                          {showAllEquipment ? t('formLabels.showLess') : t('formLabels.showMore')}
+                          <ChevronDownIcon className={`w-4 h-4 transition-transform ${showAllEquipment ? 'rotate-180' : ''}`} />
+                        </Button>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               )}
