@@ -1054,7 +1054,6 @@ export const CarListingSection = ({
                       <SelectValue placeholder={t('common.sellerName')} />
                     </SelectTrigger>
                     <SelectContent>
-                      {/* <SelectItem value="">{t('common.all')}</SelectItem> */}
                       {businessTypes.map((businessType) => (
                         <SelectItem key={businessType} value={businessType}>
                           {businessType}
