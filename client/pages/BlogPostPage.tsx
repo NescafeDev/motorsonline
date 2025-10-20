@@ -61,9 +61,7 @@ export default function BlogPostPage() {
                 <div>
                 </div>
                 </div>
-                {/* <div className="bg-motor-gray-bg rounded-[10px] p-4 pr-6 hover:bg-gray-50 transition-colors">
-                  <button className="text-black text-start text-lg font-medium">{t('blog.carsAndModels')}</button>
-                </div>
+                {/* 
                 <div className="bg-motor-gray-bg rounded-[10px] p-4 pr-6 hover:bg-gray-50 transition-colors">
                   <button className="text-black text-start text-lg font-medium">{t('blog.testsAndDrivingExperience')}</button>
                 </div>
