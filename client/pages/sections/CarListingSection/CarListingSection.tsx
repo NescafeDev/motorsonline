@@ -74,6 +74,7 @@ export interface CarFilters {
   carColor?: string;
   bodyType?: string;
   address?: string;
+  businessType?: string;
 }
 
 interface CarListingSectionProps {
@@ -110,6 +111,9 @@ export const CarListingSection = ({
   const [brands, setBrands] = useState<{ id: number; name: string }[]>([]);
   const [models, setModels] = useState<{ id: number; name: string; brand_id: number }[]>([]);
   const [filteredModels, setFilteredModels] = useState<{ id: number; name: string; brand_id: number }[]>([]);
+  
+  // Data for business types
+  const [businessTypes, setBusinessTypes] = useState<string[]>([]);
 
   // Loading states
   const [brandsLoading, setBrandsLoading] = useState(true);
@@ -126,6 +130,19 @@ export const CarListingSection = ({
       }
     };
     fetchDriveTypes();
+  }, []);
+
+  // Fetch business types on component mount
+  useEffect(() => {
+    const fetchBusinessTypes = async () => {
+      try {
+        const response = await apiClient.get('/api/contacts/business-types');
+        setBusinessTypes(response.data);
+      } catch (error) {
+        console.error('Error fetching business types:', error);
+      }
+    };
+    fetchBusinessTypes();
   }, []);
 
   // Fetch brands on component mount
@@ -1029,12 +1046,22 @@ export const CarListingSection = ({
                     </SelectContent>
                   </Select>
 
-                  <Input
-                    className="h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474] border-none"
-                    placeholder={t('common.sellerName')}
-                    value={filters.address || ''}
-                    onChange={(e) => updateFilter('address', e.target.value)}
-                  />
+                  <Select
+                    value={filters.businessType || ''}
+                    onValueChange={(value) => updateFilter('businessType', value)}
+                  >
+                    <SelectTrigger className="h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474] border-none">
+                      <SelectValue placeholder={t('common.sellerName')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {/* <SelectItem value="">{t('common.all')}</SelectItem> */}
+                      {businessTypes.map((businessType) => (
+                        <SelectItem key={businessType} value={businessType}>
+                          {businessType}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
 
                   <div className="space-y-2 pt-2">
                     {additionalInfo.map((info) => (

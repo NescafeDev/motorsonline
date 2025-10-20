@@ -70,6 +70,24 @@ router.get('/user', authenticateToken, async (req: any, res) => {
   }
 });
 
+// Get unique business types (public endpoint)
+router.get('/business-types', async (req, res) => {
+  try {
+    const { pool } = await import('../db');
+    const [rows]: any = await pool.query(`
+      SELECT DISTINCT businessType 
+      FROM contacts 
+      WHERE businessType IS NOT NULL AND businessType != ''
+      ORDER BY businessType ASC
+    `);
+    const businessTypes = rows.map((row: any) => row.businessType);
+    res.json(businessTypes);
+  } catch (err: any) {
+    console.error('Get business types error:', err);
+    res.status(500).json({ message: 'Failed to get business types.', error: err.message });
+  }
+});
+
 // Get contact by user ID (public endpoint for car pages)
 router.get('/public/:userId', async (req, res) => {
   try {
