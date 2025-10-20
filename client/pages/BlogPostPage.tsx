@@ -54,14 +54,14 @@ export default function BlogPostPage() {
                 {t('blog.categories')}
               </h2>
               <div className="space-y-0">
-                {/* <div className="bg-motor-gray-bg rounded-[10px] p-4 pr-6 hover:bg-gray-50 transition-colors">
-                  <button className="text-black text-lg font-semibold">
+                <div className="bg-motor-gray-bg rounded-[10px] p-4 pr-6 hover:bg-gray-50 transition-colors">
+                  <button className="text-black text-lg font-semibold text-start">
                     {blog.category}
                   </button>
                 <div>
                 </div>
-                </div> */}
-                <div className="bg-motor-gray-bg rounded-[10px] p-4 pr-6 hover:bg-gray-50 transition-colors">
+                </div>
+                {/* <div className="bg-motor-gray-bg rounded-[10px] p-4 pr-6 hover:bg-gray-50 transition-colors">
                   <button className="text-black text-start text-lg font-medium">{t('blog.carsAndModels')}</button>
                 </div>
                 <div className="bg-motor-gray-bg rounded-[10px] p-4 pr-6 hover:bg-gray-50 transition-colors">
@@ -78,7 +78,7 @@ export default function BlogPostPage() {
                 </div>
                 <div className="bg-motor-gray-bg rounded-[10px] p-4 pr-6 hover:bg-gray-50 transition-colors">
                   <button className="text-black text-start text-lg font-medium">{t('blog.myGarage')}</button>
-                </div>
+                </div> */}
               </div>
             </div>
           </aside>
