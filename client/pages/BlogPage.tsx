@@ -113,22 +113,22 @@ export default function BlogPage() {
                     ))}
                 </div> */}
                 <div className="bg-motor-gray-bg rounded-[10px] p-4 pr-6 hover:bg-gray-50 transition-colors">
-                  <button className="text-black text-lg font-medium">{t('blog.carsAndModels')}</button>
+                  <button className="text-black text-lg text-start font-medium">{t('blog.carsAndModels')}</button>
                 </div>
                 <div className="bg-motor-gray-bg rounded-[10px] p-4 pr-6 hover:bg-gray-50 transition-colors">
-                  <button className="text-black text-lg font-medium">{t('blog.testsAndDrivingExperience')}</button>
+                  <button className="text-black text-start text-lg font-medium">{t('blog.testsAndDrivingExperience')}</button>
                 </div>
                 <div className="bg-motor-gray-bg rounded-[10px] p-4 pr-6 hover:bg-gray-50 transition-colors">
-                  <button className="text-black text-lg font-medium">{t('blog.technicalAndMaintenance')}</button>
+                  <button className="text-black text-lg  text-start font-medium">{t('blog.technicalAndMaintenance')}</button>
                 </div>
                 <div className="bg-motor-gray-bg rounded-[10px] p-4 pr-6 hover:bg-gray-50 transition-colors">
-                  <button className="text-black text-lg font-medium">{t('blog.newsAndTrends')}</button>
+                  <button className="text-black text-lg text-start font-medium">{t('blog.newsAndTrends')}</button>
                 </div>
                 <div className="bg-motor-gray-bg rounded-[10px] p-4 pr-6 hover:bg-gray-50 transition-colors">
-                  <button className="text-black text-lg font-medium">{t('blog.autoCulture')}</button>
+                  <button className="text-black text-lg text-start font-medium">{t('blog.autoCulture')}</button>
                 </div>
                 <div className="bg-motor-gray-bg rounded-[10px] p-4 pr-6 hover:bg-gray-50 transition-colors">
-                  <button className="text-black text-lg font-medium">{t('blog.myGarage')}</button>
+                  <button className="text-black text-lg text-start font-medium">{t('blog.myGarage')}</button>
                 </div>
               </div>
             </div>
