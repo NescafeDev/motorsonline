@@ -105,12 +105,30 @@ export default function BlogPage() {
                 {t('blog.categories')}
               </h2>
               <div className="space-y-0">
-                <div className="bg-motor-gray-bg rounded-[10px] p-4">
+                {/* <div className="bg-motor-gray-bg rounded-[10px] p-4">
                     {blogs.map((blog) => (
                       <div className="w-full text-left p-2 text-black text-lg font-normal hover:bg-motor-gray-bg rounded-[10px] transition-colors">
                         {blog.category}
                       </div>
                     ))}
+                </div> */}
+                <div className="bg-motor-gray-bg rounded-[10px] p-4 pr-6 hover:bg-gray-50 transition-colors">
+                  <button className="text-black text-lg font-medium">{t('blog.carsAndModels')}</button>
+                </div>
+                <div className="bg-motor-gray-bg rounded-[10px] p-4 pr-6 hover:bg-gray-50 transition-colors">
+                  <button className="text-black text-lg font-medium">{t('blog.testsAndDrivingExperience')}</button>
+                </div>
+                <div className="bg-motor-gray-bg rounded-[10px] p-4 pr-6 hover:bg-gray-50 transition-colors">
+                  <button className="text-black text-lg font-medium">{t('blog.technicalAndMaintenance')}</button>
+                </div>
+                <div className="bg-motor-gray-bg rounded-[10px] p-4 pr-6 hover:bg-gray-50 transition-colors">
+                  <button className="text-black text-lg font-medium">{t('blog.newsAndTrends')}</button>
+                </div>
+                <div className="bg-motor-gray-bg rounded-[10px] p-4 pr-6 hover:bg-gray-50 transition-colors">
+                  <button className="text-black text-lg font-medium">{t('blog.autoCulture')}</button>
+                </div>
+                <div className="bg-motor-gray-bg rounded-[10px] p-4 pr-6 hover:bg-gray-50 transition-colors">
+                  <button className="text-black text-lg font-medium">{t('blog.myGarage')}</button>
                 </div>
               </div>
             </div>

@@ -73,6 +73,7 @@ export interface CarFilters {
   carColorType?: string;
   carColor?: string;
   bodyType?: string;
+  address?: string;
 }
 
 interface CarListingSectionProps {
@@ -235,7 +236,7 @@ export const CarListingSection = ({
     { id: "luukpara", label: t('bodyTypes.hatchback') },
     { id: "universaal", label: t('bodyTypes.wagon') },
     { id: "mahtuniversaal", label: t('bodyTypes.mpv') },
-    { id: "kupee", label: t('bodyTypes.coupe')},
+    { id: "kupee", label: t('bodyTypes.coupe') },
     { id: "kabriolett", label: t('bodyTypes.convertible') },
     { id: "pikap", label: t('bodyTypes.pickup') },
     { id: "limusiin", label: t('bodyTypes.limousine') },
@@ -302,7 +303,7 @@ export const CarListingSection = ({
     { id: "tumeoranž", label: t('colors.darkOrange'), color: "bg-orange-600" },
     { id: "tumerpruun", label: t('colors.darkBrown'), color: "bg-amber-800" },
     { id: "tumerpunane", label: t('colors.darkRed'), color: "bg-red-700" },
-    { id: "tumeroheline", label: t('colors.darkGreen') , color: "bg-green-700" },
+    { id: "tumeroheline", label: t('colors.darkGreen'), color: "bg-green-700" },
     { id: "tumesinine", label: t('colors.darkBlue'), color: "bg-blue-700" },
     { id: "valge", label: t('colors.white'), color: "bg-white", },
   ];
@@ -671,9 +672,9 @@ export const CarListingSection = ({
                         className="font-['Poppins',Helvetica] font-normal text-base"
                       >
                         {type.name === 'esivedu' ? t('driveTypes.frontWheel') :
-                         type.name === 'tagavedu' ? t('driveTypes.rearWheel') :
-                         type.name === 'nelikvedu' ? t('driveTypes.allWheel') :
-                         type.ee_name}
+                          type.name === 'tagavedu' ? t('driveTypes.rearWheel') :
+                            type.name === 'nelikvedu' ? t('driveTypes.allWheel') :
+                              type.ee_name}
                       </label>
                     </div>
                   ))}
@@ -1027,6 +1028,13 @@ export const CarListingSection = ({
                       <SelectItem value="äri">{t('formLabels.business')}</SelectItem>
                     </SelectContent>
                   </Select>
+
+                  <Input
+                    className="h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474] border-none"
+                    placeholder={t('common.sellerName')}
+                    value={filters.address || ''}
+                    onChange={(e) => updateFilter('address', e.target.value)}
+                  />
 
                   <div className="space-y-2 pt-2">
                     {additionalInfo.map((info) => (

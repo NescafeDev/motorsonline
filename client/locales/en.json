@@ -35,7 +35,8 @@
     "to":"To",
     "searchLanguages": "Search Languages...",
     "seconds": "seconds",
-    "after": "after"
+    "after": "after",
+    "sellerName": "Seller Name"
   },
   "navigation": {
     "home": "Home",
@@ -158,7 +159,13 @@
     "introduction": "Introduction",
     "introDetail": "Introduction Details",
     "summary": "Summary",
-    "noBlogsFound": "Blogs not found"
+    "noBlogsFound": "Blogs not found",
+    "carsAndModels": "Cars and Models",
+    "testsAndDrivingExperience": "Tests and Driving Experience",
+    "technicalAndMaintenance": "Technical and Maintenance",
+    "newsAndTrends": "News and Trends",
+    "autoCulture": "Auto Culture",
+    "myGarage": "My Garage"
   },
   "search": {
     "placeholder": "Search cars...",
@@ -541,7 +548,10 @@
     "r3": "trailers with a sum of axle loads exceeding 3500 kg but not exceeding 21,000 kg",
     "r4": "trailers with a sum of axle loads exceeding 21,000 kg",
     "ms1": "motorized off-road vehicle equipped with legs and tracks, with up to two seats",
-    "ms2": "at least three-wheeled off-road vehicle, engine capacity over 90 cm³, intended for off-road use"
+    "ms2": "at least three-wheeled off-road vehicle, engine capacity over 90 cm³, intended for off-road use",
+    "m1g": "SUVs with no more than eight seats in addition to the driver's seat",
+    "t2": "Wheel tractors with a speed ≤40 km/h, a track width of 1150 mm, an unladen weight of more than 600 kg and a ground clearance of ≤600 mm",
+    "t1": "Wheel tractors with a maximum design speed not exceeding 40 km/h, a track width of at least 1150 mm, an unladen weight of more than 600 kg and a ground clearance of ≤1000 mm"
   },
   "modelDetails": {
     "title": "Model Details"

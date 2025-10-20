@@ -12,7 +12,7 @@ export const FreeListingBanner = (): JSX.Element => {
     <section className="max-w-[1240px] mx-auto mt-10">
       <Card className="w-full h-[127px] bg-white rounded-[10px] flex items-center justify-between px-[67px]">
         <p className="font-normal text-secondary-500 text-xl tracking-[-0.60px] leading-[30px]">
-          {t('uiActions.publishingListingsFree')}
+          {t('uiActions.sellBuyFree')}
         </p>
         <Button
           variant="outline"

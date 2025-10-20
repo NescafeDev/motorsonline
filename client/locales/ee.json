@@ -35,7 +35,8 @@
     "to": "Kuni",
     "searchLanguages": "Otsi keeleid...",
     "seconds": "sekundit",
-    "after": "pärast"
+    "after": "pärast",
+    "sellerName": "Müüja nimi"
   },
   "navigation": {
     "home": "Avaleht",
@@ -159,7 +160,13 @@
     "introduction": "Sissejuhatus",
     "introDetail": "Sissejuhatuse detailid",
     "summary": "Kokkuvõte",
-    "noBlogsFound": "Blogisid ei leitud"
+    "noBlogsFound": "Blogisid ei leitud",
+    "carsAndModels": "Autod ja mudelid",
+    "testsAndDrivingExperience": "Testid ja sõiduelamus",
+    "technicalAndMaintenance": "Tehnika ja hooldus",
+    "newsAndTrends": "Uudised ja trendid",
+    "autoCulture": "Autokultuur",
+    "myGarage": "Minu garaaž"
   },
   "search": {
     "placeholder": "Otsi autosid...",
@@ -542,7 +549,10 @@
     "r3": "haagised, mille teljekoormuste summa ületab 3500 kg, kuid ei ületa 21 000 kg",
     "r4": "haagised, mille teljekoormuste summa ületab 21 000 kg",
     "ms1": "jalaste ja roomikuga varustatud mootoriga maastikusõiduk, millel kuni kaks istekohta",
-    "ms2": "vähemalt kolmerattaline maastikusõiduk, mootori töömaht üle 90 cm³, ette nähtud maastikul liikumiseks"
+    "ms2": "vähemalt kolmerattaline maastikusõiduk, mootori töömaht üle 90 cm³, ette nähtud maastikul liikumiseks",
+    "m1g": "maasturid, millel lisaks juhiistmele ei ole rohkem kui kaheksa istekohta",
+    "t2": "ratastraktorid, mille kiirus ≤40 km/h, rööbe alla 1150 mm, tühimass üle 600 kg ja kliirens ≤600 mm",
+    "t1": "ratastraktorid, mille suurim valmistajakiirus ei ületa 40 km/h, rööbe vähemalt 1150 mm, tühimass üle 600 kg ja kliirens ≤1000 mm"
   },
   "modelDetails": {
     "title": "Mudelidetailid"

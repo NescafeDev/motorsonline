@@ -1556,6 +1556,10 @@ export default function AddsPage() {
                       label: "M1",
                     },
                     {
+                      value: "M1G",
+                      label: "M1G",
+                    },
+                    {
                       value: "M2",
                       label: "M2",
                     },
@@ -1620,6 +1624,14 @@ export default function AddsPage() {
                       label: "O4",
                     },
                     {
+                      value: "T1",
+                      label: "T1",
+                    },
+                    {
+                      value: "T2",
+                      label: "T2",
+                    },
+                    {
                       value: "T3",
                       label: "T3"
                     },
@@ -1678,6 +1690,7 @@ export default function AddsPage() {
                       {(() => {
                         const descriptions: { [key: string]: string } = {
                           "M1": t('vehicleCategories.m1'),
+                          "M1G": t('vehicleCategories.m1g'),
                           "M2": t('vehicleCategories.m2'),
                           "M3": t('vehicleCategories.m3'),
                           "N1": t('vehicleCategories.n1'),
@@ -1694,6 +1707,8 @@ export default function AddsPage() {
                           "O2": t('vehicleCategories.o2'),
                           "O3": t('vehicleCategories.o3'),
                           "O4": t('vehicleCategories.o4'),
+                          "T1": t('vehicleCategories.t1'),
+                          "T2": t('vehicleCategories.t2'),
                           "T3": t('vehicleCategories.t3'),
                           "T4.1": t('vehicleCategories.t4.1'),
                           "T4.2": t('vehicleCategories.t4.2'),
