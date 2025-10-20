@@ -90,10 +90,37 @@ export default function BlogPostPageMobile() {
           <h2 className="text-black font-normal text-lg leading-7 mb-6">
             {t('blog.categories')}
           </h2>
-          <div className="bg-white rounded-[10px] p-4">
-            <span className="text-black text-lg font-semibold">
-              {blog.category}
-            </span>
+          <div className="space-y-2">
+            <div className="bg-[#F6F7F9] rounded-[10px] p-4 hover:bg-gray-100 transition-colors cursor-pointer">
+              <span className="text-black text-lg font-medium">
+                {t('blog.carsAndModels')}
+              </span>
+            </div>
+            <div className="bg-[#F6F7F9] rounded-[10px] p-4 hover:bg-gray-100 transition-colors cursor-pointer">
+              <span className="text-black text-lg font-medium">
+                {t('blog.testsAndDrivingExperience')}
+              </span>
+            </div>
+            <div className="bg-[#F6F7F9] rounded-[10px] p-4 hover:bg-gray-100 transition-colors cursor-pointer">
+              <span className="text-black text-lg font-medium">
+                {t('blog.technicalAndMaintenance')}
+              </span>
+            </div>
+            <div className="bg-[#F6F7F9] rounded-[10px] p-4 hover:bg-gray-100 transition-colors cursor-pointer">
+              <span className="text-black text-lg font-medium">
+                {t('blog.newsAndTrends')}
+              </span>
+            </div>
+            <div className="bg-[#F6F7F9] rounded-[10px] p-4 hover:bg-gray-100 transition-colors cursor-pointer">
+              <span className="text-black text-lg font-medium">
+                {t('blog.autoCulture')}
+              </span>
+            </div>
+            <div className="bg-[#F6F7F9] rounded-[10px] p-4 hover:bg-gray-100 transition-colors cursor-pointer">
+              <span className="text-black text-lg font-medium">
+                {t('blog.myGarage')}
+              </span>
+            </div>
           </div>
         </section>
 
