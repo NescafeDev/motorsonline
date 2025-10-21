@@ -106,7 +106,7 @@ export default function BlogPostPageMobile() {
             <img
               src={blog.title_image || 'https://cdn.builder.io/api/v1/image/assets/TEMP/affbcd99d59bab2d47bfc87453dd4cc6d4f56b3c?width=780'}
               alt={blog.title}
-              className="w-full h-[300px] object-cover"
+              className="w-full h-full object-cover"
             />
             <div className="p-5 space-y-4">
               <div className="inline-block bg-gray-100 px-2 py-1 rounded-[10px]">

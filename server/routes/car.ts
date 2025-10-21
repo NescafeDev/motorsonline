@@ -122,6 +122,7 @@ export interface CarFilters {
   registered_country?: string;
   imported_from?: string;
   seller_type?: string;
+  businessType?: string;
   with_vat?: boolean;
   service_book?: boolean;
   inspection?: boolean;
@@ -397,13 +398,15 @@ router.get('/public/approved', async (_req, res) => {
     
     const rows = await queryWithRetry(`
       SELECT cars.*, brand.name as brand_name, model.name as model_name, year.value as year_value, drive_type.name as drive_type_name, drive_type.ee_name as drive_type_ee_name,
-             contacts.phone, contacts.businessType, contacts.socialNetwork, contacts.email, contacts.address, contacts.website, contacts.language, contacts.country
+             contacts.phone, contacts.businessType, contacts.socialNetwork, contacts.email, contacts.address, contacts.website, contacts.language, contacts.country,
+             users.userType
       FROM cars
       LEFT JOIN brand ON cars.brand_id = brand.id
       LEFT JOIN model ON cars.model_id = model.id
       LEFT JOIN year ON cars.year_id = year.id
       LEFT JOIN drive_type ON cars.drive_type_id = drive_type.id
       LEFT JOIN contacts ON cars.user_id = contacts.user_id
+      LEFT JOIN users ON cars.user_id = users.id
       WHERE cars.approved = true
       ORDER BY cars.created_at DESC
     `);
@@ -469,6 +472,7 @@ router.get('/public/filtered', async (req, res) => {
       registered_country,
       imported_from,
       seller_type,
+      businessType,
       with_vat,
       service_book,
       inspection,
@@ -487,13 +491,15 @@ router.get('/public/filtered', async (req, res) => {
 
     let query = `
       SELECT cars.*, brand.name as brand_name, model.name as model_name, year.value as year_value, drive_type.name as drive_type_name, drive_type.ee_name as drive_type_ee_name,
-             contacts.phone, contacts.businessType, contacts.socialNetwork, contacts.email, contacts.address, contacts.website, contacts.language, contacts.country
+             contacts.phone, contacts.businessType, contacts.socialNetwork, contacts.email, contacts.address, contacts.website, contacts.language, contacts.country,
+             users.userType
       FROM cars
       LEFT JOIN brand ON cars.brand_id = brand.id
       LEFT JOIN model ON cars.model_id = model.id
       LEFT JOIN year ON cars.year_id = year.id
       LEFT JOIN drive_type ON cars.drive_type_id = drive_type.id
       LEFT JOIN contacts ON cars.user_id = contacts.user_id
+      LEFT JOIN users ON cars.user_id = users.id
       WHERE cars.approved = true
     `;
     
@@ -673,8 +679,13 @@ router.get('/public/filtered', async (req, res) => {
     }
 
     if (seller_type) {
-      query += ' AND cars.businessType = ?';
+      query += ' AND users.userType = ?';
       params.push(seller_type);
+    }
+
+    if (businessType) {
+      query += ' AND contacts.businessType = ?';
+      params.push(businessType);
     }
 
     if (with_vat === 'true') {
@@ -769,12 +780,16 @@ router.get('/:id', async (req, res) => {
     
     // Get car with approval check
     const rows = await queryWithRetry(`
-      SELECT cars.*, brand.name as brand_name, model.name as model_name, year.value as year_value, drive_type.name as drive_type_name, drive_type.ee_name as drive_type_ee_name
+      SELECT cars.*, brand.name as brand_name, model.name as model_name, year.value as year_value, drive_type.name as drive_type_name, drive_type.ee_name as drive_type_ee_name,
+             contacts.phone, contacts.businessType, contacts.socialNetwork, contacts.email, contacts.address, contacts.website, contacts.language, contacts.country,
+             users.userType
       FROM cars
       LEFT JOIN brand ON cars.brand_id = brand.id
       LEFT JOIN model ON cars.model_id = model.id
       LEFT JOIN year ON cars.year_id = year.id
       LEFT JOIN drive_type ON cars.drive_type_id = drive_type.id
+      LEFT JOIN contacts ON cars.user_id = contacts.user_id
+      LEFT JOIN users ON cars.user_id = users.id
       WHERE cars.id = ? AND cars.approved = true
     `, [carId]);
     

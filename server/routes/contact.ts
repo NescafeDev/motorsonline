@@ -74,12 +74,24 @@ router.get('/user', authenticateToken, async (req: any, res) => {
 router.get('/business-types', async (req, res) => {
   try {
     const { pool } = await import('../db');
-    const [rows]: any = await pool.query(`
-      SELECT DISTINCT businessType 
+    const { userType } = req.query;
+    
+    let query = `
+      SELECT DISTINCT contacts.businessType 
       FROM contacts 
-      WHERE businessType IS NOT NULL AND businessType != ''
-      ORDER BY businessType ASC
-    `);
+      LEFT JOIN users ON contacts.user_id = users.id
+      WHERE contacts.businessType IS NOT NULL AND contacts.businessType != ''
+    `;
+    const params: any[] = [];
+    
+    if (userType) {
+      query += ' AND users.userType = ?';
+      params.push(userType);
+    }
+    
+    query += ' ORDER BY contacts.businessType ASC';
+    
+    const [rows]: any = await pool.query(query, params);
     const businessTypes = rows.map((row: any) => row.businessType);
     res.json(businessTypes);
   } catch (err: any) {

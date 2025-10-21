@@ -111,7 +111,7 @@ export const CarListingSection = ({
   const [brands, setBrands] = useState<{ id: number; name: string }[]>([]);
   const [models, setModels] = useState<{ id: number; name: string; brand_id: number }[]>([]);
   const [filteredModels, setFilteredModels] = useState<{ id: number; name: string; brand_id: number }[]>([]);
-  
+
   // Data for business types
   const [businessTypes, setBusinessTypes] = useState<string[]>([]);
 
@@ -132,18 +132,22 @@ export const CarListingSection = ({
     fetchDriveTypes();
   }, []);
 
-  // Fetch business types on component mount
+  // Fetch business types based on seller_type filter
   useEffect(() => {
     const fetchBusinessTypes = async () => {
       try {
-        const response = await apiClient.get('/api/contacts/business-types');
+        const url = filters.seller_type 
+          ? `/api/contacts/business-types?userType=${filters.seller_type}`
+          : '/api/contacts/business-types';
+        const response = await apiClient.get(url);
         setBusinessTypes(response.data);
       } catch (error) {
         console.error('Error fetching business types:', error);
+        setBusinessTypes([]);
       }
     };
     fetchBusinessTypes();
-  }, []);
+  }, [filters.seller_type]);
 
   // Fetch brands on component mount
   useEffect(() => {
@@ -1036,19 +1040,26 @@ export const CarListingSection = ({
                     </SelectContent>
                   </Select>
 
-                  <Select value={filters.seller_type} onValueChange={(value) => updateFilter('seller_type', value)}>
+                  <Select 
+                    value={filters.seller_type} 
+                    onValueChange={(value) => {
+                      // Clear businessType when seller_type changes
+                      onFiltersChange({ ...filters, seller_type: value, businessType: undefined });
+                    }}
+                  >
                     <SelectTrigger className="w-full h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474]">
                       <SelectValue placeholder={t('formLabels.seller')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="era">{t('formLabels.private')}</SelectItem>
-                      <SelectItem value="äri">{t('formLabels.business')}</SelectItem>
+                      <SelectItem value="private">{t('formLabels.private')}</SelectItem>
+                      <SelectItem value="company">{t('formLabels.business')}</SelectItem>
                     </SelectContent>
                   </Select>
 
                   <Select
                     value={filters.businessType || ''}
                     onValueChange={(value) => updateFilter('businessType', value)}
+                    disabled={!filters.seller_type}
                   >
                     <SelectTrigger className="h-[43px] bg-[#f6f7f9] font-['Poppins',Helvetica] text-[#747474] border-none">
                       <SelectValue placeholder={t('common.sellerName')} />
