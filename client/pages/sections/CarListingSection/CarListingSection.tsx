@@ -706,13 +706,13 @@ export const CarListingSection = ({
           {/* <Accordion type="single" collapsible defaultValue="range-input-groups"> */}
           <Accordion type="single" collapsible>
             <AccordionItem value="range-input-groups" className="border-none">
-              <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica]">
+              <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica] text-start">
                 {t('formLabels.priceAndGeneralInfo')}
               </AccordionTrigger>
               <AccordionContent>
                 {rangeInputGroups.slice(0, 5).map((group) => (
                   <div key={group.id} className="space-y-2 pb-2">
-                    <label className="block font-['Poppins',Helvetica] font-normal text-[#747474] text-base">
+                    <label className="block font-['Poppins',Helvetica] font-normal text-[#747474] text-base text-start">
                       {group.label}
                     </label>
                     <div className="flex items-center space-x-2">
@@ -873,7 +873,7 @@ export const CarListingSection = ({
           {/* Technical Indicators */}
           <Accordion type="single" collapsible>
             <AccordionItem value="technical" className="border-none">
-              <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica]">
+              <AccordionTrigger className="py-2 font-medium text-base font-['Poppins',Helvetica] text-start">
                 {t('formLabels.technicalSpecs')}
               </AccordionTrigger>
               <AccordionContent>
