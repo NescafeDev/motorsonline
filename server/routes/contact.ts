@@ -106,7 +106,6 @@ router.get('/public/:userId', async (req, res) => {
     const userId = parseInt(req.params.userId);
     console.log('Fetching contact for user ID:', userId);
     const contact = await getContactByUserId(userId);
-    console.log('Contact found:', contact);
     if (!contact) {
       console.log('No contact found for user ID:', userId);
       return res.status(404).json({ message: 'Contact not found' });
