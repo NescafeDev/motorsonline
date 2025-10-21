@@ -27,6 +27,7 @@ import UserPage from "./pages/UserPage";
 import AddsPage from "./pages/AddsPage";
 import AdminLoginPage from "./pages/admin/index";
 import AdminBlogPanel from "./pages/admin/blog";
+import AdminBannerImagesPage from "./pages/admin/bannerimages.tsx";
 import AdminAddsPage from "./pages/admin/adds";
 import AdminPrivacyPanel from "./pages/admin/privacy";
 import AdminTermsPanel from "./pages/admin/terms";
@@ -82,6 +83,7 @@ const App = () => (
                   {/* Admin Panel Routes */}
                   <Route path="admin" element={<AdminLoginPage />} />
                   <Route path="admin/blog" element={<AdminBlogPanel />} />
+                  <Route path="admin/bannerimages" element={<AdminBannerImagesPage />} />
                   <Route path="admin/adds" element={<AdminAddsPage />} />
                   <Route path="admin/privacy" element={<AdminPrivacyPanel />} />
                   <Route path="admin/terms" element={<AdminTermsPanel />} />

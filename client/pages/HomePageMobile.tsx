@@ -12,6 +12,16 @@ import { useFavorites } from "../hooks/useFavorites";
 import { useAuth } from "../contexts/AuthContext";
 import { useI18n } from "@/contexts/I18nContext";
 
+// Banner image interface
+interface BannerImage {
+  id: number;
+  desktop_image: string;
+  mobile_image: string;
+  active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 // Car-related types
 export interface Car {
   id: number;
@@ -204,8 +214,32 @@ export default function HomePageMobile() {
   const [filteredCars, setFilteredCars] = useState<Car[]>([]);
   const [filters, setFilters] = useState<CarFilters>({});
   const [loading, setLoading] = useState(true);
+  const [banners, setBanners] = useState<BannerImage[]>([]);
+  const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [filtersApplied, setFiltersApplied] = useState(false);
+
+  // Fetch banner images
+  const fetchBanners = useCallback(async () => {
+    try {
+      const response = await axios.get("/api/banner-images");
+      const activeBanners = response.data.filter((banner: BannerImage) => banner.active);
+      setBanners(activeBanners);
+    } catch (error) {
+      console.error("Error fetching banners:", error);
+    }
+  }, []);
+
+  // Auto-rotate banners every 5 seconds
+  useEffect(() => {
+    if (banners.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentBannerIndex((prevIndex) => (prevIndex + 1) % banners.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [banners.length]);
 
   const loadCars = useCallback(async () => {
     console.log('Loading cars...');
@@ -240,7 +274,8 @@ export default function HomePageMobile() {
   useEffect(() => {
     console.log('Loading cars - isAuthenticated:', isAuthenticated, 'user:', user);
     loadCars();
-  }, [isAuthenticated, user, loadCars]);
+    fetchBanners();
+  }, [isAuthenticated, user, loadCars, fetchBanners]);
 
   // Update filtered cars when cars change or search term changes
   useEffect(() => {
@@ -421,12 +456,39 @@ export default function HomePageMobile() {
       <main className="bg-[#F6F7F9]">
         {/* Hero Section */}
         <section className="bg-motors-light">
-          <div className="h-auto flex justify-center p-5">
-            <img
-              className="h-[100%] mt-5 rounded-xl object-contain"
-              alt="Car hero image"
-              src="/img/photo_2025-10-10_22-33-18.jpg"
-            />
+          <div className="h-full flex justify-center p-5 relative">
+            {banners.length > 0 && banners[currentBannerIndex] && banners[currentBannerIndex].mobile_image ? (
+              <img
+                className="h-[100%] mt-5 rounded-xl object-contain"
+                style={{ width: '360px', height: '200px' }}
+                alt={`Banner ${currentBannerIndex + 1}`}
+                src={banners[currentBannerIndex].mobile_image}
+              />
+            ) : (
+              <img
+                className="h-[100%] mt-5 rounded-xl object-contain"
+                alt="Car hero image"
+                src="/img/photo_2025-10-10_22-33-18.jpg"
+              />
+            )}
+            
+            {/* Navigation Dots - Only show if more than 1 banner */}
+            {banners.length > 1 && (
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2">
+                {banners.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentBannerIndex(index)}
+                    className={`w-2 h-2 rounded-full transition-colors ${
+                      index === currentBannerIndex
+                        ? "bg-black"
+                        : "bg-black/50 hover:bg-black/75"
+                    }`}
+                    aria-label={`Go to banner ${index + 1}`}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </section>
 

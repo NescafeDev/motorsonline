@@ -12,6 +12,7 @@ import driveTypeRoutes from "./routes/drive-type";
 import favoritesRoutes from "./routes/favorites";
 import viewsRoutes from "./routes/views";
 import privacyRoutes from "./routes/privacy";
+import bannerImageRoutes from "./routes/banner-images";
 
 export function createServer() {
   const app = express();
@@ -24,6 +25,9 @@ export function createServer() {
   // Serve static files from public directory
   app.use(express.static(path.join(process.cwd(), 'public')));
   
+  // Serve uploaded files
+  app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+  
   app.use("/api/auth", authRoutes);
   app.use("/api/blogs", blogRoutes);
   app.use("/api/cars", carRoutes);
@@ -35,6 +39,7 @@ export function createServer() {
   app.use("/api/favorites", favoritesRoutes);
   app.use("/api/views", viewsRoutes);
   app.use("/api/privacy", privacyRoutes);
+  app.use("/api/banner-images", bannerImageRoutes);
 
   // Example API routes
   app.get("/api/ping", (_req, res) => {

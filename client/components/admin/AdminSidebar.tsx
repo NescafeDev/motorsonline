@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useI18n } from "@/contexts/I18nContext";
 
 interface AdminSidebarProps {
-  active: "blog" | "adds" | "privacy" | "terms";
+  active: "blog" | "adds" | "privacy" | "terms" | "bannerimages";
 }
 
 const AdminSidebar: React.FC<AdminSidebarProps> = ({ active }) => {
@@ -19,6 +19,12 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ active }) => {
           onClick={() => navigate(`/${currentLanguage}/admin/blog`)}
         >
           Blogid
+        </button>
+        <button
+          className={`text-left px-4 py-2 rounded hover:bg-gray-100 font-semibold ${active === "bannerimages" ? "bg-brand-primary text-white" : ""}`}
+          onClick={() => navigate(`/${currentLanguage}/admin/bannerimages`)}
+        >
+          Bännerpildid
         </button>
         <button
           className={`text-left px-4 py-2 rounded hover:bg-gray-100 font-semibold ${active === "adds" ? "bg-brand-primary text-white" : ""}`}
