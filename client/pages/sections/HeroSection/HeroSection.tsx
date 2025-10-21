@@ -5,7 +5,7 @@ interface BannerImage {
   id: number;
   desktop_image: string;
   mobile_image: string;
-  active: boolean;
+  active: string;
   created_at: string;
   updated_at: string;
 }
@@ -22,8 +22,9 @@ export const HeroSection = (): JSX.Element => {
         const response = await axios.get("/api/banner-images");
         console.log("Raw response:", response.data);
         
-        // Filter only active banners
-        const activeBanners = response.data.filter((banner: BannerImage) => banner.active);
+        // Filter only active banners (active === 1 or active === "1")
+        const activeBanners = response.data.filter((banner: BannerImage) => banner.active === "1");
+        console.log("All banners:", response.data);
         console.log("Active banners:", activeBanners);
         setBanners(activeBanners);
       } catch (error) {
@@ -34,6 +35,11 @@ export const HeroSection = (): JSX.Element => {
     };
 
     fetchBanners();
+    
+    // Poll for updates every 5 seconds to catch changes from admin panel
+    const interval = setInterval(fetchBanners, 1000);
+    
+    return () => clearInterval(interval);
   }, []);
 
   // Auto-rotate banners every 5 seconds
@@ -42,7 +48,7 @@ export const HeroSection = (): JSX.Element => {
 
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % banners.length);
-    }, 5000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [banners.length]);
@@ -71,21 +77,21 @@ export const HeroSection = (): JSX.Element => {
     );
   }
 
-  if (banners.length === 0) {
-    // Fallback to default image if no banners
-    console.log("No banners found, showing fallback image");
-    return (
-      <section className="">
-        <div className="w-full h-auto flex justify-center">
-          <img
-            className="h-[100%] object-cover mt-10 rounded-xl"
-            alt="Car hero image"
-            src="/img/photo_2025-10-10_22-33-26.jpg"
-          />
-        </div>
-      </section>
-    );
-  }
+  // if (banners.length === 0) {
+  //   // Fallback to default image if no banners
+  //   console.log("No banners found, showing fallback image");
+  //   return (
+  //     <section className="">
+  //       <div className="w-full h-auto flex justify-center">
+  //         <img
+  //           className="h-[100%] object-cover mt-10 rounded-xl"
+  //           alt="Car hero image"
+  //           src="/img/photo_2025-10-10_22-33-26.jpg"
+  //         />
+  //       </div>
+  //     </section>
+  //   );
+  // }
 
   return (
     <section className="">

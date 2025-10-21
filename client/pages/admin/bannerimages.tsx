@@ -8,7 +8,7 @@ interface BannerImage {
   id: number;
   desktop_image: string;
   mobile_image: string;
-  active: boolean;
+  active: string;
   created_at: string;
   updated_at: string;
 }
@@ -16,7 +16,7 @@ interface BannerImage {
 const defaultForm: Omit<BannerImage, "id" | "created_at" | "updated_at"> = {
   desktop_image: "",
   mobile_image: "",
-  active: true,
+  active: "1",
 };
 
 export default function AdminBannerImagesPanel() {
@@ -121,6 +121,10 @@ export default function AdminBannerImagesPanel() {
       Object.entries(form).forEach(([key, value]) => {
         formData.append(key, String(value));
       });
+      // Ensure new banner images are always active
+      if (!editing) {
+        formData.set('active', '1');
+      }
       if (formFiles.desktop_image) formData.append("desktop_image", formFiles.desktop_image);
       if (formFiles.mobile_image) formData.append("mobile_image", formFiles.mobile_image);
       
@@ -226,13 +230,13 @@ export default function AdminBannerImagesPanel() {
                        <div className="flex gap-3">
                          <button 
                            className={`px-6 py-3 rounded-lg text-base ${
-                             bannerImage.active 
-                               ? 'bg-red-500 text-white' 
-                               : 'bg-green-500 text-white'
+                             bannerImage.active === "1"
+                               ? 'bg-green-500 text-white' 
+                               : 'bg-red-500 text-white'
                            }`}
                            onClick={() => handleToggleActive(bannerImage.id)}
                          >
-                           {bannerImage.active ? 'Peida' : 'Näita'}
+                           {bannerImage.active === "1" ? 'Peida' : 'Näita'}
                          </button>
                          <button 
                            className="bg-blue-500 text-white px-6 py-3 rounded-lg text-base" 
@@ -328,16 +332,6 @@ export default function AdminBannerImagesPanel() {
                         </div>
                       )}
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <input 
-                      type="checkbox" 
-                      name="active" 
-                      checked={form.active} 
-                      onChange={handleChange}
-                      className="rounded"
-                    />
-                    <label className="font-semibold">Aktiivne</label>
                   </div>
                   <div className="flex gap-2">
                     <button 

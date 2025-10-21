@@ -17,7 +17,7 @@ interface BannerImage {
   id: number;
   desktop_image: string;
   mobile_image: string;
-  active: boolean;
+  active: string;
   created_at: string;
   updated_at: string;
 }
@@ -223,7 +223,7 @@ export default function HomePageMobile() {
   const fetchBanners = useCallback(async () => {
     try {
       const response = await axios.get("/api/banner-images");
-      const activeBanners = response.data.filter((banner: BannerImage) => banner.active);
+      const activeBanners = response.data.filter((banner: BannerImage) => banner.active === "1");
       setBanners(activeBanners);
     } catch (error) {
       console.error("Error fetching banners:", error);
@@ -236,7 +236,7 @@ export default function HomePageMobile() {
 
     const interval = setInterval(() => {
       setCurrentBannerIndex((prevIndex) => (prevIndex + 1) % banners.length);
-    }, 5000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [banners.length]);
@@ -275,6 +275,11 @@ export default function HomePageMobile() {
     console.log('Loading cars - isAuthenticated:', isAuthenticated, 'user:', user);
     loadCars();
     fetchBanners();
+    
+    // Poll for banner updates every 1 second to catch changes from admin panel
+    const interval = setInterval(fetchBanners, 1000);
+    
+    return () => clearInterval(interval);
   }, [isAuthenticated, user, loadCars, fetchBanners]);
 
   // Update filtered cars when cars change or search term changes
@@ -456,21 +461,14 @@ export default function HomePageMobile() {
       <main className="bg-[#F6F7F9]">
         {/* Hero Section */}
         <section className="bg-motors-light">
-          <div className="h-full flex justify-center p-5 relative">
-            {banners.length > 0 && banners[currentBannerIndex] && banners[currentBannerIndex].mobile_image ? (
+          <div className=" w-full flex justify-center p-5 relative">
+            {banners.length > 0 && banners[currentBannerIndex] && banners[currentBannerIndex].mobile_image && (
               <img
-                className="mt-5 rounded-xl object-cover w-[360px] h-[200px]"
+                className="mt-5 rounded-xl object-cover w-auto h-[320px]"
                 alt={`Banner ${currentBannerIndex + 1}`}
                 src={banners[currentBannerIndex].mobile_image}
               />
-            ) : (
-              <img
-                className="h-[100%] mt-5 rounded-xl object-contain"
-                alt="Car hero image"
-                src="/img/photo_2025-10-10_22-33-18.jpg"
-              />
-            )}
-            
+            ) }
             {/* Navigation Dots - Only show if more than 1 banner */}
             {banners.length > 1 && (
               <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2">
