@@ -190,8 +190,6 @@ export default function AdminBannerImagesPanel() {
                 <tr>
                   <th className="px-4 py-2 text-left">Desktop pilt</th>
                   <th className="px-4 py-2 text-left">Mobile pilt</th>
-                  {/* <th className="px-4 py-2 text-left">Staatus</th>
-                  <th className="px-4 py-2 text-left">Loodud</th> */}
                   <th className="px-4 py-2 text-left">Toimingud</th>
                 </tr>
               </thead>
