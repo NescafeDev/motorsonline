@@ -459,8 +459,7 @@ export default function HomePageMobile() {
           <div className="h-full flex justify-center p-5 relative">
             {banners.length > 0 && banners[currentBannerIndex] && banners[currentBannerIndex].mobile_image ? (
               <img
-                className="h-[100%] mt-5 rounded-xl object-contain"
-                style={{ width: '360px', height: '200px' }}
+                className="mt-5 rounded-xl object-cover w-[360px] h-[200px]"
                 alt={`Banner ${currentBannerIndex + 1}`}
                 src={banners[currentBannerIndex].mobile_image}
               />
