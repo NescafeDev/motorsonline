@@ -45,7 +45,7 @@ export default function Terms() {
 
   return (
       <PageContainer>
-        <div className="py-8 xl:w-[75%] mx-auto">
+        <div className="py-8 px-16 max-w-[1440px] mx-auto">
             <div className="bg-white p-8">
               <h1 className="text-[30px] font-semibold leading-[150%] tracking-[-0.78px] text-motorsonline-dark mb-6">
                 {t('footer.terms')}

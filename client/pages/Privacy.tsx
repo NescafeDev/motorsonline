@@ -42,7 +42,7 @@ export default function Privacy() {
 
   return (
       <PageContainer>
-        <div className="py-8 xl:w-[75%] mx-auto">
+        <div className="py-8 px-16 max-w-[1440px] mx-auto">
             <div className="bg-white p-8">
               <h1 className="text-3xl font-bold text-gray-900 mb-6">
                 {t('footer.privacy')}
