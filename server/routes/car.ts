@@ -165,7 +165,7 @@ function requireAdmin(req, res, next) {
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    let dest = path.join('/img/cars');
+    let dest = path.join('/img');
     if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
     cb(null, dest);
   },
@@ -206,7 +206,7 @@ router.post('/', authenticateToken, upload.array('images', 40), async (req: any,
     
     // Handle images array
     if (reqWithFiles.files && Array.isArray(reqWithFiles.files)) {
-      data.images = reqWithFiles.files.map((file: any) => `/img/cars/${file.filename}`);
+      data.images = reqWithFiles.files.map((file: any) => `/img/${file.filename}`);
     } else {
       data.images = [];
     }
@@ -889,7 +889,7 @@ router.put('/:id', authenticateToken, upload.array('images', 40), async (req: an
     // Handle images array - if new images are uploaded, append them to existing ones
     if (reqWithFiles.files && Array.isArray(reqWithFiles.files) && reqWithFiles.files.length > 0) {
       // Create new image paths for uploaded files
-      const newImagePaths = reqWithFiles.files.map((file: any) => `/img/cars/${file.filename}`);
+      const newImagePaths = reqWithFiles.files.map((file: any) => `/img/${file.filename}`);
       
       // Combine old images with new ones
       data.images = [...oldImages, ...newImagePaths];
