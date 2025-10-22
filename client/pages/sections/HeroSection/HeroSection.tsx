@@ -94,8 +94,8 @@ export const HeroSection = (): JSX.Element => {
   // }
 
   return (
-    <section className="max-w-[1240px] mx-auto mt-10">
-      <div className="w-full h-full flex justify-center relative mt-10">
+    <section className="max-w-[1240px] mx-auto">
+      <div className="w-full h-full flex justify-center relative">
         {/* Banner Image - Desktop Only */}
         {banners[currentIndex] && banners[currentIndex].desktop_image && (
           <img
