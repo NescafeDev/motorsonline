@@ -1,6 +1,19 @@
 import express from "express";
 import cors from "cors";
 import path from "path";
+import dotenv from "dotenv";
+
+// Load environment variables
+const envPath = path.join(process.cwd(), '.env');
+console.log('Loading .env from:', envPath);
+const result = dotenv.config({ path: envPath });
+
+if (result.error) {
+  console.error('Error loading .env file:', result.error);
+} else {
+  console.log('Environment variables loaded successfully');
+}
+
 import authRoutes from "./routes/auth";
 import blogRoutes from "./routes/blog";
 import carRoutes from "./routes/car";

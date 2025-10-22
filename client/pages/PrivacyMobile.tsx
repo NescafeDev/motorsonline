@@ -13,7 +13,8 @@ export default function PrivacyMobile() {
   useEffect(() => {
     const loadPrivacyContent = async () => {
       try {
-        const response = await axios.get("/api/privacy");
+        // Pass the current language as a query parameter
+        const response = await axios.get(`/api/privacy?lang=${currentLanguage}`);
         if (response.data.privacy) {
           setPrivacyContent(response.data.privacy);
         }
@@ -25,7 +26,7 @@ export default function PrivacyMobile() {
     };
 
     loadPrivacyContent();
-  }, []);
+  }, [currentLanguage]);
 
   if (loading) {
     return (

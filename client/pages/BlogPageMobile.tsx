@@ -21,7 +21,7 @@ interface Blog {
 
 export default function BlogPageMobile() {
   const navigate = useNavigate();
-  const { t } = useI18n();
+  const { t, currentLanguage } = useI18n();
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -33,7 +33,8 @@ export default function BlogPageMobile() {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await fetch('/api/blogs');
+        // Pass the current language as a query parameter
+        const response = await fetch(`/api/blogs?lang=${currentLanguage}`);
         const data = await response.json();
         setBlogs(data);
       } catch (error) {
@@ -44,7 +45,7 @@ export default function BlogPageMobile() {
     };
 
     fetchBlogs();
-  }, []);
+  }, [currentLanguage]);
 
   // Convert blogs to BlogCard format
   const blogPosts = blogs.map(blog => ({

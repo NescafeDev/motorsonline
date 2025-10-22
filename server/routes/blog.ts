@@ -10,9 +10,76 @@ import {
   updateBlog,
   deleteBlog
 } from '../models/blog';
+import { translationService } from '../services/translationService';
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
+
+// Helper function to translate blog content
+async function translateBlogContent(blog: any, targetLanguage: string) {
+  if (targetLanguage === 'ee' || !translationService.isConfigured()) {
+    return blog;
+  }
+
+  try {
+    const translatedBlog = { ...blog };
+    
+    // Translate title
+    if (blog.title) {
+      const titleTranslation = await translationService.translateText({
+        text: blog.title,
+        targetLanguage,
+        sourceLanguage: 'ee'
+      });
+      translatedBlog.title = titleTranslation.translatedText;
+    }
+    
+    // Translate introduction
+    if (blog.introduction) {
+      const introTranslation = await translationService.translateText({
+        text: blog.introduction,
+        targetLanguage,
+        sourceLanguage: 'ee'
+      });
+      translatedBlog.introduction = introTranslation.translatedText;
+    }
+    
+    // Translate intro_detail
+    if (blog.intro_detail) {
+      const detailTranslation = await translationService.translateText({
+        text: blog.intro_detail,
+        targetLanguage,
+        sourceLanguage: 'ee'
+      });
+      translatedBlog.intro_detail = detailTranslation.translatedText;
+    }
+    
+    // Translate summary
+    if (blog.summary) {
+      const summaryTranslation = await translationService.translateText({
+        text: blog.summary,
+        targetLanguage,
+        sourceLanguage: 'ee'
+      });
+      translatedBlog.summary = summaryTranslation.translatedText;
+    }
+    
+    // Translate category
+    if (blog.category) {
+      const categoryTranslation = await translationService.translateText({
+        text: blog.category,
+        targetLanguage,
+        sourceLanguage: 'ee'
+      });
+      translatedBlog.category = categoryTranslation.translatedText;
+    }
+    
+    return translatedBlog;
+  } catch (error) {
+    console.error('Blog translation error:', error);
+    return blog; // Return original content if translation fails
+  }
+}
 
 function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];
@@ -92,10 +159,25 @@ router.post('/', authenticateToken, requireAdmin, upload.fields([
 });
 
 // Get all blogs (public)
-router.get('/', async (_req, res) => {
+router.get('/', async (req, res) => {
   try {
+    const { lang } = req.query;
+    const targetLanguage = (lang as string) || 'ee'; // Default to Estonian
+    
+    console.log('Blog API called with language:', targetLanguage);
+    
     const blogs = await getAllBlogs();
-    res.json(blogs);
+    
+    // Translate blogs if language is not Estonian
+    if (targetLanguage !== 'ee' && translationService.isConfigured()) {
+      console.log('Translating blogs to:', targetLanguage);
+      const translatedBlogs = await Promise.all(
+        blogs.map(blog => translateBlogContent(blog, targetLanguage))
+      );
+      res.json(translatedBlogs);
+    } else {
+      res.json(blogs);
+    }
   } catch (err: any) {
     console.error('Error fetching blogs:', err);
     res.status(500).json({ message: 'Failed to fetch blogs.', error: err.message });
@@ -105,9 +187,22 @@ router.get('/', async (_req, res) => {
 // Get blog by id (public)
 router.get('/:id', async (req, res) => {
   try {
+    const { lang } = req.query;
+    const targetLanguage = (lang as string) || 'ee'; // Default to Estonian
+    
+    console.log('Blog by ID API called with language:', targetLanguage);
+    
     const blog = await getBlogById(Number(req.params.id));
     if (!blog) return res.status(404).json({ message: 'Blogi ei leitud.' });
-    res.json(blog);
+    
+    // Translate blog if language is not Estonian
+    if (targetLanguage !== 'ee' && translationService.isConfigured()) {
+      console.log('Translating blog to:', targetLanguage);
+      const translatedBlog = await translateBlogContent(blog, targetLanguage);
+      res.json(translatedBlog);
+    } else {
+      res.json(blog);
+    }
   } catch (err: any) {
     console.error('Error fetching blog:', err);
     res.status(500).json({ message: 'Failed to fetch blog.', error: err.message });

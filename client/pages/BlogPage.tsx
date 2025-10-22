@@ -45,7 +45,8 @@ export default function BlogPage() {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await fetch('/api/blogs');
+        // Pass the current language as a query parameter
+        const response = await fetch(`/api/blogs?lang=${currentLanguage}`);
         const data = await response.json();
         setBlogs(data);
       } catch (error) {

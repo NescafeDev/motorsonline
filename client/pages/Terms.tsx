@@ -14,7 +14,8 @@ export default function Terms() {
   useEffect(() => {
     const loadTermsContent = async () => {
       try {
-        const response = await axios.get("/api/privacy");
+        // Pass the current language as a query parameter
+        const response = await axios.get(`/api/privacy?lang=${currentLanguage}`);
         if (response.data.terms) {
           setTermsContent(response.data.terms);
         }
@@ -26,20 +27,20 @@ export default function Terms() {
     };
 
     loadTermsContent();
-  }, []);
+  }, [currentLanguage]);
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <PageContainer>
+      <PageContainer>
+        <div className="py-8 px-16 max-w-[1440px] mx-auto">
           <div className="flex items-center justify-center min-h-[400px]">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-primary mx-auto mb-4"></div>
               <p className="text-gray-600">{t('common.loading')}</p>
             </div>
           </div>
+        </div>
         </PageContainer>
-      </div>
     );
   }
 

@@ -13,7 +13,8 @@ export default function TermsMobile() {
   useEffect(() => {
     const loadTermsContent = async () => {
       try {
-        const response = await axios.get("/api/privacy");
+        // Pass the current language as a query parameter
+        const response = await axios.get(`/api/privacy?lang=${currentLanguage}`);
         if (response.data.terms) {
           setTermsContent(response.data.terms);
         }
@@ -25,7 +26,7 @@ export default function TermsMobile() {
     };
 
     loadTermsContent();
-  }, []);
+  }, [currentLanguage]);
 
   if (loading) {
     return (

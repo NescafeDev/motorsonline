@@ -1,11 +1,52 @@
 import { Router, Request, Response } from "express";
 import { pool } from "../db";
+import { translationService } from "../services/translationService";
 
 const router = Router();
+
+// Test endpoint to check DeepL configuration
+router.get('/test-translation', async (req: Request, res: Response) => {
+  try {
+    const isConfigured = translationService.isConfigured();
+    const testText = "Tere, see on test.";
+    
+    if (!isConfigured) {
+      return res.json({ 
+        configured: false, 
+        message: 'DeepL API key not configured. Please set DEEPL_API_KEY environment variable.' 
+      });
+    }
+    
+    const translation = await translationService.translateText({
+      text: testText,
+      targetLanguage: 'en',
+      sourceLanguage: 'ee'
+    });
+    
+    res.json({
+      configured: true,
+      original: testText,
+      translated: translation.translatedText,
+      detectedLanguage: translation.detectedLanguage
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      configured: true,
+      error: error.message,
+      message: 'Translation test failed'
+    });
+  }
+});
 
 // Get privacy and terms content
 router.get('/', async (req: Request, res: Response) => {
   try {
+    const { lang } = req.query;
+    const targetLanguage = (lang as string) || 'ee'; // Default to Estonian
+    
+    console.log('Privacy API called with language:', targetLanguage);
+    console.log('DeepL service configured:', translationService.isConfigured());
+    
     const [rows]: any = await pool.query(
       'SELECT privacy, terms FROM privacy_terms ORDER BY id DESC LIMIT 1'
     );
@@ -15,9 +56,47 @@ router.get('/', async (req: Request, res: Response) => {
       return res.json({ privacy: '', terms: '' });
     }
     
+    let privacyContent = rows[0].privacy || '';
+    let termsContent = rows[0].terms || '';
+    
+    console.log('Original privacy content length:', privacyContent.length);
+    
+    // If language is not Estonian (default), translate the content
+    if (targetLanguage !== 'ee' && translationService.isConfigured()) {
+      console.log('Attempting translation to:', targetLanguage);
+      try {
+        if (privacyContent) {
+          console.log('Translating privacy content...');
+          const privacyTranslation = await translationService.translateText({
+            text: privacyContent,
+            targetLanguage,
+            sourceLanguage: 'ee'
+          });
+          privacyContent = privacyTranslation.translatedText;
+          console.log('Privacy translation completed, length:', privacyContent.length);
+        }
+        
+        if (termsContent) {
+          console.log('Translating terms content...');
+          const termsTranslation = await translationService.translateText({
+            text: termsContent,
+            targetLanguage,
+            sourceLanguage: 'ee'
+          });
+          termsContent = termsTranslation.translatedText;
+          console.log('Terms translation completed, length:', termsContent.length);
+        }
+      } catch (translationError) {
+        console.error('Translation error:', translationError);
+        // Return original content if translation fails
+      }
+    } else if (targetLanguage !== 'ee') {
+      console.log('DeepL service not configured, returning original content');
+    }
+    
     res.json({
-      privacy: rows[0].privacy || '',
-      terms: rows[0].terms || ''
+      privacy: privacyContent,
+      terms: termsContent
     });
   } catch (error: any) {
     console.error('Error fetching privacy/terms:', error);

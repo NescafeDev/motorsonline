@@ -9,7 +9,7 @@ import { useI18n } from "@/contexts/I18nContext";
 import { slugify } from "@/lib/utils";
 export default function BlogPostPage() {
   const navigate = useNavigate();
-  const { t } = useI18n();
+  const { t, currentLanguage } = useI18n();
   const { slug } = useParams();
   const [blog, setBlog] = useState<BlogPost>(null);
   const [allBlogs, setAllBlogs] = useState<BlogPost[]>([]);
@@ -23,14 +23,14 @@ export default function BlogPostPage() {
     const run = async () => {
       try {
         // fetch all blogs to resolve slug -> id
-        const res = await fetch('/api/blogs');
+        const res = await fetch(`/api/blogs?lang=${currentLanguage}`);
         const list = await res.json();
         setAllBlogs(list);
         if (!slug) return;
         const match = list.find((b: any) => b && b.title && slugify(b.title) === slug);
         const idToFetch = match?.id;
         if (idToFetch) {
-          const resBlog = await fetch(`/api/blogs/${idToFetch}`);
+          const resBlog = await fetch(`/api/blogs/${idToFetch}?lang=${currentLanguage}`);
           const blogData = await resBlog.json();
           setBlog(blogData);
         }
@@ -39,7 +39,7 @@ export default function BlogPostPage() {
       }
     };
     run();
-  }, [slug]);
+  }, [slug, currentLanguage]);
   if (!blog) return <PageContainer className="font-poppins text-4xl text-center">{t('common.loading')}</PageContainer>;
   return (
     <PageContainer className="font-poppins">

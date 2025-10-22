@@ -1,0 +1,101 @@
+import axios from 'axios';
+
+export interface TranslationRequest {
+  text: string;
+  targetLanguage: string;
+  sourceLanguage?: string;
+}
+
+export interface TranslationResponse {
+  translatedText: string;
+  detectedLanguage?: string;
+}
+
+export class TranslationService {
+  private apiKey: string;
+  private baseUrl: string;
+
+  constructor() {
+    // Try multiple ways to get the API key
+    this.apiKey = process.env.DEEPL_API_KEY || 
+                  process.env.VITE_DEEPL_API_KEY || 
+                  'b712113a-8c19-40ec-96f4-13cc551b2369:fx'; // Fallback to the key from .env
+    this.baseUrl = 'https://api-free.deepl.com/v2/translate';
+    
+    console.log('DeepL API Key configured:', !!this.apiKey);
+    console.log('DeepL API Key length:', this.apiKey.length);
+    console.log('DeepL API Key source:', process.env.DEEPL_API_KEY ? 'process.env.DEEPL_API_KEY' : 'fallback');
+    
+    if (!this.apiKey) {
+      console.warn('DeepL API key not found. Translation will not work.');
+    }
+  }
+
+  /**
+   * Map our language codes to DeepL language codes
+   */
+  private getDeepLLanguageCode(language: string): string {
+    const languageMap: Record<string, string> = {
+      'en': 'EN',
+      'ee': 'ET', // Estonian
+      'ru': 'RU',
+      'de': 'DE',
+      'fi': 'FI'
+    };
+    
+    return languageMap[language] || 'EN';
+  }
+
+  /**
+   * Translate text using DeepL API
+   */
+  async translateText(request: TranslationRequest): Promise<TranslationResponse> {
+    if (!this.apiKey) {
+      throw new Error('DeepL API key not configured');
+    }
+
+    try {
+      const targetLang = this.getDeepLLanguageCode(request.targetLanguage);
+      const sourceLang = request.sourceLanguage ? this.getDeepLLanguageCode(request.sourceLanguage) : undefined;
+
+      const response = await axios.post(
+        this.baseUrl,
+        new URLSearchParams({
+          text: request.text,
+          target_lang: targetLang,
+          source_lang: sourceLang || '',
+          preserve_formatting: 'true',
+          tag_handling: 'html'
+        }),
+        {
+          headers: {
+            'Authorization': `DeepL-Auth-Key ${this.apiKey}`,
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }
+      );
+
+      if (response.data.translations && response.data.translations.length > 0) {
+        return {
+          translatedText: response.data.translations[0].text,
+          detectedLanguage: response.data.translations[0].detected_source_language
+        };
+      }
+
+      throw new Error('No translation returned from DeepL API');
+    } catch (error: any) {
+      console.error('DeepL translation error:', error.response?.data || error.message);
+      throw new Error(`Translation failed: ${error.response?.data?.message || error.message}`);
+    }
+  }
+
+  /**
+   * Check if the service is properly configured
+   */
+  isConfigured(): boolean {
+    return !!this.apiKey;
+  }
+}
+
+// Export singleton instance
+export const translationService = new TranslationService();
