@@ -463,11 +463,13 @@ export default function HomePageMobile() {
         <section className="bg-motors-light">
           {banners && banners.length > 0 && (<div className=" w-full aspect-[400/230] flex justify-center p-5 relative">
             {banners[currentBannerIndex] && banners[currentBannerIndex].mobile_image && (
-              <img
-                className="mt-5 rounded-2xl object-contain w-full h-full"
-                alt={`Banner ${currentBannerIndex + 1}`}
-                src={banners[currentBannerIndex].mobile_image}
-              />
+              <div className="mt-5 rounded-2xl overflow-hidden object-contain w-full h-full">
+                <img
+                  className="object-contain w-full h-full"
+                  alt={`Banner ${currentBannerIndex + 1}`}
+                  src={banners[currentBannerIndex].mobile_image}
+                />
+              </div>
             ) }
             {/* Navigation Dots - Only show if more than 1 banner */}
             {banners.length > 1 && (
