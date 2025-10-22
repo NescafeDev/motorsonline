@@ -465,7 +465,7 @@ export default function HomePageMobile() {
             {banners[currentBannerIndex] && banners[currentBannerIndex].mobile_image && (
               <div className="mt-5 rounded-2xl overflow-hidden object-contain w-full h-full">
                 <img
-                  className="object-contain w-full h-full"
+                  className="object-contain rounded-xl w-full h-full"
                   alt={`Banner ${currentBannerIndex + 1}`}
                   src={banners[currentBannerIndex].mobile_image}
                 />
