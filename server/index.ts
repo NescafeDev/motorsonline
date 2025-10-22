@@ -25,7 +25,10 @@ export function createServer() {
   // Serve static files from public directory
   app.use(express.static(path.join(process.cwd(), 'public')));
   
-  // Serve uploaded files
+  // Serve uploaded files from persistent disk mounted at /img
+  app.use('/img', express.static('/img'));
+  
+  // Serve uploaded files (legacy)
   app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
   
   app.use("/api/auth", authRoutes);
