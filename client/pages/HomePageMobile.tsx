@@ -461,8 +461,8 @@ export default function HomePageMobile() {
       <main className="bg-[#F6F7F9]">
         {/* Hero Section */}
         <section className="bg-motors-light">
-          {!banners && (<div className=" w-full aspect-[400/230] flex justify-center p-5 relative">
-            {banners.length > 0 && banners[currentBannerIndex] && banners[currentBannerIndex].mobile_image && (
+          {banners && banners.length > 0 && (<div className=" w-full aspect-[400/230] flex justify-center p-5 relative">
+            {banners[currentBannerIndex] && banners[currentBannerIndex].mobile_image && (
               <img
                 className="mt-5 rounded-xl object-cover w-full h-full"
                 alt={`Banner ${currentBannerIndex + 1}`}
