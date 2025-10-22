@@ -35,7 +35,7 @@ function requireAdmin(req, res, next) {
 // Multer setup for image uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    let dest = path.join(process.cwd(), 'public/img/blogs');
+    let dest = path.join('/img/blogs');
     if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
     cb(null, dest);
   },
@@ -67,7 +67,7 @@ router.post('/', authenticateToken, requireAdmin, upload.fields([
     const blog = await createBlog(data);
     if (reqWithFiles.files) {
       const blogId = blog.id;
-      const blogDir = path.join(process.cwd(), 'public/img/blogs', String(blogId));
+      const blogDir = path.join('/img/blogs', String(blogId));
       if (!fs.existsSync(blogDir)) fs.mkdirSync(blogDir, { recursive: true });
       for (const field of ['title_image', 'intro_image']) {
         if (reqWithFiles.files[field]) {
@@ -126,7 +126,7 @@ router.put('/:id', authenticateToken, requireAdmin, upload.fields([
     for (const field of ['title_image', 'intro_image']) {
       if (reqWithFiles.files[field]) {
         const ext = path.extname(reqWithFiles.files[field][0].originalname);
-        const blogDir = path.join(process.cwd(), 'public/img/blogs', String(id));
+        const blogDir = path.join('/img/blogs', String(id));
         if (!fs.existsSync(blogDir)) fs.mkdirSync(blogDir, { recursive: true });
         const newPath = path.join(blogDir, `${field}${ext}`);
         fs.renameSync(reqWithFiles.files[field][0].path, newPath);

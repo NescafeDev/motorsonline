@@ -36,7 +36,7 @@ function requireAdmin(req, res, next) {
 // Multer setup for image uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    let dest = path.join(process.cwd(), 'public/img/banners');
+    let dest = path.join('/img/banners');
     if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
     cb(null, dest);
   },
@@ -69,7 +69,7 @@ router.post('/', authenticateToken, requireAdmin, upload.fields([
     // Handle file uploads first
     if (reqWithFiles.files) {
       const bannerId = Date.now(); // Use timestamp as temporary ID
-      const bannerDir = path.join(process.cwd(), 'public/img/banners', String(bannerId));
+      const bannerDir = path.join('/img/banners', String(bannerId));
       if (!fs.existsSync(bannerDir)) fs.mkdirSync(bannerDir, { recursive: true });
       
       for (const field of ['desktop_image', 'mobile_image']) {
@@ -131,7 +131,7 @@ router.put('/:id', authenticateToken, requireAdmin, upload.fields([
     for (const field of ['desktop_image', 'mobile_image']) {
       if (reqWithFiles.files[field]) {
         const ext = path.extname(reqWithFiles.files[field][0].originalname);
-        const bannerDir = path.join(process.cwd(), 'public/img/banners', String(id));
+        const bannerDir = path.join('/img/banners', String(id));
         if (!fs.existsSync(bannerDir)) fs.mkdirSync(bannerDir, { recursive: true });
         const newPath = path.join(bannerDir, `${field}${ext}`);
         fs.renameSync(reqWithFiles.files[field][0].path, newPath);
