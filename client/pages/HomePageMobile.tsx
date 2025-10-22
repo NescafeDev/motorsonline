@@ -464,7 +464,7 @@ export default function HomePageMobile() {
           {banners && banners.length > 0 && (<div className=" w-full aspect-[400/230] flex justify-center p-5 relative">
             {banners[currentBannerIndex] && banners[currentBannerIndex].mobile_image && (
               <img
-                className="mt-5 rounded-xl object-contain w-full h-full"
+                className="mt-5 rounded-2xl object-contain w-full h-full"
                 alt={`Banner ${currentBannerIndex + 1}`}
                 src={banners[currentBannerIndex].mobile_image}
               />
