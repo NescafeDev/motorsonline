@@ -464,7 +464,7 @@ export default function HomePageMobile() {
           {banners && banners.length > 0 && (<div className=" w-full aspect-[400/230] flex justify-center p-5 relative">
             {banners[currentBannerIndex] && banners[currentBannerIndex].mobile_image && (
               <img
-                className="mt-5 rounded-xl object-cover w-full h-full"
+                className="mt-5 rounded-xl object-contain w-full h-full"
                 alt={`Banner ${currentBannerIndex + 1}`}
                 src={banners[currentBannerIndex].mobile_image}
               />
@@ -520,39 +520,6 @@ export default function HomePageMobile() {
             </button>
           </div>
         </section>
-
-        {/* Search Section */}
-        {/* <section className="max-w-7xl mx-auto">
-          <div className="flex items-center">
-            <div className="bg-white p-3 rounded-md shadow-sm cursor-pointer z-20" onClick={() => setFilterOpen((v) => !v)}>
-              <span className="text-black font-medium">Filtrid</span>
-            </div>
-            <div className="flex-1 w-full pl-[10px]">
-              <div className="bg-white border rounded-md px-3 py-3 flex items-center shadow-sm w-full">
-                <Search className="w-4 h-4 text-black" />
-                <input
-                  type="text"
-                  placeholder="Otsing"
-                  value={searchTerm}
-                  onChange={(e) => handleSearch(e.target.value)}
-                  className="flex-1 text-motors-gray placeholder:text-motors-gray pl-1 outline-none"
-                />
-              </div>
-            </div>
-          </div>
-          {filterOpen && (
-            <div
-              ref={filterRef}
-              className="absolute left-0 mt-2 w-3/4 bg-white rounded-[10px] shadow-lg z-30"
-            >
-              <CarListingSection
-                filters={filters}
-                onFiltersChange={handleFiltersChange}
-                onApplyFilters={() => {}}
-              />
-            </div>
-          )}
-        </section> */}
 
         <section className="px-5 relative z-40">
           <div className="flex items-center gap-2">
