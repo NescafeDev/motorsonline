@@ -461,7 +461,7 @@ export default function HomePageMobile() {
       <main className="bg-[#F6F7F9]">
         {/* Hero Section */}
         <section className="bg-motors-light">
-          <div className=" w-full aspect-[390/247] flex justify-center p-5 relative">
+          <div className=" w-full aspect-[400/230] flex justify-center p-5 relative">
             {banners.length > 0 && banners[currentBannerIndex] && banners[currentBannerIndex].mobile_image && (
               <img
                 className="mt-5 rounded-xl object-cover w-full h-full"
@@ -506,7 +506,16 @@ export default function HomePageMobile() {
             <p className="text-motors-dark leading-[150%] tracking-[-0.48px] mb-6 text-center">
               {t('uiActions.sellBuyFree')}
             </p>
-            <button className="w-full border text-motors-green py-4 px-6 rounded-[10px] font-normal text-base leading-[150%] border-[#06d6a0] text-[#06d6a0]">
+            <button className="w-full border text-motors-green py-4 px-6 rounded-[10px] font-normal text-base leading-[150%] border-[#06d6a0] text-[#06d6a0]"
+              onClick={() => {
+                const user = localStorage.getItem("user");
+                if (!user) {
+                  navigate(`/${currentLanguage}/login`);
+                } else {
+                  navigate(`/${currentLanguage}/adds`);
+                }
+              }}
+            >
               {t('uiActions.addListingFree')}
             </button>
           </div>

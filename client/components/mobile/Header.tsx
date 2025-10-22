@@ -143,7 +143,7 @@ export default function Header() {
         <img
           src="/img/logo.svg"
           alt="Echo Oasis Logo"
-          className="h-4 w-auto cursor-pointer pl-[20px]"
+          className="h-4 w-auto cursor-pointer"
           onClick={() => navigate(`/${currentLang}`)}
         />
       </div>

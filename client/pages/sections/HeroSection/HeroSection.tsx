@@ -94,13 +94,12 @@ export const HeroSection = (): JSX.Element => {
   // }
 
   return (
-    <section className="">
-      <div className="w-full h-auto flex justify-center relative mt-10">
+    <section className="max-w-[1240px] mx-auto mt-10">
+      <div className="w-full h-full flex justify-center relative mt-10">
         {/* Banner Image - Desktop Only */}
         {banners[currentIndex] && banners[currentIndex].desktop_image && (
           <img
-            className="mt-10 rounded-xl"
-            style={{ width: '1230px', height: '549px' }}
+            className="mt-10 rounded-xl w-full h-full aspect-[1240/549] object-cover"
             alt={`Banner ${currentIndex + 1}`}
             src={banners[currentIndex].desktop_image}
             onLoad={() => console.log("Banner image loaded:", banners[currentIndex].desktop_image)}
