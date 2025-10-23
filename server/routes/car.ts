@@ -908,7 +908,7 @@ router.put('/:id', authenticateToken, upload.array('images', 40), async (req: an
             const oldImagePath = finalImages[targetIndex];
             const oldImageFilename = oldImagePath.split('/').pop();
             if (oldImageFilename) {
-              const oldImageFullPath = path.join(__dirname, '..', 'public', 'img', 'cars', oldImageFilename);
+              const oldImageFullPath = path.join('/img/cars', oldImageFilename);
               try {
                 if (fs.existsSync(oldImageFullPath)) {
                   fs.unlinkSync(oldImageFullPath);
