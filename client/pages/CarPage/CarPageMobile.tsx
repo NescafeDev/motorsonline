@@ -470,7 +470,7 @@ export default function CarPageMobile() {
                     className="bg-white rounded-[10px] p-2.5 flex justify-between items-start gap-2"
                   >
                     <span className="font-medium text-secondary-500 text-lg tracking-[-0.54px] leading-[20px] [font-family:'Poppins',Helvetica] break-words flex-1 min-w-0">
-                      {feature.label}
+                      {feature.label ? feature.label.charAt(0).toUpperCase() + feature.label.slice(1) : feature.label}
                     </span>
                     <div className="w-6 h-6 bg-[100%_100%] flex-shrink-0">
                       <img className="w-6 h-6 " src={feature.icon} />
