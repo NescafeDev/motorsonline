@@ -50,7 +50,6 @@ async function translateContentInParts(content: string, targetLanguage: string):
           const textMatch = part.match(/<strong>(.*?)<\/strong>/);
           if (textMatch && textMatch[1].trim()) {
             const textToTranslate = textMatch[1];
-            console.log(`Translating strong text: "${textToTranslate}"`);
             
             const translation = await translationService.translateText({
               text: textToTranslate,
@@ -60,7 +59,6 @@ async function translateContentInParts(content: string, targetLanguage: string):
             
             const translatedPart = part.replace(textMatch[1], translation.translatedText);
             translatedParts.push(translatedPart);
-            console.log(`Strong text translated: "${translation.translatedText}"`);
           } else {
             translatedParts.push(part);
           }
@@ -73,7 +71,6 @@ async function translateContentInParts(content: string, targetLanguage: string):
               sourceLanguage: 'ee'
             });
             translatedParts.push(translation.translatedText);
-            console.log(`Regular content translated, length: ${translation.translatedText.length}`);
           } else {
             translatedParts.push(part);
           }
@@ -85,7 +82,6 @@ async function translateContentInParts(content: string, targetLanguage: string):
     }
     
     const result = translatedParts.join('');
-    console.log('Content translation in parts completed');
     return result;
     
   } catch (error) {
@@ -179,22 +175,16 @@ router.get('/', async (req: Request, res: Response) => {
     let privacyContent = rows[0].privacy || '';
     let termsContent = rows[0].terms || '';
     
-    console.log('Original privacy content length:', privacyContent.length);
     
     // If language is not Estonian (default), translate the content
     if (targetLanguage !== 'ee' && translationService.isConfigured()) {
-      console.log('Attempting translation to:', targetLanguage);
       try {
         if (privacyContent) {
-          console.log('Translating privacy content...');
           privacyContent = await translateContentInParts(privacyContent, targetLanguage);
-          console.log('Privacy translation completed, length:', privacyContent.length);
         }
         
         if (termsContent) {
-          console.log('Translating terms content...');
           termsContent = await translateContentInParts(termsContent, targetLanguage);
-          console.log('Terms translation completed, length:', termsContent.length);
         }
       } catch (translationError) {
         console.error('Translation error:', translationError);
