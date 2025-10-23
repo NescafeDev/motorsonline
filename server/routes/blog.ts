@@ -15,6 +15,95 @@ import { translationService } from '../services/translationService';
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
+// Helper function to translate content in parts (similar to privacy page)
+async function translateBlogContentInParts(content: string, targetLanguage: string): Promise<string> {
+  try {
+    // Split content into parts based on <strong> tags
+    const strongTagRegex = /<strong>.*?<\/strong>/g;
+    const parts: string[] = [];
+    let lastIndex = 0;
+    let match;
+    
+    // Find all <strong> sections
+    while ((match = strongTagRegex.exec(content)) !== null) {
+      // Add content before the <strong> tag
+      if (match.index > lastIndex) {
+        const beforeContent = content.substring(lastIndex, match.index);
+        if (beforeContent.trim()) {
+          parts.push(beforeContent);
+        }
+      }
+      
+      // Add the <strong> section
+      parts.push(match[0]);
+      lastIndex = match.index + match[0].length;
+    }
+    
+    // Add remaining content after the last <strong> tag
+    if (lastIndex < content.length) {
+      const remainingContent = content.substring(lastIndex);
+      if (remainingContent.trim()) {
+        parts.push(remainingContent);
+      }
+    }
+    
+    // If no <strong> tags found, treat as single part
+    if (parts.length === 0) {
+      parts.push(content);
+    }
+    
+    // Translate each part individually
+    const translatedParts: string[] = [];
+    
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i];
+      
+      try {
+        if (part.includes('<strong>')) {
+          // This is a <strong> section - translate the text inside
+          const textMatch = part.match(/<strong>(.*?)<\/strong>/);
+          if (textMatch && textMatch[1].trim()) {
+            const textToTranslate = textMatch[1];
+            
+            const translation = await translationService.translateText({
+              text: textToTranslate,
+              targetLanguage,
+              sourceLanguage: 'ee'
+            });
+            
+            const translatedPart = part.replace(textMatch[1], translation.translatedText);
+            translatedParts.push(translatedPart);
+          } else {
+            translatedParts.push(part);
+          }
+        } else {
+          // This is regular content - translate normally
+          if (part.trim()) {
+            const translation = await translationService.translateText({
+              text: part,
+              targetLanguage,
+              sourceLanguage: 'ee'
+            });
+            translatedParts.push(translation.translatedText);
+          } else {
+            translatedParts.push(part);
+          }
+        }
+      } catch (partError) {
+        console.error(`Error translating blog part ${i + 1}:`, partError);
+        translatedParts.push(part); // Use original if translation fails
+      }
+    }
+    
+    const result = translatedParts.join('');
+    return result;
+    
+  } catch (error) {
+    console.error('Error in translateBlogContentInParts:', error);
+    return content; // Return original content if translation fails
+  }
+}
+
 // Helper function to translate blog content
 async function translateBlogContent(blog: any, targetLanguage: string) {
   if (targetLanguage === 'ee' || !translationService.isConfigured()) {
@@ -34,34 +123,19 @@ async function translateBlogContent(blog: any, targetLanguage: string) {
       translatedBlog.title = titleTranslation.translatedText;
     }
     
-    // Translate introduction
+    // Translate introduction (using part-based translation for HTML content)
     if (blog.introduction) {
-      const introTranslation = await translationService.translateText({
-        text: blog.introduction,
-        targetLanguage,
-        sourceLanguage: 'ee'
-      });
-      translatedBlog.introduction = introTranslation.translatedText;
+      translatedBlog.introduction = await translateBlogContentInParts(blog.introduction, targetLanguage);
     }
     
-    // Translate intro_detail
+    // Translate intro_detail (using part-based translation for HTML content)
     if (blog.intro_detail) {
-      const detailTranslation = await translationService.translateText({
-        text: blog.intro_detail,
-        targetLanguage,
-        sourceLanguage: 'ee'
-      });
-      translatedBlog.intro_detail = detailTranslation.translatedText;
+      translatedBlog.intro_detail = await translateBlogContentInParts(blog.intro_detail, targetLanguage);
     }
     
-    // Translate summary
+    // Translate summary (using part-based translation for HTML content)
     if (blog.summary) {
-      const summaryTranslation = await translationService.translateText({
-        text: blog.summary,
-        targetLanguage,
-        sourceLanguage: 'ee'
-      });
-      translatedBlog.summary = summaryTranslation.translatedText;
+      translatedBlog.summary = await translateBlogContentInParts(blog.summary, targetLanguage);
     }
     
     // Translate category

@@ -1,12 +1,12 @@
 import { ArrowRight } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { slugify } from "@/lib/utils";
+import { useI18n } from "@/contexts/I18nContext";
 interface BlogCardProps {
   image: string;
   category: string;
   title: string;
   description: string;
-  readMoreText?: string;
   id: number;
 }
 
@@ -15,10 +15,10 @@ export function BlogCard({
   category,
   title,
   description,
-  readMoreText = "Loe postitust",
   id,
 }: BlogCardProps) {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const { lang } = useParams<{ lang: string }>();
   return (
     <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer" onClick={() => navigate(`/${lang || 'ee'}/blog/${slugify(title)}`)}>
@@ -41,7 +41,7 @@ export function BlogCard({
         </p>
         <div className="flex items-center gap-2" onClick={() => navigate(`/${lang || 'ee'}/blog/${slugify(title)}`)}>
           <button className="text-motors-green font-medium text-base text-[#06d6a0]" >
-            {readMoreText}
+            {t('blog.readMore')}
           </button>
           <ArrowRight className="w-5 h-5 text-motors-green text-[#06d6a0]" onClick={() => navigate(`/${lang || 'ee'}/blog/${slugify(title)}`)}/>
         </div>
