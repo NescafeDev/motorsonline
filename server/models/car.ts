@@ -161,7 +161,7 @@ export async function getCarsByUserId(userId: number): Promise<any[]> {
 
 export async function updateCar(id: number, car: Partial<Omit<Car, 'id'>>): Promise<boolean> {
   // Filter out joined fields that don't exist in the cars table
-  const fieldsToExclude = ['imageimageIndices', 'brand_name', 'model_name', 'year_value', 'drive_type_name', 'drive_type_ee_name', 'favoriteCount', 'stereo_input'];
+  const fieldsToExclude = ['imageIndices', 'brand_name', 'model_name', 'year_value', 'drive_type_name', 'drive_type_ee_name', 'favoriteCount', 'stereo_input'];
   
   const filteredCar = Object.keys(car)
     .filter(key => !fieldsToExclude.includes(key))
