@@ -491,7 +491,7 @@ export default function HomePage() {
                 {/* Car Grid */}
                 {!loading && (
                   <>
-                    <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                    <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-3">
                       {filteredCars.map((car) => {
                         const displayCar = formatCarForDisplay(car);
                         return (
@@ -503,7 +503,7 @@ export default function HomePage() {
                               window.scrollTo(0, 0);
                             }}
                           >
-                            <div className="relative group aspect-[4/3]">
+                            <div className="relative group aspect-[5/3]">
                               <img
                                 className="w-full h-full object-cover"
                                 alt="Car"

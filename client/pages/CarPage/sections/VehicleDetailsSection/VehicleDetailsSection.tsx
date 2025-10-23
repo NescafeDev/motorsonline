@@ -305,7 +305,7 @@ export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionPro
             >
               <div className="relative group">
                 <img
-                  className="w-full h-full aspect-[4/3] object-cover"
+                  className="w-full h-full aspect-[5/3] object-cover"
                   alt="Car"
                   src={displayCar.image}
                 />

@@ -70,7 +70,7 @@ export default function CarGallery({
   return (
     <div className="px-3">
       {/* Main image */}
-      <div className="relative mb-3 aspect-[4/3] w-full">
+      <div className="relative mb-3 aspect-[5/3] w-full">
         <img
           src={allImages[currentImageIndex]}
           alt="Car main view"
@@ -125,9 +125,9 @@ export default function CarGallery({
             const isSelected = currentImageIndex === index;
             
             return (
-              <div key={index} className="relative flex-shrink-0 w-[calc(33.333%-4.67px)]">
+              <div key={index} className="relative flex-shrink-0  w-[calc(33.333%-4.67px)]">
                 <div
-                  className={`w-full h-[100px] rounded-[6.951px] overflow-hidden cursor-pointer transition-all duration-200 hover:scale-105 ${
+                  className={`w-full aspect-[5/3] rounded-[6.951px] overflow-hidden cursor-pointer transition-all duration-200 hover:scale-105 ${
                     isSelected ? "border-[1.697px] border-primary" : "border border-gray-200 hover:border-primary"
                   }`}
                   onClick={() => handleImageClick(index)}
