@@ -4,6 +4,96 @@ import { translationService } from "../services/translationService";
 
 const router = Router();
 
+// Function to translate content by splitting it into parts
+async function translateContentInParts(content: string, targetLanguage: string): Promise<string> {
+  try {
+    
+    // Split content into parts based on <strong> tags
+    const strongTagRegex = /<strong>.*?<\/strong>/g;
+    const parts: string[] = [];
+    let lastIndex = 0;
+    let match;
+    
+    // Find all <strong> sections
+    while ((match = strongTagRegex.exec(content)) !== null) {
+      // Add content before the <strong> tag
+      if (match.index > lastIndex) {
+        const beforeContent = content.substring(lastIndex, match.index);
+        if (beforeContent.trim()) {
+          parts.push(beforeContent);
+        }
+      }
+      
+      // Add the <strong> section
+      parts.push(match[0]);
+      lastIndex = match.index + match[0].length;
+    }
+    
+    // Add remaining content after the last <strong> tag
+    if (lastIndex < content.length) {
+      const remainingContent = content.substring(lastIndex);
+      if (remainingContent.trim()) {
+        parts.push(remainingContent);
+      }
+    }
+    
+    
+    // Translate each part individually
+    const translatedParts: string[] = [];
+    
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i];
+      
+      try {
+        if (part.includes('<strong>')) {
+          // This is a <strong> section - translate the text inside
+          const textMatch = part.match(/<strong>(.*?)<\/strong>/);
+          if (textMatch && textMatch[1].trim()) {
+            const textToTranslate = textMatch[1];
+            console.log(`Translating strong text: "${textToTranslate}"`);
+            
+            const translation = await translationService.translateText({
+              text: textToTranslate,
+              targetLanguage,
+              sourceLanguage: 'ee'
+            });
+            
+            const translatedPart = part.replace(textMatch[1], translation.translatedText);
+            translatedParts.push(translatedPart);
+            console.log(`Strong text translated: "${translation.translatedText}"`);
+          } else {
+            translatedParts.push(part);
+          }
+        } else {
+          // This is regular content - translate normally
+          if (part.trim()) {
+            const translation = await translationService.translateText({
+              text: part,
+              targetLanguage,
+              sourceLanguage: 'ee'
+            });
+            translatedParts.push(translation.translatedText);
+            console.log(`Regular content translated, length: ${translation.translatedText.length}`);
+          } else {
+            translatedParts.push(part);
+          }
+        }
+      } catch (partError) {
+        console.error(`Error translating part ${i + 1}:`, partError);
+        translatedParts.push(part); // Use original if translation fails
+      }
+    }
+    
+    const result = translatedParts.join('');
+    console.log('Content translation in parts completed');
+    return result;
+    
+  } catch (error) {
+    console.error('Error in translateContentInParts:', error);
+    return content; // Return original content if translation fails
+  }
+}
+
 // Test endpoint to check DeepL configuration
 router.get('/test-translation', async (req: Request, res: Response) => {
   try {
@@ -38,6 +128,36 @@ router.get('/test-translation', async (req: Request, res: Response) => {
   }
 });
 
+// Test endpoint for part-based translation
+router.get('/test-parts-translation', async (req: Request, res: Response) => {
+  try {
+    const isConfigured = translationService.isConfigured();
+    const testContent = "<p>See on tavaline tekst. <strong>Autoriõigused ja sisu kasutamine</strong> on oluline osa. <strong>Konto kasutamine ja sulgemine</strong> on teine osa. <strong>Teavitused</strong> on kolmas osa.</p>";
+    
+    if (!isConfigured) {
+      return res.json({ 
+        configured: false, 
+        message: 'DeepL API key not configured. Please set DEEPL_API_KEY environment variable.' 
+      });
+    }
+    
+    const translation = await translateContentInParts(testContent, 'en');
+    
+    res.json({
+      configured: true,
+      original: testContent,
+      translated: translation,
+      message: 'Part-based translation test completed'
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      configured: true,
+      error: error.message,
+      message: 'Part-based translation test failed'
+    });
+  }
+});
+
 // Get privacy and terms content
 router.get('/', async (req: Request, res: Response) => {
   try {
@@ -67,23 +187,13 @@ router.get('/', async (req: Request, res: Response) => {
       try {
         if (privacyContent) {
           console.log('Translating privacy content...');
-          const privacyTranslation = await translationService.translateText({
-            text: privacyContent,
-            targetLanguage,
-            sourceLanguage: 'ee'
-          });
-          privacyContent = privacyTranslation.translatedText;
+          privacyContent = await translateContentInParts(privacyContent, targetLanguage);
           console.log('Privacy translation completed, length:', privacyContent.length);
         }
         
         if (termsContent) {
           console.log('Translating terms content...');
-          const termsTranslation = await translationService.translateText({
-            text: termsContent,
-            targetLanguage,
-            sourceLanguage: 'ee'
-          });
-          termsContent = termsTranslation.translatedText;
+          termsContent = await translateContentInParts(termsContent, targetLanguage);
           console.log('Terms translation completed, length:', termsContent.length);
         }
       } catch (translationError) {
