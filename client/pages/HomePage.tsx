@@ -392,7 +392,7 @@ export default function HomePage() {
 
     setCarImageIndices(prev => ({
       ...prev,
-      [carId]: prev[carId] === 0 ? car.images.length - 1 : (prev[carId] || 0) - 1
+      [carId]: (prev[carId] || 0) === 0 ? car.images.length - 1 : (prev[carId] || 0) - 1
     }));
   };
 
@@ -489,7 +489,7 @@ export default function HomePage() {
                           >
                             <div className="relative group aspect-[4/3]">
                               <img
-                                className="w-full h-full aspect-[4/3] object-cover"
+                                className="w-full h-full object-cover"
                                 alt="Car"
                                 src={displayCar.image}
                               />

@@ -172,7 +172,7 @@ export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionPro
 
     setCarImageIndices(prev => ({
       ...prev,
-      [carId]: prev[carId] === 0 ? car.images.length - 1 : (prev[carId] || 0) - 1
+      [carId]: (prev[carId] || 0) === 0 ? car.images.length - 1 : (prev[carId] || 0) - 1
     }));
   };
 
