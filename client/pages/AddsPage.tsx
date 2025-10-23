@@ -333,6 +333,7 @@ export default function AddsPage() {
   const [carImages, setCarImages] = useState<(File | null)[]>(
     Array(40).fill(null),
   );
+  const [imagePreviews, setImagePreviews] = useState<(string | undefined)[]>([]);
   const [showMorePhotos, setShowMorePhotos] = useState(false);
   const [brands, setBrands] = useState<{ id: number; name: string }[]>([]);
   const [models, setModels] = useState<{ id: number; name: string }[]>([]);
@@ -392,6 +393,7 @@ export default function AddsPage() {
         if (car) {
           // Set the car data after all other data is loaded
           setEditingCar(car);
+          setImagePreviews(car.images || []);
 
           // Convert car data to proper format for form fields
           let priceToShow = car.price?.toString() || "";
@@ -785,6 +787,14 @@ export default function AddsPage() {
     });
   };
 
+  const handlePreviewRemove = (index: number) => {
+    setImagePreviews((prev) => {
+      const updated = [...prev];
+      updated[index] = undefined;
+      return updated;
+    });
+  };
+
   const handleCarSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -934,6 +944,7 @@ export default function AddsPage() {
       }
       setEditingCar(null);
       setCarImages(Array(40).fill(null));
+      setImagePreviews([]);
       setShowMorePhotos(false);
       setStereoInput("");
       fetchCars();
@@ -957,6 +968,7 @@ export default function AddsPage() {
 
   const handleEditCar = (car: any) => {
     setEditingCar(car);
+    setImagePreviews(car.images || []);
 
     console.log('Editing Car:', car);
 
@@ -1121,11 +1133,8 @@ export default function AddsPage() {
               images={carImages}
               onImageChange={handleCarImageChange}
               onReorder={handleImageReorder}
-              previews={
-                editingCar && editingCar.images
-                  ? editingCar.images
-                  : []
-              }
+              previews={imagePreviews}
+              onPreviewRemove={handlePreviewRemove}
               maxPhotos={40}
               initialVisibleCount={8}
               showMore={showMorePhotos}
@@ -2195,6 +2204,7 @@ export default function AddsPage() {
                       className="bg-gray-300 px-4 py-2 rounded font-semibold hover:bg-gray-400 transition-colors"
                       onClick={() => {
                         setEditingCar(null);
+                        setImagePreviews([]);
                         setFormData({
                           brand_id: "",
                           model_id: "",

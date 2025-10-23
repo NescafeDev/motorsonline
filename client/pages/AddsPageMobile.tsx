@@ -339,6 +339,7 @@ export default function AddsPageMobile() {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [stereoInput, setStereoInput] = useState("");
   const [carImages, setCarImages] = useState<(File | null)[]>(Array(40).fill(null));
+  const [imagePreviews, setImagePreviews] = useState<(string | undefined)[]>([]);
   const [modelLoading, setModelLoading] = useState<boolean>(false);
 
   // Data for dropdowns
@@ -398,6 +399,7 @@ export default function AddsPageMobile() {
         if (car) {
           // Set the car data after all other data is loaded
           setEditingCar(car);
+          setImagePreviews(car.images || []);
 
           // Convert car data to proper format for form fields
           let priceToShow = car.price?.toString() || "";
@@ -774,6 +776,14 @@ export default function AddsPageMobile() {
     });
   };
 
+  const handlePreviewRemove = (index: number) => {
+    setImagePreviews((prev) => {
+      const updated = [...prev];
+      updated[index] = undefined;
+      return updated;
+    });
+  };
+
   // Calculate VAT price for display
   const calculateVatPrice = () => {
     if (formData.vatRefundable === 'yes' && formData.price && formData.vatRate) {
@@ -803,6 +813,7 @@ export default function AddsPageMobile() {
 
   const handleEditCar = (car: any) => {
     setEditingCar(car);
+    setImagePreviews(car.images || []);
 
     // Calculate base price if VAT is applied
     let priceToShow = car.price?.toString() || "";
@@ -1025,6 +1036,7 @@ export default function AddsPageMobile() {
       }
       setEditingCar(null);
       setCarImages(Array(40).fill(null));
+      setImagePreviews([]);
       setShowMorePhotos(false);
       setStereoInput("");
       fetchCars();
@@ -1085,11 +1097,8 @@ export default function AddsPageMobile() {
               images={carImages}
               onImageChange={handleCarImageChange}
               onReorder={handleImageReorder}
-              previews={
-                editingCar && editingCar.images
-                  ? editingCar.images
-                  : []
-              }
+              previews={imagePreviews}
+              onPreviewRemove={handlePreviewRemove}
               maxPhotos={40}
               initialVisibleCount={8}
               showMore={showMorePhotos}
@@ -2127,6 +2136,7 @@ export default function AddsPageMobile() {
                       className="bg-gray-300 px-4 py-2 rounded font-semibold hover:bg-gray-400 transition-colors"
                       onClick={() => {
                         setEditingCar(null);
+                        setImagePreviews([]);
                         setFormData({
                           brand_id: "",
                           model_id: "",

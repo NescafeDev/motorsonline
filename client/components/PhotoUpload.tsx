@@ -7,6 +7,7 @@ interface PhotoUploadProps {
   onImageChange: (index: number, file: File | null) => void;
   onReorder?: (sourceIndex: number, destinationIndex: number) => void;
   previews?: (string | undefined)[];
+  onPreviewRemove?: (index: number) => void;
   maxFileSize?: number; // in MB
   acceptedTypes?: string[];
   maxPhotos?: number;
@@ -20,6 +21,7 @@ export default function PhotoUpload({
   onImageChange, 
   onReorder,
   previews = [],
+  onPreviewRemove,
   maxFileSize = 5, // 5MB default
   acceptedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
   maxPhotos = 38,
@@ -79,8 +81,15 @@ export default function PhotoUpload({
   }, [handleFileSelect]);
 
   const removeImage = useCallback((index: number) => {
-    onImageChange(index, null);
-  }, [onImageChange]);
+    // If there's a new uploaded file at this index, remove it
+    if (images[index]) {
+      onImageChange(index, null);
+    }
+    // If there's an existing image (preview) at this index, remove it from previews
+    else if (previews[index] && onPreviewRemove) {
+      onPreviewRemove(index);
+    }
+  }, [onImageChange, onPreviewRemove, images, previews]);
 
   const handleDragStart = useCallback((e: React.DragEvent, index: number) => {
     setDraggedIndex(index);
