@@ -267,7 +267,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
   return (
     <div className="bg-white overflow-hidden w-full flex flex-col items-center">
       {/* Main content */}
-      <main className="px-6 lg:px-[100px]">
+      <main className="px-6 lg:px-[100px] 2xl:px-[110px] 2xl:w-[1500px]">
         {/* Car details and gallery section - Sticky sidebar */}
         <div className="w-full mx-auto">
           <div
