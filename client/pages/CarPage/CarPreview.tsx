@@ -193,7 +193,6 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
     { label: t('formLabels.interiorColor') + ':' , value:car.salonColor},
     { label: t('formLabels.color') + ':', value: car.carColor },
   ];
-
   // Equipment features data - get from checkboxes
   const accessoriesOptions = [
     { key: 'kokkupõrgetennetavpidurisüsteem', label: t('carFeatures.collisionPreventionBrakingSystem') },
