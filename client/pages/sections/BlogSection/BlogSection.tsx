@@ -5,7 +5,7 @@ import { useNavigate , useParams } from "react-router-dom";
 import { useEffect, useState } from 'react'
 import axios from "axios";
 import { useI18n } from "@/contexts/I18nContext";
-import { slugify } from "@/lib/utils";
+import slugify from "slugify";
 import ExpandableSection from "@/components/mobile/ExpandableSection";
 
 interface Blog {

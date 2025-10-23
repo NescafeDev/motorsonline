@@ -6,7 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { BlogSection } from "./sections/BlogSection/BlogSection";
 import { BlogPost } from "./BlogPage";
 import { useI18n } from "@/contexts/I18nContext";
-import { slugify } from "@/lib/utils";
+import slugify from "slugify";
 export default function BlogPostPage() {
   const navigate = useNavigate();
   const { t, currentLanguage } = useI18n();

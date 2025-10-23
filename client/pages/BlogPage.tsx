@@ -6,7 +6,7 @@ import axios from "axios";
 import { Card, CardContent } from "../components/ui/card";
 import { ArrowRightIcon } from "lucide-react";
 import { useI18n } from "@/contexts/I18nContext";
-import { slugify } from "@/lib/utils";
+import slugify from "slugify";
 
 interface Blog {
   id: number;

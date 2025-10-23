@@ -15,93 +15,145 @@ import { translationService } from '../services/translationService';
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
-// Helper function to translate content in parts (similar to privacy page)
-async function translateBlogContentInParts(content: string, targetLanguage: string): Promise<string> {
+// Helper function to translate content in parts using regex splitting
+// async function translateBlogContentInParts(content: string, targetLanguage: string = 'ru'): Promise<string> {
+//   try {
+//     // Split by HTML tags
+//     const tagRegex = /(<\/?[^>]+>)/g;
+//     const parts = content.split(tagRegex).filter(part => part);
+
+//     const translatedParts = [];
+    
+//     for (const part of parts) {
+//       // Skip HTML tags
+//       if (part.startsWith('<') && part.endsWith('>')) {
+//         translatedParts.push(part);
+//         continue;
+//       }
+      
+//       // For text, split into sentences (handles bullet points and short sentences)
+//       if (part.trim()) {
+//         // Sentence splitter for Estonian (handles .!?, bullet points, and whitespace)
+//         const sentences = part.split(/(?<=[.!?])\s+|(?<=•)\s+/).filter(s => s.trim());
+        
+//         const translatedSentences = [];
+//         for (const sentence of sentences) {
+//           try {
+//             let translation;
+//             let attempts = 0;
+//             const maxAttempts = 3;
+
+//             // Retry translation for each sentence
+//             while (attempts < maxAttempts) {
+//               try {
+//                 translation = await translationService.translateText({
+//                   text: sentence,
+//                   targetLanguage: targetLanguage,
+//                   sourceLanguage: 'ee'
+//                 });
+                
+//                 if (translation.translatedText && translation.translatedText !== sentence) {
+//                   translatedSentences.push(translation.translatedText);
+//                   break;
+//                 }
+//               } catch (error) {
+//                 console.error(`Translation attempt ${attempts + 1} failed for sentence:`, sentence, error);
+//               }
+//               attempts++;
+//               if (attempts === maxAttempts) {
+//                 console.error(`Max attempts reached for sentence:`, sentence);
+//                 translatedSentences.push(sentence); // Use original if all attempts fail
+//               }
+//             }
+//           } catch (error) {
+//             console.error('Error processing sentence:', sentence, error);
+//             translatedSentences.push(sentence);
+//           }
+//         }
+//         translatedParts.push(translatedSentences.join(' '));
+//       } else {
+//         translatedParts.push(part); // Preserve whitespace
+//       }
+//     }
+
+//     return translatedParts.join('');
+//   } catch (error) {
+//     console.error('Error in translateBlogContentInParts:', error);
+//     return content; // Return original content if translation fails
+//   }
+// }
+
+async function translateBlogContentInParts(content: string, targetLanguage: string = 'ru'): Promise<string> {
   try {
-    // Split content into parts based on <strong> tags
-    const strongTagRegex = /<strong>.*?<\/strong>/g;
-    const parts: string[] = [];
-    let lastIndex = 0;
-    let match;
-    
-    // Find all <strong> sections
-    while ((match = strongTagRegex.exec(content)) !== null) {
-      // Add content before the <strong> tag
-      if (match.index > lastIndex) {
-        const beforeContent = content.substring(lastIndex, match.index);
-        if (beforeContent.trim()) {
-          parts.push(beforeContent);
-        }
+    const tagRegex = /(<[^>]+>)/g;
+    const parts = content.split(tagRegex).filter(Boolean);
+
+    const translatedParts = [];
+
+    for (const part of parts) {
+      // Skip HTML tags entirely
+      if (part.startsWith('<') && part.endsWith('>')) {
+        translatedParts.push(part);
+        continue;
       }
-      
-      // Add the <strong> section
-      parts.push(match[0]);
-      lastIndex = match.index + match[0].length;
-    }
-    
-    // Add remaining content after the last <strong> tag
-    if (lastIndex < content.length) {
-      const remainingContent = content.substring(lastIndex);
-      if (remainingContent.trim()) {
-        parts.push(remainingContent);
+
+      const cleanPart = part.trim();
+
+      // Skip non-translatable or empty text
+      if (!cleanPart || isNonTranslatable(cleanPart)) {
+        translatedParts.push(part);
+        continue;
       }
-    }
-    
-    // If no <strong> tags found, treat as single part
-    if (parts.length === 0) {
-      parts.push(content);
-    }
-    
-    // Translate each part individually
-    const translatedParts: string[] = [];
-    
-    for (let i = 0; i < parts.length; i++) {
-      const part = parts[i];
-      
+
       try {
-        if (part.includes('<strong>')) {
-          // This is a <strong> section - translate the text inside
-          const textMatch = part.match(/<strong>(.*?)<\/strong>/);
-          if (textMatch && textMatch[1].trim()) {
-            const textToTranslate = textMatch[1];
-            
-            const translation = await translationService.translateText({
-              text: textToTranslate,
-              targetLanguage,
-              sourceLanguage: 'ee'
-            });
-            
-            const translatedPart = part.replace(textMatch[1], translation.translatedText);
-            translatedParts.push(translatedPart);
-          } else {
-            translatedParts.push(part);
-          }
-        } else {
-          // This is regular content - translate normally
-          if (part.trim()) {
-            const translation = await translationService.translateText({
-              text: part,
-              targetLanguage,
-              sourceLanguage: 'ee'
-            });
-            translatedParts.push(translation.translatedText);
-          } else {
-            translatedParts.push(part);
-          }
-        }
-      } catch (partError) {
-        console.error(`Error translating blog part ${i + 1}:`, partError);
-        translatedParts.push(part); // Use original if translation fails
+        const translated = await translateWithRetries(cleanPart, targetLanguage);
+        translatedParts.push(translated || part);
+      } catch (err) {
+        translatedParts.push(part);
       }
     }
-    
-    const result = translatedParts.join('');
-    return result;
-    
-  } catch (error) {
-    console.error('Error in translateBlogContentInParts:', error);
-    return content; // Return original content if translation fails
+
+    return translatedParts.join('');
+  } catch (err) {
+    console.error('translateHtmlByParts error:', err);
+    return content;
   }
+}
+
+function isNonTranslatable(text: string): boolean {
+  // Skip things like &nbsp;, single punctuation, or symbols
+  return (
+    text === '&nbsp;' ||
+    text === '\n' ||
+    /^[•\s]+$/.test(text) ||
+    !text.replace(/&nbsp;/g, '').trim()
+  );
+}
+
+async function translateWithRetries(
+  text: string,
+  targetLanguage: string,
+  retries = 3
+): Promise<string> {
+  let attempt = 0;
+  while (attempt < retries) {
+    try {
+      const res = await translationService.translateText({
+        text,
+        targetLanguage,
+        sourceLanguage: 'ee',
+      });
+
+      if (res?.translatedText) return res.translatedText;
+      throw new Error('No translation returned from DeepL API');
+    } catch (err) {
+      attempt++;
+      if (attempt === retries) throw err;
+      console.warn(`Retrying translation (attempt ${attempt})...`);
+      await new Promise((r) => setTimeout(r, 300 * attempt));
+    }
+  }
+  return text;
 }
 
 // Helper function to translate blog content
@@ -147,6 +199,8 @@ async function translateBlogContent(blog: any, targetLanguage: string) {
       });
       translatedBlog.category = categoryTranslation.translatedText;
     }
+
+
     
     return translatedBlog;
   } catch (error) {
@@ -238,13 +292,11 @@ router.get('/', async (req, res) => {
     const { lang } = req.query;
     const targetLanguage = (lang as string) || 'ee'; // Default to Estonian
     
-    console.log('Blog API called with language:', targetLanguage);
     
     const blogs = await getAllBlogs();
     
     // Translate blogs if language is not Estonian
     if (targetLanguage !== 'ee' && translationService.isConfigured()) {
-      console.log('Translating blogs to:', targetLanguage);
       const translatedBlogs = await Promise.all(
         blogs.map(blog => translateBlogContent(blog, targetLanguage))
       );
@@ -264,14 +316,12 @@ router.get('/:id', async (req, res) => {
     const { lang } = req.query;
     const targetLanguage = (lang as string) || 'ee'; // Default to Estonian
     
-    console.log('Blog by ID API called with language:', targetLanguage);
     
     const blog = await getBlogById(Number(req.params.id));
     if (!blog) return res.status(404).json({ message: 'Blogi ei leitud.' });
     
     // Translate blog if language is not Estonian
     if (targetLanguage !== 'ee' && translationService.isConfigured()) {
-      console.log('Translating blog to:', targetLanguage);
       const translatedBlog = await translateBlogContent(blog, targetLanguage);
       res.json(translatedBlog);
     } else {

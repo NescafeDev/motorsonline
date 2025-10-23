@@ -63,22 +63,27 @@ export class TranslationService {
         new URLSearchParams({
           text: request.text,
           target_lang: targetLang,
-          source_lang: sourceLang || '',
+          source_lang: sourceLang,
           preserve_formatting: 'true',
-          tag_handling: 'html'
+          tag_handling: 'html',
+          split_sentences: '0', // Disable sentence splitting
+          non_splitting_tags: 'span,p', // Prevent splitting within <span> and <p>
+          splitting_tags: '' // Avoid splitting on any tags
         }),
         {
           headers: {
             'Authorization': `DeepL-Auth-Key ${this.apiKey}`,
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
           }
         }
       );
-
-      if (response.data.translations && response.data.translations.length > 0) {
+      
+      const result = response.data.translations[0].text;
+      
+      if (result.length > 0) {
         return {
-          translatedText: response.data.translations[0].text,
-          detectedLanguage: response.data.translations[0].detected_source_language
+          translatedText: result,
+          detectedLanguage: 'ET',
         };
       }
 

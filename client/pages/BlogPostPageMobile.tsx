@@ -7,7 +7,7 @@ import { ChevronLeft, Menu } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useI18n } from "@/contexts/I18nContext";
-import { slugify } from "@/lib/utils";
+import slugify from "slugify";
 
 interface Blog {
   id: number;

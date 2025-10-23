@@ -1,7 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { slugify } from "@/lib/utils";
 import { useI18n } from "@/contexts/I18nContext";
+import slugify from "slugify";
 interface BlogCardProps {
   image: string;
   category: string;
