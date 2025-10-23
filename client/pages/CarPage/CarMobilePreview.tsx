@@ -303,7 +303,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                                                     {detail.label}
                                                 </span>
                                                 <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
-                                                    {detail.value}
+                                                    {detail.value ? detail.value.charAt(0).toUpperCase() + detail.value.slice(1) : detail.value}
                                                 </span>
                                             </div>
                                         </div>

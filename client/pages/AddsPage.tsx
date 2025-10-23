@@ -79,7 +79,7 @@ const accessoriesOptions = (t: any) => [
   { key: 'tagaistmeseljatugiallaklapitav', label: t('carFeatures.rearSeatBackFoldable') },
   { key: 'eraldikliimaseadetagaistmetele', label: t('carFeatures.rearSeatIndependentClimate') },
   { key: 'võtmetavamine', label: t('carFeatures.keylessEntry') },
-  { key: 'võtmetaäivitus', label: t('carFeatures.keylessStart') },
+  { key: 'võtmetaKäivitus', label: t('carFeatures.keylessStart') },
   { key: 'pakiruumiavaminejasulgeminelektriliselt', label: t('carFeatures.powerTailgate') },
   { key: 'soojendusegarool', label: t('carFeatures.heatedSteeringWheel') },
   { key: 'ventileeritavadstmed', label: t('carFeatures.ventilatedSeats') },
@@ -845,8 +845,17 @@ export default function AddsPage() {
     const accessoriesSelected = Object.entries(checkboxes)
       .filter(([k, v]) => v)
       .map(([k]) => k);
+    
+    // Get labels for selected accessories
+    const accessoriesLabels = accessoriesSelected
+      .map(key => {
+        const option = accessoriesOptions(t).find(opt => opt.key === key);
+        return option ? option.label : key;
+      })
+      .filter(Boolean);
+    
     formDataObj.append('tech_check', techCheckSelected.join(','));
-    formDataObj.append('accessories', accessoriesSelected.join(','));
+    formDataObj.append('accessories', accessoriesLabels.join(','));
     const token = localStorage.getItem("token");
 
     try {
@@ -1325,15 +1334,15 @@ export default function AddsPage() {
                     label: t('common.select'),
                   },
                   {
-                    value: "uus",
+                    value: "Uus",
                     label: t('vehicleCondition.new'),
                   },
                   {
-                    value: "kasutatud",
+                    value: "Kasutatud",
                     label: t('vehicleCondition.used'),
                   },
                   {
-                    value: "avariiline",
+                    value: "Avariiline",
                     label: t('vehicleCondition.damaged'),
                   },
                 ]}

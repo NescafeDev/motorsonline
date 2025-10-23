@@ -89,7 +89,7 @@ export function CarCard({
         <img
           src={currentImage}
           alt={title}
-          className="w-full h-[250px] sm:h-[450px] object-cover"
+          className="w-full h-full aspect-[4/3] object-cover"
         />
 
         {/* Navigation arrows - only show if there are multiple images */}
@@ -215,7 +215,7 @@ export function CarCard({
             </div>
             <div className="flex flex-col min-w-0 flex-1 ml-1 justify-center">
               <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
-                {fuel}
+                {fuel ? fuel.charAt(0).toUpperCase() + fuel.slice(1) : fuel}
               </span>
             </div>
           </div>
@@ -231,7 +231,7 @@ export function CarCard({
             </div>
             <div className="flex flex-col min-w-0 flex-1 ml-1 justify-center">
               <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
-                {transmission}
+                {transmission ? transmission.charAt(0).toUpperCase() + transmission.slice(1) : transmission}
               </span>
             </div>
           </div>

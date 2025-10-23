@@ -242,7 +242,7 @@ export const CarCard: React.FC<CarCardProps> = ({
       {/* Breadcrumb */}
       <div className="flex items-center gap-[9.764px] absolute left-[370px] top-[100px] h-[29px]">
         <span className="text-[#747474] font-['Poppins'] text-[17px] font-normal tracking-[0.342px]">
-          {breadcrumb}
+          {breadcrumb ? breadcrumb.charAt(0).toUpperCase() + breadcrumb.slice(1) : breadcrumb}
         </span>
       </div>
 

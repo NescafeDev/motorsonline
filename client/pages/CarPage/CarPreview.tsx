@@ -223,7 +223,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
     { key: 'tagaistmeseljatugiallaklapitav', label: t('carFeatures.rearSeatBackFoldable') },
     { key: 'eraldikliimaseadetagaistmetele', label: t('carFeatures.rearSeatIndependentClimate') },
     { key: 'võtmetavamine', label: t('carFeatures.keylessEntry') },
-    { key: 'võtmetaäivitus', label: t('carFeatures.keylessStart') },
+    { key: 'võtmetaKäivitus', label: t('carFeatures.keylessStart') },
     { key: 'pakiruumiavaminejasulgeminelektriliselt', label: t('carFeatures.powerTailgate') },
     { key: 'soojendusegarool', label: t('carFeatures.heatedSteeringWheel') },
     { key: 'ventileeritavadstmed', label: t('carFeatures.ventilatedSeats') },
@@ -300,7 +300,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
                           {spec.label}
                         </span>
                         <span className="font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica]">
-                          {spec.value}
+                          {spec.value ? spec.value.charAt(0).toUpperCase() + spec.value.slice(1) : spec.value}
                         </span>
                       </div>
                     ))}
@@ -417,7 +417,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
                               {/* {detail.label} */}
                             </span>
                             <span className="font-medium text-secondary-500 text-[12px] tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica] break-words">
-                              {detail.value}
+                              {detail.value ? detail.value.charAt(0).toUpperCase() + detail.value.slice(1) : detail.value}
                             </span>
                           </div>
                         </div>

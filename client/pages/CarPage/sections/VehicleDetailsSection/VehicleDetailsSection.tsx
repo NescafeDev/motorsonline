@@ -305,7 +305,7 @@ export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionPro
             >
               <div className="relative group">
                 <img
-                  className="w-full h-[189px] object-cover"
+                  className="w-full h-full aspect-[4/3] object-cover"
                   alt="Car"
                   src={displayCar.image}
                 />
@@ -391,7 +391,7 @@ export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionPro
                         <span className="font-normal text-secondary-500 text-[12px] tracking-[-0.42px] leading-[20px] [font-family:'Poppins',Helvetica] break-all">
                         </span>
                         <span className="font-medium text-secondary-500 text-[12px] tracking-[-0.54px] leading-[20px] [font-family:'Poppins',Helvetica] break-all">
-                          {detail.value}
+                          {detail.value ? detail.value.charAt(0).toUpperCase() + detail.value.slice(1) : detail.value}
                         </span>
                       </div>
                     </div>

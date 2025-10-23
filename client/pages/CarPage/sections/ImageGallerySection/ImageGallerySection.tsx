@@ -53,7 +53,7 @@ export const ImageGallerySection = ({ car }: ImageGallerySectionProps): JSX.Elem
               {car?.equipment && car.equipment.trim() ? (
                 car.equipment.split(/\r?\n|\r|\n/g).map((item, index) => (
                   // <li key={index} className="break-words leading-relaxed py-1">{item.trim()}</li>
-                  <li key={index} className="break-all leading-relaxed">{
+                  <li key={index} className="break-words leading-relaxed">{
                       item.trim().includes('•') ? (
                         item.trim()
                       ) : (

@@ -376,7 +376,7 @@ export const CarListingSection = ({
     { key: 'tagaistmeseljatugiallaklapitav', label: t('carFeatures.rearSeatBackFoldable') },
     { key: 'eraldikliimaseadetagaistmetele', label: t('carFeatures.rearSeatIndependentClimate') },
     { key: 'võtmetavamine', label: t('carFeatures.keylessEntry') },
-    { key: 'võtmetaäivitus', label: t('carFeatures.keylessStart') },
+    { key: 'võtmetaKäivitus', label: t('carFeatures.keylessStart') },
     { key: 'pakiruumiavaminejasulgeminelektriliselt', label: t('carFeatures.powerTailgate') },
     { key: 'soojendusegarool', label: t('carFeatures.heatedSteeringWheel') },
     { key: 'ventileeritavadstmed', label: t('carFeatures.ventilatedSeats') },

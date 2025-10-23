@@ -18,14 +18,10 @@ export const HeroSection = (): JSX.Element => {
   useEffect(() => {
     const fetchBanners = async () => {
       try {
-        console.log("Fetching banners from /api/banner-images");
         const response = await axios.get("/api/banner-images");
-        console.log("Raw response:", response.data);
         
         // Filter only active banners (active === 1 or active === "1")
         const activeBanners = response.data.filter((banner: BannerImage) => banner.active === "1");
-        console.log("All banners:", response.data);
-        console.log("Active banners:", activeBanners);
         setBanners(activeBanners);
       } catch (error) {
         console.error("Error fetching banners:", error);

@@ -158,6 +158,23 @@ export default function UserPageMobile() {
     navigate(`/${currentLanguage}/update/${carId}`);
   };
 
+  const dateEnd = (car: Car) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user?.userType === 'company') {
+      return 'N/A';
+    }
+    if (user?.userType === 'private' && car.month && car.year_value) {
+      const month = parseInt(car.month);
+      const year = car.year_value;
+      if (month === 11) {
+        return new Date(year as number + 1, 0);
+      } else {
+        return new Date(year, month);
+      }
+    }
+    return undefined;
+  }
+
   return (
     <div className="min-h-screen bg-white w-full">
       {/* Header */}
@@ -201,7 +218,7 @@ export default function UserPageMobile() {
                 price={`€ ${car.price?.toLocaleString() || '0'}`}
                 originalPrice={car.discountPrice ? `€ ${car.discountPrice.toLocaleString()}` : undefined}
                 discount={car.discountPrice ? `${Math.round(((car.price - car.discountPrice) / car.price) * 100)}%` : undefined}
-                dateEnd={car.month ? `${t('common.to')} ${car.month}-${car.year_value}` : undefined}
+                dateEnd={dateEnd(car) === 'N/A' ? 'N/A' : dateEnd(car) ? `${t('common.to')} ${(dateEnd(car) as Date).getMonth() + 1}/${(dateEnd(car) as Date).getFullYear()}` : undefined}
                 views={car.views || 0}
                 likes={car.favoriteCount || 0}
                 vatNote={getVatDisplayText(car)}

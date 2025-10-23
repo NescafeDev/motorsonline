@@ -67,11 +67,11 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
   return (
     <div className="bg-white rounded-[13px] overflow-hidden shadow-sm w-full xl:w-full mx-auto">
       {/* Image Section */}
-      <div className="relative mb-5 group h-[250px] sm:h-[450px]">
+      <div className="relative mb-5 group aspect-[4/3]">
         <img
           src={currentImage}
           alt={title}
-          className="w-full h-full object-cover"
+          className="w-full h-full aspect-[4/3] object-cover"
         />
         
         {/* Navigation arrows - only show if there are multiple images */}
@@ -123,7 +123,7 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
             {major && major.length > 50 ? `${major.substring(0, 50)}...` : major}
           </div>
           <p className="text-sm text-motors-gray leading-[21px] tracking-[-0.42px]">
-            {breadcrumb}
+            {breadcrumb ? breadcrumb.charAt(0).toUpperCase() + breadcrumb.slice(1) : breadcrumb}
           </p>
         </div>
         

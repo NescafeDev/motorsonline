@@ -355,7 +355,7 @@ export default function CarPage() {
                             {spec.label}
                           </span>
                           <span className="font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica]">
-                            {spec.value}
+                            {spec.value ? spec.value.charAt(0).toUpperCase() + spec.value.slice(1) : spec.value}
                           </span>
                         </div>
                       ))}
@@ -470,7 +470,7 @@ export default function CarPage() {
                               {/* {detail.label} */}
                             </span>
                             <span className="font-medium text-secondary-500 text-[12px] tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica] break-words">
-                              {detail.value}
+                              {detail.value ? detail.value.charAt(0).toUpperCase() + detail.value.slice(1) : detail.value}
                             </span>
                           </div>
                         </div>
