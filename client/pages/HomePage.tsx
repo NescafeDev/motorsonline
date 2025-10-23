@@ -1,4 +1,4 @@
-import { HeartIcon, SearchIcon, MapPin, ChevronLeft, ChevronRight, ChevronRight as ArrowRight } from "lucide-react";
+import { HeartIcon, SearchIcon, MapPin, ChevronLeft, ChevronRight, ChevronRight as ArrowRight, Heart } from "lucide-react";
 import { Badge } from "../components/ui/badge";
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
@@ -357,6 +357,22 @@ export default function HomePage() {
     }
   };
 
+  const handleHeartClick = async ( car: Car, e: React.MouseEvent<SVGSVGElement> ) => {
+    e.stopPropagation();
+    if (!car || !isAuthenticated) return;
+
+    if (!isAuthenticated) {
+      alert('Please log in to save favorites');
+      return;
+    }
+
+    try {
+      await toggleFavorite(car.id);
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+      alert('Failed to update favorite status');
+    }
+  };
 
   const handleApplyFilters = () => {
     if (Object.keys(filters).length > 0) {
@@ -534,28 +550,13 @@ export default function HomePage() {
                                 </div>
                                 <div className="col-span-1 justify-end items-end">
                                   <div className="absolute right-5 top-8">
-                                    <button
-                                      className="w-6 h-6 cursor-pointer "
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        if (!isAuthenticated) {
-                                          // You could show a login prompt here
-                                          alert('Please log in to save favorites');
-                                          return;
-                                        }
-                                        // toggleFavorite(car.id);
-                                      }}
-                                    >
-                                      <img
-                                        className="w-6 h-6"
-                                        alt="Favorite"
-                                        src={
-                                          isFavorite(car.id)
-                                            ? "/img/vuesax-bold-heart.svg"
-                                            : "/img/vuesax-linear-heart.svg"
-                                        }
-                                      />
-                                    </button>
+                                    <Heart
+                                      className={`w-6 h-6 transition-colors duration-200 cursor-pointer ${isFavorite(car.id)
+                                        ? "text-red-500 fill-red-500"
+                                        : "text-gray-400 hover:text-red-400"
+                                        }`}
+                                      onClick={(e) => handleHeartClick(car, e)}
+                                    />
                                   </div>
                                 </div>
                               </div>
