@@ -19,8 +19,8 @@ export class TranslationService {
     // Try multiple ways to get the API key
     this.apiKey = process.env.DEEPL_API_KEY || 
                   process.env.VITE_DEEPL_API_KEY || 
-                  'b712113a-8c19-40ec-96f4-13cc551b2369:fx'; // Fallback to the key from .env
-    this.baseUrl = 'https://api-free.deepl.com/v2/translate';
+                  '704ecd57-4a20-4e86-ad5f-36150f4abfd2'; // Fallback to the key from .env
+    this.baseUrl = 'https://api.deepl.com/v2/translate';
     
     console.log('DeepL API Key configured:', !!this.apiKey);
     console.log('DeepL API Key length:', this.apiKey.length);
