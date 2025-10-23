@@ -158,7 +158,7 @@ export default function CarGallery({
                   }}
                 >
                   <div
-                    className={`w-full h-[140px] rounded-[6.951px] overflow-hidden cursor-pointer transition-all duration-200 ease-in-out transform hover:scale-105 ${selectedImage === uniqueKey
+                    className={`w-full h-[110px] rounded-[6.951px] overflow-hidden cursor-pointer transition-all duration-200 ease-in-out transform hover:scale-105 ${selectedImage === uniqueKey
                         ? "border-[3px] border-red-500 shadow-lg rounded-lg"
                         : "border-[1.697px] border-transparent hover:border-gray-300"
                       }`}

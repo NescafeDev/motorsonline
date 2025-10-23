@@ -886,13 +886,47 @@ router.put('/:id', authenticateToken, upload.array('images', 40), async (req: an
     // Store old images for deletion
     const oldImages = car.images || [];
     
-    // Handle images array - if new images are uploaded, append them to existing ones
+    // Handle images array - if new images are uploaded, replace at specific indices
     if (reqWithFiles.files && Array.isArray(reqWithFiles.files) && reqWithFiles.files.length > 0) {
       // Create new image paths for uploaded files
       const newImagePaths = reqWithFiles.files.map((file: any) => `/img/cars/${file.filename}`);
       
-      // Combine old images with new ones
-      data.images = [...oldImages, ...newImagePaths];
+      // Get image indices from the request
+      const imageIndices = req.body.imageIndices ? 
+        (Array.isArray(req.body.imageIndices) ? req.body.imageIndices : [req.body.imageIndices]) :
+        [];
+      
+      // Start with existing images
+      let finalImages = [...oldImages];
+      
+      // Replace images at specific indices
+      newImagePaths.forEach((newImagePath, fileIndex) => {
+        const targetIndex = parseInt(imageIndices[fileIndex]);
+        if (!isNaN(targetIndex) && targetIndex >= 0) {
+          // If replacing an existing image, delete the old one from filesystem
+          if (finalImages[targetIndex]) {
+            const oldImagePath = finalImages[targetIndex];
+            const oldImageFilename = oldImagePath.split('/').pop();
+            if (oldImageFilename) {
+              const oldImageFullPath = path.join(__dirname, '..', 'public', 'img', 'cars', oldImageFilename);
+              try {
+                if (fs.existsSync(oldImageFullPath)) {
+                  fs.unlinkSync(oldImageFullPath);
+                }
+              } catch (error) {
+                console.error('Error deleting old image:', error);
+              }
+            }
+          }
+          // Replace at the specific index
+          finalImages[targetIndex] = newImagePath;
+        } else {
+          // If no valid index, append to the end
+          finalImages.push(newImagePath);
+        }
+      });
+      
+      data.images = finalImages;
     } 
     else if (data.existingImages) {
       // If existingImages is sent from frontend, use it (for reordering/deleting without new uploads)

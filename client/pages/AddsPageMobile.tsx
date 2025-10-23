@@ -339,6 +339,7 @@ export default function AddsPageMobile() {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [stereoInput, setStereoInput] = useState("");
   const [carImages, setCarImages] = useState<(File | null)[]>(Array(40).fill(null));
+  const [removedImageIndexes, setRemovedImageIndexes] = useState<number[]>([]);
   const [modelLoading, setModelLoading] = useState<boolean>(false);
 
   // Data for dropdowns
@@ -394,6 +395,7 @@ export default function AddsPageMobile() {
       // If we have a carId in the URL, fetch that car for editing
       if (carId) {
         const car = await fetchCarById(carId);
+
         if (car) {
           // Set the car data after all other data is loaded
           setEditingCar(car);
@@ -440,6 +442,7 @@ export default function AddsPageMobile() {
           }
 
           // Set checkboxes
+          console.log("car tech check:", car.tech_check);
           if (car.tech_check) {
             const arr = Array.isArray(car.tech_check) ? car.tech_check : car.tech_check.split(',');
             setCheckTechboxes((prev) => {
@@ -450,12 +453,14 @@ export default function AddsPageMobile() {
               return obj;
             });
           }
+
+          console.log("car accessory check:", car.accessories);
           if (car.accessories) {
             const arr = Array.isArray(car.accessories) ? car.accessories : car.accessories.split(',');
             setCheckboxes((prev) => {
               const obj: any = {};
               accessoriesOptions(t).forEach(opt => {
-                obj[opt.key] = arr.includes(opt.key);
+                obj[opt.key] = arr.includes(opt.label);
               });
               return obj;
             });
@@ -681,10 +686,6 @@ export default function AddsPageMobile() {
     setContactSaved(false); // Reset saved state when data changes
   };
 
-  // const handleCountryChange = (countries: string[]) => {
-  //   setFormData((prev) => ({ ...prev, country: countries }));
-  // };
-
   // Function to save contact data independently
   const handleSaveContact = async () => {
     const token = localStorage.getItem("token");
@@ -763,6 +764,19 @@ export default function AddsPageMobile() {
       updated[index] = file;
       return updated;
     });
+    
+    // Track removed images during editing
+    if (editingCar && file === null) {
+      setRemovedImageIndexes((prev) => {
+        if (!prev.includes(index)) {
+          return [...prev, index];
+        }
+        return prev;
+      });
+    } else if (editingCar && file !== null) {
+      // If user uploads a new image, remove from removed list
+      setRemovedImageIndexes((prev) => prev.filter(i => i !== index));
+    }
   };
 
   const handleImageReorder = (sourceIndex: number, destinationIndex: number) => {
@@ -803,6 +817,7 @@ export default function AddsPageMobile() {
 
   const handleEditCar = (car: any) => {
     setEditingCar(car);
+    setRemovedImageIndexes([]);
 
     // Calculate base price if VAT is applied
     let priceToShow = car.price?.toString() || "";
@@ -934,22 +949,40 @@ export default function AddsPageMobile() {
       }
     });
 
-    // Handle images for editing - preserve existing images and add new ones
+    // Handle images based on operation type
     if (editingCar) {
+      // EDITING MODE: Handle image updates, additions, and removals
       const hasNewImages = carImages.some(file => file !== null);
-      if (hasNewImages) {
-        // User uploaded new images during edit - send them
+      const hasRemovedImages = removedImageIndexes.length > 0;
+      
+      if (hasNewImages || hasRemovedImages) {
+        // User made changes to images - send new images and removal info
         carImages.forEach((file) => {
           if (file) formDataObj.append('images', file);
         });
+        
+        // Send information about removed images
+        if (hasRemovedImages) {
+          formDataObj.append('removedImageIndexes', JSON.stringify(removedImageIndexes));
+        }
+        
+        // Send existing images that should be preserved (not removed and not replaced)
+        if (editingCar.images && Array.isArray(editingCar.images)) {
+          const preservedImages = editingCar.images.filter((_: any, index: number) => 
+            !removedImageIndexes.includes(index) && !carImages[index]
+          );
+          if (preservedImages.length > 0) {
+            formDataObj.append('existingImages', JSON.stringify(preservedImages));
+          }
+        }
       } else {
-        // No new images uploaded, preserve existing images from database
+        // No changes to images - preserve all existing images
         if (editingCar.images && Array.isArray(editingCar.images)) {
           formDataObj.append('existingImages', JSON.stringify(editingCar.images));
         }
       }
     } else {
-      // For new listings, just add the uploaded images
+      // NEW CAR MODE: Just add the uploaded images
       carImages.forEach((file) => {
         if (file) formDataObj.append('images', file);
       });
@@ -970,8 +1003,8 @@ export default function AddsPageMobile() {
       })
       .filter(Boolean);
     
-    formDataObj.append('tech_check', techCheckSelected.join(','));
-    formDataObj.append('accessories', accessoriesLabels.join(','));
+    formDataObj.set('tech_check', techCheckSelected.join(','));
+    formDataObj.set('accessories', accessoriesLabels.join(','));
     const token = localStorage.getItem("token");
 
     try {
@@ -991,6 +1024,7 @@ export default function AddsPageMobile() {
       }
       setEditingCar(null);
       setCarImages(Array(40).fill(null));
+      setRemovedImageIndexes([]);
       setShowMorePhotos(false);
       setStereoInput("");
       fetchCars();
@@ -1639,9 +1673,9 @@ export default function AddsPageMobile() {
                         "T1": t('vehicleCategories.t1'),
                         "T2": t('vehicleCategories.t2'),
                         "T3": t('vehicleCategories.t3'),
-                        "T4.1": t('vehicleCategories.t4.1'),
-                        "T4.2": t('vehicleCategories.t4.2'),
-                        "T4.3": t('vehicleCategories.t4.3'),
+                        "T4.1": t('vehicleCategories.t41'),
+                        "T4.2": t('vehicleCategories.t42'),
+                        "T4.3": t('vehicleCategories.t43'),
                         "T5": t('vehicleCategories.t5'),
                         "LM": t('vehicleCategories.lm'),
                         "C1-C5": t('vehicleCategories.c1c5'),
@@ -2093,6 +2127,7 @@ export default function AddsPageMobile() {
                       className="bg-gray-300 px-4 py-2 rounded font-semibold hover:bg-gray-400 transition-colors"
                       onClick={() => {
                         setEditingCar(null);
+                        setRemovedImageIndexes([]);
                         setFormData({
                           brand_id: "",
                           model_id: "",

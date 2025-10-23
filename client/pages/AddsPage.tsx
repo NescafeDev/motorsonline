@@ -202,7 +202,6 @@ const inspectionValidityOptions = (t: any) => [
 ];
 
 export default function AddsPage() {
-  const options = useMemo(() => countryList().getData(), []);
   const { user } = useAuth();
   const { t, currentLanguage } = useI18n();
 
@@ -451,7 +450,7 @@ export default function AddsPage() {
             setCheckboxes((prev) => {
               const obj: any = {};
               accessoriesOptions(t).forEach(opt => {
-                obj[opt.key] = arr.includes(opt.key);
+                obj[opt.key] = arr.includes(opt.label);
               });
               return obj;
             });
@@ -808,6 +807,7 @@ export default function AddsPage() {
     }
 
     const form = { ...formData };
+
     // Map checkboxes to form fields if needed
     const formDataObj = new FormData();
     Object.entries(form).forEach(([key, value]) => {
@@ -818,14 +818,35 @@ export default function AddsPage() {
       }
     });
 
-    // Handle images for editing - preserve existing images and add new ones
+    // Handle images for editing - replace existing images at same index with new ones
+
     if (editingCar) {
       const hasNewImages = carImages.some(file => file !== null);
       if (hasNewImages) {
-        // User uploaded new images during edit - send them
-        carImages.forEach((file) => {
-          if (file) formDataObj.append('images', file);
+        // User uploaded new images during edit - send them with index information
+        carImages.forEach((file, index) => {
+          if (file) {
+            formDataObj.append('images', file);
+            formDataObj.append('imageIndices', index.toString());
+          }
         });
+        
+        // Send existing images that are not being replaced
+        if (editingCar.images && Array.isArray(editingCar.images)) {
+          const existingImages = [...editingCar.images];
+          carImages.forEach((file, index) => {
+            if (file && existingImages[index]) {
+              // This index is being replaced, so remove it from existing images
+              existingImages[index] = null;
+            }
+          });
+          
+          // Send the remaining existing images (filter out nulls)
+          const remainingImages = existingImages.filter(img => img !== null);
+          if (remainingImages.length > 0) {
+            formDataObj.append('existingImages', JSON.stringify(remainingImages));
+          }
+        }
       } else {
         // No new images uploaded, preserve existing images from database
         if (editingCar.images && Array.isArray(editingCar.images)) {
@@ -845,7 +866,7 @@ export default function AddsPage() {
     const accessoriesSelected = Object.entries(checkboxes)
       .filter(([k, v]) => v)
       .map(([k]) => k);
-    
+
     // Get labels for selected accessories
     const accessoriesLabels = accessoriesSelected
       .map(key => {
@@ -854,8 +875,9 @@ export default function AddsPage() {
       })
       .filter(Boolean);
     
-    formDataObj.append('tech_check', techCheckSelected.join(','));
-    formDataObj.append('accessories', accessoriesLabels.join(','));
+    formDataObj.set('tech_check', techCheckSelected.join(','));
+    formDataObj.set('accessories', accessoriesLabels.join(','));
+
     const token = localStorage.getItem("token");
 
     try {
@@ -1719,9 +1741,9 @@ export default function AddsPage() {
                           "T1": t('vehicleCategories.t1'),
                           "T2": t('vehicleCategories.t2'),
                           "T3": t('vehicleCategories.t3'),
-                          "T4.1": t('vehicleCategories.t4.1'),
-                          "T4.2": t('vehicleCategories.t4.2'),
-                          "T4.3": t('vehicleCategories.t4.3'),
+                          "T4.1": t('vehicleCategories.t41'),
+                          "T4.2": t('vehicleCategories.t42'),
+                          "T4.3": t('vehicleCategories.t43'),
                           "T5": t('vehicleCategories.t5'),
                           "LM": t('vehicleCategories.lm'),
                           "C1-C5": t('vehicleCategories.c1c5'),
