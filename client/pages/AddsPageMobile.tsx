@@ -339,7 +339,6 @@ export default function AddsPageMobile() {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [stereoInput, setStereoInput] = useState("");
   const [carImages, setCarImages] = useState<(File | null)[]>(Array(40).fill(null));
-  const [removedImageIndexes, setRemovedImageIndexes] = useState<number[]>([]);
   const [modelLoading, setModelLoading] = useState<boolean>(false);
 
   // Data for dropdowns
@@ -764,19 +763,6 @@ export default function AddsPageMobile() {
       updated[index] = file;
       return updated;
     });
-    
-    // Track removed images during editing
-    if (editingCar && file === null) {
-      setRemovedImageIndexes((prev) => {
-        if (!prev.includes(index)) {
-          return [...prev, index];
-        }
-        return prev;
-      });
-    } else if (editingCar && file !== null) {
-      // If user uploads a new image, remove from removed list
-      setRemovedImageIndexes((prev) => prev.filter(i => i !== index));
-    }
   };
 
   const handleImageReorder = (sourceIndex: number, destinationIndex: number) => {
@@ -817,7 +803,6 @@ export default function AddsPageMobile() {
 
   const handleEditCar = (car: any) => {
     setEditingCar(car);
-    setRemovedImageIndexes([]);
 
     // Calculate base price if VAT is applied
     let priceToShow = car.price?.toString() || "";
@@ -949,40 +934,56 @@ export default function AddsPageMobile() {
       }
     });
 
-    // Handle images based on operation type
+    // Handle images for editing - replace existing images at same index with new ones
+
     if (editingCar) {
-      // EDITING MODE: Handle image updates, additions, and removals
       const hasNewImages = carImages.some(file => file !== null);
-      const hasRemovedImages = removedImageIndexes.length > 0;
+      const hasChanges = carImages.some((file, index) => {
+        // Check if there are changes (new files or removed existing images)
+        if (file !== null) return true; // New file uploaded
+        if (editingCar.images && editingCar.images[index] && file === null) return true; // Existing image removed
+        return false;
+      });
       
-      if (hasNewImages || hasRemovedImages) {
-        // User made changes to images - send new images and removal info
-        carImages.forEach((file) => {
-          if (file) formDataObj.append('images', file);
-        });
-        
-        // Send information about removed images
-        if (hasRemovedImages) {
-          formDataObj.append('removedImageIndexes', JSON.stringify(removedImageIndexes));
+      if (hasChanges) {
+        // User made changes to images during edit
+        if (hasNewImages) {
+          // Send new images with index information
+          carImages.forEach((file, index) => {
+            if (file) {
+              formDataObj.append('images', file);
+              formDataObj.append('imageIndices', index.toString());
+            }
+          });
         }
         
-        // Send existing images that should be preserved (not removed and not replaced)
+        // Handle existing images - keep only those that weren't removed or replaced
         if (editingCar.images && Array.isArray(editingCar.images)) {
-          const preservedImages = editingCar.images.filter((_: any, index: number) => 
-            !removedImageIndexes.includes(index) && !carImages[index]
-          );
-          if (preservedImages.length > 0) {
-            formDataObj.append('existingImages', JSON.stringify(preservedImages));
+          const existingImages = [...editingCar.images];
+          carImages.forEach((file, index) => {
+            if (file && existingImages[index]) {
+              // This index is being replaced with a new file, so remove it from existing images
+              existingImages[index] = null;
+            } else if (file === null && existingImages[index]) {
+              // This existing image was removed (set to null), so remove it from existing images
+              existingImages[index] = null;
+            }
+          });
+          
+          // Send the remaining existing images (filter out nulls)
+          const remainingImages = existingImages.filter(img => img !== null);
+          if (remainingImages.length > 0) {
+            formDataObj.append('existingImages', JSON.stringify(remainingImages));
           }
         }
       } else {
-        // No changes to images - preserve all existing images
+        // No changes to images, preserve existing images from database
         if (editingCar.images && Array.isArray(editingCar.images)) {
           formDataObj.append('existingImages', JSON.stringify(editingCar.images));
         }
       }
     } else {
-      // NEW CAR MODE: Just add the uploaded images
+      // For new listings, just add the uploaded images
       carImages.forEach((file) => {
         if (file) formDataObj.append('images', file);
       });
@@ -1024,7 +1025,6 @@ export default function AddsPageMobile() {
       }
       setEditingCar(null);
       setCarImages(Array(40).fill(null));
-      setRemovedImageIndexes([]);
       setShowMorePhotos(false);
       setStereoInput("");
       fetchCars();
@@ -2127,7 +2127,6 @@ export default function AddsPageMobile() {
                       className="bg-gray-300 px-4 py-2 rounded font-semibold hover:bg-gray-400 transition-colors"
                       onClick={() => {
                         setEditingCar(null);
-                        setRemovedImageIndexes([]);
                         setFormData({
                           brand_id: "",
                           model_id: "",

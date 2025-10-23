@@ -949,6 +949,24 @@ router.put('/:id', authenticateToken, upload.array('images', 40), async (req: an
       data.images = car.images;
     }
     
+    // Handle image removal when both new images and existingImages are present
+    if (reqWithFiles.files && Array.isArray(reqWithFiles.files) && reqWithFiles.files.length > 0 && data.existingImages) {
+      try {
+        const remainingImages = JSON.parse(data.existingImages);
+        const allImages = [...data.images, ...remainingImages];
+        
+        // Find images that were removed (exist in old but not in final result)
+        const removedImages = oldImages.filter((oldImg: string) => !allImages.includes(oldImg));
+        
+        // Delete removed images from filesystem
+        await deleteOldImages(removedImages);
+        
+        data.images = allImages;
+      } catch (e) {
+        console.error('Error handling image removal:', e);
+      }
+    }
+    
     // Validate required fields
     if (!data.brand_id || data.brand_id === '') {
       return res.status(400).json({ message: 'Brand is required.' });

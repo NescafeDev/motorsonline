@@ -822,21 +822,34 @@ export default function AddsPage() {
 
     if (editingCar) {
       const hasNewImages = carImages.some(file => file !== null);
-      if (hasNewImages) {
-        // User uploaded new images during edit - send them with index information
-        carImages.forEach((file, index) => {
-          if (file) {
-            formDataObj.append('images', file);
-            formDataObj.append('imageIndices', index.toString());
-          }
-        });
+      const hasChanges = carImages.some((file, index) => {
+        // Check if there are changes (new files or removed existing images)
+        if (file !== null) return true; // New file uploaded
+        if (editingCar.images && editingCar.images[index] && file === null) return true; // Existing image removed
+        return false;
+      });
+      
+      if (hasChanges) {
+        // User made changes to images during edit
+        if (hasNewImages) {
+          // Send new images with index information
+          carImages.forEach((file, index) => {
+            if (file) {
+              formDataObj.append('images', file);
+              formDataObj.append('imageIndices', index.toString());
+            }
+          });
+        }
         
-        // Send existing images that are not being replaced
+        // Handle existing images - keep only those that weren't removed or replaced
         if (editingCar.images && Array.isArray(editingCar.images)) {
           const existingImages = [...editingCar.images];
           carImages.forEach((file, index) => {
             if (file && existingImages[index]) {
-              // This index is being replaced, so remove it from existing images
+              // This index is being replaced with a new file, so remove it from existing images
+              existingImages[index] = null;
+            } else if (file === null && existingImages[index]) {
+              // This existing image was removed (set to null), so remove it from existing images
               existingImages[index] = null;
             }
           });
@@ -848,7 +861,7 @@ export default function AddsPage() {
           }
         }
       } else {
-        // No new images uploaded, preserve existing images from database
+        // No changes to images, preserve existing images from database
         if (editingCar.images && Array.isArray(editingCar.images)) {
           formDataObj.append('existingImages', JSON.stringify(editingCar.images));
         }
