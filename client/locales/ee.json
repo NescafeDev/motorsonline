@@ -36,7 +36,8 @@
     "searchLanguages": "Otsi keeleid...",
     "seconds": "sekundit",
     "after": "pärast",
-    "sellerName": "Müüja nimi"
+    "sellerName": "Müüja nimi",
+    "translating": "Tõlkimine..."
   },
   "navigation": {
     "home": "Avaleht",

@@ -36,7 +36,8 @@
         "searchLanguages": "Etsi kieliä...",
         "seconds": "sekuntia",
         "after": "jälkeen",
-        "sellerName": "Myyjän nimi"
+        "sellerName": "Myyjän nimi",
+        "translating": "Kääntäminen..."
     },
     "navigation": {
         "home": "Etusivu",

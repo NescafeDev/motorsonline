@@ -36,7 +36,8 @@
     "searchLanguages": "Поиск языков...",
     "seconds": "секунд",
     "after": "после",
-    "sellerName": "Имя продавца"
+    "sellerName": "Имя продавца",
+    "translating": "Перевод..."
   },
   "navigation": {
     "home": "Главная",

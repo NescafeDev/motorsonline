@@ -36,7 +36,8 @@
         "searchLanguages": "Sprachen suchen...",
         "seconds": "Sekunden",
         "after": "nach",
-        "sellerName": "Verkopersnaam"
+        "sellerName": "Verkopersnaam",
+        "translating": "Übersetzen..."
     },
     "navigation": {
         "home": "Startseite",

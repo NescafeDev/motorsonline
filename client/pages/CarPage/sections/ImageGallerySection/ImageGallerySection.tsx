@@ -91,7 +91,7 @@ export const ImageGallerySection = ({ car }: ImageGallerySectionProps): JSX.Elem
             </h2>
             <ul className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px] pl-6 space-y-2">
               {isTranslating ? (
-                <li className="text-gray-500 italic">Translating...</li>
+                <li className="text-gray-500 italic">{t('common.translating')}</li>
               ) : car?.equipment && car.equipment.trim() ? (
                 (translatedEquipment || car.equipment).split(/\r?\n|\r|\n/g).map((item, index) => (
                   <li key={index} className="break-words leading-relaxed">{
@@ -114,7 +114,7 @@ export const ImageGallerySection = ({ car }: ImageGallerySectionProps): JSX.Elem
             </h2>
             <div className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]">
               {isTranslating ? (
-                <p className="text-gray-500 italic">Translating...</p>
+                <p className="text-gray-500 italic">{t('common.translating')}</p>
               ) : car?.description && car.description.trim() ? (
                 <p className="break-words leading-relaxed py-1">{translatedDescription || car.description}</p>
               ) : (

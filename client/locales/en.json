@@ -36,7 +36,8 @@
     "searchLanguages": "Search Languages...",
     "seconds": "seconds",
     "after": "after",
-    "sellerName": "Seller Name"
+    "sellerName": "Seller Name",
+    "translating": "Translating..."
   },
   "navigation": {
     "home": "Home",
