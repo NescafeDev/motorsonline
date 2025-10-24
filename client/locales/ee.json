@@ -322,7 +322,8 @@
     "darkRed": "Tume Punane",
     "darkGreen": "Tume Roheline",
     "darkBlue": "Tume Sinine",
-    "white": "Valge"
+    "white": "Valge",
+    "lightGreen": "Hele Roheline"
   },
   "carFeatures": {
     "collisionPreventionBrakingSystem": "Kokkupõrget Ennetav Pidurisüsteem",

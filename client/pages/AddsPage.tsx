@@ -116,7 +116,7 @@ const carColorOptions = (t: any) => [
   { value: "heleanž", label: t('colors.lightOrange') },
   { value: "helepruun", label: t('colors.lightBrown') },
   { value: "helepunane", label: t('colors.lightRed') },
-  { value: "heleroheline", label: t('colors.brown') },
+  { value: "heleroheline", label: t('colors.lightGreen') },
   { value: "helesinine", label: t('colors.lightBlue') },
   { value: "hõbedane", label: t('colors.silver') },
   { value: "kollane", label: t('colors.yellow') },

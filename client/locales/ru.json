@@ -322,7 +322,8 @@
     "darkRed": "Темно-красный",
     "darkGreen": "Темно-зеленый",
     "darkBlue": "Темно-синий",
-    "white": "Белый"
+    "white": "Белый",
+    "lightGreen": "Cветло-зеленый"
   },
   "carFeatures": {
     "collisionPreventionBrakingSystem": "Система предотвращения столкновений",

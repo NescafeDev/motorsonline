@@ -322,7 +322,8 @@
         "darkRed": "Dunkelrot",
         "darkGreen": "Dunkelgrün",
         "darkBlue": "Dunkelblau",
-        "white": "Weiß"
+        "white": "Weiß",
+        "lightGreen": "Hellgrün"
     },
     "carFeatures": {
         "collisionPreventionBrakingSystem": "Kollisionsverhinderungs-Brems­system",

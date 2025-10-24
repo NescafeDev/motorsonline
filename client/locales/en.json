@@ -321,7 +321,8 @@
     "darkRed": "Dark Red",
     "darkGreen": "Dark Green",
     "darkBlue": "Dark Blue",
-    "white": "White"
+    "white": "White",
+    "lightGreen": "Light Green"
   },
   "carFeatures": {
     "collisionPreventionBrakingSystem": "Collision Prevention Braking System",

@@ -322,7 +322,8 @@
         "darkRed": "Tummanpunainen",
         "darkGreen": "Tummanvihreä",
         "darkBlue": "Tummansininen",
-        "white": "Valkoinen"
+        "white": "Valkoinen",
+        "lightGreen": "Vaaleanvihreä"
     },
     "carFeatures": {
         "collisionPreventionBrakingSystem": "Törmäyksenesto­järjestelmä",
