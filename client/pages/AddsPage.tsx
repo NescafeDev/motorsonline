@@ -670,7 +670,6 @@ export default function AddsPage() {
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    console.log('lastMaintence:' , formData.lastMaintenance)
   };
 
   const handleContactInputChange = (field: string, value: string | string[]) => {
@@ -723,14 +722,12 @@ export default function AddsPage() {
         const existingContact = await axios.get(`/api/contacts/user`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        console.log(existingContact.data)
         if (existingContact.data) {
           // Update existing contact
           await axios.put(`/api/contacts/user`, contactFormData, {
             headers: { Authorization: `Bearer ${token}` },
           });
           alert("Contact information updated successfully!");
-          console.log(existingContact.data)
           setContactSaved(true);
         }
       } catch (error: any) {
@@ -906,13 +903,10 @@ export default function AddsPage() {
     try {
       setCarLoading(true);
       if (editingCar) {
-        console.log('Editing Car:', editingCar);
         await axios.put(`/api/cars/${editingCar.id}`, formDataObj, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } else {
-        console.log('Form Data:', formDataObj);
-        console.log('Contact Form Data:', contactFormData);
 
         // Send car data first
         const carResponse = await axios.post("/api/cars", formDataObj, {
@@ -970,7 +964,6 @@ export default function AddsPage() {
     setEditingCar(car);
     setImagePreviews(car.images || []);
 
-    console.log('Editing Car:', car);
 
     // Calculate base price if VAT is applied
     let priceToShow = car.price?.toString() || "";
@@ -1007,7 +1000,6 @@ export default function AddsPage() {
     });
     setCarImages(Array(40).fill(null));
     setShowMorePhotos(false);
-    console.log('Contact Form Data:', contactFormData);
     // Fetch models for the selected brand when editing
     if (car.brand_id) {
       fetchModels(car.brand_id.toString());
