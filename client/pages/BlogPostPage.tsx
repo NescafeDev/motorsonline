@@ -171,7 +171,7 @@ export default function BlogPostPage() {
 
       {/* Recent Posts Section */}
       <section className="max-w-[1440px] mx-auto px-6 lg:px-[100px] py-8 mb-8">
-            <BlogSection />
+            <BlogSection excludeBlogId={blog.id} />
       </section>
     </PageContainer>
   );

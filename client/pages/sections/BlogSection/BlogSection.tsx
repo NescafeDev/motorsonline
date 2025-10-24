@@ -27,7 +27,7 @@ export interface BlogPost {
   id?: number;
 }
 
-export const BlogSection = (): JSX.Element => {
+export const BlogSection = ({ excludeBlogId }: { excludeBlogId?: number }): JSX.Element => {
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
@@ -58,6 +58,10 @@ export const BlogSection = (): JSX.Element => {
     id: blog.id
   }));
 
+  const filteredBlogs = excludeBlogId 
+    ? blogPosts.filter(blog => blog.id !== excludeBlogId)
+    : blogPosts;
+  
   return (
     <div className="w-full bg-white pt-8">
       <section className="w-full pl-[2%] pr-[2%] mt-3 max-w-[1300px] mx-auto relative bg-white">
@@ -76,7 +80,7 @@ export const BlogSection = (): JSX.Element => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[16px]">
-            {blogPosts.map((post, index) => (
+            {filteredBlogs.map((post, index) => (
               <Card
                 key={post.id || index}
                 className="bg-[#f6f7f9] rounded-[10px] overflow-hidden border-none h-full flex flex-col"
@@ -113,7 +117,7 @@ export const BlogSection = (): JSX.Element => {
                 </CardContent>
               </Card>
             ))}
-            {blogPosts.length === 0 && !loading && (
+            {filteredBlogs.length === 0 && !loading && (
               <div className="col-span-full text-center py-12">
                 <p className="text-gray-500">{t('blog.noPosts')}</p>
               </div>

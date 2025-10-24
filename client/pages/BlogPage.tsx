@@ -7,6 +7,7 @@ import { Card, CardContent } from "../components/ui/card";
 import { ArrowRightIcon } from "lucide-react";
 import { useI18n } from "@/contexts/I18nContext";
 import slugify from "slugify";
+import { BlogSection } from "./sections/BlogSection/BlogSection";
 
 interface Blog {
   id: number;
@@ -275,50 +276,51 @@ export default function BlogPage() {
             <p className="text-gray-500">{t('common.loading')}</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[16px]">
-            {blogPosts.map((post, index) => (
-              <Card
-                key={post.id || index}
-                className="bg-[#f6f7f9] rounded-[10px] overflow-hidden border-none"
-              >
-                <div className="relative h-[200px]">
-                  <img
-                    onClick={() => navigate(`/${currentLanguage}/blog/${slugify(post.title)}`)}
-                    className="w-full h-full object-fit cursor-pointer"
-                    alt="Blog post thumbnail"
-                    src={post.title_image || 'https://via.placeholder.com/300x189?text=No+Image'}
-                  />
-                </div>
-                <CardContent className="p-5">
-                  <div className="space-y-3">
-                    <p className="font-['Poppins',Helvetica] font-medium text-black text-xs leading-[18px]">
-                      {post.category || 'Kategooria'}
-                    </p>
-                    <h3 className="font-['Poppins',Helvetica] font-semibold text-black text-lg leading-[25.2px]">
-                      {post.title || 'Lorem Ipsum'}
-                    </h3>
-                    <div 
-                      className="font-['Poppins',Helvetica] font-normal text-black text-sm leading-normal"
-                      dangerouslySetInnerHTML={{ 
-                        __html: post.introduction?.replace(/<[^>]*>/g, '').substring(0, 150) + '...' || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-                      }}
-                    />
-                    <div className="pt-6 flex items-center cursor-pointer" onClick={() => navigate(`/${currentLanguage}/blog/${slugify(post.title)}`)}>
-                      <button className="font-['Poppins',Helvetica] font-medium text-[#06d6a0] text-sm leading-[21px]">
-                        {t('blog.readMore')}
-                      </button>
-                      <ArrowRightIcon className="w-6 h-6 ml-3 text-[#06d6a0]" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-            {blogPosts.length === 0 && !loading && (
-              <div className="col-span-full text-center py-12">
-                <p className="text-gray-500">{t('uiActions.noBlogPostsFound')}</p>
-              </div>
-            )}
-          </div>
+          // <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[16px]">
+          //   {blogPosts.map((post, index) => (
+          //     <Card
+          //       key={post.id || index}
+          //       className="bg-[#f6f7f9] rounded-[10px] overflow-hidden border-none"
+          //     >
+          //       <div className="relative h-[200px]">
+          //         <img
+          //           onClick={() => navigate(`/${currentLanguage}/blog/${slugify(post.title)}`)}
+          //           className="w-full h-full object-fit cursor-pointer"
+          //           alt="Blog post thumbnail"
+          //           src={post.title_image || 'https://via.placeholder.com/300x189?text=No+Image'}
+          //         />
+          //       </div>
+          //       <CardContent className="p-5">
+          //         <div className="space-y-3">
+          //           <p className="font-['Poppins',Helvetica] font-medium text-black text-xs leading-[18px]">
+          //             {post.category || 'Kategooria'}
+          //           </p>
+          //           <h3 className="font-['Poppins',Helvetica] font-semibold text-black text-lg leading-[25.2px]">
+          //             {post.title || 'Lorem Ipsum'}
+          //           </h3>
+          //           <div 
+          //             className="font-['Poppins',Helvetica] font-normal text-black text-sm leading-normal"
+          //             dangerouslySetInnerHTML={{ 
+          //               __html: post.introduction?.replace(/<[^>]*>/g, '').substring(0, 150) + '...' || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+          //             }}
+          //           />
+          //           <div className="pt-6 flex items-center cursor-pointer" onClick={() => navigate(`/${currentLanguage}/blog/${slugify(post.title)}`)}>
+          //             <button className="font-['Poppins',Helvetica] font-medium text-[#06d6a0] text-sm leading-[21px]">
+          //               {t('blog.readMore')}
+          //             </button>
+          //             <ArrowRightIcon className="w-6 h-6 ml-3 text-[#06d6a0]" />
+          //           </div>
+          //         </div>
+          //       </CardContent>
+          //     </Card>
+          //   ))}
+          //   {blogPosts.length === 0 && !loading && (
+          //     <div className="col-span-full text-center py-12">
+          //       <p className="text-gray-500">{t('uiActions.noBlogPostsFound')}</p>
+          //     </div>
+          //   )}
+          // </div>
+          <BlogSection />
         )}
         </div>
       </section>
