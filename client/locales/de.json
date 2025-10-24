@@ -485,7 +485,10 @@
         "seeTheLatestCar": "Sieh dir das neueste Fahrzeug an",
         "noCarsAvailable": "Keine Fahrzeuge verfügbar",
         "noImagesAvailableForThisCar": "Für dieses Fahrzeug sind keine Bilder vorhanden",
-        "selectVehicleType": "Fahr­zeugtyp wählen"
+        "selectVehicleType": "Fahr­zeugtyp wählen",
+        "contactSave": "Kontaktinformationen erfolgreich gespeichert!",
+        "contactUpdate" : "Kontaktinformationen erfolgreich aktualisiert!",
+        "contactSaveFail": "Kontaktinformationen konnten nicht gespeichert werden"
     },
     "photo": {
         "addMain": "+ Hauptbild hinzufügen",

@@ -505,7 +505,10 @@
     "sellerData": "Данные продавца",
     "seeTheLatestCar": "Посмотрите последнюю машину",
     "noCarsAvailable": "Автомобилей нет",
-    "noImagesAvailableForThisCar": "У этой машины нет изображений"
+    "noImagesAvailableForThisCar": "У этой машины нет изображений",
+    "contactSave": "Контактная информация успешно сохранена!",
+    "contactUpdate": "Контактная информация успешно обновлена!",
+    "contactSaveFail" : "Не удалось сохранить контактную информацию"
   },
   "photo": {
     "addMain": "+ Добавить основное фото",

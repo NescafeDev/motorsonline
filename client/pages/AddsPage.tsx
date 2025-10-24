@@ -727,7 +727,7 @@ export default function AddsPage() {
           await axios.put(`/api/contacts/user`, contactFormData, {
             headers: { Authorization: `Bearer ${token}` },
           });
-          alert("Contact information updated successfully!");
+          alert(t('formLabels.contactUpdate'));
           setContactSaved(true);
         }
       } catch (error: any) {
@@ -736,7 +736,7 @@ export default function AddsPage() {
           await axios.post("/api/contacts/user", contactFormData, {
             headers: { Authorization: `Bearer ${token}` },
           });
-          alert("Contact information saved successfully!");
+          alert(t('formLabels.contactSave'));
           setContactSaved(true);
         } else {
           throw error;
@@ -745,7 +745,7 @@ export default function AddsPage() {
       }
     } catch (error: any) {
       console.error('Error saving contact:', error);
-      alert("Failed to save contact information");
+      alert(t('formLabels.contactSaveFail'));
     }
   };
   const handleDeleteContact = () => {

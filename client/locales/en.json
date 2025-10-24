@@ -490,7 +490,10 @@
     "sellerData": "Seller Data",
     "seeTheLatestCar": "See the latest car",
     "noCarsAvailable": "No cars available",
-    "noImagesAvailableForThisCar": "No images available for this car"
+    "noImagesAvailableForThisCar": "No images available for this car",
+    "contactSave": "Contact information saved successfully!",
+    "contactUpdate": "Contact information updated successfully!",
+    "contactSaveFail": "Failed to save contact information"
   },
   "photo": {
     "addMain": "+ Add main photo",

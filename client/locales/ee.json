@@ -491,7 +491,10 @@
     "sellerData": "Müüja andmed",
     "seeTheLatestCar": "Vaata viimast autot",
     "noCarsAvailable": "Autosid pole saadaval",
-    "noImagesAvailableForThisCar": "Selle autoga ei ole pilti"
+    "noImagesAvailableForThisCar": "Selle autoga ei ole pilti",
+    "contactSave": "Kontaktandmed salvestati edukalt!",
+    "contactUpdate": "Kontaktandmed on edukalt uuendatud!",
+    "contactSaveFail" : "Kontaktandmete salvestamine ebaõnnestus"
   },
   "photo": {
     "addMain": "+Lisa foto (põhipilt)",

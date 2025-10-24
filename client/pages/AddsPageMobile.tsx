@@ -722,7 +722,7 @@ export default function AddsPageMobile() {
           await axios.put(`/api/contacts/user`, contactFormData, {
             headers: { Authorization: `Bearer ${token}` },
           });
-          alert("Contact information updated successfully!");
+          alert(t('formLabels.contactUpdate'));
           console.log(existingContact.data)
           setContactSaved(true);
         }
@@ -732,7 +732,7 @@ export default function AddsPageMobile() {
           await axios.post("/api/contacts/user", contactFormData, {
             headers: { Authorization: `Bearer ${token}` },
           });
-          alert("Contact information saved successfully!");
+          alert(t('formLabels.contactSave'));
           setContactSaved(true);
         } else {
           throw error;
@@ -741,7 +741,7 @@ export default function AddsPageMobile() {
       }
     } catch (error: any) {
       console.error('Error saving contact:', error);
-      alert("Failed to save contact information");
+      alert(t('formLabels.contactSaveFail'));
     }
   };
   const handleDeleteContact = () => {

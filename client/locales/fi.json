@@ -485,7 +485,10 @@
         "sellerData": "Myyjän tiedot",
         "seeTheLatestCar": "Katso uusin auto",
         "noCarsAvailable": "Autoja ei ole saatavilla",
-        "noImagesAvailableForThisCar": "Tälle autolle ei ole kuvia"
+        "noImagesAvailableForThisCar": "Tälle autolle ei ole kuvia",
+        "contactSave" : "Yhteystiedot tallennettu onnistuneesti!",
+        "contactUpdate" : "Yhteystiedot päivitetty onnistuneesti!",
+        "contactSaveFail": "Yhteystietojen tallentaminen epäonnistui"
     },
     "photo": {
         "addMain": "+Lisää kuva (pääkuva)",
