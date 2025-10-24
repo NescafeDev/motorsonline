@@ -429,7 +429,7 @@ export default function SearchPageMobile() {
             <div className="bg-white p-3 rounded-md shadow-sm cursor-pointer z-20 w-full text-center flex items-center justify-center" data-filter-button onClick={() => setFilterOpen((v) => !v)}>
               <SearchIcon className="w-4 h-4 mr-1 text-black" />
               <span className="text-black font-['Poppins',Helvetica] font-medium text-[16px] tracking-[0.2px]">
-                Filtrid
+                {t('search.filters')}
               </span>
             </div>
           </div>
@@ -491,7 +491,7 @@ export default function SearchPageMobile() {
                 variant="outline"
                 className="h-11 px-5 py-0 border-[#06d6a0] text-[#06d6a0] rounded-[10px]"
               >
-                Näita rohkem autosid
+                {t('formLabels.showMore')}
               </Button>
             </div>
           </>

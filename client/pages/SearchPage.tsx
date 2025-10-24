@@ -13,6 +13,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { Separator } from "@/components/ui/separator";
 import { useI18n } from "@/contexts/I18nContext";
 import { CarCard } from '@/components/CarCard';
+import { translateCarDetail } from "@/lib/utils";
 // Car-related types (imported from HomePage)
 export interface Car {
     id: number;
@@ -364,7 +365,7 @@ export default function SearchPage() {
                                             <CarCard
                                                 key={car.id || index}
                                                 title={`${car.brand_name || 'Unknown'} ${car.model_name || ''} ${car.modelDetail || ''}`}
-                                                breadcrumb={`${car.technicalData}  »  ${car.brand_name || 'Unknown'} ${car.model_name || ''}  »  ${car.year_value || ''}`}
+                                                breadcrumb={`${translateCarDetail(car.technicalData, currentLanguage)}  »  ${car.brand_name || 'Unknown'} ${car.model_name || ''}  »  ${car.year_value || ''}`}
                                                 image={car.images?.[0] || "https://cdn.builder.io/api/v1/image/assets/TEMP/cc7bda4b04e2c28565ece34ac8989e7268a2a60f?width=620"}
                                                 images={car.images}
                                                 description={""}

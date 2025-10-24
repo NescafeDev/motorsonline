@@ -6,6 +6,8 @@ import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { Car } from "@/pages/CarPage/sections/VehicleDetailsSection/VehicleDetailsSection";
 import { Badge } from "@/components/ui/badge";
+import { translateCarDetail } from "@/lib/utils";
+import { useI18n } from "@/contexts/I18nContext";
 
 interface CarCardProps {
   id: number;
@@ -56,8 +58,8 @@ export function CarCard({
 
   // Image navigation state
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  // Prepare images array - use images prop if available, otherwise fallback to single image
+  const { currentLanguage } = useI18n();
+  // Prepare images  array - use images prop if available, otherwise fallback to single image
   const allImages = images && images.length > 0 ? images.filter(img => img && img.trim() !== '') : [image].filter(img => img && img.trim() !== '');
   const currentImage = allImages[currentImageIndex] || image;
 
@@ -215,7 +217,7 @@ export function CarCard({
             </div>
             <div className="flex flex-col min-w-0 flex-1 ml-1 justify-center">
               <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
-                {fuel ? fuel.charAt(0).toUpperCase() + fuel.slice(1) : fuel}
+                {translateCarDetail(fuel, currentLanguage)}
               </span>
             </div>
           </div>
@@ -231,7 +233,7 @@ export function CarCard({
             </div>
             <div className="flex flex-col min-w-0 flex-1 ml-1 justify-center">
               <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
-                {transmission ? transmission.charAt(0).toUpperCase() + transmission.slice(1) : transmission}
+                {translateCarDetail(transmission, currentLanguage)}
               </span>
             </div>
           </div>
@@ -254,7 +256,7 @@ export function CarCard({
           </div>
         </div>
         <div className="grid grid-cols-2 h-2 mx-2 justify-center">
-          {discountPrice && (
+          {discountPercentage != 0 &&  discountPrice && (
             <>
               <div className="relative flex items-center gap-2">
                 <span className="font-medium text-[#747474] text-[14px] leading-[normal] [font-family:'Poppins',Helvetica]">
@@ -262,7 +264,7 @@ export function CarCard({
                 </span>
                 <Separator className="absolute w-[40px] top-[12px] -left-1 bg-gray-400" />
                 {
-                  discountPercentage != 0 && (
+                  (
                     <Badge className="bg-[#ffe5e5] text-[#ff0000] border border-[#ff0000] rounded-[100px] ml-1 mt-1 px-2.5 py-0.4 text-[12px]">
                       {discountPercentage}%
                     </Badge>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { CarCard } from '@/components/CarCard';
 import { useI18n } from '@/contexts/I18nContext';
+import { translateCarDetail } from '@/lib/utils';
 
 interface Car {
   id: number;
@@ -205,7 +206,7 @@ export default function UserForm() {
                 title={`${car.brand_name || 'Unknown'} ${car.model_name || ''} ${car.modelDetail || ''}`}
                 major={car.major}
                 majorTruncateLimit={80}
-                breadcrumb={`${car.technicalData}  »  ${car.brand_name || 'Unknown'} ${car.model_name || ''}  »  ${car.year_value || ''}`}
+                breadcrumb={`${translateCarDetail(car.technicalData, currentLanguage)}  »  ${car.brand_name || 'Unknown'} ${car.model_name || ''}  »  ${car.year_value || ''}`}
                 image={car.images?.[0] || "https://cdn.builder.io/api/v1/image/assets/TEMP/cc7bda4b04e2c28565ece34ac8989e7268a2a60f?width=620"}
                 images={car.images}
                 description={car.description || "No description available"}

@@ -67,7 +67,7 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
   return (
     <div className="bg-white rounded-[13px] overflow-hidden shadow-sm w-full xl:w-full mx-auto">
       {/* Image Section */}
-      <div className="relative mb-5 group aspect-[4/3]">
+      <div className="relative mb-5 group aspect-[5/3]">
         <img
           src={currentImage}
           alt={title}
@@ -105,7 +105,7 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
         )}
 
         {/* Discount Badge */}
-        {discount && (
+        {discount !== "0%" && discount && (
           <div className="absolute top-3 right-3 bg-red-500 text-white px-2 py-1 rounded-full text-sm font-medium">
             {discount}
           </div>
@@ -136,7 +136,7 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
         {/* Price Section */}
         <div className="mb-4">
           <div className="flex items-center gap-2 mb-1">
-            {originalPrice && (
+            {discount !== "0%" && originalPrice && (
               <span className="text-sm text-gray-500 line-through">
                 {originalPrice}
               </span>

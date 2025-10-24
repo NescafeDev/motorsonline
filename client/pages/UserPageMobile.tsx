@@ -6,6 +6,7 @@ import { UserCarCard } from '../components/mobile/UserCarCard';
 import { useState, useEffect } from "react";
 import { useI18n } from "@/contexts/I18nContext";
 import axios from 'axios';
+import { translateCarDetail } from "@/lib/utils";
 
 
 interface Car {
@@ -211,7 +212,7 @@ export default function UserPageMobile() {
                 key={car.id || index}
                 id={car.id}
                 title={`${car.brand_name || 'Unknown'} ${car.model_name || ''} ${car.modelDetail || ''}`}
-                breadcrumb={`${car.technicalData}  »  ${car.brand_name || 'Unknown'} ${car.model_name || ''}  »  ${car.year_value || ''}`}
+                breadcrumb={`${translateCarDetail(car.technicalData, currentLanguage)}  »  ${car.brand_name || 'Unknown'} ${car.model_name || ''}  »  ${car.year_value || ''}`}
                 image={car.images?.[0] || "https://cdn.builder.io/api/v1/image/assets/TEMP/cc7bda4b04e2c28565ece34ac8989e7268a2a60f?width=620"}
                 images={car.images}
                 description={car.description || "No description available"}

@@ -17,6 +17,7 @@ import { useFavorites } from "../hooks/useFavorites";
 import { useAuth } from "../contexts/AuthContext";
 import { Separator } from "@/components/ui/separator";
 import { useI18n } from "@/contexts/I18nContext";
+import { translateCarDetail } from "@/lib/utils";
 
 // Car-related types
 export interface Car {
@@ -131,7 +132,7 @@ export interface CarFilters {
 }
 
 // Vehicle details data function
-const getVehicleDetails = (car: Car, t: any) => [
+const getVehicleDetails = (car: Car, t , currentLanguage : any) => [
   {
     icon: "/img/car/Car.png",
     value: `${car.mileage.toLocaleString()} km`,
@@ -146,11 +147,11 @@ const getVehicleDetails = (car: Car, t: any) => [
   },
   {
     icon: "/img/car/gas_station.png",
-    value: car.fuelType,
+    value: translateCarDetail(car.fuelType, currentLanguage),
   },
   {
     icon: "/img/car/gear-box-switch.png",
-    value: car.transmission,
+    value: translateCarDetail(car.transmission, currentLanguage),
   },
   {
     icon: "/img/car/user_profile.png",
@@ -564,7 +565,7 @@ export default function HomePage() {
                                 {car.major}
                               </div>
                               <div className="grid grid-cols-2 gap-y-2 mb-2">
-                                {getVehicleDetails(car, t).map((detail, index) => (
+                                {getVehicleDetails(car, t, currentLanguage).map((detail, index) => (
                                   <div key={index} className="flex items-center w-full h-[40px]">
                                     <div className="w-[35px] h-[35px] relative flex-shrink-0">
                                       <img
@@ -583,7 +584,7 @@ export default function HomePage() {
                                 ))}
                               </div>
                               <div className="grid grid-cols-1 h-8 pt-2">
-                                {car.discountPrice && (
+                                {displayCar.discountPercentage != 0 && car.discountPrice && (
                                   <>
                                     <div className="relative">
                                       <span className="font-medium text-[#747474] text-[14px] leading-[normal] [font-family:'Poppins',Helvetica]">
@@ -591,11 +592,9 @@ export default function HomePage() {
                                       </span>
                                       <Separator className="absolute w-[40px] top-[12px] -left-1 bg-gray-400" />
                                       {
-                                        displayCar.discountPercentage != 0 && (
-                                          <Badge className="bg-[#ffe5e5] text-[#ff0000] border border-[#ff0000] rounded-[100px] ml-1 mt-1 px-2.5 py-0.4 text-[12px]">
-                                            {displayCar.discountPercentage}%
-                                          </Badge>
-                                        )
+                                        <Badge className="bg-[#ffe5e5] text-[#ff0000] border border-[#ff0000] rounded-[100px] ml-1 mt-1 px-2.5 py-0.4 text-[12px]">
+                                          {displayCar.discountPercentage}%
+                                        </Badge>
                                       }
                                     </div>
 

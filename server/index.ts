@@ -26,6 +26,7 @@ import favoritesRoutes from "./routes/favorites";
 import viewsRoutes from "./routes/views";
 import privacyRoutes from "./routes/privacy";
 import bannerImageRoutes from "./routes/banner-images";
+import translateRoutes from "./routes/translate";
 
 export function createServer() {
   const app = express();
@@ -56,6 +57,7 @@ export function createServer() {
   app.use("/api/views", viewsRoutes);
   app.use("/api/privacy", privacyRoutes);
   app.use("/api/banner-images", bannerImageRoutes);
+  app.use("/api/translate", translateRoutes);
 
   // Example API routes
   app.get("/api/ping", (_req, res) => {

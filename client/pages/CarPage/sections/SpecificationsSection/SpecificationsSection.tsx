@@ -178,7 +178,7 @@ export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps
             {displayData.title}
           </h3>
           <p className="[font-family:'Poppins',Helvetica] font-medium text-lg text-secondary-500 tracking-[-0.54px] leading-[27px]">
-            {displayData.contactPerson === "company" ? "Ettevõte" : "Eraisik"}
+            {displayData.contactPerson === "company" ? t('formLabels.company') : t('formLabels.individual')}
           </p>
           <div className="[font-family:'Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]">
             {displayData.company}

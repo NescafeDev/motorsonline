@@ -11,6 +11,7 @@ import { SpecificationsSection } from "./sections/SpecificationsSection";
 import { VehicleDetailsSection } from "./sections/VehicleDetailsSection/VehicleDetailsSection";
 import CarGallery from "./sections/CarGallery";
 import { useAuth } from "../../contexts/AuthContext";
+import { translateCarDetail } from "@/lib/utils";
 
 interface CarPreviewProps {
   formData: any;
@@ -131,7 +132,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
   };
 
   const car = getCarData();
-
+  const { currentLanguage } = useI18n();
   // Prepare car images array
   const carImagesArray = (car.images || []).filter(Boolean) as string[];
 
@@ -299,7 +300,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
                           {spec.label}
                         </span>
                         <span className="font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica]">
-                          {spec.value ? spec.value.charAt(0).toUpperCase() + spec.value.slice(1) : spec.value}
+                          {translateCarDetail(spec.value, currentLanguage)}
                         </span>
                       </div>
                     ))}
@@ -393,7 +394,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
                     </span>
                     <div className="mt-2">
                       <span className="text-[#747474] text-[12px] tracking-[0.34px] leading-[normal] [font-family:'Poppins',Helvetica] font-medium">
-                        {car.technicalData} » {car.brand_name} {car.model_name} » {car.year_value}
+                        {translateCarDetail(car.technicalData, currentLanguage)} » {car.brand_name} {car.model_name} » {car.year_value}
                       </span>
                     </div>
 
@@ -416,7 +417,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
                               {/* {detail.label} */}
                             </span>
                             <span className="font-medium text-secondary-500 text-[12px] tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica] break-words">
-                              {detail.value ? detail.value.charAt(0).toUpperCase() + detail.value.slice(1) : detail.value}
+                              {translateCarDetail(detail.value, currentLanguage)}
                             </span>
                           </div>
                         </div>
@@ -426,7 +427,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
                     <div className="mt-10 row flex">
                       <div className="col-6 w-full">
                         <div className="flex items-center gap-1">
-                          {car.discountPrice && (
+                          {discountPercentage != 0 && car.discountPrice && (
                             <>
                               <div className="relative">
                                 <span className="font-medium text-[#747474] text-[14px] leading-[normal] [font-family:'Poppins',Helvetica]">
@@ -435,7 +436,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
                                 <Separator className="absolute w-[40px] top-[12px] -left-1 bg-gray-400" />
                               </div>
                               {
-                                discountPercentage != 0 && (
+                                 (
                                   <Badge className="bg-[#ffe5e5] text-[#ff0000] border border-[#ff0000] rounded-[100px] ml-1 mt-1 px-2.5 py-0.4 text-[12px]">
                                     {discountPercentage}%
                                   </Badge>

@@ -9,6 +9,7 @@ import CarGallery from "../../components/mobile/CarGallery";
 import { ImageGallerySection } from "./sections/ImageGallerySection";
 import { useAuth } from "../../contexts/AuthContext";
 import { useI18n } from "../../contexts/I18nContext";
+import { translateCarDetail } from "@/lib/utils";
 
 interface CarMobilePreviewProps {
     formData: any;
@@ -93,7 +94,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
     };
 
     const car = getCarData();
-
+    const { currentLanguage } = useI18n();
     // Prepare car images array
     const carImagesArray = (car.images || []).filter(Boolean) as string[];
 
@@ -278,7 +279,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                         </div>
                         <div className="mb-4">
                             <span className="text-[#747474] text-sm tracking-[0.2px] leading-[20px] font-medium">
-                                {car.technicalData} » {car.brand_name} {car.model_name} » {car.year_value}
+                                {translateCarDetail(car.technicalData, currentLanguage)} » {car.brand_name} {car.model_name} » {car.year_value}
                             </span>
                         </div>
                         {/* Vehicle details */}
@@ -303,7 +304,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                                                     {detail.label}
                                                 </span>
                                                 <span className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] break-words">
-                                                    {detail.value ? detail.value.charAt(0).toUpperCase() + detail.value.slice(1) : detail.value}
+                                                    {translateCarDetail(detail.value, currentLanguage)}
                                                 </span>
                                             </div>
                                         </div>
@@ -369,7 +370,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                                         {spec.label}
                                     </span>
                                     <span className="font-normal text-secondary-500 text-sm tracking-[-0.3px] leading-[20px] ml-2">
-                                        {spec.value}
+                                        {translateCarDetail(spec.value, currentLanguage)}
                                     </span>
                                 </div>
                             ))}

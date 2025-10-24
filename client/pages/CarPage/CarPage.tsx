@@ -15,6 +15,7 @@ import { useFavorites } from "../../hooks/useFavorites";
 import { useAuth } from "../../contexts/AuthContext";
 import { useViews } from "../../hooks/useViews";
 import { useI18n } from "@/contexts/I18nContext";
+import { translateCarDetail } from "@/lib/utils";
 
 interface CarData {
   id: number;
@@ -65,7 +66,7 @@ interface CarData {
 }
 
 export default function CarPage() {
-  const { t } = useI18n();
+  const { t, currentLanguage } = useI18n();
 
   // Gallery images
   const galleryImages = [
@@ -261,7 +262,7 @@ export default function CarPage() {
     {
       icon: "/img/car/gear-box-switch.png",
       label: t('carSpecs.transmission') + ':',
-      value: car.transmission,
+      value: translateCarDetail(car.transmission, currentLanguage),
     },
     {
       icon: "/img/car/calendar.png",
@@ -271,44 +272,44 @@ export default function CarPage() {
     {
       icon: "/img/car/gas_station.png",
       label: t('carSpecs.fuel'),
-      value: car.fuelType,
+      value: translateCarDetail(car.fuelType, currentLanguage),
     },
     {
       icon: "/img/car/user_profile.png",
       label: t('carSpecs.ownerCount') + ':',
-      value: car.ownerCount,
+      value: translateCarDetail(car.ownerCount, currentLanguage),
     },
   ];
 
   // Technical specifications data
   const technicalSpecs = [
-    { label: t('formLabels.vehicleCondition') + ':', value: car.technicalData },
-    { label: t('formLabels.ownerCountLabel') + ':' , value:car.ownerCount},
+    { label: t('formLabels.vehicleCondition') + ':', value: translateCarDetail(car.technicalData, currentLanguage) },
+    { label: t('formLabels.ownerCountLabel') + ':' , value: car.ownerCount},
     { label: t('formLabels.vinCode') + ':' , value:car.vinCode},
     { label: t('formLabels.vehicleNumber') , value: car.plateNumber },
     { label: t('carSpecs.mileage') + ':', value: `${car.mileage.toLocaleString()} km` },
     { label: t('formLabels.firstRegistration') + ':' , value:(car.month.length === 1 ? `0${car.month}` : car.month) + "." +  car.year_value?.toString() || "N/A"},
-    { label: t('formLabels.serviceBook') + ':' , value:car.serviceBook},
+    { label: t('formLabels.serviceBook') + ':' , value:translateCarDetail(car.serviceBook, currentLanguage)},
     { label: t('formLabels.lastMaintenance') + ':' , value:car.lastMaintenance},
     { label: t('formLabels.lastInspection') + ':' , value:car.lastInspection},
     { label: t('formLabels.inspectionValid') + ':' , value:car.inspectionValidityPeriod},
     { label: t('formLabels.warranty') + ':' , value:car.warranty},
     { label: t('formLabels.powerKw') + ':', value: car.power },
     { label: t('formLabels.displacement') + ':', value: car.displacement },
-    { label: t('formLabels.transmissionType') + ':', value: car.transmission },
-    { label: t('formLabels.driveType') + ':', value: car.drive_type_ee_name },
-    { label: t('formLabels.fuelType') + ':', value: car.fuelType },
+    { label: t('formLabels.transmissionType') + ':', value: translateCarDetail(car.transmission, currentLanguage) },
+    { label: t('formLabels.driveType') + ':', value: translateCarDetail(car.drive_type_ee_name, currentLanguage) },
+    { label: t('formLabels.fuelType') + ':', value: translateCarDetail(car.fuelType, currentLanguage) },
     { label: t('formLabels.categoryDesignation') + ':', value: car.category },
     { label: t('formLabels.doors') + ':' , value:car.doors},
-    { label: t('formLabels.bodyType') + ':' , value:car.bodyType},
-    { label: t('formLabels.interiorColor') + ':' , value:car.salonColor},
-    { label: t('formLabels.color') + ':', value: car.carColor },
+    { label: t('formLabels.bodyType') + ':' , value: translateCarDetail(car.bodyType, currentLanguage)},
+    { label: t('formLabels.interiorColor') + ':' , value:translateCarDetail(car.salonColor, currentLanguage)},
+    { label: t('formLabels.color') + ':', value: translateCarDetail(car.carColor, currentLanguage)},
   ];
 
   // Equipment features data - parse from equipment string
   const equipmentFeatures = car.accessories
     ? car.accessories.split(',').map(item => ({
-      label: item.trim(),
+      label: translateCarDetail(item.trim(), currentLanguage),
       icon: "/img/car/check.svg"
     }))
     : [];
@@ -447,7 +448,7 @@ export default function CarPage() {
                     </span>
                     <div className="mt-2">
                       <span className="text-[#747474] text-[12px] tracking-[0.34px] leading-[normal] [font-family:'Poppins',Helvetica] font-medium">
-                        {car.technicalData} » {car.brand_name} {car.model_name} » {car.year_value}
+                        {translateCarDetail(car.technicalData, currentLanguage)} » {car.brand_name} {car.model_name} » {car.year_value}
                       </span>
                     </div>
 
@@ -480,7 +481,7 @@ export default function CarPage() {
                     <div className="mt-10 row flex">
                       <div className="col-6 w-full">
                         <div className="flex items-center gap-1">
-                          {car.discountPrice && (
+                          {discountPercentage != 0 && car.discountPrice && (
                             <>
                               <div className="relative">
                                 <span className="font-medium text-[#747474] text-[14px] leading-[normal] [font-family:'Poppins',Helvetica]">
@@ -489,7 +490,7 @@ export default function CarPage() {
                                 <Separator className="absolute w-[40px] top-[12px] -left-1 bg-gray-400" />
                               </div>
                               {
-                                discountPercentage != 0 && (
+                                 (
                                   <Badge className="bg-[#ffe5e5] text-[#ff0000] border border-[#ff0000] rounded-[100px] ml-1 mt-1 px-2.5 py-0.4 text-[12px]">
                                     {discountPercentage}%
                                   </Badge>

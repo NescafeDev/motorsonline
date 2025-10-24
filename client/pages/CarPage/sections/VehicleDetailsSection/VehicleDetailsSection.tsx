@@ -8,6 +8,7 @@ import axios from "axios";
 import { useI18n } from "@/contexts/I18nContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFavorites } from "@/hooks/useFavorites";
+import { translateCarDetail } from "@/lib/utils";
 
 // Car interface (matching HomePage structure)
 export interface Car {
@@ -391,14 +392,14 @@ export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionPro
                         <span className="font-normal text-secondary-500 text-[12px] tracking-[-0.42px] leading-[20px] [font-family:'Poppins',Helvetica] break-all">
                         </span>
                         <span className="font-medium text-secondary-500 text-[12px] tracking-[-0.54px] leading-[20px] [font-family:'Poppins',Helvetica] break-all">
-                          {detail.value ? detail.value.charAt(0).toUpperCase() + detail.value.slice(1) : detail.value}
+                          {translateCarDetail(detail.value, currentLanguage)}
                         </span>
                       </div>
                     </div>
                   ))}
                 </div>
                 <div className="grid grid-cols-1 h-8 pt-2">
-                  {car.discountPrice && (
+                  {displayCar.discountPercentage != 0 && car.discountPrice && (
                     <>
                       <div className="relative">
                         <span className="font-medium text-[#747474] text-[14px] leading-[normal] [font-family:'Poppins',Helvetica]">
@@ -406,7 +407,7 @@ export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionPro
                         </span>
                         <Separator className="absolute w-[40px] top-[12px] -left-1 bg-gray-400" />
                         {
-                          displayCar.discountPercentage != 0 && (
+                           (
                             <Badge className="bg-[#ffe5e5] text-[#ff0000] border border-[#ff0000] rounded-[100px] ml-1 mt-1 px-2.5 py-0.4 text-[12px]">
                               {displayCar.discountPercentage}%
                             </Badge>

@@ -19,6 +19,7 @@ import {
 } from "@/components/mobile/CarIcons";
 import { ImageGallerySection } from "./sections/ImageGallerySection/ImageGallerySection";
 import { useI18n } from "@/contexts/I18nContext";
+import { translateCarDetail } from "@/lib/utils";
 import { Form, useParams } from "react-router-dom";
 import { useFavorites } from "../../hooks/useFavorites";
 import { useAuth } from "../../contexts/AuthContext";
@@ -76,7 +77,7 @@ interface CarData {
 }
 
 export default function CarPageMobile() {
-  const { t } = useI18n();
+  const { t, currentLanguage } = useI18n();
   const { id } = useParams();
   const [car, setCar] = useState<any>(null);
   const [contacts, setContacts] = useState<any>(null);
@@ -247,8 +248,8 @@ export default function CarPageMobile() {
   ];
 
   const technicalSpecs = [
-    { label: t('formLabels.vehicleCondition') + ':', value: car.technicalData },
-    { label: t('formLabels.ownerCountLabel') + ':', value: car.ownerCount },
+    { label: t('formLabels.vehicleCondition') + ':', value: translateCarDetail(car.technicalData, currentLanguage) },
+    { label: t('formLabels.ownerCountLabel') + ':', value: translateCarDetail(car.ownerCount, currentLanguage) },
     { label: t('formLabels.vinCode') + ':', value: car.vinCode },
     { label: t('formLabels.vehicleNumber'), value: car.plateNumber },
     { label: t('carSpecs.mileage') + ':', value: `${car.mileage.toLocaleString()} km` },
@@ -260,12 +261,12 @@ export default function CarPageMobile() {
     { label: t('formLabels.warranty') + ':', value: car.warranty },
     { label: t('formLabels.powerKw') + ':', value: car.power },
     { label: t('formLabels.displacement') + ':', value: car.displacement },
-    { label: t('formLabels.transmissionType') + ':', value: car.transmission },
-    { label: t('formLabels.driveType') + ':', value: car.drive_type_ee_name },
-    { label: t('formLabels.fuelType') + ':', value: car.fuelType },
+    { label: t('formLabels.transmissionType') + ':', value: translateCarDetail(car.transmission, currentLanguage) },
+    { label: t('formLabels.driveType') + ':', value: translateCarDetail(car.drive_type_ee_name, currentLanguage) },
+    { label: t('formLabels.fuelType') + ':', value: translateCarDetail(car.fuelType, currentLanguage) },
     { label: t('formLabels.categoryDesignation') + ':', value: car.category },
     { label: t('formLabels.doors') + ':', value: car.doors },
-    { label: t('formLabels.bodyType') + ':', value: car.bodyType },
+    { label: t('formLabels.bodyType') + ':', value: translateCarDetail(car.bodyType, currentLanguage) },
     { label: t('formLabels.interiorColor') + ':', value: car.salonColor },
     { label: t('formLabels.color') + ':', value: car.carColor },
   ];
@@ -275,7 +276,7 @@ export default function CarPageMobile() {
 
   const equipmentFeatures = car.accessories
     ? car.accessories.split(',').map(item => ({
-      label: item.trim(),
+      label: translateCarDetail(item.trim(), currentLanguage),
       icon: "/img/car/check.svg"
     }))
     : [];
@@ -335,7 +336,7 @@ export default function CarPageMobile() {
               </h3>
             </div>
             <p className="text-[#747474] text-[14px] font-medium tracking-[0.28px] mb-6">
-              {car.technicalData ? car.technicalData.charAt(0).toUpperCase() + car.technicalData.slice(1) : car.technicalData} » {car.brand_name} {car.model_name} » {car.year_value}
+              {translateCarDetail(car.technicalData, currentLanguage)} » {car.brand_name} {car.model_name} » {car.year_value}
             </p>
 
             <h2 className="text-[#1A202C] text-[16px] font-semibold leading-[150%] tracking-[-0.48px] mb-6">
@@ -362,12 +363,12 @@ export default function CarPageMobile() {
               <SpecCard 
                 icon={<FuelIcon />} 
                 label={t('carSpecs.fuel') + ':'} 
-                value={car.fuelType ? car.fuelType.charAt(0).toUpperCase() + car.fuelType.slice(1) : car.fuelType} 
+                value={translateCarDetail(car.fuelType, currentLanguage)} 
               />
               <SpecCard
                 icon={<GearboxIcon />}
                 label={t('carSpecs.transmission') + ':'}
-                value={car.transmission ? car.transmission.charAt(0).toUpperCase() + car.transmission.slice(1) : car.transmission}
+                value={translateCarDetail(car.transmission, currentLanguage)}
               />
               <SpecCard icon={<UserIcon />} label={t('carSpecs.ownerCount') + ':'} value={car.ownerCount} />
             </div>
@@ -434,7 +435,7 @@ export default function CarPageMobile() {
                     {spec.label}
                   </span>
                   <span className="text-[#1A202C] text-sm font-normal">
-                    {spec.value ? spec.value.charAt(0).toUpperCase() + spec.value.slice(1) : spec.value}
+                    {translateCarDetail(spec.value || 'N/A', currentLanguage)}
                   </span>
                 </div>
               ))}
