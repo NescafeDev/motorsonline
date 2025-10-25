@@ -261,14 +261,14 @@ export default function BlogPage() {
       {/* Recent Posts Section */}
       <section className="max-w-[1440px] mx-auto px-6 lg:px-[100px] py-8 mb-8">
         <div className="space-y-12">
-          <div className="space-y-6">
+          {/* <div className="space-y-6">
             <h2 className="text-black text-[46px] font-semibold leading-tight">
               {t('blog.latestPosts')}
             </h2>
             <p className="text-motor-dark-text text-lg font-normal leading-[1.5] max-w-[578px]">
               {t('blog.description')}
             </p>
-          </div>
+          </div> */}
 
           {/* Recent Posts Grid */}
           {loading ? (

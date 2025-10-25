@@ -1,0 +1,14 @@
+CREATE TABLE blog_translations (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  blogId INT NOT NULL,
+  lang VARCHAR(5) NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  introduction TEXT,
+  intro_detail TEXT,
+  summary TEXT,
+  category VARCHAR(100) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (blogId) REFERENCES blogs_1(id) ON DELETE CASCADE,
+  UNIQUE KEY unique_blog_lang (blogId, lang)
+);
