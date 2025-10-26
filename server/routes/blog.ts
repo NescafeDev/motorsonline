@@ -265,7 +265,7 @@ function requireAdmin(req, res, next) {
 // Multer setup for image uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    let dest = path.join('/img/blogs_1');
+    let dest = path.join('/img/blogs');
     if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
     cb(null, dest);
   },
@@ -288,20 +288,20 @@ router.post('/', authenticateToken, requireAdmin, upload.fields([
     let data = reqWithFiles.body;
     if (reqWithFiles.files) {
       if (reqWithFiles.files['title_image']) {
-        data.title_image = `/img/blogs_1/${reqWithFiles.files['title_image'][0].filename}`;
+        data.title_image = `/img/blogs/${reqWithFiles.files['title_image'][0].filename}`;
       }
       if (reqWithFiles.files['intro_image']) {
-        data.intro_image = `/img/blogs_1/${reqWithFiles.files['intro_image'][0].filename}`;
+        data.intro_image = `/img/blogs/${reqWithFiles.files['intro_image'][0].filename}`;
       }
     }
     
-    // Create the main blog in Estonian (blogs_1 table)
+    // Create the main blog in Estonian (blogs table)
     const blog = await createBlog(data);
     
     // Handle image file organization
     if (reqWithFiles.files) {
       const blogId = blog.id;
-      const blogDir = path.join('/img/blogs_1', String(blogId));
+      const blogDir = path.join('/img/blogs', String(blogId));
       if (!fs.existsSync(blogDir)) fs.mkdirSync(blogDir, { recursive: true });
       for (const field of ['title_image', 'intro_image']) {
         if (reqWithFiles.files[field]) {
@@ -310,7 +310,7 @@ router.post('/', authenticateToken, requireAdmin, upload.fields([
           const ext = path.extname(file.originalname);
           const newPath = path.join(blogDir, `${field}${ext}`);
           fs.renameSync(oldPath, newPath);
-          data[field] = `/img/blogs_1/${blogId}/${field}${ext}`;
+          data[field] = `/img/blogs/${blogId}/${field}${ext}`;
         }
       }
       await updateBlog(blogId, {
@@ -438,16 +438,16 @@ router.put('/:id', authenticateToken, requireAdmin, upload.fields([
       for (const field of ['title_image', 'intro_image']) {
         if (reqWithFiles.files[field]) {
           const ext = path.extname(reqWithFiles.files[field][0].originalname);
-          const blogDir = path.join('/img/blogs_1', String(id));
+          const blogDir = path.join('/img/blogs', String(id));
           if (!fs.existsSync(blogDir)) fs.mkdirSync(blogDir, { recursive: true });
           const newPath = path.join(blogDir, `${field}${ext}`);
           fs.renameSync(reqWithFiles.files[field][0].path, newPath);
-          data[field] = `/img/blogs_1/${id}/${field}${ext}`;
+          data[field] = `/img/blogs/${id}/${field}${ext}`;
         }
       }
     }
     
-    // Update the main blog in Estonian (blogs_1 table)
+    // Update the main blog in Estonian (blogs table)
     const ok = await updateBlog(id, data);
     if (!ok) return res.status(404).json({ message: 'Blogi uuendamine ebaõnnestus.' });
     

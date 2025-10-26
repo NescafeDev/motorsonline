@@ -4,6 +4,56 @@ import { translationService } from "../services/translationService";
 
 const router = Router();
 
+// Function to create translations for all supported languages when admin saves content
+async function createTranslationsForAllLanguages(privacyContent: string, termsContent: string): Promise<void> {
+  const supportedLanguages = ['ee', 'en', 'fi', 'de', 'ru'];
+  
+  for (const lang of supportedLanguages) {
+    try {
+      let translatedPrivacy = privacyContent;
+      let translatedTerms = termsContent;
+      
+      // For Estonian (ee), use original content
+      if (lang !== 'ee' && translationService.isConfigured()) {
+        // Translate privacy content
+        if (privacyContent && privacyContent.trim()) {
+          translatedPrivacy = await translateContentInParts(privacyContent, lang);
+        }
+        
+        // Translate terms content
+        if (termsContent && termsContent.trim()) {
+          translatedTerms = await translateContentInParts(termsContent, lang);
+        }
+      }
+      
+      // Check if record exists for this language
+      const [existingRows]: any = await pool.query(
+        'SELECT id FROM privacy_terms WHERE lang = ?',
+        [lang]
+      );
+      
+      if (existingRows.length > 0) {
+        // Update existing record
+        await pool.query(
+          'UPDATE privacy_terms SET privacy = ?, terms = ?, updated_at = CURRENT_TIMESTAMP WHERE lang = ?',
+          [translatedPrivacy, translatedTerms, lang]
+        );
+      } else {
+        // Insert new record
+        await pool.query(
+          'INSERT INTO privacy_terms (privacy, terms, lang) VALUES (?, ?, ?)',
+          [translatedPrivacy, translatedTerms, lang]
+        );
+      }
+      
+      console.log(`Created/updated translation for language: ${lang}`);
+    } catch (error) {
+      console.error(`Error creating translation for language ${lang}:`, error);
+      // Continue with other languages even if one fails
+    }
+  }
+}
+
 // Function to translate content by splitting it into parts
 async function translateContentInParts(content: string, targetLanguage: string): Promise<string> {
   try {
@@ -154,6 +204,43 @@ router.get('/test-parts-translation', async (req: Request, res: Response) => {
   }
 });
 
+// Test endpoint for full translation workflow
+router.get('/test-translation-workflow', async (req: Request, res: Response) => {
+  try {
+    const isConfigured = translationService.isConfigured();
+    
+    if (!isConfigured) {
+      return res.json({ 
+        configured: false, 
+        message: 'DeepL API key not configured. Please set DEEPL_API_KEY environment variable.' 
+      });
+    }
+    
+    const testPrivacyContent = "<p>See on privaatsuspoliitika test. <strong>Andmete kogumine</strong> on oluline osa. <strong>Andmete kasutamine</strong> on teine osa.</p>";
+    const testTermsContent = "<p>See on kasutustingimuste test. <strong>Vastutuse piirangud</strong> on oluline osa. <strong>Konto kasutamine</strong> on teine osa.</p>";
+    
+    // Test creating translations for all languages
+    await createTranslationsForAllLanguages(testPrivacyContent, testTermsContent);
+    
+    // Fetch all translations to verify
+    const [rows]: any = await pool.query(
+      'SELECT lang, privacy, terms FROM privacy_terms ORDER BY lang'
+    );
+    
+    res.json({
+      configured: true,
+      message: 'Translation workflow test completed',
+      translations: rows
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      configured: true,
+      error: error.message,
+      message: 'Translation workflow test failed'
+    });
+  }
+});
+
 // Get privacy and terms content
 router.get('/', async (req: Request, res: Response) => {
   try {
@@ -161,38 +248,39 @@ router.get('/', async (req: Request, res: Response) => {
     const targetLanguage = (lang as string) || 'ee'; // Default to Estonian
     
     console.log('Privacy API called with language:', targetLanguage);
-    console.log('DeepL service configured:', translationService.isConfigured());
     
+    // Get content for the specific language
     const [rows]: any = await pool.query(
-      'SELECT privacy, terms FROM privacy_terms ORDER BY id DESC LIMIT 1'
+      'SELECT privacy, terms FROM privacy_terms WHERE lang = ?',
+      [targetLanguage]
     );
     
     if (rows.length === 0) {
-      // If no record exists, return empty content
-      return res.json({ privacy: '', terms: '' });
-    }
-    
-    let privacyContent = rows[0].privacy || '';
-    let termsContent = rows[0].terms || '';
-    
-    
-    // If language is not Estonian (default), translate the content
-    if (targetLanguage !== 'ee' && translationService.isConfigured()) {
-      try {
-        if (privacyContent) {
-          privacyContent = await translateContentInParts(privacyContent, targetLanguage);
-        }
-        
-        if (termsContent) {
-          termsContent = await translateContentInParts(termsContent, targetLanguage);
-        }
-      } catch (translationError) {
-        console.error('Translation error:', translationError);
-        // Return original content if translation fails
+      // If no record exists for this language, try to get Estonian as fallback
+      const [fallbackRows]: any = await pool.query(
+        'SELECT privacy, terms FROM privacy_terms WHERE lang = ?',
+        ['ee']
+      );
+      
+      if (fallbackRows.length === 0) {
+        // If no record exists at all, return empty content
+        return res.json({ privacy: '', terms: '' });
       }
-    } else if (targetLanguage !== 'ee') {
-      console.log('DeepL service not configured, returning original content');
+      
+      // Use Estonian content as fallback
+      const privacyContent = fallbackRows[0].privacy || '';
+      const termsContent = fallbackRows[0].terms || '';
+      
+      res.json({
+        privacy: privacyContent,
+        terms: termsContent
+      });
+      return;
     }
+    
+    // Return content for the requested language
+    const privacyContent = rows[0].privacy || '';
+    const termsContent = rows[0].terms || '';
     
     res.json({
       privacy: privacyContent,
@@ -213,23 +301,20 @@ router.post('/', async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Content must be a string' });
     }
     
-    // Check if a record exists
-    const [existingRows]: any = await pool.query(
-      'SELECT id FROM privacy_terms ORDER BY id DESC LIMIT 1'
+    // Get current terms content for translation
+    const [termsRows]: any = await pool.query(
+      'SELECT terms FROM privacy_terms WHERE lang = ?',
+      ['ee']
     );
+    const termsContent = termsRows.length > 0 ? termsRows[0].terms : '';
     
-    if (existingRows.length > 0) {
-      // Update existing record
-      await pool.query(
-        'UPDATE privacy_terms SET privacy = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
-        [content, existingRows[0].id]
-      );
-    } else {
-      // Insert new record
-      await pool.query(
-        'INSERT INTO privacy_terms (privacy, terms) VALUES (?, ?)',
-        [content, '']
-      );
+    // Create translations for all languages
+    try {
+      await createTranslationsForAllLanguages(content, termsContent);
+      console.log('Translations created successfully for privacy content');
+    } catch (translationError) {
+      console.error('Error creating translations:', translationError);
+      // Don't fail the request if translation fails
     }
     
     res.json({ message: 'Privacy content updated successfully' });
@@ -248,23 +333,20 @@ router.post('/terms', async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Content must be a string' });
     }
     
-    // Check if a record exists
-    const [existingRows]: any = await pool.query(
-      'SELECT id FROM privacy_terms ORDER BY id DESC LIMIT 1'
+    // Get current privacy content for translation
+    const [privacyRows]: any = await pool.query(
+      'SELECT privacy FROM privacy_terms WHERE lang = ?',
+      ['ee']
     );
+    const privacyContent = privacyRows.length > 0 ? privacyRows[0].privacy : '';
     
-    if (existingRows.length > 0) {
-      // Update existing record
-      await pool.query(
-        'UPDATE privacy_terms SET terms = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
-        [content, existingRows[0].id]
-      );
-    } else {
-      // Insert new record
-      await pool.query(
-        'INSERT INTO privacy_terms (privacy, terms) VALUES (?, ?)',
-        ['', content]
-      );
+    // Create translations for all languages
+    try {
+      await createTranslationsForAllLanguages(privacyContent, content);
+      console.log('Translations created successfully for terms content');
+    } catch (translationError) {
+      console.error('Error creating translations:', translationError);
+      // Don't fail the request if translation fails
     }
     
     res.json({ message: 'Terms content updated successfully' });

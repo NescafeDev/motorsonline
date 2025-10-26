@@ -29,7 +29,7 @@ export interface BlogTranslation {
 
 export async function createBlog(blog: Omit<Blog, 'id'>): Promise<Blog> {
   const [result]: any = await pool.query(
-    `INSERT INTO blogs_1 (category, title, title_image, author, published, introduction, intro_image, summary, intro_detail)
+    `INSERT INTO blogs (category, title, title_image, author, published, introduction, intro_image, summary, intro_detail)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [blog.category, blog.title, blog.title_image, blog.author, blog.published, blog.introduction, blog.intro_image, blog.summary, blog.intro_detail]
   );
@@ -37,13 +37,13 @@ export async function createBlog(blog: Omit<Blog, 'id'>): Promise<Blog> {
 }
 
 export async function getBlogById(id: number): Promise<Blog | null> {
-  const [rows]: any = await pool.query('SELECT * FROM blogs_1 WHERE id = ?', [id]);
+  const [rows]: any = await pool.query('SELECT * FROM blogs WHERE id = ?', [id]);
   if (rows.length === 0) return null;
   return rows[0];
 }
 
 export async function getAllBlogs(): Promise<Blog[]> {
-  const [rows]: any = await pool.query('SELECT * FROM blogs_1 ORDER BY published DESC');
+  const [rows]: any = await pool.query('SELECT * FROM blogs ORDER BY published DESC');
   return rows;
 }
 
@@ -52,14 +52,14 @@ export async function updateBlog(id: number, blog: Partial<Omit<Blog, 'id'>>): P
   const values = Object.values(blog);
   if (!fields) return false;
   const [result]: any = await pool.query(
-    `UPDATE blogs_1 SET ${fields}, updated_at = NOW() WHERE id = ?`,
+    `UPDATE blogs SET ${fields}, updated_at = NOW() WHERE id = ?`,
     [...values, id]
   );
   return result.affectedRows > 0;
 }
 
 export async function deleteBlog(id: number): Promise<boolean> {
-  const [result]: any = await pool.query('DELETE FROM blogs_1 WHERE id = ?', [id]);
+  const [result]: any = await pool.query('DELETE FROM blogs WHERE id = ?', [id]);
   return result.affectedRows > 0;
 }
 
