@@ -13,12 +13,12 @@ export default function BlogPostPage() {
   const { slug } = useParams();
   const [blog, setBlog] = useState<BlogPost>(null);
   const [allBlogs, setAllBlogs] = useState<BlogPost[]>([]);
-  
+
   // Scroll to top when page loads or id changes
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [slug]);
-  
+
   useEffect(() => {
     const run = async () => {
       try {
@@ -29,17 +29,56 @@ export default function BlogPostPage() {
         if (!slug) return;
         const match = list.find((b: any) => b && b.title && slugify(b.title) === slug);
         const idToFetch = match?.id;
+        
         if (idToFetch) {
           const resBlog = await fetch(`/api/blogs/${idToFetch}?lang=${currentLanguage}`);
           const blogData = await resBlog.json();
           setBlog(blogData);
+        } else {
+          // If no match found with current slug, try to find by ID from other languages
+          // This handles the case when language changes but slug remains from previous language
+          const blogId = await findBlogIdBySlugInAllLanguages(slug);
+          
+          if (blogId) {
+            // Fetch the blog with the found ID in current language
+            const resBlog = await fetch(`/api/blogs/${blogId}?lang=${currentLanguage}`);
+            const blogData = await resBlog.json();
+            setBlog(blogData);
+            
+            // Update URL to correct slug for current language
+            const correctSlug = slugify(blogData.title);
+            if (correctSlug !== slug) {
+              navigate(`/${currentLanguage}/blog/${correctSlug}`, { replace: true });
+            }
+          }
         }
       } catch (e) {
         console.error(e);
       }
     };
     run();
-  }, [slug, currentLanguage]);
+  }, [slug, currentLanguage, navigate]);
+
+  // Helper function to find blog ID by slug across all languages
+  const findBlogIdBySlugInAllLanguages = async (targetSlug: string) => {
+    try {
+      // Try to find the blog by checking all available languages
+      const languages = ['ee', 'en', 'ru', 'de']; // Add all your supported languages
+      
+      for (const lang of languages) {
+        const res = await fetch(`/api/blogs?lang=${lang}`);
+        const list = await res.json();
+        const match = list.find((b: any) => b && b.title && slugify(b.title) === targetSlug);
+        if (match) {
+          return match.id;
+        }
+      }
+    } catch (e) {
+      console.error('Error finding blog across languages:', e);
+    }
+    return null;
+  };
+
   if (!blog) return <PageContainer className="font-poppins text-4xl text-center">{t('common.loading')}</PageContainer>;
   return (
     <PageContainer className="font-poppins">
@@ -58,8 +97,8 @@ export default function BlogPostPage() {
                   <button className="text-black text-lg font-semibold text-start">
                     {blog.category}
                   </button>
-                <div>
-                </div>
+                  <div>
+                  </div>
                 </div>
                 {/* 
                 <div className="bg-motor-gray-bg rounded-[10px] p-4 pr-6 hover:bg-gray-50 transition-colors">
@@ -103,7 +142,7 @@ export default function BlogPostPage() {
                   <h3 className="text-black text-[26px] font-bold leading-[1.3]">
                     {t('blog.introduction')}
                   </h3>
-                  <div 
+                  <div
                     className="text-black text-[18px] font-normal leading-[1.5] prose prose-lg max-w-none"
                     dangerouslySetInnerHTML={{ __html: blog.introduction }}
                   />
@@ -113,10 +152,10 @@ export default function BlogPostPage() {
             <article className="bg-motor-gray-bg rounded-[10px] overflow-hidden mb-8">
               <div className="p-0 space-y-4 mt-[60px]">
                 <div className="space-y-4">
-                <h3 className="text-black text-[26px] font-bold leading-[1.3]">
+                  <h3 className="text-black text-[26px] font-bold leading-[1.3]">
                     {t('blog.introDetail')}
                   </h3>
-                  <div 
+                  <div
                     className="text-black text-[18px] font-semi leading-[1.5] prose prose-lg max-w-none "
                     dangerouslySetInnerHTML={{ __html: blog.intro_detail }}
                   />
@@ -127,7 +166,7 @@ export default function BlogPostPage() {
                   <h3 className="text-black text-[26px] font-bold leading-[1.3]">
                     {t('blog.summary')}
                   </h3>
-                  <div 
+                  <div
                     className="text-black text-[18px] font-normal leading-[1.5] prose prose-lg max-w-none"
                     dangerouslySetInnerHTML={{ __html: blog.summary }}
                   />
@@ -171,7 +210,7 @@ export default function BlogPostPage() {
 
       {/* Recent Posts Section */}
       <section className="max-w-[1440px] mx-auto px-6 lg:px-[100px] py-8 mb-8">
-            <BlogSection excludeBlogId={blog.id} />
+        <BlogSection excludeBlogId={blog.id} />
       </section>
     </PageContainer>
   );

@@ -42,10 +42,29 @@ export default function BlogPostPageMobile() {
         setAllBlogs(blogsData);
         if (slug) {
           const match = blogsData.find((b: any) => b && b.title && slugify(b.title) === slug);
-          if (match?.id) {
-            const blogResponse = await fetch(`/api/blogs/${match.id}?lang=${currentLanguage}`);
+          const idToFetch = match?.id;
+          
+          if (idToFetch) {
+            const blogResponse = await fetch(`/api/blogs/${idToFetch}?lang=${currentLanguage}`);
             const blogData = await blogResponse.json();
             setBlog(blogData);
+          } else {
+            // If no match found with current slug, try to find by ID from other languages
+            // This handles the case when language changes but slug remains from previous language
+            const blogId = await findBlogIdBySlugInAllLanguages(slug);
+            
+            if (blogId) {
+              // Fetch the blog with the found ID in current language
+              const blogResponse = await fetch(`/api/blogs/${blogId}?lang=${currentLanguage}`);
+              const blogData = await blogResponse.json();
+              setBlog(blogData);
+              
+              // Update URL to correct slug for current language
+              const correctSlug = slugify(blogData.title);
+              if (correctSlug !== slug) {
+                navigate(`/${currentLanguage}/blog/${correctSlug}`, { replace: true });
+              }
+            }
           }
         }
       } catch (error) {
@@ -56,7 +75,27 @@ export default function BlogPostPageMobile() {
     };
 
     fetchData();
-  }, [slug, currentLanguage]);
+  }, [slug, currentLanguage, navigate]);
+
+  // Helper function to find blog ID by slug across all languages
+  const findBlogIdBySlugInAllLanguages = async (targetSlug: string) => {
+    try {
+      // Try to find the blog by checking all available languages
+      const languages = ['ee', 'en', 'ru', 'de']; // Add all your supported languages
+      
+      for (const lang of languages) {
+        const res = await fetch(`/api/blogs?lang=${lang}`);
+        const list = await res.json();
+        const match = list.find((b: any) => b && b.title && slugify(b.title) === targetSlug);
+        if (match) {
+          return match.id;
+        }
+      }
+    } catch (e) {
+      console.error('Error finding blog across languages:', e);
+    }
+    return null;
+  };
 
   // Get unique categories for tabs
   const categories = [t('uiActions.viewAll'), ...Array.from(new Set(allBlogs.map(blog => blog.category)))];
