@@ -12,13 +12,13 @@ services:
         value: 10000
       # Database Configuration
       - key: DB_HOST
-        value: sql12.freesqldatabase.com
+        value: sql8.freesqldatabase.com
       - key: DB_USER
-        value: sql12801757
+        value: sql8804825
       - key: DB_PASSWORD
-        value: 3IfLc2uf4B
+        value: e2rlDBmxcG
       - key: DB_NAME
-        value: sql12801757
+        value: sql8804825
       - key: DB_PORT
         value: 3306
       # JWT Secret
