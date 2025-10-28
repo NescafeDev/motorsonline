@@ -7,7 +7,7 @@ interface BlogCardProps {
   image: string;
   category: string;
   title: string;
-  description: string;
+  introduction: string;
   id: number;
 }
 
@@ -15,7 +15,7 @@ export function BlogCard({
   image,
   category,
   title,
-  description,
+  introduction,
   id,
 }: BlogCardProps) {
   const navigate = useNavigate();
@@ -54,7 +54,7 @@ export function BlogCard({
           {blogs.find(blog => blog.id === id)?.title || title}
         </h3>
         <p className="text-black text-base leading-normal mb-6 break-all">
-          {blogs.find(blog => blog.id === id)?.description || description}
+          {blogs.find(blog => blog.id === id)?.introduction || introduction}
         </p>
         <div className="flex items-center gap-2" onClick={() => navigate(`/${lang || 'ee'}/blog/${slugify(title)}`)}>
           <button className="text-motors-green font-medium text-base text-[#06d6a0]" >
