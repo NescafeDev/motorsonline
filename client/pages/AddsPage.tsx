@@ -1447,7 +1447,7 @@ export default function AddsPage() {
                     label: t('fuelTypes.gasLNG'),
                   },
                   {
-                    value: "hübriid (ensiin / elekter)",
+                    value: "hübriid (bensiin / elekter)",
                     label: t('fuelTypes.hybridGasolineElectric'),
                   },
                   {

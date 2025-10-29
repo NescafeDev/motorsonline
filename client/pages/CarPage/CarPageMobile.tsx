@@ -1,4 +1,4 @@
-import { Heart, Check, MapPin, ChevronDownIcon, Divide } from "lucide-react";
+import { Heart, Check, MapPin, ChevronDownIcon, Divide, ArrowRight } from "lucide-react";
 import Header from "@/components/mobile/Header";
 import CarGallery from "@/components/mobile/CarGallery";
 import SpecCard from "@/components/mobile/SpecCard";
@@ -360,10 +360,10 @@ export default function CarPageMobile() {
                 label={t('carSpecs.power') + ':'}
                 value={`${car.power} kw`}
               />
-              <SpecCard 
-                icon={<FuelIcon />} 
-                label={t('carSpecs.fuel') + ':'} 
-                value={translateCarDetail(car.fuelType, currentLanguage)} 
+              <SpecCard
+                icon={<FuelIcon />}
+                label={t('carSpecs.fuel') + ':'}
+                value={translateCarDetail(car.fuelType, currentLanguage)}
               />
               <SpecCard
                 icon={<GearboxIcon />}
@@ -373,16 +373,31 @@ export default function CarPageMobile() {
               <SpecCard icon={<UserIcon />} label={t('carSpecs.ownerCount') + ':'} value={car.ownerCount} />
             </div>
             <Separator className="my-3" />
-            <div className="flex items-center gap-2 mx-1 my-3 pt-3 justify-start h-[20px]">
-              <MapPin className="w-5 h-5 text-secondary-500 flex-shrink-0" />
-              <div className="flex flex-col">
-                <div className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
-                  {contacts.businessType}
-                </div>
-                <div className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
-                  {contacts.address}
+            <div className="flex items-center gap-2 mx-1 my-3 pt-3 justify-between h-[20px]">
+              <div className="flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-secondary-500 flex-shrink-0" />
+                <div className="flex flex-col items-start">
+                  <div className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
+                    {contacts.businessType}
+                  </div>
+                  <div className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
+                    {contacts.address}
+                  </div>
                 </div>
               </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (contacts.address) {
+                    const encodedAddress = encodeURIComponent(contacts.address);
+                    window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank');
+                  }
+                }}
+                className="w-6 h-6 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors"
+                disabled={!contacts.address}
+              >
+                <ArrowRight className="w-4 h-4 text-gray-400" />
+              </button>
             </div>
           </div>
         </div>
@@ -394,10 +409,10 @@ export default function CarPageMobile() {
               {car.discountPrice && (
                 <>
                   <div className="relative">
-                    <span className="font-medium text-[#747474] text-sm leading-[20px]">
+                    <span className="relative inline-block font-medium text-[#747474] text-sm leading-[20px]">
                       € {car.price.toLocaleString()}
+                      <Separator className="absolute left-0 right-0 top-1/2 -translate-y-1/2 bg-gray-400" />
                     </span>
-                    <Separator className="absolute w-[40px] top-[10px] -left-1 bg-gray-400" />
                   </div>
                   {discountPercentage != 0 && (
                     <Badge className="bg-[#ffe5e5] text-[#ff0000] border border-[#ff0000] rounded-[100px] px-2 py-1 text-xs">

@@ -319,10 +319,11 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                                     {car.discountPrice && (
                                         <>
                                             <div className="relative">
-                                                <span className="font-medium text-[#747474] text-sm leading-[20px]">
+                                                <span className="relative inline-block font-medium text-[#747474] text-sm leading-[20px]">
                                                     € {car.price.toLocaleString()}
+                                                    <Separator className="absolute left-0 right-0 top-1/2 -translate-y-1/2 bg-gray-400" />
                                                 </span>
-                                                <Separator className="absolute w-[40px] top-[10px] -left-1 bg-gray-400" />
+                                                
                                             </div>
                                             {discountPercentage != 0 && (
                                                 <Badge className="bg-[#ffe5e5] text-[#ff0000] border border-[#ff0000] rounded-[100px] px-2 py-1 text-xs">

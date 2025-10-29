@@ -8,6 +8,7 @@ import { Car } from "@/pages/CarPage/sections/VehicleDetailsSection/VehicleDetai
 import { Badge } from "@/components/ui/badge";
 import { translateCarDetail } from "@/lib/utils";
 import { useI18n } from "@/contexts/I18nContext";
+import { useEffect } from 'react'
 
 interface CarCardProps {
   id: number;
@@ -56,6 +57,9 @@ export function CarCard({
   const { isAuthenticated } = useAuth();
   const { isFavorite: isFav, toggleFavorite } = useFavorites();
 
+  useEffect(() => {
+    console.log(title);
+  }, [title]);
   // Image navigation state
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { currentLanguage } = useI18n();
@@ -259,10 +263,10 @@ export function CarCard({
           {discountPercentage != 0 &&  discountPrice && (
             <>
               <div className="relative flex items-center gap-2">
-                <span className="font-medium text-[#747474] text-[14px] leading-[normal] [font-family:'Poppins',Helvetica]">
+                <span className="relative inline-block font-medium text-[#747474] text-[14px] leading-[normal] [font-family:'Poppins',Helvetica]">
                   {price.toLocaleString()}
+                  <Separator className="absolute left-0 right-0 top-1/2 -translate-y-1/2 bg-gray-400" />
                 </span>
-                <Separator className="absolute w-[40px] top-[12px] -left-1 bg-gray-400" />
                 {
                   (
                     <Badge className="bg-[#ffe5e5] text-[#ff0000] border border-[#ff0000] rounded-[100px] ml-1 mt-1 px-2.5 py-0.4 text-[12px]">

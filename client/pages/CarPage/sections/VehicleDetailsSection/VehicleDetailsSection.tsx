@@ -389,9 +389,9 @@ export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionPro
                         />
                       </div>
                       <div className="flex flex-col min-w-0 flex-1 justify-center">
-                        <span className="font-normal text-secondary-500 text-[12px] tracking-[-0.42px] leading-[20px] [font-family:'Poppins',Helvetica] break-all">
+                        <span className="font-normal text-secondary-500 text-[12px] tracking-[-0.42px] leading-[18px] [font-family:'Poppins',Helvetica] break-all">
                         </span>
-                        <span className="font-medium text-secondary-500 text-[12px] tracking-[-0.54px] leading-[20px] [font-family:'Poppins',Helvetica] break-all">
+                        <span className="font-medium text-secondary-500 text-[12px] tracking-[-0.54px] leading-[18px] [font-family:'Poppins',Helvetica] break-all">
                           {translateCarDetail(detail.value, currentLanguage)}
                         </span>
                       </div>
@@ -402,10 +402,11 @@ export const VehicleDetailsSection = ({ excludeCarId }: VehicleDetailsSectionPro
                   {displayCar.discountPercentage != 0 && car.discountPrice && (
                     <>
                       <div className="relative">
-                        <span className="font-medium text-[#747474] text-[14px] leading-[normal] [font-family:'Poppins',Helvetica]">
+                        <span className="relative inline-block font-medium text-[#747474] text-[14px] leading-[normal] [font-family:'Poppins',Helvetica]">
                           {displayCar.price.toLocaleString()}
+                          <Separator className="absolute left-0 right-0 top-1/2 -translate-y-1/2 bg-gray-400" />
                         </span>
-                        <Separator className="absolute w-[40px] top-[12px] -left-1 bg-gray-400" />
+                        
                         {
                            (
                             <Badge className="bg-[#ffe5e5] text-[#ff0000] border border-[#ff0000] rounded-[100px] ml-1 mt-1 px-2.5 py-0.4 text-[12px]">

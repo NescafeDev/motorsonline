@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 import { Lightbox } from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
@@ -37,6 +37,14 @@ export default function CarGallery({
   const [isOpen, setIsOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   
+  // Touch/swipe state
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const hasSwipedRef = useRef(false);
+  
+  // Minimum swipe distance (in pixels) to trigger navigation
+  const minSwipeDistance = 50;
+  
   // Navigation functions
   const goToPrevious = () => {
     setCurrentImageIndex((prev) => (prev > 0 ? prev - 1 : allImages.length - 1));
@@ -53,7 +61,14 @@ export default function CarGallery({
   };
   
   // Handle main image click to open lightbox
-  const handleMainImageClick = () => {
+  const handleMainImageClick = (e?: React.MouseEvent) => {
+    // Don't open lightbox if user just swiped
+    if (hasSwipedRef.current) {
+      hasSwipedRef.current = false;
+      e?.preventDefault();
+      e?.stopPropagation();
+      return;
+    }
     setLightboxIndex(currentImageIndex);
     setIsOpen(true);
   };
@@ -66,20 +81,65 @@ export default function CarGallery({
       setIsOpen(true);
     }
   };
+  
+  // Touch handlers for swipe detection
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null); // Reset touchEnd
+    setTouchStart(e.targetTouches[0].clientX);
+    hasSwipedRef.current = false;
+  };
+  
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+  
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    
+    if (isLeftSwipe && hasImages && allImages.length > 1) {
+      hasSwipedRef.current = true;
+      goToNext();
+      // Reset the flag after a short delay to allow click handler to check it
+      setTimeout(() => {
+        hasSwipedRef.current = false;
+      }, 300);
+    } else if (isRightSwipe && hasImages && allImages.length > 1) {
+      hasSwipedRef.current = true;
+      goToPrevious();
+      // Reset the flag after a short delay to allow click handler to check it
+      setTimeout(() => {
+        hasSwipedRef.current = false;
+      }, 300);
+    }
+    
+    // Reset touch positions
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
 
   return (
     <div className="px-3">
       {/* Main image */}
-      <div className="relative mb-3 aspect-[5/3] w-full">
+      <div 
+        className="relative mb-3 aspect-[5/3] w-full touch-none"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
         <img
           src={allImages[currentImageIndex]}
           alt="Car main view"
-          className="w-full h-full object-cover rounded-[10px] cursor-pointer hover:opacity-95 transition-opacity "
+          className="w-full h-full object-cover rounded-[10px] cursor-pointer hover:opacity-95 transition-opacity select-none"
           onClick={handleMainImageClick}
           onKeyDown={handleKeyDown}
           tabIndex={0}
           role="button"
           aria-label="Open image in lightbox"
+          draggable={false}
         />
         
         {/* Lightbox indicator */}

@@ -33,7 +33,6 @@ export default function UserPageMobile() {
   const { t , currentLanguage } = useI18n();
   const [userCars, setUserCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
-
   // Function to get VAT display text
   const getVatDisplayText = (car: Car) => {
     if (!car) return '';

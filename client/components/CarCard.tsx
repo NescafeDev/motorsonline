@@ -1,5 +1,5 @@
 import { Edit, Trash2, Eye, MapPin, ChevronLeft, ChevronRight, ChevronRight as ArrowRight } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useI18n } from "@/contexts/I18nContext";
 
 interface CarCardProps {
@@ -173,7 +173,9 @@ export const CarCard: React.FC<CarCardProps> = ({
   // Prepare images array - use images prop if available, otherwise fallback to single image
   const allImages = images && images.length > 0 ? images.filter(img => img && img.trim() !== '') : [image].filter(img => img && img.trim() !== '');
   const currentImage = allImages[currentImageIndex] || image;
-
+  useEffect(() => {
+    console.log(title)
+  })
   // Navigation functions
   const handlePreviousImage = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -229,7 +231,7 @@ export const CarCard: React.FC<CarCardProps> = ({
       </div>
 
       {/* Car Title */}
-      <h3 className="text-[#1A202C] font-['Poppins'] text-[30px] font-medium leading-[150%] tracking-[-0.9px] absolute left-[370px] top-[30px] w-fit h-[45px]">
+      <h3 className="text-[#1A202C] font-['Poppins'] text-[25px] font-medium leading-[150%] tracking-[-0.9px] absolute left-[370px] top-[30px] w-fit h-[45px]">
         {title}
       </h3>
 
@@ -248,11 +250,11 @@ export const CarCard: React.FC<CarCardProps> = ({
 
 
       {/* Price Section */}
-      <div className="absolute right-[15px] top-[55px] flex flex-col items-end gap-2">
+      <div className="absolute right-[15px] top-[60px] flex flex-col items-end gap-2">
         {discount !== "0%" && price && (
           <div className="flex items-center gap-[15px]">
             <div className="relative">
-              <span className="text-[#747474] font-['Poppins'] text-[18px] font-medium">
+              <span className="text-[#747474] font-['Poppins'] text-[16px] font-medium">
                 {price}
               </span>
               <div className="absolute top-1/2 left-0 w-full h-[1px] bg-[#747474]"></div>
@@ -266,7 +268,7 @@ export const CarCard: React.FC<CarCardProps> = ({
             )}
           </div>
         )}
-        <div className="text-[#1A202C] font-['Poppins'] text-[24px] font-medium text-right">
+        <div className="text-[#1A202C] font-['Poppins'] text-[20px] font-medium text-right">
           {originalPrice}
         </div>
         <div className="text-[#747474] font-['Poppins'] text-[12px] font-normal leading-[150%] tracking-[-0.36px] text-right">
@@ -281,7 +283,7 @@ export const CarCard: React.FC<CarCardProps> = ({
 
       {/* Car Information Section - Two Lines at Bottom */}
       {hideBottomIcons && (
-        <div className="absolute left-[370px] bottom-[70px] grid grid-cols-3 gap-x-[60px] gap-y-[15px]">
+        <div className="absolute left-[370px] bottom-[60px] grid grid-cols-3 gap-x-[10px] gap-y-[10px]">
           {power && (
             <div className="flex items-center gap-[4px]">
               <img

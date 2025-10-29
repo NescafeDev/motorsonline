@@ -416,7 +416,7 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
                             <span className="font-normal text-secondary-500 text-[12px] tracking-[-0.42px] leading-[21px] [font-family:'Poppins',Helvetica] break-words">
                               {/* {detail.label} */}
                             </span>
-                            <span className="font-medium text-secondary-500 text-[12px] tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica] break-words">
+                            <span className="font-medium text-secondary-500 text-[12px] tracking-[-0.54px] leading-[20px] [font-family:'Poppins',Helvetica] break-words">
                               {translateCarDetail(detail.value, currentLanguage)}
                             </span>
                           </div>
@@ -430,10 +430,10 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
                           {discountPercentage != 0 && car.discountPrice && (
                             <>
                               <div className="relative">
-                                <span className="font-medium text-[#747474] text-[14px] leading-[normal] [font-family:'Poppins',Helvetica]">
+                                <span className="relative inline-block font-medium text-[#747474] text-[14px] leading-[normal] [font-family:'Poppins',Helvetica]">
                                   € {car.price.toLocaleString()}
+                                  <Separator className="absolute left-0 right-0 top-1/2 -translate-y-1/2 bg-gray-400" />
                                 </span>
-                                <Separator className="absolute w-[40px] top-[12px] -left-1 bg-gray-400" />
                               </div>
                               {
                                  (

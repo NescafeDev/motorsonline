@@ -1,4 +1,4 @@
-import { ChevronDownIcon, HeartIcon } from "lucide-react";
+import { ArrowRight, ChevronDownIcon, HeartIcon, MapPin } from "lucide-react";
 import React, { useRef, useEffect, useState } from "react";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
@@ -257,7 +257,7 @@ export default function CarPage() {
     {
       icon: "/img/car/Speedometer.png",
       label: t('carSpecs.power') + ':',
-      value: car.power+' kW',
+      value: car.power + ' kW',
     },
     {
       icon: "/img/car/gear-box-switch.png",
@@ -284,26 +284,26 @@ export default function CarPage() {
   // Technical specifications data
   const technicalSpecs = [
     { label: t('formLabels.vehicleCondition') + ':', value: translateCarDetail(car.technicalData, currentLanguage) },
-    { label: t('formLabels.ownerCountLabel') + ':' , value: car.ownerCount},
-    { label: t('formLabels.vinCode') + ':' , value:car.vinCode},
-    { label: t('formLabels.vehicleNumber') , value: car.plateNumber },
+    { label: t('formLabels.ownerCountLabel') + ':', value: car.ownerCount },
+    { label: t('formLabels.vinCode') + ':', value: car.vinCode },
+    { label: t('formLabels.vehicleNumber'), value: car.plateNumber },
     { label: t('carSpecs.mileage') + ':', value: `${car.mileage.toLocaleString()} km` },
-    { label: t('formLabels.firstRegistration') + ':' , value:(car.month.length === 1 ? `0${car.month}` : car.month) + "." +  car.year_value?.toString() || "N/A"},
-    { label: t('formLabels.serviceBook') + ':' , value:translateCarDetail(car.serviceBook, currentLanguage)},
-    { label: t('formLabels.lastMaintenance') + ':' , value:car.lastMaintenance},
-    { label: t('formLabels.lastInspection') + ':' , value:car.lastInspection},
-    { label: t('formLabels.inspectionValid') + ':' , value:car.inspectionValidityPeriod},
-    { label: t('formLabels.warranty') + ':' , value:car.warranty},
+    { label: t('formLabels.firstRegistration') + ':', value: (car.month.length === 1 ? `0${car.month}` : car.month) + "." + car.year_value?.toString() || "N/A" },
+    { label: t('formLabels.serviceBook') + ':', value: translateCarDetail(car.serviceBook, currentLanguage) },
+    { label: t('formLabels.lastMaintenance') + ':', value: car.lastMaintenance },
+    { label: t('formLabels.lastInspection') + ':', value: car.lastInspection },
+    { label: t('formLabels.inspectionValid') + ':', value: car.inspectionValidityPeriod },
+    { label: t('formLabels.warranty') + ':', value: car.warranty },
     { label: t('formLabels.powerKw') + ':', value: car.power },
     { label: t('formLabels.displacement') + ':', value: car.displacement },
     { label: t('formLabels.transmissionType') + ':', value: translateCarDetail(car.transmission, currentLanguage) },
     { label: t('formLabels.driveType') + ':', value: translateCarDetail(car.drive_type_ee_name, currentLanguage) },
     { label: t('formLabels.fuelType') + ':', value: translateCarDetail(car.fuelType, currentLanguage) },
     { label: t('formLabels.categoryDesignation') + ':', value: car.category },
-    { label: t('formLabels.doors') + ':' , value:car.doors},
-    { label: t('formLabels.bodyType') + ':' , value: translateCarDetail(car.bodyType, currentLanguage)},
-    { label: t('formLabels.interiorColor') + ':' , value:translateCarDetail(car.salonColor, currentLanguage)},
-    { label: t('formLabels.color') + ':', value: translateCarDetail(car.carColor, currentLanguage)},
+    { label: t('formLabels.doors') + ':', value: car.doors },
+    { label: t('formLabels.bodyType') + ':', value: translateCarDetail(car.bodyType, currentLanguage) },
+    { label: t('formLabels.interiorColor') + ':', value: translateCarDetail(car.salonColor, currentLanguage) },
+    { label: t('formLabels.color') + ':', value: translateCarDetail(car.carColor, currentLanguage) },
   ];
 
   // Equipment features data - parse from equipment string
@@ -329,7 +329,7 @@ export default function CarPage() {
             <div
               className="grid grid-cols-1 md:grid-cols-3 gap-5"
               ref={gridRef}
-              style={{ position: "relative",}}
+              style={{ position: "relative", }}
             >
               {/* Left: 2/3 width on md+ screens */}
               <div className="md:col-span-2">
@@ -392,7 +392,7 @@ export default function CarPage() {
                             className="bg-white rounded-[10px] p-2.5 flex justify-between items-start gap-2"
                           >
                             <span className="font-medium text-secondary-500 text-lg tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica] break-words flex-1 min-w-0">
-                            {feature.label ? feature.label.charAt(0).toUpperCase() + feature.label.slice(1) : feature.label}
+                              {feature.label ? feature.label.charAt(0).toUpperCase() + feature.label.slice(1) : feature.label}
                             </span>
                             <div className="w-6 h-6 bg-[100%_100%] flex-shrink-0">
                               <img className="w-6 h-6 " src={feature.icon} />
@@ -470,7 +470,7 @@ export default function CarPage() {
                             <span className="font-normal text-secondary-500 text-[12px] tracking-[-0.42px] leading-[21px] [font-family:'Poppins',Helvetica] break-words">
                               {/* {detail.label} */}
                             </span>
-                            <span className="font-medium text-secondary-500 text-[12px] tracking-[-0.54px] leading-[27px] [font-family:'Poppins',Helvetica] break-words">
+                            <span className="font-medium text-secondary-500 text-[12px] tracking-[-0.54px] leading-[20px] [font-family:'Poppins',Helvetica] break-words">
                               {detail.value ? detail.value.charAt(0).toUpperCase() + detail.value.slice(1) : detail.value}
                             </span>
                           </div>
@@ -484,13 +484,13 @@ export default function CarPage() {
                           {discountPercentage != 0 && car.discountPrice && (
                             <>
                               <div className="relative">
-                                <span className="font-medium text-[#747474] text-[14px] leading-[normal] [font-family:'Poppins',Helvetica]">
+                                <span className="relative inline-block font-medium text-[#747474] text-[14px] leading-[normal] [font-family:'Poppins',Helvetica]">
                                   € {car.price.toLocaleString()}
+                                  <Separator className="absolute left-0 right-0 top-1/2 -translate-y-1/2 bg-gray-400" />
                                 </span>
-                                <Separator className="absolute w-[40px] top-[12px] -left-1 bg-gray-400" />
                               </div>
                               {
-                                 (
+                                (
                                   <Badge className="bg-[#ffe5e5] text-[#ff0000] border border-[#ff0000] rounded-[100px] ml-1 mt-1 px-2.5 py-0.4 text-[12px]">
                                     {discountPercentage}%
                                   </Badge>
@@ -527,7 +527,35 @@ export default function CarPage() {
                           </a>
                         </div>
                       </div>
+                      
                     </div>
+                    <Separator className="my-3" />
+                      <div className="flex items-center gap-2 mx-1 justify-between">
+                        <div className="flex items-center gap-2">
+                          <MapPin className="w-5 h-5 text-secondary-500 flex-shrink-0" />
+                          <div className="flex flex-col">
+                            <div className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
+                              {contacts.businessType}
+                            </div>
+                            <div className="font-medium text-secondary-500 text-sm tracking-[-0.3px] leading-[20px]">
+                              {contacts.address}
+                            </div>
+                          </div>
+                        </div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (contacts.address) {
+                              const encodedAddress = encodeURIComponent(contacts.address);
+                              window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank');
+                            }
+                          }}
+                          className="w-6 h-6 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors"
+                          disabled={!contacts.address}
+                        >
+                          <ArrowRight className="w-4 h-4 text-gray-400" />
+                        </button>
+                      </div>
                   </CardContent>
                 </Card>
               </div>

@@ -403,7 +403,7 @@ export default function HomePageMobile() {
   // Format car data for display
   const formatCarForDisplay = (car: Car) => ({
     id: car.id,
-    title: `${car.brand_name || 'Unknown'} ${car.model_name || ''}`,
+    title: `${car.brand_name || 'Unknown'} ${car.model_name || ''} ${car.modelDetail || ''}`,
     year: car.year_value || 0,
     mileage: `${car.mileage?.toLocaleString() || 'N/A'} km`,
     price: `€ ${car.price?.toLocaleString() || 'N/A'}`,
@@ -617,7 +617,7 @@ export default function HomePageMobile() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
               {blogPosts.map((post) => (
-                <BlogCard key={post.id} {...post} />
+                <BlogCard key={post.id} {...post} introduction={post.description || ''} />
               ))}
               {blogPosts.length === 0 && !blogsLoading && (
                 <div className="col-span-full text-center py-12">
