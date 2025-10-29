@@ -17,6 +17,7 @@ export interface SellerData {
   company?: string;
   address?: string;
   contactPerson?: string;
+  userType?: string;
   phone?: string;
   email?: string;
   avatar?: string;
@@ -30,14 +31,13 @@ interface SpecificationsSectionProps {
 }
 
 export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps): JSX.Element => {
-  const { user } = useAuth();
   const { t } = useI18n();
   // Default fallback data if no seller data is provided
   const defaultSellerData: SellerData = {
     title: t('formLabels.sellerData'),
     company: "ELKE Mustamäe",
     address: "Tallinn, Mustamäe tee 22",
-    contactPerson: user?.userType || "Lorem Ipsum",
+    // contactPerson: user.userType,
     phone: "+372 8888 8888",
     email: "Näide@elke.ee",
     language: "en",
@@ -45,9 +45,11 @@ export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps
     country: "EE"
   };
   const options = useMemo(() => countryList().getData(), []);
-
   // Use provided seller data or fallback to default
   const displayData = sellerData || defaultSellerData;
+  const userTypeLabel = (displayData.userType || '').toLowerCase() === 'company'
+    ? t('formLabels.company')
+    : t('formLabels.individual');
 
   // Function to map language codes to country codes for flags
   const getCountryCodeFromLanguage = (languageCode: string): string => {
@@ -178,7 +180,7 @@ export const SpecificationsSection = ({ sellerData }: SpecificationsSectionProps
             {displayData.title}
           </h3>
           <p className="[font-family:'Poppins',Helvetica] font-medium text-lg text-secondary-500 tracking-[-0.54px] leading-[27px]">
-            {displayData.contactPerson === "private" ? t('formLabels.company') : t('formLabels.individual')}
+            {userTypeLabel}
           </p>
           <div className="[font-family:'Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px]">
             {displayData.company}

@@ -57,6 +57,7 @@ interface CarData {
   warranty?: string;
   // Seller information
   businessType?: string;
+  userType?: string;
   country?: string;
   address?: string;
   phone?: string;
@@ -565,10 +566,10 @@ export default function CarPage() {
           <SpecificationsSection
             sellerData={{
               title: t('formLabels.sellerData'),
+              userType: (car?.userType || '').toLowerCase(),
               company: contacts?.businessType || car.businessType || "ELKE Mustamäe",
               country: contacts?.country || car.country || "EE",
               phone: contacts?.phone || car.phone || "+372 8888 8888",
-              contactPerson: user?.userType || "Eraisik",
               email: contacts?.email || car.email || "Näide@elke.ee",
               language: contacts?.language || car.language || "en",
               website: contacts?.website || car.website || "example.com",

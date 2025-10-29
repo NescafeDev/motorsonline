@@ -517,10 +517,10 @@ export default function CarPageMobile() {
         <SpecificationsSection
           sellerData={{
             title: t('formLabels.sellerData'),
+            userType: (car?.userType || '').toLowerCase(),
             company: contacts?.businessType || "ELKE Mustamäe",
             country: contacts?.country || "EE",
             address: contacts?.address || "Tallinn, Mustamäe tee 22",
-            contactPerson: user?.userType || "Eraisik",
             phone: contacts?.phone || "+372 8888 8888",
             email: contacts?.email || "Näide@elke.ee",
             language: contacts?.language || "en",
