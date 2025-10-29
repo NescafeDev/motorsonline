@@ -396,7 +396,7 @@ export default function SearchPageMobile() {
   // Format car data for display
   const formatCarForDisplay = (car: Car) => ({
     id: car.id,
-    title: `${car.brand_name || 'Unknown'} ${car.model_name || ''}`,
+    title: `${car.brand_name || 'Unknown'} ${car.model_name || ''} ${car.modelDetail || ''}`,
     year: car.year_value || 0,
     mileage: `${car.mileage?.toLocaleString() || 'N/A'} km`,
     price: `€ ${car.price?.toLocaleString() || 'N/A'}`,

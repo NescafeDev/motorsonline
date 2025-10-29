@@ -49,16 +49,57 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
   // Prepare images array - use images prop if available, otherwise fallback to single image
   const allImages = images && images.length > 0 ? images.filter(img => img && img.trim() !== '') : [image].filter(img => img && img.trim() !== '');
   const currentImage = allImages[currentImageIndex] || image;
+
+  // Swipe/touch state for mobile
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const minSwipeDistance = 50; // Minimum swipe distance in pixels
   
   // Navigation functions
+  const goToPreviousImage = () => {
+    setCurrentImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
+  };
+
+  const goToNextImage = () => {
+    setCurrentImageIndex((prev) => (prev === allImages.length - 1 ? 0 : prev + 1));
+  };
+  
   const handlePreviousImage = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setCurrentImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
+    goToPreviousImage();
   };
   
   const handleNextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setCurrentImageIndex((prev) => (prev === allImages.length - 1 ? 0 : prev + 1));
+    goToNextImage();
+  };
+
+  // Touch handlers for swipe detection
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null); // Reset touchEnd
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    
+    if (isLeftSwipe && allImages.length > 1) {
+      goToNextImage();
+    } else if (isRightSwipe && allImages.length > 1) {
+      goToPreviousImage();
+    }
+    
+    // Reset touch positions
+    setTouchStart(null);
+    setTouchEnd(null);
   };
 
   const handleViewCar = () => {
@@ -67,11 +108,16 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
   return (
     <div className="bg-white rounded-[13px] overflow-hidden shadow-sm w-full xl:w-full mx-auto">
       {/* Image Section */}
-      <div className="relative mb-5 group aspect-[5/3]">
+      <div 
+        className="relative mb-5 group aspect-[5/3]"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
         <img
           src={currentImage}
           alt={title}
-          className="w-full h-full aspect-[5/3] object-cover"
+          className="w-full h-full aspect-[5/3] object-cover select-none touch-none"
         />
         
         {/* Navigation arrows - only show if there are multiple images */}

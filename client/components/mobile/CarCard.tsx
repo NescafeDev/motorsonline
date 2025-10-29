@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useFavorites } from "../../hooks/useFavorites";
 import { useAuth } from "../../contexts/AuthContext";
 import { Separator } from "@/components/ui/separator";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Car } from "@/pages/CarPage/sections/VehicleDetailsSection/VehicleDetailsSection";
 import { Badge } from "@/components/ui/badge";
 import { translateCarDetail } from "@/lib/utils";
@@ -67,15 +67,78 @@ export function CarCard({
   const allImages = images && images.length > 0 ? images.filter(img => img && img.trim() !== '') : [image].filter(img => img && img.trim() !== '');
   const currentImage = allImages[currentImageIndex] || image;
 
+  // Swipe/touch state for mobile
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const hasSwipedRef = useRef(false);
+  const minSwipeDistance = 50; // Minimum swipe distance in pixels
+
   // Navigation functions
+  const goToPreviousImage = () => {
+    setCurrentImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
+  };
+
+  const goToNextImage = () => {
+    setCurrentImageIndex((prev) => (prev === allImages.length - 1 ? 0 : prev + 1));
+  };
+
   const handlePreviousImage = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setCurrentImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
+    goToPreviousImage();
   };
 
   const handleNextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setCurrentImageIndex((prev) => (prev === allImages.length - 1 ? 0 : prev + 1));
+    goToNextImage();
+  };
+
+  // Touch handlers for swipe detection
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null); // Reset touchEnd
+    setTouchStart(e.targetTouches[0].clientX);
+    hasSwipedRef.current = false;
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    
+    if (isLeftSwipe && allImages.length > 1) {
+      hasSwipedRef.current = true;
+      goToNextImage();
+      // Reset the flag after a short delay
+      setTimeout(() => {
+        hasSwipedRef.current = false;
+      }, 300);
+    } else if (isRightSwipe && allImages.length > 1) {
+      hasSwipedRef.current = true;
+      goToPreviousImage();
+      // Reset the flag after a short delay
+      setTimeout(() => {
+        hasSwipedRef.current = false;
+      }, 300);
+    }
+    
+    // Reset touch positions
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
+
+  // Handle card click - prevent navigation if user just swiped
+  const handleCardClick = () => {
+    if (hasSwipedRef.current) {
+      hasSwipedRef.current = false;
+      return;
+    }
+    navigate(`/${lang || 'ee'}/car/${id}`);
+    window.scrollTo(0, 0);
   };
   // Clean the price strings by removing non-numeric characters
   const cleanPrice = Number(price.toString().replace(/[^\d.-]/g, ''));
@@ -87,15 +150,17 @@ export function CarCard({
     
   return (
     <div className="bg-white rounded-[13px] overflow-hidden shadow-sm w-full xl:w-full mx-auto"
-      onClick={() => {
-        navigate(`/${lang || 'ee'}/car/${id}`);
-        window.scrollTo(0, 0);
-      }}>
-      <div className="relative group">
+      onClick={handleCardClick}>
+      <div 
+        className="relative group"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
         <img
           src={currentImage}
           alt={title}
-          className="w-full h-full aspect-[5/3] object-cover"
+          className="w-full h-full aspect-[5/3] object-cover select-none touch-none"
         />
 
         {/* Navigation arrows - only show if there are multiple images */}

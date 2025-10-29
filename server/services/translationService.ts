@@ -43,7 +43,7 @@ export class TranslationService {
       'fi': 'FI'
     };
     
-    return languageMap[language] || 'EN';
+    return languageMap[language] || 'ET';
   }
 
   /**
@@ -56,7 +56,7 @@ export class TranslationService {
 
     try {
       const targetLang = this.getDeepLLanguageCode(request.targetLanguage);
-      const sourceLang = request.sourceLanguage ? this.getDeepLLanguageCode(request.sourceLanguage) : undefined;
+      const sourceLang = this.getDeepLLanguageCode(request.sourceLanguage);
 
       const response = await axios.post(
         this.baseUrl,
@@ -86,7 +86,7 @@ export class TranslationService {
           detectedLanguage: 'ET',
         };
       }
-
+      console.log('================result:', result)
       throw new Error('No translation returned from DeepL API');
     } catch (error: any) {
       console.error('DeepL translation error:', error.response?.data || error.message);

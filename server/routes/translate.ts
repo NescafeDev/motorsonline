@@ -48,17 +48,16 @@ router.post('/', async (req, res) => {
       targetLanguage: targetLanguage,
       detectedLanguage: result.detectedLanguage
     });
-
   } catch (error: any) {
     console.error('Translation error:', error);
     
     // Return original text if translation fails
-    res.json({
-      translatedText: req.body.text,
-      originalText: req.body.text,
-      targetLanguage: req.body.targetLanguage,
-      error: 'Translation failed, using original text'
-    });
+    // res.json({
+    //   translatedText: req.body.text,
+    //   originalText: req.body.text,
+    //   targetLanguage: req.body.targetLanguage,
+    //   error: 'Translation failed, using original text'
+    // });
   }
 });
 

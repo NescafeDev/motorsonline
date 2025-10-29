@@ -72,6 +72,7 @@ export const ImageGallerySection = ({ car }: ImageGallerySectionProps): JSX.Elem
         if (car.equipment && car.equipment.trim()) {
           const translatedEquip = await translateEquipmentText(car.equipment, currentLanguage);
           setTranslatedEquipment(translatedEquip);
+          console.log(translatedEquipment)
         }
 
         // Translate description
