@@ -34,14 +34,12 @@ router.post('/', async (req, res) => {
         warning: 'Translation service not configured'
       });
     }
-
     // Translate the text
     const result = await translationService.translateText({
       text,
       targetLanguage,
       sourceLanguage: sourceLanguage || 'ee'
     });
-
     res.json({
       translatedText: result.translatedText,
       originalText: text,
@@ -51,13 +49,14 @@ router.post('/', async (req, res) => {
   } catch (error: any) {
     console.error('Translation error:', error);
     
+    
     // Return original text if translation fails
-    // res.json({
-    //   translatedText: req.body.text,
-    //   originalText: req.body.text,
-    //   targetLanguage: req.body.targetLanguage,
-    //   error: 'Translation failed, using original text'
-    // });
+    res.json({
+      translatedText: req.body.text,
+      originalText: req.body.text,
+      targetLanguage: req.body.targetLanguage,
+      error: 'Translation failed, using original text'
+    });
   }
 });
 

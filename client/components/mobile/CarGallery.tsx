@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 import { Lightbox } from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
@@ -41,6 +41,13 @@ export default function CarGallery({
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const hasSwipedRef = useRef(false);
+  const thumbnailsContainerRef = useRef<HTMLDivElement | null>(null);
+  const thumbnailRefs = useRef<Array<HTMLDivElement | null>>([]);
+
+  // Thumbnail slides (3 per slide)
+  const THUMBS_PER_SLIDE = 3;
+  const totalThumbSlides = Math.ceil(allImages.length / THUMBS_PER_SLIDE);
+  const [currentThumbSlide, setCurrentThumbSlide] = useState(0);
   
   // Minimum swipe distance (in pixels) to trigger navigation
   const minSwipeDistance = 50;
@@ -59,6 +66,29 @@ export default function CarGallery({
     setCurrentImageIndex(index);
     onImageClick?.(index);
   };
+
+  // Ensure the selected thumbnail is brought into view
+  useEffect(() => {
+    const el = thumbnailRefs.current[currentImageIndex];
+    if (el && typeof el.scrollIntoView === 'function') {
+      el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    } else if (thumbnailsContainerRef.current) {
+      // Fallback: approximate scroll by index if element ref missing
+      const container = thumbnailsContainerRef.current;
+      const thumbWidth = container.firstElementChild instanceof HTMLElement ? container.firstElementChild.offsetWidth + 7 /* gap */ : 0;
+      if (thumbWidth > 0) {
+        container.scrollTo({ left: thumbWidth * Math.max(0, currentImageIndex - 1), behavior: 'smooth' });
+      }
+    }
+  }, [currentImageIndex]);
+
+  // Keep thumbnail slide in sync with selected image
+  useEffect(() => {
+    const slideIndex = Math.floor(currentImageIndex / THUMBS_PER_SLIDE);
+    if (slideIndex !== currentThumbSlide) {
+      setCurrentThumbSlide(slideIndex);
+    }
+  }, [currentImageIndex]);
   
   // Handle main image click to open lightbox
   const handleMainImageClick = (e?: React.MouseEvent) => {
@@ -178,32 +208,62 @@ export default function CarGallery({
         )}
       </div>
 
-      {/* Thumbnails - show all images including main image */}
+      {/* Thumbnails - paginated slides (3 per slide) */}
       {allImages.length > 0 && (
-        <div className="flex gap-[7px] overflow-x-auto pb-2 scrollbar-hide">
-          {allImages.map((thumb, index) => {
-            const isSelected = currentImageIndex === index;
-            
-            return (
-              <div key={index} className="relative flex-shrink-0  w-[calc(33.333%-4.67px)]">
+        <div ref={thumbnailsContainerRef} className="flex gap-[7px] pb-2">
+          {allImages
+            .slice(currentThumbSlide * THUMBS_PER_SLIDE, currentThumbSlide * THUMBS_PER_SLIDE + THUMBS_PER_SLIDE)
+            .map((thumb, localIdx) => {
+              const globalIndex = currentThumbSlide * THUMBS_PER_SLIDE + localIdx;
+              const isSelected = currentImageIndex === globalIndex;
+              
+              return (
                 <div
-                  className={`w-full aspect-[5/3] rounded-[6.951px] overflow-hidden cursor-pointer transition-all duration-200 hover:scale-105 ${
-                    isSelected ? "border-[1.697px] border-primary" : "border border-gray-200 hover:border-primary"
-                  }`}
-                  onClick={() => handleImageClick(index)}
+                  key={globalIndex}
+                  ref={(el) => (thumbnailRefs.current[globalIndex] = el)}
+                  className="relative flex-shrink-0  w-[calc(33.333%-4.67px)]"
                 >
-                  <img
-                    src={thumb}
-                    alt={`Car view ${index + 1}`}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
+                  <div
+                    className={`w-full aspect-[5/3] rounded-[6.951px] overflow-hidden cursor-pointer transition-all duration-200 hover:scale-105 ${
+                      isSelected ? "border-[1.697px] border-primary" : "border border-gray-200 hover:border-primary"
+                    }`}
+                    onClick={() => handleImageClick(globalIndex)}
+                  >
+                    <img
+                      src={thumb}
+                      alt={`Car view ${globalIndex + 1}`}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
                 </div>
-                {/* Image number indicator */}
-                {/* <div className="absolute bottom-1 right-1 bg-black bg-opacity-70 text-white text-xs px-1.5 py-0.5 rounded-full">
-                  {index + 1}
-                </div> */}
-              </div>
+              );
+            })}
+        </div>
+      )}
+
+      {/* Pagination dots for slides */}
+      {totalThumbSlides > 1 && (
+        <div className="flex justify-center items-center gap-2 mt-1 mb-1">
+          {Array.from({ length: totalThumbSlides }).map((_, slideIdx) => {
+            const active = slideIdx === currentThumbSlide;
+            return (
+              <button
+                key={`thumb-slide-dot-${slideIdx}`}
+                type="button"
+                aria-label={`Go to thumbnails slide ${slideIdx + 1}`}
+                aria-current={active ? 'true' : undefined}
+                onClick={() => {
+                  setCurrentThumbSlide(slideIdx);
+                  const firstIndex = slideIdx * THUMBS_PER_SLIDE;
+                  setCurrentImageIndex(firstIndex);
+                }}
+                className={`transition-all duration-200 rounded-full ${
+                  active
+                    ? 'w-2.5 h-2.5 bg-primary'
+                    : 'w-2 h-2 bg-gray-300 hover:bg-gray-400'
+                }`}
+              />
             );
           })}
         </div>

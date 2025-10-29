@@ -127,7 +127,7 @@ export const ImageGallerySection = ({ car }: ImageGallerySectionProps): JSX.Elem
               {t('formLabels.equipment')}
             </h2>
             <div className="space-y-2">
-              <ul className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[27px] pl-6 space-y-2">
+              <ul className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[15px] pl-6 space-y-2">
                 {isTranslating ? (
                   <li className="text-gray-500 italic">{t('common.translating')}</li>
                 ) : car?.equipment && car.equipment.trim() ? (
@@ -138,11 +138,11 @@ export const ImageGallerySection = ({ car }: ImageGallerySectionProps): JSX.Elem
                       const trimmedItem = item.trim();
                       if (!trimmedItem) return null;
                       return (
-                        <li key={index} className="break-words leading-relaxed">
+                        <li key={index} className="break-words leading-[15px]">
                           {trimmedItem.includes('•') ? (
                             trimmedItem
                           ) : (
-                            <p className="font-semibold mt-5">{trimmedItem}</p>
+                            <p className="mt-5">{trimmedItem}</p>
                           )}
                         </li>
                       );

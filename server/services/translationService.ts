@@ -1,4 +1,5 @@
 import axios from 'axios';
+import qs from 'qs';
 
 export interface TranslationRequest {
   text: string;
@@ -56,37 +57,51 @@ export class TranslationService {
 
     try {
       const targetLang = this.getDeepLLanguageCode(request.targetLanguage);
-      const sourceLang = this.getDeepLLanguageCode(request.sourceLanguage);
+      
+      // Build request parameters conditionally
+      // const params: Record<string, any> = {
+      //   text: request.text,
+      //   target_lang: targetLang,
+      //   preserve_formatting: true,
+      //   tag_handling: 'html',
+      //   non_splitting_tags: 'span,p', // Prevent splitting within <span> and <p>
+      //   splitting_tags: '' // Avoid splitting on any tags
+      // };
+      // Only include source_lang if sourceLanguage is explicitly provided
+      // If omitted, DeepL will auto-detect the source language
+      // if (request.sourceLanguage) {
+      //   params.source_lang = this.getDeepLLanguageCode(request.sourceLanguage);
+      // }
+      
+      let data = qs.stringify({
+        text: request.text.replace(/\n/g, '<br>'),
+        target_lang: targetLang,
+        source_lang: this.getDeepLLanguageCode(request.sourceLanguage),
+        preserve_formatting: '1',
+        split_sentences: 'nonewlines',
+      });
 
-      const response = await axios.post(
-        this.baseUrl,
-        new URLSearchParams({
-          text: request.text,
-          target_lang: targetLang,
-          source_lang: sourceLang,
-          preserve_formatting: 'true',
-          tag_handling: 'html',
-          split_sentences: '0', // Disable sentence splitting
-          non_splitting_tags: 'span,p', // Prevent splitting within <span> and <p>
-          splitting_tags: '' // Avoid splitting on any tags
-        }),
-        {
-          headers: {
-            'Authorization': `DeepL-Auth-Key ${this.apiKey}`,
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-          }
-        }
-      );
+      let config = {
+        method: 'post',
+        url: this.baseUrl,
+        headers: {
+          'Authorization': `DeepL-Auth-Key ${this.apiKey}`,
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        },
+        data: data
+      }
+
+      const response = await axios.request(config);
+      const translation = response.data.translations?.[0];
+      const result = translation.text.replace(/<br\s*\/?>/gi, '\n');
       
-      const result = response.data.translations[0].text;
-      
-      if (result.length > 0) {
+      if (translation && translation.text) {
         return {
           translatedText: result,
-          detectedLanguage: 'ET',
+          detectedLanguage: translation.detected_source_language || undefined,
         };
       }
-      console.log('================result:', result)
+      
       throw new Error('No translation returned from DeepL API');
     } catch (error: any) {
       console.error('DeepL translation error:', error.response?.data || error.message);

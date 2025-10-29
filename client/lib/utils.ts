@@ -224,7 +224,7 @@ export const translateEquipmentText = async (text: string, targetLanguage: strin
       console.warn('Translation failed, using original text');
       return text;
     }
-
+    
     const result = await response.json();
     return result.translatedText || text;
   } catch (error) {
