@@ -99,12 +99,12 @@ export const BlogSection = ({ excludeBlogId }: { excludeBlogId?: number }): JSX.
                       {post.category || t('blog.category')}
                     </p>
                     <h3 className="font-['Poppins',Helvetica] font-semibold text-black text-lg leading-[25.2px]">
-                      {post.title || t('blog.fallbackTitle')}
+                      {post.title || t('blog.loadingPosts')}
                     </h3>
                     <div 
                       className="font-['Poppins',Helvetica] font-normal text-black text-sm leading-normal flex-1"
                       dangerouslySetInnerHTML={{ 
-                        __html: post.introduction?.replace(/<[^>]*>/g, '').substring(0, 100) + '...' || t('blog.fallbackDescription')
+                        __html: post.introduction?.replace(/<[^>]*>/g, '').substring(0, 100) + '...' || t('blog.loadingPosts')
                       }}
                     />
                     <div className="pt-6 flex items-center cursor-pointer mt-auto pb-2" onClick={() => navigate(`/${currentLanguage}/blog/${slugify(post.title)}`)}>

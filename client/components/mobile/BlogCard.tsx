@@ -55,7 +55,7 @@ export function BlogCard({
         </h3>
         <div className="text-black text-base leading-normal mb-6 break-all"
           dangerouslySetInnerHTML={{
-            __html: blogs.find(blog => blog.id === id)?.introduction?.replace(/<[^>]*>/g, '').substring(0, 100) + '...' || t('blog.fallbackDescription')
+            __html: blogs.find(blog => blog.id === id)?.introduction?.replace(/<[^>]*>/g, '').substring(0, 100) + '...' || t('blog.loadingPosts')
           }} />
         <div className="flex items-center gap-2" onClick={() => navigate(`/${lang || 'ee'}/blog/${slugify(title)}`)}>
           <button className="text-motors-green font-medium text-base text-[#06d6a0]" >
