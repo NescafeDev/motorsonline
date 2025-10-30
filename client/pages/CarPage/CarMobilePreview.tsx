@@ -1,5 +1,5 @@
 import { ChevronDownIcon, HeartIcon } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
@@ -27,6 +27,34 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
     const { t } = useI18n();
     const [showAllTechSpecs, setShowAllTechSpecs] = useState(false);
     const [showAllEquipment, setShowAllEquipment] = useState(false);
+
+    // Refs for sections to stabilize scroll on collapse
+    const techSpecsRef = useRef<HTMLDivElement | null>(null);
+    const equipmentRef = useRef<HTMLDivElement | null>(null);
+
+    const stabilizeScrollOnCollapse = (
+        isCurrentlyExpanded: boolean,
+        container: HTMLDivElement | null,
+        toggle: () => void
+    ) => {
+        if (!container) {
+            toggle();
+            return;
+        }
+        if (isCurrentlyExpanded) {
+            const prevBottom = container.getBoundingClientRect().bottom;
+            toggle();
+            requestAnimationFrame(() => {
+                const newBottom = container.getBoundingClientRect().bottom;
+                const delta = newBottom - prevBottom;
+                if (delta !== 0) {
+                    window.scrollBy(0, delta);
+                }
+            });
+        } else {
+            toggle();
+        }
+    };
 
     // Function to get VAT display text
     const getVatDisplayText = (car: any) => {
@@ -355,6 +383,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                 </Card>
 
                 {/* Technical specifications */}
+                <div ref={techSpecsRef}>
                 <Card className="bg-[#f6f7f9] rounded-[10px] border-none">
                     <CardContent className="p-4">
                         <h2 className="font-semibold text-secondary-500 text-lg tracking-[-0.4px] leading-[24px] mb-4">
@@ -382,7 +411,13 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                                 <Button
                                     variant="outline"
                                     className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2 px-4 py-2"
-                                    onClick={() => setShowAllTechSpecs(!showAllTechSpecs)}
+                                    onClick={() =>
+                                        stabilizeScrollOnCollapse(
+                                            showAllTechSpecs,
+                                            techSpecsRef.current,
+                                            () => setShowAllTechSpecs(!showAllTechSpecs)
+                                        )
+                                    }
                                 >
                                     {showAllTechSpecs ? t('formLabels.showLess') : t('formLabels.showMore')}
                                     <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${showAllTechSpecs ? 'rotate-180' : ''}`} />
@@ -391,9 +426,11 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                         )}
                     </CardContent>
                 </Card>
+                </div>
 
                 {/* Equipment features */}
                 {equipmentFeatures.length > 0 && (
+                    <div ref={equipmentRef}>
                     <Card className="w-full mt-10 bg-[#f6f7f9] rounded-[10px] border-none">
                         <CardContent className="p-5">
                             <h2 className="font-semibold text-secondary-500 text-xl tracking-[-0.60px] leading-[30px] [font-family:'Poppins',Helvetica] mb-6">
@@ -421,7 +458,13 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                                     <Button
                                         variant="outline"
                                         className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2.5"
-                                        onClick={() => setShowAllEquipment(!showAllEquipment)}
+                                        onClick={() =>
+                                            stabilizeScrollOnCollapse(
+                                                showAllEquipment,
+                                                equipmentRef.current,
+                                                () => setShowAllEquipment(!showAllEquipment)
+                                            )
+                                        }
                                     >
                                         {showAllEquipment ? t('formLabels.showLess') : t('formLabels.showMore')}
                                         <ChevronDownIcon className={`w-4 h-4 transition-transform ${showAllEquipment ? 'rotate-180' : ''}`} />
@@ -430,6 +473,7 @@ export default function CarMobilePreview({ formData, contactFormData, checkboxes
                             )}
                         </CardContent>
                     </Card>
+                    </div>
                 )}
 
                 <ImageGallerySection car={car} />
