@@ -101,7 +101,7 @@ export default function CarPageMobile() {
     // }
 
     // For any other VAT rate, show the specific rate
-    return `Hind sisaldab käibemaksu ${car.vatRate}%`;
+    return t('vatInfo.priceIncludesVat') + ' ' + car.vatRate + '%';
   };
 
   // Favorites functionality
