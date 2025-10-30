@@ -355,7 +355,6 @@ export default function CarPreview({ formData, contactFormData, checkboxes, bran
                 </CardContent>
               </Card>
               </div>
-
               {/* Equipment features section */}
               {equipmentFeatures.length > 0 && (
                 <div ref={equipmentRef}>
