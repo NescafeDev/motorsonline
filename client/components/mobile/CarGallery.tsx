@@ -150,7 +150,6 @@ export default function CarGallery({
     setTouchStart(null);
     setTouchEnd(null);
   };
-
   return (
     <div className="px-3">
       {/* Main image */}
