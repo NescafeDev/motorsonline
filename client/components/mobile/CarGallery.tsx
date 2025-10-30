@@ -199,12 +199,12 @@ export default function CarGallery({
             transition: isAnimating ? `transform ${ANIMATION_MS}ms ease` : undefined,
           }}
         >
-          <img
+          {/* <img
             src={allImages[prevIndex]}
             alt="Previous car view"
             className="w-full h-full object-cover rounded-[10px] select-none"
             draggable={false}
-          />
+          /> */}
           <img
             src={allImages[currentImageIndex]}
             alt="Car main view"
@@ -216,12 +216,12 @@ export default function CarGallery({
             aria-label="Open image in lightbox"
             draggable={false}
           />
-          <img
+          {/* <img
             src={allImages[nextIndex]}
             alt="Next car view"
             className="w-full h-full object-cover rounded-[10px] select-none"
             draggable={false}
-          />
+          /> */}
         </div>
         
         {/* Lightbox indicator */}
