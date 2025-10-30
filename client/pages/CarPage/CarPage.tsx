@@ -112,6 +112,34 @@ export default function CarPage() {
   const [showAllEquipment, setShowAllEquipment] = useState(false);
   const { user } = useAuth();
 
+  // Refs for sections to stabilize scroll on collapse
+  const techSpecsRef = useRef<HTMLDivElement | null>(null);
+  const equipmentRef = useRef<HTMLDivElement | null>(null);
+
+  const stabilizeScrollOnCollapse = (
+    isCurrentlyExpanded: boolean,
+    container: HTMLDivElement | null,
+    toggle: () => void
+  ) => {
+    if (!container) {
+      toggle();
+      return;
+    }
+    if (isCurrentlyExpanded) {
+      const prevBottom = container.getBoundingClientRect().bottom;
+      toggle();
+      requestAnimationFrame(() => {
+        const newBottom = container.getBoundingClientRect().bottom;
+        const delta = newBottom - prevBottom;
+        if (delta !== 0) {
+          window.scrollBy(0, delta);
+        }
+      });
+    } else {
+      toggle();
+    }
+  };
+
 
   // Favorites functionality
   const { isAuthenticated } = useAuth();
@@ -341,6 +369,7 @@ export default function CarPage() {
                   totalImages={carImages.length}
                 />
                 {/* Technical specifications section */}
+                <div ref={techSpecsRef}>
                 <Card className="w-full mt-10 bg-[#f6f7f9] rounded-[10px] border-none">
                   <CardContent className="p-5">
                     <h2 className="font-semibold text-secondary-500 text-xl tracking-[-0.60px] leading-[30px] [font-family:'Poppins',Helvetica] mb-6">
@@ -368,7 +397,13 @@ export default function CarPage() {
                         <Button
                           variant="outline"
                           className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2.5"
-                          onClick={() => setShowAllTechSpecs(!showAllTechSpecs)}
+                          onClick={() =>
+                            stabilizeScrollOnCollapse(
+                              showAllTechSpecs,
+                              techSpecsRef.current,
+                              () => setShowAllTechSpecs(!showAllTechSpecs)
+                            )
+                          }
                         >
                           {showAllTechSpecs ? t('formLabels.showLess') : t('formLabels.showMore')}
                           <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${showAllTechSpecs ? 'rotate-180' : ''}`} />
@@ -377,9 +412,11 @@ export default function CarPage() {
                     )}
                   </CardContent>
                 </Card>
+                </div>
 
                 {/* Equipment features section */}
                 {equipmentFeatures.length > 0 && (
+                  <div ref={equipmentRef}>
                   <Card className="w-full mt-10 bg-[#f6f7f9] rounded-[10px] border-none">
                     <CardContent className="p-5">
                       <h2 className="font-semibold text-secondary-500 text-xl tracking-[-0.60px] leading-[30px] [font-family:'Poppins',Helvetica] mb-6">
@@ -407,7 +444,13 @@ export default function CarPage() {
                           <Button
                             variant="outline"
                             className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2.5"
-                            onClick={() => setShowAllEquipment(!showAllEquipment)}
+                            onClick={() =>
+                              stabilizeScrollOnCollapse(
+                                showAllEquipment,
+                                equipmentRef.current,
+                                () => setShowAllEquipment(!showAllEquipment)
+                              )
+                            }
                           >
                             {showAllEquipment ? t('formLabels.showLess') : t('formLabels.showMore')}
                             <ChevronDownIcon className={`w-4 h-4 transition-transform ${showAllEquipment ? 'rotate-180' : ''}`} />
@@ -416,6 +459,7 @@ export default function CarPage() {
                       )}
                     </CardContent>
                   </Card>
+                  </div>
                 )}
 
                 {/* Import all required sections */}

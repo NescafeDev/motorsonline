@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent } from "../../../../components/ui/card";
 import { Separator } from "../../../../components/ui/separator";
 import { useI18n } from "@/contexts/I18nContext";
@@ -47,6 +47,32 @@ export const ImageGallerySection = ({ car }: ImageGallerySectionProps): JSX.Elem
   const [isTranslating, setIsTranslating] = useState(false);
   const [isEquipmentExpanded, setIsEquipmentExpanded] = useState(false);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  // Refs for scroll stabilization when collapsing content
+  const equipmentSectionRef = useRef<HTMLDivElement | null>(null);
+  const descriptionSectionRef = useRef<HTMLDivElement | null>(null);
+
+  const stabilizeScrollOnCollapse = (isCurrentlyExpanded: boolean, container: HTMLDivElement | null, toggle: () => void) => {
+    if (!container) {
+      toggle();
+      return;
+    }
+    // Only stabilize when collapsing (expanded -> collapsed)
+    if (isCurrentlyExpanded) {
+      const prevBottom = container.getBoundingClientRect().bottom;
+      toggle();
+      // Wait for layout to update then adjust scroll by the height difference
+      requestAnimationFrame(() => {
+        const newBottom = container.getBoundingClientRect().bottom;
+        const delta = newBottom - prevBottom;
+        if (delta !== 0) {
+          window.scrollBy(0, delta);
+        }
+      });
+    } else {
+      toggle();
+    }
+  };
+
 
   const TRUNCATE_LENGTH = 300;
 
@@ -122,12 +148,12 @@ export const ImageGallerySection = ({ car }: ImageGallerySectionProps): JSX.Elem
       <Card className="bg-[#f6f7f9] rounded-[10px] p-5">
         <CardContent className="p-0 space-y-8">
           {/* Equipment */}
-          <div className="space-y-4">
+          <div className="space-y-4" ref={equipmentSectionRef}>
             <h2 className="font-['Poppins',Helvetica] font-semibold text-secondary-500 text-lg tracking-[-0.60px] leading-[30px]">
               {t('formLabels.equipment')}
             </h2>
             <div className="space-y-2">
-              <ul className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[15px] pl-6 space-y-2">
+              <ul className="font-['Poppins',Helvetica] font-normal text-secondary-500 text-lg tracking-[-0.54px] leading-[20px] pl-6 space-y-2">
                 {isTranslating ? (
                   <li className="text-gray-500 italic">{t('common.translating')}</li>
                 ) : car?.equipment && car.equipment.trim() ? (
@@ -138,7 +164,7 @@ export const ImageGallerySection = ({ car }: ImageGallerySectionProps): JSX.Elem
                       const trimmedItem = item.trim();
                       if (!trimmedItem) return null;
                       return (
-                        <li key={index} className="break-words leading-[15px]">
+                        <li key={index} className="break-words leading-[25px]">
                           {trimmedItem.includes('•') ? (
                             trimmedItem
                           ) : (
@@ -156,7 +182,13 @@ export const ImageGallerySection = ({ car }: ImageGallerySectionProps): JSX.Elem
                 <div className="flex justify-center mt-5">
                 <Button
                   variant="outline"
-                  onClick={() => setIsEquipmentExpanded(!isEquipmentExpanded)}
+                  onClick={() =>
+                    stabilizeScrollOnCollapse(
+                      isEquipmentExpanded,
+                      equipmentSectionRef.current,
+                      () => setIsEquipmentExpanded(!isEquipmentExpanded)
+                    )
+                  }
                   className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2.5"
                 >
                   {isEquipmentExpanded ? t('formLabels.showLess') : t('formLabels.showMore')}
@@ -167,7 +199,7 @@ export const ImageGallerySection = ({ car }: ImageGallerySectionProps): JSX.Elem
             </div>
           </div>
           {/* Vehicle description */}
-          <div className="space-y-4">
+          <div className="space-y-4" ref={descriptionSectionRef}>
             <h2 className="font-['Poppins',Helvetica] font-semibold text-secondary-500 text-lg tracking-[-0.60px] leading-[30px]">
               {t('formLabels.vehicleDescription')}
             </h2>
@@ -185,7 +217,13 @@ export const ImageGallerySection = ({ car }: ImageGallerySectionProps): JSX.Elem
                 <div className="flex justify-center mt-5">
                 <Button
                   variant="outline"
-                  onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+                  onClick={() =>
+                    stabilizeScrollOnCollapse(
+                      isDescriptionExpanded,
+                      descriptionSectionRef.current,
+                      () => setIsDescriptionExpanded(!isDescriptionExpanded)
+                    )
+                  }
                   className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2.5"
                 >
                   {isDescriptionExpanded ? t('formLabels.showLess') : t('formLabels.showMore')}

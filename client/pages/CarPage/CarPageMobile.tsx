@@ -24,7 +24,7 @@ import { Form, useParams } from "react-router-dom";
 import { useFavorites } from "../../hooks/useFavorites";
 import { useAuth } from "../../contexts/AuthContext";
 import { useViews } from "../../hooks/useViews";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { VehicleDetailsSection } from "./sections/VehicleDetailsSection/VehicleDetailsSection";
 import { SpecificationsSection } from "./sections/SpecificationsSection/SpecificationsSection";
 
@@ -86,6 +86,30 @@ export default function CarPageMobile() {
   const [showAllTechSpecs, setShowAllTechSpecs] = useState(false);
   const [showAllEquipment, setShowAllEquipment] = useState(false);
   const { user } = useAuth();
+
+  // Refs for sections to stabilize scroll on collapse
+  const techSpecsRef = useRef<HTMLDivElement | null>(null);
+  const equipmentRef = useRef<HTMLDivElement | null>(null);
+
+  const stabilizeScrollOnCollapse = (isCurrentlyExpanded: boolean, container: HTMLDivElement | null, toggle: () => void) => {
+    if (!container) {
+      toggle();
+      return;
+    }
+    if (isCurrentlyExpanded) {
+      const prevBottom = container.getBoundingClientRect().bottom;
+      toggle();
+      requestAnimationFrame(() => {
+        const newBottom = container.getBoundingClientRect().bottom;
+        const delta = newBottom - prevBottom;
+        if (delta !== 0) {
+          window.scrollBy(0, delta);
+        }
+      });
+    } else {
+      toggle();
+    }
+  };
 
   // Function to get VAT display text
   const getVatDisplayText = (car: any) => {
@@ -441,7 +465,7 @@ export default function CarPageMobile() {
         </div>
 
         {/* Technical data section */}
-        <div className="px-5 mb-6">
+        <div className="px-5 mb-6" ref={techSpecsRef}>
           <ExpandableSection title={t('formLabels.technicalSpecs')}>
             <div className="space-y-3">
               {(showAllTechSpecs ? technicalSpecs : technicalSpecs.slice(0, 6)).map((spec, index) => (
@@ -461,7 +485,13 @@ export default function CarPageMobile() {
                 <Button
                   variant="outline"
                   className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2 px-4 py-2"
-                  onClick={() => setShowAllTechSpecs(!showAllTechSpecs)}
+                  onClick={() =>
+                    stabilizeScrollOnCollapse(
+                      showAllTechSpecs,
+                      techSpecsRef.current,
+                      () => setShowAllTechSpecs(!showAllTechSpecs)
+                    )
+                  }
                 >
                   {showAllTechSpecs ? t('formLabels.showLess') : t('formLabels.showMore')}
                   <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${showAllTechSpecs ? 'rotate-180' : ''}`} />
@@ -472,8 +502,8 @@ export default function CarPageMobile() {
         </div>
 
         {/* Equipment features section */}
-        {equipmentFeatures.length > 0 && (
-          <div className="px-5 mb-4">
+        <div className="px-5 mb-4" ref={equipmentRef}>
+          {equipmentFeatures.length > 0 && (
             <div className="bg-[#f6f7f9] rounded-[10px] p-5">
               <h2 className="font-semibold text-secondary-500 text-xl tracking-[-0.60px] leading-[30px] [font-family:'Poppins',Helvetica] mb-6">
                 {t('formLabels.higherValueAccessories')}
@@ -500,7 +530,13 @@ export default function CarPageMobile() {
                   <Button
                     variant="outline"
                     className="border-[#06d6a0] text-[#06d6a0] rounded-[10px] flex items-center gap-2.5"
-                    onClick={() => setShowAllEquipment(!showAllEquipment)}
+                    onClick={() =>
+                      stabilizeScrollOnCollapse(
+                        showAllEquipment,
+                        equipmentRef.current,
+                        () => setShowAllEquipment(!showAllEquipment)
+                      )
+                    }
                   >
                     {showAllEquipment ? t('formLabels.showLess') : t('formLabels.showMore')}
                     <ChevronDownIcon className={`w-4 h-4 transition-transform ${showAllEquipment ? 'rotate-180' : ''}`} />
@@ -508,8 +544,8 @@ export default function CarPageMobile() {
                 </div>
               )}
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
         <ImageGallerySection car={car} />
 
