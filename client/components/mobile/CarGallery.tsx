@@ -155,7 +155,7 @@ export default function CarGallery({
     <div className="px-3">
       {/* Main image */}
       <div 
-        className="relative mb-3 aspect-[5/3] w-full touch-none"
+        className="relative mb-3 aspect-[5/3] w-full"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}

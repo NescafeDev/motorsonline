@@ -160,7 +160,7 @@ export function CarCard({
         <img
           src={currentImage}
           alt={title}
-          className="w-full h-full aspect-[5/3] object-cover select-none touch-none"
+          className="w-full h-full aspect-[5/3] object-cover select-none"
         />
 
         {/* Navigation arrows - only show if there are multiple images */}
