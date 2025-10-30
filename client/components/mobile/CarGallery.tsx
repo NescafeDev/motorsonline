@@ -43,6 +43,13 @@ export default function CarGallery({
   const hasSwipedRef = useRef(false);
   const thumbnailsContainerRef = useRef<HTMLDivElement | null>(null);
   const thumbnailRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const mainSliderRef = useRef<HTMLDivElement | null>(null);
+
+  // Drag animation state for smooth swiping
+  const [dragX, setDragX] = useState(0); // pixels
+  const [isDragging, setIsDragging] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const ANIMATION_MS = 250;
 
   // Thumbnail slides (3 per slide)
   const THUMBS_PER_SLIDE = 3;
@@ -115,61 +122,107 @@ export default function CarGallery({
   // Touch handlers for swipe detection
   const onTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null); // Reset touchEnd
-    setTouchStart(e.targetTouches[0].clientX);
+    const x = e.targetTouches[0].clientX;
+    setTouchStart(x);
+    setDragX(0);
+    setIsDragging(true);
     hasSwipedRef.current = false;
   };
   
   const onTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
+    const x = e.targetTouches[0].clientX;
+    setTouchEnd(x);
+    if (touchStart !== null) {
+      setDragX(x - touchStart);
+    }
   };
   
   const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-    
+    setIsDragging(false);
+    if (touchStart === null || touchEnd === null) {
+      setDragX(0);
+      setTouchStart(null);
+      setTouchEnd(null);
+      return;
+    }
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
-    
-    if (isLeftSwipe && hasImages && allImages.length > 1) {
+
+    if ((isLeftSwipe || isRightSwipe) && hasImages && allImages.length > 1) {
       hasSwipedRef.current = true;
-      goToNext();
-      // Reset the flag after a short delay to allow click handler to check it
+      setIsAnimating(true);
+      // Animate to the next or previous slide visually using container width
+      const width = mainSliderRef.current?.clientWidth || 0;
+      setDragX(isLeftSwipe ? -width : width);
+      // After animation, update index and reset to centered position without animation
       setTimeout(() => {
+        if (isLeftSwipe) {
+          goToNext();
+        } else {
+          goToPrevious();
+        }
+        setIsAnimating(false);
+        setDragX(0);
         hasSwipedRef.current = false;
-      }, 300);
-    } else if (isRightSwipe && hasImages && allImages.length > 1) {
-      hasSwipedRef.current = true;
-      goToPrevious();
-      // Reset the flag after a short delay to allow click handler to check it
+      }, ANIMATION_MS);
+    } else {
+      // Snap back
+      setIsAnimating(true);
       setTimeout(() => {
-        hasSwipedRef.current = false;
-      }, 300);
+        setIsAnimating(false);
+        setDragX(0);
+      }, ANIMATION_MS);
     }
-    
-    // Reset touch positions
+
     setTouchStart(null);
     setTouchEnd(null);
   };
+
+  // Compute adjacent indices for smooth swipe rendering
+  const prevIndex = (currentImageIndex - 1 + allImages.length) % allImages.length;
+  const nextIndex = (currentImageIndex + 1) % allImages.length;
   return (
     <div className="px-3">
       {/* Main image */}
       <div 
-        className="relative mb-3 aspect-[5/3] w-full"
+        className="relative mb-3 aspect-[5/3] w-full overflow-hidden"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
+        ref={mainSliderRef}
       >
-        <img
-          src={allImages[currentImageIndex]}
-          alt="Car main view"
-          className="w-full h-full object-cover rounded-[10px] cursor-pointer hover:opacity-95 transition-opacity select-none"
-          onClick={handleMainImageClick}
-          onKeyDown={handleKeyDown}
-          tabIndex={0}
-          role="button"
-          aria-label="Open image in lightbox"
-          draggable={false}
-        />
+        <div
+          className="absolute inset-0 flex"
+          style={{
+            transform: `translateX(calc(-100% + ${dragX}px))`,
+            transition: isAnimating ? `transform ${ANIMATION_MS}ms ease` : undefined,
+          }}
+        >
+          <img
+            src={allImages[prevIndex]}
+            alt="Previous car view"
+            className="w-full h-full object-cover rounded-[10px] select-none"
+            draggable={false}
+          />
+          <img
+            src={allImages[currentImageIndex]}
+            alt="Car main view"
+            className="w-full h-full object-cover rounded-[10px] cursor-pointer hover:opacity-95 transition-opacity select-none"
+            onClick={handleMainImageClick}
+            onKeyDown={handleKeyDown}
+            tabIndex={0}
+            role="button"
+            aria-label="Open image in lightbox"
+            draggable={false}
+          />
+          <img
+            src={allImages[nextIndex]}
+            alt="Next car view"
+            className="w-full h-full object-cover rounded-[10px] select-none"
+            draggable={false}
+          />
+        </div>
         
         {/* Lightbox indicator */}
         <div className="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full opacity-0 hover:opacity-100 transition-opacity duration-200">
