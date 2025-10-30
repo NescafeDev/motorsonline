@@ -77,7 +77,7 @@ export function CarCard({
   const [dragX, setDragX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const ANIMATION_MS = 250;
+  const ANIMATION_MS = 400;
   const sliderRef = useRef<HTMLDivElement | null>(null);
 
   // Navigation functions
@@ -91,12 +91,30 @@ export function CarCard({
 
   const handlePreviousImage = (e: React.MouseEvent) => {
     e.stopPropagation();
-    goToPreviousImage();
+    // Smooth animate then change index
+    if (allImages.length <= 1 || isAnimating) return;
+    const width = sliderRef.current?.clientWidth || 0;
+    setIsAnimating(true);
+    setDragX(width);
+    setTimeout(() => {
+      goToPreviousImage();
+      setIsAnimating(false);
+      setDragX(0);
+    }, ANIMATION_MS);
   };
 
   const handleNextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
-    goToNextImage();
+    // Smooth animate then change index
+    if (allImages.length <= 1 || isAnimating) return;
+    const width = sliderRef.current?.clientWidth || 0;
+    setIsAnimating(true);
+    setDragX(-width);
+    setTimeout(() => {
+      goToNextImage();
+      setIsAnimating(false);
+      setDragX(0);
+    }, ANIMATION_MS);
   };
 
   // Touch handlers for swipe detection
@@ -181,7 +199,7 @@ export function CarCard({
     <div className="bg-white rounded-[13px] overflow-hidden shadow-sm w-full xl:w-full mx-auto"
       onClick={handleCardClick}>
       <div 
-        className="relative group overflow-hidden"
+        className="relative group aspect-[5/3] overflow-hidden"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
@@ -209,7 +227,7 @@ export function CarCard({
           <img
             src={allImages[nextIndex]}
             alt={title}
-            className="w-full h-full aspect=[5/3] object-cover select-none"
+            className="w-full h-full aspect-[5/3] object-cover select-none"
             draggable={false}
           />
         </div>

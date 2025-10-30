@@ -58,7 +58,7 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
   const [dragX, setDragX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const ANIMATION_MS = 250;
+  const ANIMATION_MS = 400;
   const sliderRef = useRef<HTMLDivElement | null>(null);
   
   // Navigation functions
@@ -72,12 +72,28 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
   
   const handlePreviousImage = (e: React.MouseEvent) => {
     e.stopPropagation();
-    goToPreviousImage();
+    if (allImages.length <= 1 || isAnimating) return;
+    const width = sliderRef.current?.clientWidth || 0;
+    setIsAnimating(true);
+    setDragX(width);
+    setTimeout(() => {
+      goToPreviousImage();
+      setIsAnimating(false);
+      setDragX(0);
+    }, ANIMATION_MS);
   };
   
   const handleNextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
-    goToNextImage();
+    if (allImages.length <= 1 || isAnimating) return;
+    const width = sliderRef.current?.clientWidth || 0;
+    setIsAnimating(true);
+    setDragX(-width);
+    setTimeout(() => {
+      goToNextImage();
+      setIsAnimating(false);
+      setDragX(0);
+    }, ANIMATION_MS);
   };
 
   // Touch handlers for swipe detection

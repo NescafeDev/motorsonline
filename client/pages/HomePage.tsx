@@ -1,6 +1,6 @@
 import { HeartIcon, SearchIcon, MapPin, ChevronLeft, ChevronRight, ChevronRight as ArrowRight, Heart } from "lucide-react";
 import { Badge } from "../components/ui/badge";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
@@ -224,6 +224,10 @@ export default function HomePage() {
   const [filtersApplied, setFiltersApplied] = useState(false);
   const [carImageIndices, setCarImageIndices] = useState<{ [key: number]: number }>({});
   const [carContacts, setCarContacts] = useState<{ [carId: number]: { address?: string, businessType?: string } }>({});
+  // Per-card slide animation state
+  const [cardAnimations, setCardAnimations] = useState<{ [carId: number]: { dragX: number; isAnimating: boolean } }>({});
+  const cardRefs = useRef<{ [carId: number]: HTMLDivElement | null }>({});
+  const ANIMATION_MS = 400;
   const getVatDisplayText = (car: Car | null) => {
     if (!car) return '';
 
@@ -424,6 +428,37 @@ export default function HomePage() {
     }));
   };
 
+  // Smoothly animate slide for a card, then update image index
+  const animateCardSlide = (carId: number, direction: 'prev' | 'next', e: React.MouseEvent) => {
+    e.stopPropagation();
+    const car = cars.find(c => c.id === carId);
+    if (!car || !car.images || car.images.length <= 1) return;
+    const width = cardRefs.current[carId]?.clientWidth || 0;
+    if (!width) {
+      // Fallback: change without animation
+      direction === 'next' ? handleNextImage(carId, e) : handlePreviousImage(carId, e);
+      return;
+    }
+    setCardAnimations(prev => ({
+      ...prev,
+      [carId]: { dragX: direction === 'next' ? -width : width, isAnimating: true }
+    }));
+    window.setTimeout(() => {
+      // Update index after the slide
+      const fakeEvent = { ...e, stopPropagation: () => {} } as unknown as React.MouseEvent;
+      if (direction === 'next') {
+        handleNextImage(carId, fakeEvent);
+      } else {
+        handlePreviousImage(carId, fakeEvent);
+      }
+      // Reset animation state
+      setCardAnimations(prev => ({
+        ...prev,
+        [carId]: { dragX: 0, isAnimating: false }
+      }));
+    }, ANIMATION_MS);
+  };
+
   // Format car data for display
   const formatCarForDisplay = (car: Car) => {
     const currentImageIndex = carImageIndices[car.id] || 0;
@@ -504,19 +539,44 @@ export default function HomePage() {
                               window.scrollTo(0, 0);
                             }}
                           >
-                            <div className="relative group aspect-[5/3]">
-                              <img
-                                className="w-full h-full object-cover"
-                                alt="Car"
-                                src={displayCar.image}
-                              />
+                            <div ref={(el) => { cardRefs.current[car.id] = el; }} className="relative group aspect-[5/3] overflow-hidden">
+                              {/* Sliding track: prev | current | next */}
+                              <div
+                                className="absolute inset-0 flex"
+                                style={{
+                                  transform: `translateX(calc(-100% + ${(cardAnimations[car.id]?.dragX || 0)}px))`,
+                                  transition: cardAnimations[car.id]?.isAnimating ? `transform ${ANIMATION_MS}ms ease` : undefined,
+                                }}
+                              >
+                                {/* Prev image */}
+                                <img
+                                  className="aspect-[5/3] object-cover select-none"
+                                  alt="Previous car"
+                                  src={displayCar.images.length ? displayCar.images[(displayCar.currentImageIndex - 1 + displayCar.images.length) % displayCar.images.length] : displayCar.image}
+                                  draggable={false}
+                                />
+                                {/* Current image */}
+                                <img
+                                  className="aspect-[5/3] object-cover select-none"
+                                  alt="Car"
+                                  src={displayCar.image}
+                                  draggable={false}
+                                />
+                                {/* Next image */}
+                                <img
+                                  className="aspect-[5/3] object-cover select-none"
+                                  alt="Next car"
+                                  src={displayCar.images.length ? displayCar.images[(displayCar.currentImageIndex + 1) % displayCar.images.length] : displayCar.image}
+                                  draggable={false}
+                                />
+                              </div>
 
                               {/* Navigation arrows - only show if there are multiple images */}
                               {displayCar.images && displayCar.images.length > 1 && (
                                 <>
                                   {/* Previous button */}
                                   <button
-                                    onClick={(e) => handlePreviousImage(car.id, e)}
+                                    onClick={(e) => animateCardSlide(car.id, 'prev', e)}
                                     className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-40 hover:bg-opacity-70 rounded-full p-2 shadow-lg transition-all duration-200 hover:shadow-xl z-10 opacity-0 group-hover:opacity-100"
                                     aria-label="Previous image"
                                   >
@@ -525,7 +585,7 @@ export default function HomePage() {
 
                                   {/* Next button */}
                                   <button
-                                    onClick={(e) => handleNextImage(car.id, e)}
+                                    onClick={(e) => animateCardSlide(car.id, 'next', e)}
                                     className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-40 hover:bg-opacity-70 rounded-full p-2 shadow-lg transition-all duration-200 hover:shadow-xl z-10 opacity-0 group-hover:opacity-100"
                                     aria-label="Next image"
                                   >

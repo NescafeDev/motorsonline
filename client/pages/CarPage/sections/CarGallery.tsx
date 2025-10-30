@@ -19,6 +19,12 @@ export default function CarGallery({
 }: CarGalleryProps) {
   const [selectedImage, setSelectedImage] = useState(0);
   const [currentSlide, setCurrentSlide] = useState(0);
+  // Sliding animation state
+  const [isSliding, setIsSliding] = useState(false);
+  const [slideDirection, setSlideDirection] = useState<"next" | "prev" | null>(null);
+  const [slideImages, setSlideImages] = useState<string[]>([]);
+  const [animateToEnd, setAnimateToEnd] = useState(false);
+  const slideTargetIndexRef = useRef<number | null>(null);
 
   useEffect(() => {
     const slide = Math.floor(selectedImage / 4);
@@ -30,11 +36,26 @@ export default function CarGallery({
   };
 
   const handlePreviousImage = () => {
-    setSelectedImage((prev) => (prev === 0 ? validImages.length - 1 : prev - 1));
+    if (isSliding || validImages.length <= 1) return;
+    const targetIndex = selectedImage === 0 ? validImages.length - 1 : selectedImage - 1;
+    // Arrange [prev, current], start showing current, slide to prev
+    setSlideImages([validImages[targetIndex], validImages[selectedImage]]);
+    setSlideDirection("prev");
+    slideTargetIndexRef.current = targetIndex;
+    setIsSliding(true);
+    // Defer to next tick to trigger CSS transition
+    requestAnimationFrame(() => setAnimateToEnd(true));
   };
 
   const handleNextImage = () => {
-    setSelectedImage((prev) => (prev === validImages.length - 1 ? 0 : prev + 1));    
+    if (isSliding || validImages.length <= 1) return;
+    const targetIndex = selectedImage === validImages.length - 1 ? 0 : selectedImage + 1;
+    // Arrange [current, next], start showing current, slide to next
+    setSlideImages([validImages[selectedImage], validImages[targetIndex]]);
+    setSlideDirection("next");
+    slideTargetIndexRef.current = targetIndex;
+    setIsSliding(true);
+    requestAnimationFrame(() => setAnimateToEnd(true));
   };
   const [isOpen, setIsOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
@@ -95,16 +116,54 @@ export default function CarGallery({
     <div className="px-5">
       {/* Main image */}
       <div className="relative mb-4 group w-full h-[480px] overflow-hidden rounded-[7.5px] flex items-center bg-white justify-center">
-        <img
-          src={currentMainImage || validImages[0]}
-          alt="Car main view"
-          className="object-cover transition-all duration-300 ease-in-out transform cursor-pointer w-auto h-[480px] rounded-[10px] justify-items-center"
-          onClick={handleImageClick}
-          onKeyDown={handleKeyDown}
-          tabIndex={0}
-          role="button"
-          aria-label="Open image in lightbox"
-        />
+        {!isSliding && (
+          <img
+            src={currentMainImage || validImages[0]}
+            alt="Car main view"
+            className="object-cover transition-all duration-300 ease-in-out transform cursor-pointer rounded-[10px] justify-items-center w-full h-full"
+            onClick={handleImageClick}
+            onKeyDown={handleKeyDown}
+            tabIndex={0}
+            role="button"
+            aria-label="Open image in lightbox"
+          />
+        )}
+        {isSliding && (
+          <div className="w-auto h-[480px] overflow-hidden">
+            <div
+              className={
+                `flex w-[200%] h-full transition-transform duration-300 ease-in-out ` +
+                (
+                  animateToEnd
+                    ? (slideDirection === "next" ? "-translate-x-1/2" : "translate-x-0")
+                    : (slideDirection === "next" ? "translate-x-0" : "-translate-x-1/2")
+                )
+              }
+              onTransitionEnd={() => {
+                if (slideTargetIndexRef.current != null) {
+                  setSelectedImage(slideTargetIndexRef.current);
+                }
+                // reset animation state
+                setIsSliding(false);
+                setAnimateToEnd(false);
+                setSlideDirection(null);
+                setSlideImages([]);
+                slideTargetIndexRef.current = null;
+              }}
+            >
+              <img
+                src={slideImages[0]}
+                alt="Slide A"
+                className="w-1/2 h-full object-cover rounded-[10px]"
+              />
+              <img
+                src={slideImages[1]}
+                alt="Slide B"
+                className="w-1/2 h-full object-cover rounded-[10px]"
+              />
+            </div>
+          </div>
+        )}
         {/* Lightbox indicator */}
         <div className="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           <Maximize2 className="w-4 h-4" />

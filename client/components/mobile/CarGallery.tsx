@@ -49,7 +49,7 @@ export default function CarGallery({
   const [dragX, setDragX] = useState(0); // pixels
   const [isDragging, setIsDragging] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const ANIMATION_MS = 250;
+  const ANIMATION_MS = 400;
 
   // Thumbnail slides (3 per slide)
   const THUMBS_PER_SLIDE = 3;
@@ -66,6 +66,24 @@ export default function CarGallery({
   
   const goToNext = () => {
     setCurrentImageIndex((prev) => (prev < allImages.length - 1 ? prev + 1 : 0));
+  };
+
+  // Smooth animate on button clicks
+  const animateSlide = (direction: 'prev' | 'next') => {
+    if (isAnimating) return;
+    if (!hasImages || allImages.length <= 1) return;
+    const width = mainSliderRef.current?.clientWidth || 0;
+    setIsAnimating(true);
+    setDragX(direction === 'next' ? -width : width);
+    setTimeout(() => {
+      if (direction === 'next') {
+        goToNext();
+      } else {
+        goToPrevious();
+      }
+      setIsAnimating(false);
+      setDragX(0);
+    }, ANIMATION_MS);
   };
   
   // Handle image click to update current index
@@ -199,16 +217,16 @@ export default function CarGallery({
             transition: isAnimating ? `transform ${ANIMATION_MS}ms ease` : undefined,
           }}
         >
-          {/* <img
+          <img
             src={allImages[prevIndex]}
             alt="Previous car view"
-            className="w-full h-full object-cover rounded-[10px] select-none"
+            className="w-full h-full object-cover aspect-[5/3] rounded-[10px] select-none"
             draggable={false}
-          /> */}
+          />
           <img
             src={allImages[currentImageIndex]}
             alt="Car main view"
-            className="w-full h-full object-cover rounded-[10px] cursor-pointer hover:opacity-95 transition-opacity select-none"
+            className="w-full h-full object-cover aspect-[5/3] rounded-[10px] cursor-pointer hover:opacity-95 transition-opacity select-none"
             onClick={handleMainImageClick}
             onKeyDown={handleKeyDown}
             tabIndex={0}
@@ -216,12 +234,12 @@ export default function CarGallery({
             aria-label="Open image in lightbox"
             draggable={false}
           />
-          {/* <img
+          <img
             src={allImages[nextIndex]}
             alt="Next car view"
-            className="w-full h-full object-cover rounded-[10px] select-none"
+            className="w-full h-full object-cover aspect-[5/3] rounded-[10px] select-none"
             draggable={false}
-          /> */}
+          />
         </div>
         
         {/* Lightbox indicator */}
@@ -234,7 +252,7 @@ export default function CarGallery({
           <>
             {/* Left arrow */}
             <button
-              onClick={goToPrevious}
+              onClick={() => animateSlide('prev')}
               className="absolute left-3 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-2 rounded-full transition-all duration-200 hover:scale-110"
               aria-label="Previous image"
             >
@@ -243,7 +261,7 @@ export default function CarGallery({
             
             {/* Right arrow */}
             <button
-              onClick={goToNext}
+              onClick={() => animateSlide('next')}
               className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-2 rounded-full transition-all duration-200 hover:scale-110"
               aria-label="Next image"
             >

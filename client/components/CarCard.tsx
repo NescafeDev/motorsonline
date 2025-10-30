@@ -1,5 +1,5 @@
 import { Edit, Trash2, Eye, MapPin, ChevronLeft, ChevronRight, ChevronRight as ArrowRight } from "lucide-react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useI18n } from "@/contexts/I18nContext";
 
 interface CarCardProps {
@@ -169,6 +169,10 @@ export const CarCard: React.FC<CarCardProps> = ({
 
   // Image navigation state
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [dragX, setDragX] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const ANIMATION_MS = 400;
+  const sliderRef = useRef<HTMLDivElement | null>(null);
 
   // Prepare images array - use images prop if available, otherwise fallback to single image
   const allImages = images && images.length > 0 ? images.filter(img => img && img.trim() !== '') : [image].filter(img => img && img.trim() !== '');
@@ -186,25 +190,73 @@ export const CarCard: React.FC<CarCardProps> = ({
     e.stopPropagation();
     setCurrentImageIndex((prev) => (prev === allImages.length - 1 ? 0 : prev + 1));
   };
+
+  const animateSlide = (direction: 'prev' | 'next', e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (allImages.length <= 1 || isAnimating) return;
+    const width = sliderRef.current?.clientWidth || 0;
+    if (!width) {
+      // Fallback without animation
+      direction === 'next' ? handleNextImage(e) : handlePreviousImage(e);
+      return;
+    }
+    setIsAnimating(true);
+    setDragX(direction === 'next' ? -width : width);
+    window.setTimeout(() => {
+      const fakeEvent = { ...e, stopPropagation: () => {} } as unknown as React.MouseEvent;
+      if (direction === 'next') {
+        handleNextImage(fakeEvent);
+      } else {
+        handlePreviousImage(fakeEvent);
+      }
+      setIsAnimating(false);
+      setDragX(0);
+    }, ANIMATION_MS);
+  };
   return (
     <div className={`w-100 h-[307px] relative cursor-pointer`} onClick={onPreview ? onPreview : () => { }}>
       {/* Main Card Background */}
       <div className={`w-full h-full ${className} rounded-[10px] absolute left-0 top-0`}></div>
 
       {/* Car Image with Navigation */}
-      <div className="w-[310px] h-[227px] absolute left-[30px] top-[40px] group">
-        <img
-          src={currentImage}
-          alt={title}
-          className="w-full h-full rounded-[10px] object-cover"
-        />
+      <div ref={sliderRef} className="w-[320px] h-[227px] aspect-[5/3] absolute left-[30px] top-[40px] group overflow-hidden rounded-[10px]">
+        {/* Sliding track: prev | current | next */}
+        <div
+          className="absolute inset-0 flex"
+          style={{
+            transform: `translateX(calc(-100% + ${dragX}px))`,
+            transition: isAnimating ? `transform ${ANIMATION_MS}ms ease` : undefined,
+          }}
+        >
+          {/* Prev */}
+          <img
+            src={allImages[(currentImageIndex - 1 + allImages.length) % allImages.length]}
+            alt={title}
+            className="aspect-[5/3] object-cover select-none"
+            draggable={false}
+          />
+          {/* Current */}
+          <img
+            src={currentImage}
+            alt={title}
+            className="aspect-[5/3] object-cover select-none"
+            draggable={false}
+          />
+          {/* Next */}
+          <img
+            src={allImages[(currentImageIndex + 1) % allImages.length]}
+            alt={title}
+            className="aspect-[5/3] object-cover select-none"
+            draggable={false}
+          />
+        </div>
 
         {/* Navigation arrows - only show if there are multiple images */}
         {allImages.length > 1 && (
           <>
             {/* Previous button */}
             <button
-              onClick={handlePreviousImage}
+              onClick={(e) => animateSlide('prev', e)}
               className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-40 hover:bg-opacity-70 rounded-full p-2 shadow-lg transition-all duration-200 hover:shadow-xl z-10 opacity-0 group-hover:opacity-100"
               aria-label="Previous image"
             >
@@ -213,7 +265,7 @@ export const CarCard: React.FC<CarCardProps> = ({
 
             {/* Next button */}
             <button
-              onClick={handleNextImage}
+              onClick={(e) => animateSlide('next', e)}
               className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-40 hover:bg-opacity-70 rounded-full p-2 shadow-lg transition-all duration-200 hover:shadow-xl z-10 opacity-0 group-hover:opacity-100"
               aria-label="Next image"
             >
