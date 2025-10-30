@@ -527,7 +527,7 @@ export default function HomePageMobile() {
           <div className="flex items-center gap-2">
             <div className="bg-white p-3 rounded-md shadow-sm cursor-pointer z-20 w-full text-center flex items-center justify-center" data-filter-button onClick={() => setFilterOpen((v) => !v)}>
               <SearchIcon className="w-4 h-4 mr-1 text-black" />
-              <span className="text-black font-['Poppins',Helvetica] font-medium text-[16px] tracking-[0.2px]">{t('search.filters')}</span>
+              <span className="text-black font-['Poppins',Helvetica] font-medium text-[16px] tracking-[0.2px]">{t('search.placeholder')}</span>
             </div>
           </div>
           {filterOpen && (

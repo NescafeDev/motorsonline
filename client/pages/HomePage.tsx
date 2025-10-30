@@ -510,7 +510,7 @@ export default function HomePage() {
                     <SearchIcon className="w-4 h-4 mr-2 text-[#747474]" />
                     <Input
                       className="border-none shadow-none focus-visible:ring-0 text-[#747474]"
-                      placeholder={t('common.search')}
+                      placeholder={t('search.placeholder')}
                       value={searchTerm}
                       onChange={(e) => handleSearch(e.target.value)}
                     />

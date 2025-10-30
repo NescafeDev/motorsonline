@@ -170,7 +170,7 @@
         "myGarage": "Oma autotalli"
     },
     "search": {
-        "placeholder": "Hae autoja...",
+        "placeholder": "Hae ajoneuvoja...",
         "filters": "Suodattimet",
         "applyFilters": "Käytä suodattimia",
         "results": "Tulokset",
