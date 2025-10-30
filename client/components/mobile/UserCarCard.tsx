@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Eye, Heart, Edit, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useI18n } from "@/contexts/I18nContext";
@@ -54,6 +54,12 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const minSwipeDistance = 50; // Minimum swipe distance in pixels
+  // Smooth swipe drag animation
+  const [dragX, setDragX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const ANIMATION_MS = 250;
+  const sliderRef = useRef<HTMLDivElement | null>(null);
   
   // Navigation functions
   const goToPreviousImage = () => {
@@ -77,30 +83,60 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
   // Touch handlers for swipe detection
   const onTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null); // Reset touchEnd
-    setTouchStart(e.targetTouches[0].clientX);
+    const x = e.targetTouches[0].clientX;
+    setTouchStart(x);
+    setDragX(0);
+    setIsDragging(true);
   };
 
   const onTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
+    const x = e.targetTouches[0].clientX;
+    setTouchEnd(x);
+    if (touchStart !== null) {
+      setDragX(x - touchStart);
+    }
   };
 
   const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-    
+    setIsDragging(false);
+    if (touchStart === null || touchEnd === null) {
+      setDragX(0);
+      setTouchStart(null);
+      setTouchEnd(null);
+      return;
+    }
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
-    
-    if (isLeftSwipe && allImages.length > 1) {
-      goToNextImage();
-    } else if (isRightSwipe && allImages.length > 1) {
-      goToPreviousImage();
+
+    if ((isLeftSwipe || isRightSwipe) && allImages.length > 1) {
+      setIsAnimating(true);
+      const width = sliderRef.current?.clientWidth || 0;
+      setDragX(isLeftSwipe ? -width : width);
+      setTimeout(() => {
+        if (isLeftSwipe) {
+          goToNextImage();
+        } else {
+          goToPreviousImage();
+        }
+        setIsAnimating(false);
+        setDragX(0);
+      }, ANIMATION_MS);
+    } else {
+      setIsAnimating(true);
+      setTimeout(() => {
+        setIsAnimating(false);
+        setDragX(0);
+      }, ANIMATION_MS);
     }
-    
-    // Reset touch positions
+
     setTouchStart(null);
     setTouchEnd(null);
   };
+
+  // Adjacent indices for smooth swipe rendering
+  const prevIndex = (currentImageIndex - 1 + allImages.length) % allImages.length;
+  const nextIndex = (currentImageIndex + 1) % allImages.length;
 
   const handleViewCar = () => {
     navigate(`/${lang || 'ee'}/car/${id}`);
@@ -109,16 +145,38 @@ export const UserCarCard: React.FC<UserCarCardProps> = ({
     <div className="bg-white rounded-[13px] overflow-hidden shadow-sm w-full xl:w-full mx-auto">
       {/* Image Section */}
       <div 
-        className="relative mb-5 group aspect-[5/3]"
+        className="relative mb-5 group aspect-[5/3] overflow-hidden"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
+        ref={sliderRef}
       >
-        <img
-          src={currentImage}
-          alt={title}
-          className="w-full h-full aspect-[5/3] object-cover select-none"
-        />
+        <div
+          className="absolute inset-0 flex"
+          style={{
+            transform: `translateX(calc(-100% + ${dragX}px))`,
+            transition: isAnimating ? `transform ${ANIMATION_MS}ms ease` : undefined,
+          }}
+        >
+          <img
+            src={allImages[prevIndex]}
+            alt={title}
+            className="w-full h-full aspect-[5/3] object-cover select-none"
+            draggable={false}
+          />
+          <img
+            src={currentImage}
+            alt={title}
+            className="w-full h-full aspect-[5/3] object-cover select-none"
+            draggable={false}
+          />
+          <img
+            src={allImages[nextIndex]}
+            alt={title}
+            className="w-full h-full aspect-[5/3] object-cover select-none"
+            draggable={false}
+          />
+        </div>
         
         {/* Navigation arrows - only show if there are multiple images */}
         {allImages.length > 1 && (

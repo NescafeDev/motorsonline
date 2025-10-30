@@ -73,6 +73,13 @@ export function CarCard({
   const hasSwipedRef = useRef(false);
   const minSwipeDistance = 50; // Minimum swipe distance in pixels
 
+  // Smooth swipe drag animation
+  const [dragX, setDragX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const ANIMATION_MS = 250;
+  const sliderRef = useRef<HTMLDivElement | null>(null);
+
   // Navigation functions
   const goToPreviousImage = () => {
     setCurrentImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
@@ -95,41 +102,63 @@ export function CarCard({
   // Touch handlers for swipe detection
   const onTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null); // Reset touchEnd
-    setTouchStart(e.targetTouches[0].clientX);
+    const x = e.targetTouches[0].clientX;
+    setTouchStart(x);
+    setDragX(0);
+    setIsDragging(true);
     hasSwipedRef.current = false;
   };
 
   const onTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
+    const x = e.targetTouches[0].clientX;
+    setTouchEnd(x);
+    if (touchStart !== null) {
+      setDragX(x - touchStart);
+    }
   };
 
   const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-    
+    setIsDragging(false);
+    if (touchStart === null || touchEnd === null) {
+      setDragX(0);
+      setTouchStart(null);
+      setTouchEnd(null);
+      return;
+    }
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
-    
-    if (isLeftSwipe && allImages.length > 1) {
+
+    if ((isLeftSwipe || isRightSwipe) && allImages.length > 1) {
       hasSwipedRef.current = true;
-      goToNextImage();
-      // Reset the flag after a short delay
+      setIsAnimating(true);
+      const width = sliderRef.current?.clientWidth || 0;
+      setDragX(isLeftSwipe ? -width : width);
       setTimeout(() => {
+        if (isLeftSwipe) {
+          goToNextImage();
+        } else {
+          goToPreviousImage();
+        }
+        setIsAnimating(false);
+        setDragX(0);
         hasSwipedRef.current = false;
-      }, 300);
-    } else if (isRightSwipe && allImages.length > 1) {
-      hasSwipedRef.current = true;
-      goToPreviousImage();
-      // Reset the flag after a short delay
+      }, ANIMATION_MS);
+    } else {
+      setIsAnimating(true);
       setTimeout(() => {
-        hasSwipedRef.current = false;
-      }, 300);
+        setIsAnimating(false);
+        setDragX(0);
+      }, ANIMATION_MS);
     }
-    
-    // Reset touch positions
+
     setTouchStart(null);
     setTouchEnd(null);
   };
+
+  // Adjacent indices for smooth swipe rendering
+  const prevIndex = (currentImageIndex - 1 + allImages.length) % allImages.length;
+  const nextIndex = (currentImageIndex + 1) % allImages.length;
 
   // Handle card click - prevent navigation if user just swiped
   const handleCardClick = () => {
@@ -152,16 +181,38 @@ export function CarCard({
     <div className="bg-white rounded-[13px] overflow-hidden shadow-sm w-full xl:w-full mx-auto"
       onClick={handleCardClick}>
       <div 
-        className="relative group"
+        className="relative group overflow-hidden"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
+        ref={sliderRef}
       >
-        <img
-          src={currentImage}
-          alt={title}
-          className="w-full h-full aspect-[5/3] object-cover select-none"
-        />
+        <div
+          className="absolute inset-0 flex"
+          style={{
+            transform: `translateX(calc(-100% + ${dragX}px))`,
+            transition: isAnimating ? `transform ${ANIMATION_MS}ms ease` : undefined,
+          }}
+        >
+          <img
+            src={allImages[prevIndex]}
+            alt={title}
+            className="w-full h-full aspect-[5/3] object-cover select-none"
+            draggable={false}
+          />
+          <img
+            src={currentImage}
+            alt={title}
+            className="w-full h-full aspect-[5/3] object-cover select-none"
+            draggable={false}
+          />
+          <img
+            src={allImages[nextIndex]}
+            alt={title}
+            className="w-full h-full aspect=[5/3] object-cover select-none"
+            draggable={false}
+          />
+        </div>
 
         {/* Navigation arrows - only show if there are multiple images */}
         {allImages.length > 1 && (
